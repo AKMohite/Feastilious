@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -34,9 +35,17 @@ android {
 
 dependencies {
 
+    implementation project(":domain")
     implementation deps.kotlin.stdlib
     implementation deps.core_ktx
     implementation deps.app_compat
+
+    // Dagger Hilt
+    implementation deps.hilt.hilt_android
+    kapt deps.hilt.hilt_android_compiler
+
+    // DataStore
+    implementation deps.data_store
 
     testImplementation deps.junit
     androidTestImplementation deps.atsl.ext_junit
