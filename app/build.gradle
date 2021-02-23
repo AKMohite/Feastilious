@@ -31,6 +31,11 @@ android {
             resValue "string", "app_version", "${defaultConfig.versionName}"
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -63,6 +68,7 @@ dependencies {
 
     // Dagger Hilt
     implementation deps.hilt.hilt_android
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.hilt.hilt_android_compiler
 
     testImplementation deps.junit
