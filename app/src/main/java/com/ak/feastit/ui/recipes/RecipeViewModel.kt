@@ -3,28 +3,35 @@ package com.ak.feastit.ui.recipes
 import androidx.lifecycle.*
 import com.ak.feastit.domain.category.GetCategoriesUseCase
 import com.ak.feastit.domain.category.RecipeCategory
-import com.ak.feastit.domain.utils.RecipeResult
+import com.ak.feastit.domain.recipelist.RandomRecipeUseCase
+import com.ak.feastit.domain.recipelist.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-    useCase: GetCategoriesUseCase,
+    getCategoriesUseCase: GetCategoriesUseCase,
+    randomRecipeUseCase: RandomRecipeUseCase,
     val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())
+    val dashboardRecipes = MutableStateFlow<List<Recipe>>(emptyList())
 
     init {
-            useCase.execute(Unit).onEach { state ->
-                state.data?.let { categories ->
-                    allCategories.value = categories
-                }
-            }.launchIn(viewModelScope)
+        getCategoriesUseCase.execute(Unit).onEach { state ->
+            state.data?.let { categories ->
+                allCategories.value = categories
+            }
+        }.launchIn(viewModelScope)
+
+        randomRecipeUseCase.execute(Unit).onEach { state ->
+            state.data?.let { recipes ->
+                dashboardRecipes.value = recipes
+            }
+        }.launchIn(viewModelScope)
     }
 }

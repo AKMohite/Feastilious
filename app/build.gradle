@@ -72,6 +72,13 @@ dependencies {
     // DataStore
     implementation deps.data_store
 
+//    retrofit
+    implementation deps.retrofit.runtime
+    implementation deps.okhttp_logging_interceptor
+    implementation deps.retrofit.moshi
+    implementation deps.retrofit.moshi_converter
+    kapt deps.retrofit.moshi_codegen
+
     testImplementation deps.junit
     androidTestImplementation deps.atsl.ext_junit
     androidTestImplementation deps.espresso.core

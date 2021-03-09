@@ -28,6 +28,12 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                     Log.d(APP_TAG, "onActivityCreated: ${category.categoryName}")
                 }
             }
+
+            viewModel.dashboardRecipes.collect { recipes ->
+                recipes.forEach {recipe ->
+                    Log.d(APP_TAG, "onActivityCreated: ${recipe.recipeName}")
+                }
+            }
         }
     }
 }
