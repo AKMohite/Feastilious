@@ -47,8 +47,6 @@ android {
 
 dependencies {
 
-    implementation project(":data")
-    implementation project(":domain")
     implementation deps.kotlin.stdlib
     implementation deps.core_ktx
     implementation deps.app_compat
@@ -70,6 +68,9 @@ dependencies {
     implementation deps.hilt.hilt_android
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.hilt.hilt_android_compiler
+
+    // DataStore
+    implementation deps.data_store
 
     testImplementation deps.junit
     androidTestImplementation deps.atsl.ext_junit

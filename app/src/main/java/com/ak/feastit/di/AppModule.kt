@@ -1,4 +1,4 @@
-package com.ak.data.di
+package com.ak.feastit.di
 
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,12 +1,11 @@
-package com.ak.data.di
+package com.ak.feastit.di
 
-import com.ak.domain.category.CategoryRepository
-import com.ak.domain.category.GetCategoriesUseCase
+import com.ak.feastit.domain.category.CategoryRepository
+import com.ak.feastit.domain.category.GetCategoriesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)

@@ -1,4 +1,4 @@
-package com.ak.data.utils
+package com.ak.feastit.data.utils
 
 import android.content.Context
 import android.util.Log
@@ -23,7 +23,7 @@ class FeastPrefManager @Inject constructor(
     @ApplicationContext context: Context
 ) {
 
-    private val dataStore = context.createDataStore("jot_it_prefs")
+    private val dataStore = context.createDataStore("feat_prefs")
 
     val preferencesFlow = dataStore.data
         .catch { exception ->

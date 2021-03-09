@@ -1,4 +1,4 @@
-package com.ak.domain.base
+package com.ak.feastit.domain.base
 
 abstract class UseCaseWithParams<in Params, out R> {
     /**
@@ -8,7 +8,7 @@ abstract class UseCaseWithParams<in Params, out R> {
      *
      * @return result [R] of the use case.
      */
-    protected abstract suspend fun buildUseCase(params: Params) : R
+    protected abstract fun buildUseCase(params: Params) : R
 
     /**
      * Execute the use case.
@@ -17,5 +17,5 @@ abstract class UseCaseWithParams<in Params, out R> {
      *
      * @return [R] result of executing this use case
      */
-    suspend fun execute(params: Params): R = buildUseCase(params)
+    fun execute(params: Params): R = buildUseCase(params)
 }

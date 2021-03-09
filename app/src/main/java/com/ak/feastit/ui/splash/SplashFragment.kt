@@ -3,12 +3,12 @@ package com.ak.feastit.ui.splash
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ak.feastit.R
-import com.ak.feastit.ui.splash.SplashViewModel.SplashState.NavigateToHome
-import com.ak.feastit.ui.splash.SplashViewModel.SplashState.NavigateToOnBoarding
+import com.ak.feastit.ui.splash.SplashViewModel.SplashState.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class SplashFragment : Fragment(R.layout.splash_fragment) {
@@ -18,16 +18,23 @@ class SplashFragment : Fragment(R.layout.splash_fragment) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.liveData.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is NavigateToOnBoarding -> {
-                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
-                }
-                is NavigateToHome -> {
-                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToRecipeDashboardFragment())
+        setFlowObservers()
+    }
+
+    private fun setFlowObservers() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.splashState.collect {
+                when (it) {
+                    NavigateToOnBoarding -> {
+                        findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
+                    }
+                    NavigateToHome -> {
+                        findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToRecipeDashboardFragment())
+                    }
+                    Empty -> {}
                 }
             }
-        })
+        }
     }
 
 }

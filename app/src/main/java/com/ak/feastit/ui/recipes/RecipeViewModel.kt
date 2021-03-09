@@ -1,25 +1,30 @@
 package com.ak.feastit.ui.recipes
 
 import androidx.lifecycle.*
-import com.ak.domain.category.GetCategoriesUseCase
-import com.ak.domain.category.RecipeCategory
-import com.ak.domain.utils.RecipeResult
+import com.ak.feastit.domain.category.GetCategoriesUseCase
+import com.ak.feastit.domain.category.RecipeCategory
+import com.ak.feastit.domain.utils.RecipeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-    private val useCase: GetCategoriesUseCase,
+    useCase: GetCategoriesUseCase,
     val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val _allCategories = MutableLiveData<RecipeResult<List<RecipeCategory>>>()
-    val allCategories: LiveData<RecipeResult<List<RecipeCategory>>>
-        = _allCategories
+    val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())
+
     init {
-        viewModelScope.launch {
-            _allCategories.value = useCase.execute(Unit)
-        }
+            useCase.execute(Unit).onEach { state ->
+                state.data?.let { categories ->
+                    allCategories.value = categories
+                }
+            }.launchIn(viewModelScope)
     }
 }
