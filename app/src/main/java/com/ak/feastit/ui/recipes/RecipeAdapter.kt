@@ -44,10 +44,14 @@ class RecipeAdapter(
         }
 
         fun bindData(recipe: Recipe) {
-            Glide.with(itemView)
+            binding.apply {
+                Glide.with(itemView)
                     .load(recipe.recipeImgUrl)
                     .error(R.drawable.image_placeholder)
-                    .into(binding.recipeImg)
+                    .into(recipeImg)
+
+                recipeName.text = recipe.recipeName
+            }
         }
     }
 }
