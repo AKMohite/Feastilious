@@ -20,7 +20,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 const val BASE_URL = "https://api.spoonacular.com"
-const val API_KEY = ""
+const val API_KEY = BuildConfig.API_KEY
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -48,14 +48,14 @@ object NetworkModule {
         @Named("MockInterceptor") mockInterceptor: Interceptor
     ): Call.Factory {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor(mockInterceptor)
             .addInterceptor { chain ->
                 val original = chain.request()
                 val url = original.url.newBuilder().addQueryParameter("apiKey", API_KEY).build()
                 val request = original.newBuilder().url(url)
                 chain.proceed(request.build())
             }
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(mockInterceptor)
             .build()
     }
 

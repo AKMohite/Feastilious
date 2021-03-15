@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
@@ -14,7 +15,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 data class FilterPreferences(
-    val isFirstInstall: Boolean
+    val isFirstInstall: Boolean,
+    val searchQuery: String
 )
 private const val TAG = "FeastPrefManager"
 
@@ -36,7 +38,8 @@ class FeastPrefManager @Inject constructor(
         }
         .map { preferences->
             val firstInstall = preferences[PreferencesKeys.IS_FIRST_INSTALL] ?: true
-            FilterPreferences(firstInstall)
+            val searchQuery = preferences[PreferencesKeys.SEARCH_QUERY] ?: ""
+            FilterPreferences(firstInstall, searchQuery)
         }
 
     suspend fun updateFirstInstall(isFirstInstall: Boolean){
@@ -47,5 +50,6 @@ class FeastPrefManager @Inject constructor(
 
     private object PreferencesKeys{
         val IS_FIRST_INSTALL = booleanPreferencesKey("pref_first_install")
+        val SEARCH_QUERY = stringPreferencesKey("pref_search_query")
     }
 }

@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.recipes
 
 import androidx.lifecycle.*
+import com.ak.feastit.data.utils.FeastPrefManager
 import com.ak.feastit.domain.category.GetCategoriesUseCase
 import com.ak.feastit.domain.category.RecipeCategory
 import com.ak.feastit.domain.recipelist.RandomRecipeUseCase
@@ -13,9 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-    getCategoriesUseCase: GetCategoriesUseCase,
-    randomRecipeUseCase: RandomRecipeUseCase,
-    val savedStateHandle: SavedStateHandle
+        private val getCategoriesUseCase: GetCategoriesUseCase,
+        private val randomRecipeUseCase: RandomRecipeUseCase,
+        val prefManager: FeastPrefManager,
+        val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())

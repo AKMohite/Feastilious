@@ -16,6 +16,7 @@ android {
         targetSdkVersion build_versions.target_sdk
         versionCode build_versions.version_code
         versionName build_versions.version_name
+        buildConfigField("String", "API_KEY", "\"${SPOONACULAR_KEY}\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +79,10 @@ dependencies {
     implementation deps.retrofit.moshi
     implementation deps.retrofit.moshi_converter
     kapt deps.retrofit.moshi_codegen
+
+//    glide
+    implementation deps.glide.runtime
+    kapt deps.glide.compiler
 
     testImplementation deps.junit
     androidTestImplementation deps.atsl.ext_junit
