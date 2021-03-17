@@ -11,6 +11,16 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="chipStyle">@style/CustomChipStyle</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_bg_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="checkedIconTint">@color/white</item>
+        <!-- selected chip Checkbox visibility -->
+        <item name="checkedIconVisible">false</item>
+        <item name="rippleColor">@color/white_alpha</item>
     </style>
 </resources>

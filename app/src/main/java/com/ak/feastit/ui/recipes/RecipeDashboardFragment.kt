@@ -1,7 +1,7 @@
 package com.ak.feastit.ui.recipes
 
 import android.os.Bundle
-import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FragmentRecipeDashboardBinding
 import com.ak.feastit.domain.recipelist.Recipe
-import com.ak.feastit.utils.APP_TAG
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+
 
 @AndroidEntryPoint
 class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
@@ -22,6 +23,11 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFlowObservers(view)
+    }
+
+    private fun setFlowObservers(view: View) {
 
         val binding =  FragmentRecipeDashboardBinding.bind(view)
         recipeAdapter = RecipeAdapter { recipe ->
@@ -34,15 +40,24 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                 setHasFixedSize(true)
             }
         }
-        setFlowObservers()
-    }
-
-    private fun setFlowObservers() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.allCategories.collect { categories ->
-                categories.forEach {category ->
-                    Log.d(APP_TAG, "onActivityCreated: ${category.categoryName}")
+
+                categories.forEach { category ->
+                    val chip = Chip(context)
+                    val paddingDp = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 10f,
+                            resources.displayMetrics
+                    ).toInt()
+                    chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp)
+                    chip.text = category.categoryName
+                    chip.setOnCheckedChangeListener { selectChip, isChecked ->
+//                        TODO add category select search query functionality
+                        selectChip.text
+                    }
+
+                    binding.categoryChips.addView(chip)
                 }
             }
         }
