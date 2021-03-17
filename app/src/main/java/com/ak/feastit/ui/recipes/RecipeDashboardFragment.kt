@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FragmentRecipeDashboardBinding
@@ -70,6 +71,6 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
     }
 
     private fun navigateToDetails(recipe: Recipe) {
-        TODO("Not yet implemented")
+        findNavController().navigate(RecipeDashboardFragmentDirections.recipeToRecipeDetail(recipeId = recipe.id.toString()))
     }
 }
