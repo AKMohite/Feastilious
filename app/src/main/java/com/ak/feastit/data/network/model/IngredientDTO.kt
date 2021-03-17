@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class IngredientDTO(
-    val id: Int?,
+    val id: Long?,
     val image: String?,
     val localizedName: String?,
     val name: String?

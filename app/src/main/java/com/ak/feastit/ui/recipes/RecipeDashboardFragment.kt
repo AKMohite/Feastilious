@@ -71,6 +71,10 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
     }
 
     private fun navigateToDetails(recipe: Recipe) {
-        findNavController().navigate(RecipeDashboardFragmentDirections.recipeToRecipeDetail(recipeId = recipe.id.toString()))
+        findNavController().navigate(RecipeDashboardFragmentDirections.recipeToRecipeDetail(
+                recipeId = recipe.id.toString(),
+                recipeName = recipe.recipeName,
+                recipeImage = recipe.recipeImgUrl
+        ))
     }
 }
