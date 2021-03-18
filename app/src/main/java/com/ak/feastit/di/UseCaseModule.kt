@@ -6,6 +6,7 @@ import com.ak.feastit.domain.recipedetails.RecipeDetailRepository
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
 import com.ak.feastit.domain.recipelist.RandomRecipeUseCase
 import com.ak.feastit.domain.recipelist.RecipeRepository
+import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,7 @@ object UseCaseModule {
     fun provideGetCategoriesUseCase(categoryRepository: CategoryRepository) = GetCategoriesUseCase(categoryRepository)
 
     @Provides
-    fun provideRandomRecipeUseCase(recipeRepository: RecipeRepository) = RandomRecipeUseCase(recipeRepository)
+    fun provideSearchRecipeUseCase(recipeRepository: RecipeRepository) = SearchRecipeUseCase(recipeRepository)
 
     @Provides
     fun provideRecipeDetailUseCase(recipeDetailRepository: RecipeDetailRepository) = RecipeDetailUseCase(recipeDetailRepository)
