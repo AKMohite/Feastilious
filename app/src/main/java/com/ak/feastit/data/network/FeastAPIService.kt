@@ -17,11 +17,6 @@ interface FeastAPIService {
             @QueryMap searchQuery: Map<String, String>
     ): ComplexSearchDTO
 
-    @GET(API_GET_RANDOM_RECIPES)
-    suspend fun getRandomRecipes(
-        @Query("number") pageSize: Int = DEFAULT_PAGE_SIZE.toInt()
-    ): RecipesDTO
-
     @GET(API_GET_RECIPE_ANALYSED_INSTRUCTION)
     suspend fun getAnalysedDetail(
             @Path(API_PATH_ID) recipeId: String

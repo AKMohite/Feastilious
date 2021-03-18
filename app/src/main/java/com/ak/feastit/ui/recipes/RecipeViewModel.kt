@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.ak.feastit.data.utils.FeastPrefManager
 import com.ak.feastit.domain.category.GetCategoriesUseCase
 import com.ak.feastit.domain.category.RecipeCategory
-import com.ak.feastit.domain.recipelist.RandomRecipeUseCase
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
 import com.ak.feastit.utils.*
@@ -12,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

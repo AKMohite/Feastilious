@@ -2,9 +2,10 @@ package com.ak.feastit.data.network
 
 import com.ak.feastit.BuildConfig
 import com.ak.feastit.utils.API_COMPLEX_SEARCH_RECIPES
-import com.ak.feastit.utils.API_GET_RANDOM_RECIPES
-import okhttp3.*
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Protocol
+import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 
 /**
@@ -17,7 +18,6 @@ class MockInterceptor : Interceptor {
         if (BuildConfig.DEBUG) {
             val uri = chain.request().url.toUri().toString()
             val responseString = when {
-                uri.contains(API_GET_RANDOM_RECIPES) -> RANDOM_RECIPE_RESPONSE
                 uri.contains(API_COMPLEX_SEARCH_RECIPES) -> COMPLEX_SEARCH_RESPONSE
                 uri.contains("/analyzedInstructions") -> ANALYSED_RECIPE_RESPONSE
                 else -> ""
