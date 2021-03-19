@@ -1,4 +1,4 @@
-package com.ak.feastit.data.category
+package com.ak.feastit.domain.category
 
 import com.ak.feastit.domain.category.CategoryRepository
 import com.ak.feastit.domain.category.RecipeCategory

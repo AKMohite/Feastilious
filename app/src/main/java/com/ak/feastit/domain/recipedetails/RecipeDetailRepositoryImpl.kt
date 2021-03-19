@@ -30,7 +30,7 @@ class RecipeDetailRepositoryImpl constructor(
                         if (stepDTO != null) {
                             stepDTO.ingredients?.forEachIndexed { ingredientIndex, ingredientDTO ->
                                 ingredients.add(Ingredient(
-                                        id = ingredientDTO?.id!!,
+                                        id = ingredientDTO.id!!,
                                         image = ingredientDTO.image!!,
                                         name = ingredientDTO.name!!,
                                         localizedName = ingredientDTO.localizedName!!
@@ -57,14 +57,15 @@ class RecipeDetailRepositoryImpl constructor(
                 }
 
 
-                val recipeDetail = RecipeDetail(
-                        id = recipe.id,
-                        recipeName = recipe.recipeName,
-                        recipeImgUrl = recipe.recipeImgUrl,
-                        subRecipes = subRecipes
-                )
-
-                emit(RecipeResult.success(recipeDetail))
+//                val recipeDetail = RecipeDetail(
+//                        recipeId = recipe.id,
+//                        recipeName = recipe.recipeName,
+//                        recipeImg = recipe.recipeImgUrl,
+//                        subRecipes = subRecipes
+//                )
+//
+//                emit(RecipeResult.success(recipeDetail))
+                TODO("Mapping and DB call pending")
             } else {
                 emit(RecipeResult.error<RecipeDetail>("An error occurred"))
             }

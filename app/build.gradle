@@ -84,6 +84,10 @@ dependencies {
     implementation deps.glide.runtime
     kapt deps.glide.compiler
 
+//    room
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+
     testImplementation deps.junit
     androidTestImplementation deps.atsl.ext_junit
     androidTestImplementation deps.espresso.core

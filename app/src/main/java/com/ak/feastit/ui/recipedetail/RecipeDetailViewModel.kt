@@ -16,13 +16,13 @@ class RecipeDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getRecipe(recipe: Recipe) {
-        detailUseCase.execute(recipe)
+        /*detailUseCase.execute(recipe)
                 .onEach { detailState ->
                     detailState.data?.let { detail ->
 
                     }
                 }
-                .launchIn(viewModelScope)
+                .launchIn(viewModelScope)*/
     }
 
 

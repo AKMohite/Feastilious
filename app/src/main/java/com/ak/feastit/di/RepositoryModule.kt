@@ -1,6 +1,6 @@
 package com.ak.feastit.di
 
-import com.ak.feastit.data.category.CategoryRepositoryImpl
+import com.ak.feastit.domain.category.CategoryRepositoryImpl
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.domain.category.CategoryRepository
 import com.ak.feastit.domain.recipedetails.RecipeDetailRepository
