@@ -14,7 +14,7 @@ class RecipeDetailRepositoryImpl constructor(
 
     override fun getRecipeDetail(recipe: Recipe): Flow<RecipeResult<RecipeDetail>> = flow {
         try {
-            emit(RecipeResult.loading())
+            /*emit(RecipeResult.loading())
             val detailResponse = apiService.getAnalysedDetail(recipe.id.toString())
             if (!detailResponse.isNullOrEmpty()) {
                 val subRecipes = mutableListOf<SubRecipe>()
@@ -30,7 +30,7 @@ class RecipeDetailRepositoryImpl constructor(
                         if (stepDTO != null) {
                             stepDTO.ingredients?.forEachIndexed { ingredientIndex, ingredientDTO ->
                                 ingredients.add(Ingredient(
-                                        id = ingredientDTO.id!!,
+                                        id = ingredientDTO.id.toString(),
                                         image = ingredientDTO.image!!,
                                         name = ingredientDTO.name!!,
                                         localizedName = ingredientDTO.localizedName!!
@@ -68,7 +68,7 @@ class RecipeDetailRepositoryImpl constructor(
                 TODO("Mapping and DB call pending")
             } else {
                 emit(RecipeResult.error<RecipeDetail>("An error occurred"))
-            }
+            }*/
         } catch (error: Exception) {
             emit(RecipeResult.error(error.message ?: "An error occurred"))
             Log.d(APP_TAG, "getRecipeDetail: ${error.message}")

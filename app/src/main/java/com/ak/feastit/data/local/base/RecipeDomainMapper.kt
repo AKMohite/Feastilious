@@ -21,7 +21,7 @@ class RecipeDomainMapper: DataMapper<RecipeEntity, Recipe>{
     fun toRecipeDetailDomain(detail: RecipeDetailEntity): RecipeDetail {
         val recipe = detail.recipe
         return RecipeDetail(
-                recipeId = recipe.recipeId,
+                recipeId = recipe.id,
                 recipeName = recipe.recipeName,
                 recipeSummary = recipe.recipeSummary,
                 recipeImg = recipe.recipeImg,
@@ -38,19 +38,18 @@ class RecipeDomainMapper: DataMapper<RecipeEntity, Recipe>{
 
     fun toRecipesDomain(recipes: List<RecipeEntity>): List<Recipe> = recipes.map { recipe-> mapToDomainModel(recipe) }
 
-    fun toInstructionsDomain(instructions: List<InstructionEntity>): List<Instruction> {
-        return instructions.map { inst -> Instruction(
+    fun toInstructionsDomain(instructions: List<InstructionEntity>): List<Instruction> = instructions.map { inst ->
+        Instruction(
                 stepNo = "Step ${inst.stepNo}",
                 stepDesc = inst.stepDesc
         ) }
-    }
 
-    fun toIngredientsDomain(ingredients: List<IngredientEntity>): List<Ingredient> {
-        return ingredients.map { ing -> Ingredient(
-                id = ing.id,
+    fun toIngredientsDomain(ingredients: List<IngredientEntity>): List<Ingredient> = ingredients.map { ing ->
+        Ingredient(
+                id = ing.ingredientUnique,
                 image = ing.ingredientImg,
                 localizedName = ing.ingredientName,
                 name = ing.ingredientSpec
         ) }
-    }
+
 }

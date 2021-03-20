@@ -11,13 +11,11 @@ import com.ak.feastit.utils.*
         indices = [Index(value = [DB_STEP_ID], unique = true)]
 )
 data class InstructionEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = DB_TABLE_ID)
-    val id: Long,
-    @ColumnInfo(name = DB_RECIPE_ID)
-    val recipeId: Long,
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = DB_STEP_ID) // recipeId+stepNo
     val stepId: String,
+    @ColumnInfo(name = DB_RECIPE_ID)
+    val recipeId: Long,
     @ColumnInfo(name = DB_STEP_NUMBER)
     val stepNo: Int,
     @ColumnInfo(name = DB_STEP_DESC)

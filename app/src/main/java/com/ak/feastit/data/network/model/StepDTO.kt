@@ -8,5 +8,5 @@ data class StepDTO(
     val ingredients: List<IngredientDTO>?,
     val length: LengthDTO?,
     val number: Int? = 0,
-    val step: String? = ""
+    val step: String = ""
 )

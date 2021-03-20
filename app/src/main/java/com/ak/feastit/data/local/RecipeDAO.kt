@@ -4,6 +4,8 @@ import androidx.room.*
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.utils.DB_RECIPE_ID
+import com.ak.feastit.utils.DB_RECIPE_TABLE
+import com.ak.feastit.utils.DB_TABLE_ID
 
 @Dao
 interface RecipeDAO {
@@ -26,8 +28,11 @@ interface RecipeDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInstructions(instructions: List<InstructionEntity>)
 
+    @Query("SELECT * FROM $DB_RECIPE_TABLE")
+    suspend fun getRecipes(): List<RecipeEntity>
+
     @Transaction
-    @Query("SELECT * FROM recipes WHERE $DB_RECIPE_ID= :recipeId")
+    @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID= :recipeId")
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity
 
 //    Delete only if recipe is not added in book and delete all ingredients and instructions

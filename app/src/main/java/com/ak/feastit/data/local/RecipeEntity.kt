@@ -7,15 +7,12 @@ import androidx.room.PrimaryKey
 import com.ak.feastit.utils.*
 
 @Entity(
-    tableName = DB_RECIPE_TABLE,
-    indices = [Index(value = [DB_RECIPE_ID], unique = true)]
+    tableName = DB_RECIPE_TABLE
 )
 data class RecipeEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = DB_TABLE_ID)
     val id: Long,
-    @ColumnInfo(name = DB_RECIPE_ID)
-    val recipeId: Long,
     @ColumnInfo(name = DB_TABLE_COL_NAME)
     val recipeName: String,
     @ColumnInfo(name = DB_TABLE_COL_SUMMARY)
@@ -34,4 +31,10 @@ data class RecipeEntity(
     val sourceName: String,
     @ColumnInfo(name = DB_MY_RECIPE_BOOK)
     val isAdded: Boolean = false,
+    @ColumnInfo(name = DB_RECIPE_CUISINES)
+    val cuisines: String,
+    @ColumnInfo(name = DB_RECIPE_DISH_TYPES)
+    val dishTypes: String,
+    @ColumnInfo(name = DB_RECIPE_DIETS)
+    val diets: String,
 )

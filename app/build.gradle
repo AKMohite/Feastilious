@@ -19,6 +19,12 @@ android {
         buildConfigField("String", "API_KEY", "\"${SPOONACULAR_KEY}\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {
@@ -86,6 +92,7 @@ dependencies {
 
 //    room
     implementation deps.room.runtime
+    implementation deps.room.ktx
     kapt deps.room.compiler
 
     testImplementation deps.junit
