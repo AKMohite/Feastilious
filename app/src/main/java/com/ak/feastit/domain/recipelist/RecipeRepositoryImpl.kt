@@ -50,9 +50,14 @@ class RecipeRepositoryImpl constructor(
                         recipeDAO.insertRecipes(dtoRecipes)
                         recipeDAO.insertIngredients(ingredients)
                         recipeDAO.insertInstructions(instructions)
+                        recipeDAO.deleteRecipes()
                     }
                 }
             }
+
+            val recipeDetails = recipeDAO.getRecipeDetail(716426)
+
+            val recipeSingle = recipeDetails.recipe
 
             val localRecipes = recipeDAO.getRecipes()
             recipes = recipeDomainMapper.toRecipesDomain(localRecipes)

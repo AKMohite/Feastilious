@@ -1,13 +1,16 @@
 package com.ak.feastit.data.local
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.ak.feastit.utils.*
 
 @Entity(
-        tableName = DB_INGREDIENT_TABLE
+        tableName = DB_INGREDIENT_TABLE,
+        foreignKeys = [ForeignKey(
+                entity = RecipeEntity::class,
+                parentColumns = [DB_TABLE_ID],
+                childColumns = [DB_RECIPE_ID],
+                onDelete = ForeignKey.CASCADE
+        )]
 )
 data class IngredientEntity(
     @PrimaryKey(autoGenerate = false)

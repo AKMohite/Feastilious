@@ -35,5 +35,8 @@ interface RecipeDAO {
     @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID= :recipeId")
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity
 
+    @Query("DELETE FROM $DB_RECIPE_TABLE WHERE id = 644387")
+    suspend fun deleteRecipes()
+
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }
