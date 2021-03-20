@@ -1,6 +1,8 @@
 package com.ak.feastit.domain.recipedetails
 
 import android.util.Log
+import com.ak.feastit.data.local.FeastDatabase
+import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
@@ -9,10 +11,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RecipeDetailRepositoryImpl constructor(
-        private val apiService: FeastAPIService
+        private val feastDatabase: FeastDatabase,
+        private val domainMapper: RecipeDomainMapper
 ) : RecipeDetailRepository {
 
-    override fun getRecipeDetail(recipe: Recipe): Flow<RecipeResult<RecipeDetail>> = flow {
+    private val recipeDAO = feastDatabase.recipeDAO()
+
+    override fun getRecipeDetail(id: Long): Flow<RecipeResult<RecipeDetail>> = flow {
         try {
             /*emit(RecipeResult.loading())
             val detailResponse = apiService.getAnalysedDetail(recipe.id.toString())
@@ -69,6 +74,10 @@ class RecipeDetailRepositoryImpl constructor(
             } else {
                 emit(RecipeResult.error<RecipeDetail>("An error occurred"))
             }*/
+            emit(RecipeResult.loading())
+            val recipe = recipeDAO.getRecipeDetail(recipeId = id)
+
+            emit(RecipeResult.success(domainMapper.toRecipeDetailDomain(recipe)))
         } catch (error: Exception) {
             emit(RecipeResult.error(error.message ?: "An error occurred"))
             Log.d(APP_TAG, "getRecipeDetail: ${error.message}")

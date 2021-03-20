@@ -36,6 +36,7 @@ object RepositoryModule {
 
     @Provides
     fun provideRecipeDetailRepository(
-            apiService: FeastAPIService
-    ): RecipeDetailRepository = RecipeDetailRepositoryImpl(apiService)
+            feastDatabase: FeastDatabase,
+            recipeDomainMapper: RecipeDomainMapper,
+    ): RecipeDetailRepository = RecipeDetailRepositoryImpl(feastDatabase, recipeDomainMapper)
 }

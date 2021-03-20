@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 class RecipeDetailUseCase constructor(
         private val repository: RecipeDetailRepository
-): UseCaseWithParams<Recipe, Flow<RecipeResult<RecipeDetail>>>() {
+): UseCaseWithParams<Long, Flow<RecipeResult<RecipeDetail>>>() {
 
-    override fun buildUseCase(params: Recipe): Flow<RecipeResult<RecipeDetail>> {
+    override fun buildUseCase(params: Long): Flow<RecipeResult<RecipeDetail>> {
         return repository.getRecipeDetail(params)
     }
 }

@@ -15,14 +15,14 @@ class RecipeDetailViewModel @Inject constructor(
         private val detailUseCase: RecipeDetailUseCase
 ) : ViewModel() {
 
-    fun getRecipe(recipe: Recipe) {
-        /*detailUseCase.execute(recipe)
+    fun getRecipe(id: Long) {
+        detailUseCase.execute(id)
                 .onEach { detailState ->
                     detailState.data?.let { detail ->
 
                     }
                 }
-                .launchIn(viewModelScope)*/
+                .launchIn(viewModelScope)
     }
 
 

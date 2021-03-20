@@ -48,12 +48,6 @@
         tools:layout="@layout/recipe_detail_fragment" >
         <argument
             android:name="recipeId"
-            app:argType="string" />
-        <argument
-            android:name="recipeName"
-            app:argType="string" />
-        <argument
-            android:name="recipeImage"
-            app:argType="string" />
+            app:argType="long" />
     </fragment>
 </navigation>

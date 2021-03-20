@@ -20,7 +20,7 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val binding = RecipeDetailFragmentBinding.bind(view)
 
-        viewModel.getRecipe(Recipe(id = args.recipeId.toLong(), recipeName = args.recipeName, recipeImgUrl = args.recipeImage))
+        viewModel.getRecipe(args.recipeId)
     }
 
 }
