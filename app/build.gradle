@@ -71,6 +71,9 @@ dependencies {
     implementation deps.navigation.fragment_ktx
     implementation deps.navigation.ui_ktx
 
+//    recyclerview for concat adapter
+    implementation deps.recyclerview
+
     // Dagger Hilt
     implementation deps.hilt.hilt_android
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
