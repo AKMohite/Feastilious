@@ -32,6 +32,9 @@ interface RecipeDAO {
     @Query("SELECT * FROM $DB_RECIPE_TABLE")
     suspend fun getRecipes(): List<RecipeEntity>
 
+    @Query("SELECT $DB_TABLE_ID FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1")
+    suspend fun getFavRecipeIds(): List<Long>
+
     @Transaction
     @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID= :recipeId")
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity

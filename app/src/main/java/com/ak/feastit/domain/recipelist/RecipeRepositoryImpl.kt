@@ -35,14 +35,18 @@ class RecipeRepositoryImpl constructor(
 
                 val recipeDetails = recipeEntityMapper.toEntityList(apiRecipes)
 
-                //            TODO handle favorite recipes too and null assertion
+                //            TODO handle favorite recipes while deleting from DB and null assertion
 
                 if (!recipeDetails.isNullOrEmpty()) {
                     val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
                     val ingredients: MutableList<IngredientEntity> = mutableListOf()
                     val instructions: MutableList<InstructionEntity> = mutableListOf()
+                    val favRecipes = recipeDAO.getFavRecipeIds()
                     recipeDetails.forEach { recipe ->
-                        dtoRecipes.add(recipe.recipe)
+                        if (!favRecipes.isNullOrEmpty() && favRecipes.contains(recipe.recipe.id))
+                            dtoRecipes.add(recipe.recipe.copy(isAdded = true))
+                        else
+                            dtoRecipes.add(recipe.recipe)
                         ingredients.addAll(recipe.ingredients)
                         instructions.addAll(recipe.instructions)
                     }
