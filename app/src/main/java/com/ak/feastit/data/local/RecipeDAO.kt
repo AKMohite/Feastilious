@@ -3,6 +3,7 @@ package com.ak.feastit.data.local
 import androidx.room.*
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.utils.DB_MY_RECIPE_BOOK
 import com.ak.feastit.utils.DB_RECIPE_ID
 import com.ak.feastit.utils.DB_RECIPE_TABLE
 import com.ak.feastit.utils.DB_TABLE_ID
@@ -34,6 +35,9 @@ interface RecipeDAO {
     @Transaction
     @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID= :recipeId")
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity
+
+    @Query("UPDATE $DB_RECIPE_TABLE SET $DB_MY_RECIPE_BOOK = :isFav WHERE $DB_TABLE_ID = :id")
+    suspend fun toggleFav(id: Long, isFav: Boolean): Int
 
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

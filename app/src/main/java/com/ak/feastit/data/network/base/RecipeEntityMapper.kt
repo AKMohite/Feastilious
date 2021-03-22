@@ -8,6 +8,7 @@ import com.ak.feastit.data.network.model.AnalyzedInstructionDTO
 import com.ak.feastit.data.network.model.ExtendedIngredientDTO
 import com.ak.feastit.data.network.model.RecipeDTO
 import com.ak.feastit.domain.base.DataMapper
+import com.ak.feastit.utils.IMG_INGREDIENT_BASE_URL
 import java.util.*
 import javax.inject.Inject
 
@@ -42,7 +43,7 @@ class RecipeEntityMapper @Inject constructor(): DataMapper<RecipeDTO, RecipeDeta
                     recipeId = recipeId,
                     ingredientUnique = "$recipeId-${ing.name?.capitalize(Locale.getDefault())?.replace(" ", "") ?: ""}",
                     ingredientConsistency = ing.consistency ?: "",
-                    ingredientImg = ing.image ?: "",
+                    ingredientImg = if (!ing.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${ing.image}" else "",
                     ingredientName = ing.name?.capitalize(Locale.getDefault()) ?: "",
                     ingredientSpec = ing.original ?: "",
                     amount = ing.amount ?: 0.0,

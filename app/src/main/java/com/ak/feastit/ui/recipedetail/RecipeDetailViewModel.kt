@@ -2,8 +2,10 @@ package com.ak.feastit.ui.recipedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ak.feastit.domain.recipedetails.FavParams
 import com.ak.feastit.domain.recipedetails.RecipeDetail
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
+import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,17 +17,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
-        private val detailUseCase: RecipeDetailUseCase
+        private val detailUseCase: RecipeDetailUseCase,
+        private val toggleFavUseCase: ToggleFavUseCase,
 ) : ViewModel() {
     val recipeDetail: MutableStateFlow<RecipeDetail?> = MutableStateFlow(null)
+    val favRecipe: MutableStateFlow<Boolean> = MutableStateFlow(false)
     fun getRecipe(id: Long) {
         detailUseCase.execute(id)
                 .onEach { detailState ->
                     detailState.data?.let { detail ->
                         recipeDetail.value = detail
+                        favRecipe.value = detail.isAdded
                     }
                 }
                 .launchIn(viewModelScope)
+    }
+
+    fun toggleFav() {
+        recipeDetail.value?.let { recipe ->
+            toggleFavUseCase.execute(FavParams(recipe.recipeId, !favRecipe.value))
+                    .onEach { favState ->
+                        favState.data?.let { fav ->
+                            if (fav) {
+                                favRecipe.value = !favRecipe.value
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+        }
     }
 
 

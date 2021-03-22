@@ -3,6 +3,8 @@ package com.ak.feastit.utils
 const val APP_TAG = "FeastIt"
 const val DEFAULT_PAGE_SIZE = "30"
 
+const val IMG_INGREDIENT_BASE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
+
 // API Query Keys
 const val QUERY_SEARCH = "query"
 const val QUERY_NUMBER = "number"

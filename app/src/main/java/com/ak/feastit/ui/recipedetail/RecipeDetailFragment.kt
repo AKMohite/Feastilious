@@ -45,6 +45,10 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
 
                 )
             }
+
+            recipeFavBtn.setOnClickListener {
+                viewModel.toggleFav()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -56,6 +60,15 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
                     ingredsAdapter.submitList(detail.ingredients)
                     instsAdapter.submitList(detail.instructions)
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.favRecipe.collect { fav ->
+                if (fav)
+                    binding.recipeFavBtn.setImageResource(R.drawable.ic_favorite_filled)
+                else
+                    binding.recipeFavBtn.setImageResource(R.drawable.ic_favorite_border)
             }
         }
     }
