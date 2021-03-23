@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeRepository {
 
     fun searchRecipes(params: HashMap<String, String>): Flow<RecipeResult<List<Recipe>>>
+
+    fun getRecipesByCategory(params: HashMap<String, String>): Flow<RecipeResult<List<Recipe>>>
 }

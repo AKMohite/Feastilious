@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.ak.feastit.data.utils.FeastPrefManager
 import com.ak.feastit.domain.category.GetCategoriesUseCase
 import com.ak.feastit.domain.category.RecipeCategory
+import com.ak.feastit.domain.recipelist.MealTypeRecipeUseCase
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
 import com.ak.feastit.utils.*
@@ -17,12 +18,14 @@ import javax.inject.Inject
 class RecipeViewModel @Inject constructor(
         private val getCategoriesUseCase: GetCategoriesUseCase,
         private val searchRecipeUseCase: SearchRecipeUseCase,
+        private val mealTypeRecipeUseCase: MealTypeRecipeUseCase,
         val prefManager: FeastPrefManager,
         val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())
     val dashboardRecipes = MutableStateFlow<List<Recipe>>(emptyList())
+    val selectedCategory = MutableStateFlow("")
 
     init {
         getCategoriesUseCase.execute(Unit).onEach { state ->
@@ -31,11 +34,7 @@ class RecipeViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        searchRecipeUseCase.execute(applyQueries()).onEach { state ->
-            state.data?.let { recipes ->
-                dashboardRecipes.value = recipes
-            }
-        }.launchIn(viewModelScope)
+        searchRecipe("")
     }
 
 //    ?offset=0&number=6&type=&diet=&addRecipeInformation=true&fillIngredients=true
@@ -51,7 +50,7 @@ class RecipeViewModel @Inject constructor(
 
         queries[QUERY_NUMBER] = DEFAULT_PAGE_SIZE
         queries[QUERY_OFFSET] = "0" // TODO pagination
-        queries[QUERY_TYPE] = "" // TODO implement meal type
+        queries[QUERY_TYPE] = selectedCategory.value // TODO implement meal type
         queries[QUERY_DIET] = "" // TODO implement diet type
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILL_INGREDIENTS] = "true"
@@ -59,7 +58,7 @@ class RecipeViewModel @Inject constructor(
         return queries
     }
 
-    fun applySearchQuery(searchQuery: String): HashMap<String, String> {
+    private fun applySearchQuery(searchQuery: String): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
         queries[QUERY_SEARCH] = searchQuery
         queries[QUERY_OFFSET] = "0" // TODO pagination
@@ -67,5 +66,35 @@ class RecipeViewModel @Inject constructor(
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILL_INGREDIENTS] = "true"
         return queries
+    }
+
+    fun searchRecipe(searchQuery: String) {
+        selectedCategory.value = ""
+        searchRecipeUseCase.execute(applySearchQuery(searchQuery = searchQuery))
+                .onEach {  recipeResult ->
+                    recipeResult.data?.let { recipes ->
+                        dashboardRecipes.value = recipes
+                    }
+                }
+                .launchIn(viewModelScope)
+    }
+
+    fun searchByCategory(mealCategory: String) {
+        if (!mealCategory.isBlank()) {
+            selectedCategory.value = mealCategory
+            getRecipesByMealType()
+        } else
+            searchRecipe("")
+
+    }
+
+    private fun getRecipesByMealType() {
+        mealTypeRecipeUseCase.execute(applyQueries())
+                .onEach {  recipeResult ->
+                    recipeResult.data?.let { recipes ->
+                        dashboardRecipes.value = recipes
+                    }
+                }
+                .launchIn(viewModelScope)
     }
 }

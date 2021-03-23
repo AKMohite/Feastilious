@@ -3,10 +3,7 @@ package com.ak.feastit.data.local
 import androidx.room.*
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.domain.recipelist.Recipe
-import com.ak.feastit.utils.DB_MY_RECIPE_BOOK
-import com.ak.feastit.utils.DB_RECIPE_ID
-import com.ak.feastit.utils.DB_RECIPE_TABLE
-import com.ak.feastit.utils.DB_TABLE_ID
+import com.ak.feastit.utils.*
 
 @Dao
 interface RecipeDAO {
@@ -41,6 +38,17 @@ interface RecipeDAO {
 
     @Query("UPDATE $DB_RECIPE_TABLE SET $DB_MY_RECIPE_BOOK = :isFav WHERE $DB_TABLE_ID = :id")
     suspend fun toggleFav(id: Long, isFav: Boolean): Int
+
+    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE 
+                    LOWER($DB_TABLE_COL_NAME) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_TABLE_COL_SUMMARY) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_CUISINES) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_DISH_TYPES) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_DIETS) LIKE '%' || :searchQuery || '%'""")
+    suspend fun searchRecipes(searchQuery: String): List<RecipeEntity>
+
+    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE LOWER($DB_RECIPE_DISH_TYPES) LIKE '%'|| :mealType ||'%'""")
+    suspend fun getRecipesByMealType(mealType: String): List<RecipeEntity>
 
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

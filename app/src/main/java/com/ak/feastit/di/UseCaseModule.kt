@@ -6,6 +6,7 @@ import com.ak.feastit.domain.category.GetCategoriesUseCase
 import com.ak.feastit.domain.recipedetails.RecipeDetailRepository
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
+import com.ak.feastit.domain.recipelist.MealTypeRecipeUseCase
 import com.ak.feastit.domain.recipelist.RecipeRepository
 import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
 import dagger.Module
@@ -22,6 +23,9 @@ object UseCaseModule {
 
     @Provides
     fun provideSearchRecipeUseCase(recipeRepository: RecipeRepository) = SearchRecipeUseCase(recipeRepository)
+
+    @Provides
+    fun provideMealTypeRecipeUseCase(recipeRepository: RecipeRepository) = MealTypeRecipeUseCase(recipeRepository)
 
     @Provides
     fun provideRecipeDetailUseCase(recipeDetailRepository: RecipeDetailRepository) = RecipeDetailUseCase(recipeDetailRepository)
