@@ -4,21 +4,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeIngredItemBinding
 import com.ak.feastit.domain.recipedetails.Ingredient
-import com.bumptech.glide.Glide
 
-class RecipeIngredientAdapter(): ListAdapter<Ingredient, RecipeIngredientAdapter.IngredientViewHolder>(IngredientComparator()) {
+class RecipeIngredientAdapter : ListAdapter<Ingredient, RecipeIngredientAdapter.IngredientViewHolder>(IngredientComparator()) {
 
     class IngredientViewHolder(private val binding: RecipeIngredItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bindData(ingredient: Ingredient) {
-            Glide.with(itemView).load(ingredient.image)
-                    .error(R.drawable.ic_recipe_img_placeholder)
-                    .placeholder(R.drawable.ic_recipe_img_placeholder)
-                    .into(binding.imgIngredient)
 
-            binding.tvIngredientDesc.text = ingredient.name
+            binding.apply {
+                imgIngredient.load(ingredient.image) {
+                    error(R.drawable.ic_recipe_img_placeholder)
+                    placeholder(R.drawable.ic_recipe_img_placeholder)
+                }
+
+                tvIngredientDesc.text = ingredient.name
+            }
         }
 
     }

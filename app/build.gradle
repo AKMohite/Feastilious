@@ -89,9 +89,8 @@ dependencies {
     implementation deps.retrofit.moshi_converter
     kapt deps.retrofit.moshi_codegen
 
-//    glide
-    implementation deps.glide.runtime
-    kapt deps.glide.compiler
+//    coil image loading
+    implementation deps.coil.runtime
 
 //    room
     implementation deps.room.runtime

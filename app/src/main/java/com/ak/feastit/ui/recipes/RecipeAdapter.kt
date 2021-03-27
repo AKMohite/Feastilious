@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeItemBinding
 import com.ak.feastit.domain.recipelist.Recipe
-import com.bumptech.glide.Glide
 
 class RecipeAdapter(
         private val onItemClick: (Recipe) -> Unit,
@@ -36,7 +36,7 @@ class RecipeAdapter(
         init {
             binding.apply {
                 root.setOnClickListener {
-                    val position = adapterPosition
+                    val position = bindingAdapterPosition
                     if (position != RecyclerView.NO_POSITION)
                         onItemClick(position)
                 }
@@ -45,10 +45,10 @@ class RecipeAdapter(
 
         fun bindData(recipe: Recipe) {
             binding.apply {
-                Glide.with(itemView)
-                    .load(recipe.recipeImgUrl)
-                    .error(R.drawable.image_placeholder)
-                    .into(recipeImg)
+                recipeImg.load(recipe.recipeImgUrl) {
+                    placeholder(R.drawable.ic_recipe_img_placeholder)
+                    error(R.drawable.ic_recipe_img_placeholder)
+                }
 
                 recipeName.text = recipe.recipeName
             }

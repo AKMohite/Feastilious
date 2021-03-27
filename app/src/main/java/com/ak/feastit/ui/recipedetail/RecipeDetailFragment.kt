@@ -10,10 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeDetailFragmentBinding
-import com.ak.feastit.domain.recipelist.Recipe
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -54,7 +53,10 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.recipeDetail.collect { recipeDetail ->
                 recipeDetail?.let { detail ->
-                    Glide.with(requireContext()).load(detail.recipeImg).placeholder(R.drawable.ic_recipe_img_placeholder).error(R.drawable.ic_recipe_img_placeholder).into(binding.recipeImg)
+                    binding.recipeImg.load(detail.recipeImg) {
+                        placeholder(R.drawable.ic_recipe_img_placeholder)
+                        error(R.drawable.ic_recipe_img_placeholder)
+                    }
                     binding.recipeName.text = detail.recipeName
                     headingAdapter.subtitle = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) Html.fromHtml(detail.recipeSummary, Html.FROM_HTML_MODE_LEGACY) else Html.fromHtml(detail.recipeSummary)
                     ingredsAdapter.submitList(detail.ingredients)
