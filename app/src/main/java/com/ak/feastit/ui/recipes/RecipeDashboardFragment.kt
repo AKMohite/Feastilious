@@ -42,7 +42,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                 setHasFixedSize(true)
             }
 
-            recipeSearch.setOnEditorActionListener { v, actionId, event ->
+            recipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!v.text.trim().isBlank())
                         viewModel.searchRecipe(v.text.trim().toString())
@@ -65,7 +65,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                     chip.text = category.categoryName
                     chip.setOnCheckedChangeListener { selectChip, isChecked ->
                         if (isChecked) {
-                            binding.recipeSearch.setText("")
+                            binding.recipeSearch.feastSearchEt.setText("")
                             viewModel.searchByCategory(selectChip.text.toString())
                         } else {
                             viewModel.searchRecipe("")
