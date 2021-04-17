@@ -3,8 +3,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next">Next</string>
     <string name="search">Search</string>
+    <string name="txt_wip">Work in progress</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Facilisi cras fermentum odio eu feugiat pretium nibh. Pretium viverra suspendisse potenti nullam. Amet tellus cras adipiscing enim eu turpis. Malesuada fames ac turpis egestas maecenas pharetra convallis. Est velit egestas dui id ornare arcu odio ut sem. Facilisis gravida neque convallis a cras semper auctor neque.</string>
     <string name="summary">Summary:</string>
     <string name="ingredients">Ingredients:</string>
     <string name="instructions">Instructions:</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
+    <string name="cart">Cart</string>
 </resources>

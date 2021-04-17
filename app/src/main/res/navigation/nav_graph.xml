@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashFragment">
-
+    app:startDestination="@id/recipeDashboardFragment">
+    <!--TODO handle splash and onboarding screen-->
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.ak.feastit.ui.splash.SplashFragment"
@@ -50,4 +50,19 @@
             android:name="recipeId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/favoriteRecipesFragment"
+        android:name="com.ak.feastit.ui.favorites.FavoriteRecipesFragment"
+        android:label="favorite_recipes_fragment"
+        tools:layout="@layout/favorite_recipes_fragment">
+        <action
+            android:id="@+id/action_favoriteRecipesFragment_to_recipeDetailFragment"
+            app:destination="@id/recipeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.ak.feastit.ui.cart.ShoppingListFragment"
+        android:label="shopping_list_fragment"
+        tools:layout="@layout/shopping_list_fragment"
+        />
 </navigation>
