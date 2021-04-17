@@ -1,8 +1,10 @@
 package com.ak.feastit.di
 
 import com.ak.feastit.data.local.FeastDatabase
+import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.domain.category.CategoryRepository
 import com.ak.feastit.domain.category.GetCategoriesUseCase
+import com.ak.feastit.domain.favlist.FavRecipeUseCase
 import com.ak.feastit.domain.recipedetails.RecipeDetailRepository
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
@@ -32,5 +34,11 @@ object UseCaseModule {
 
     @Provides
     fun provideToggleFavUseCase(feastDatabase: FeastDatabase) = ToggleFavUseCase(feastDatabase)
+
+    @Provides
+    fun provideFavRecipeUseCase(
+            feastDatabase: FeastDatabase,
+            recipeDomainMapper: RecipeDomainMapper,
+    ) = FavRecipeUseCase(feastDatabase, recipeDomainMapper)
 
 }

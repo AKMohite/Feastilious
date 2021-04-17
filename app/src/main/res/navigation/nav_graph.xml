@@ -56,7 +56,7 @@
         android:label="favorite_recipes_fragment"
         tools:layout="@layout/favorite_recipes_fragment">
         <action
-            android:id="@+id/action_favoriteRecipesFragment_to_recipeDetailFragment"
+            android:id="@+id/favRecipes_to_recipeDetail"
             app:destination="@id/recipeDetailFragment" />
     </fragment>
     <fragment

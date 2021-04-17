@@ -1,13 +1,66 @@
 package com.ak.feastit.ui.favorites
 
+import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
+import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
+import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.ui.recipes.RecipeAdapter
+import com.ak.feastit.ui.recipes.RecipeDashboardFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
 
     private val viewModel: FavoriteRecipesViewModel by viewModels()
+    private var recipeAdapter: RecipeAdapter = RecipeAdapter { recipe ->
+        navigateToDetails(recipe)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setFlowObservers(view)
+    }
+
+    private fun setFlowObservers(view: View) {
+        val binding =  FavoriteRecipesFragmentBinding.bind(view)
+
+        binding.apply {
+            favRecipeRv.apply {
+                adapter = recipeAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
+
+            favRecipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (!v.text.trim().isBlank())
+                        viewModel.favSearchRecipe(v.text.trim().toString())
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.favRecipes.collect { recipes ->
+                recipeAdapter.submitList(recipes) // TODO check callbacks
+            }
+        }
+    }
+
+    private fun navigateToDetails(recipe: Recipe) {
+        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(
+                recipeId = recipe.id
+        ))
+    }
 
 }

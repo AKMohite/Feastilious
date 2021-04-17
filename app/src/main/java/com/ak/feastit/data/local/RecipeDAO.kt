@@ -50,5 +50,13 @@ interface RecipeDAO {
     @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE LOWER($DB_RECIPE_DISH_TYPES) LIKE '%'|| :mealType ||'%'""")
     suspend fun getRecipesByMealType(mealType: String): List<RecipeEntity>
 
+    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1 AND
+                    (LOWER($DB_TABLE_COL_NAME) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_TABLE_COL_SUMMARY) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_CUISINES) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_DISH_TYPES) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER($DB_RECIPE_DIETS) LIKE '%' || :searchQuery || '%')""")
+    suspend fun getFavRecipes(searchQuery: String): List<RecipeEntity>
+
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }
