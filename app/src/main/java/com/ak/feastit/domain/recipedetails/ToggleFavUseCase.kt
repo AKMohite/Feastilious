@@ -3,7 +3,6 @@ package com.ak.feastit.domain.recipedetails
 import android.util.Log
 import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.domain.base.UseCaseWithParams
-import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 
 
 class ToggleFavUseCase constructor(
-        feastDatabase: FeastDatabase,
+        feastDatabase: FeastDatabase
 ): UseCaseWithParams<FavParams, Flow<RecipeResult<Boolean>>>() {
 
     private val recipeDAO = feastDatabase.recipeDAO()

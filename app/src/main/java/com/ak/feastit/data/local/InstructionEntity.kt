@@ -23,5 +23,5 @@ data class InstructionEntity(
     @ColumnInfo(name = DB_STEP_INGREDIENTS)
     val stepIngredients: String,
     @ColumnInfo(name = DB_STEP_EQUIPMENTS)
-    val stepEquipments: String,
+    val stepEquipments: String
 )

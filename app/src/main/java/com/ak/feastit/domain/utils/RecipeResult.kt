@@ -3,7 +3,7 @@ package com.ak.feastit.domain.utils
 data class RecipeResult<out T>(
     val data: T? = null,
     val error: String? = null,
-    val loading: Boolean = false,
+    val loading: Boolean = false
 ) {
     companion object{
 
@@ -11,12 +11,12 @@ data class RecipeResult<out T>(
             data: T
         ): RecipeResult<T>{
             return RecipeResult(
-                data = data,
+                data = data
             )
         }
 
         fun <T> error(
-            message: String,
+            message: String
         ): RecipeResult<T>{
             return RecipeResult(
                 error = message

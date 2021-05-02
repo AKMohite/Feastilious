@@ -12,7 +12,6 @@ import com.ak.feastit.R
 import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
 import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.ui.recipes.RecipeAdapter
-import com.ak.feastit.ui.recipes.RecipeDashboardFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -40,7 +39,7 @@ class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
                 setHasFixedSize(true)
             }
 
-            favRecipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, event ->
+            favRecipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!v.text.trim().isBlank())
                         viewModel.favSearchRecipe(v.text.trim().toString())

@@ -15,5 +15,5 @@ data class RecipeDetail(
         val sourceName: String,
         val isAdded: Boolean = false,
         val instructions: List<Instruction> = emptyList(),
-        val ingredients: List<Ingredient> = emptyList(),
+        val ingredients: List<Ingredient> = emptyList()
 )

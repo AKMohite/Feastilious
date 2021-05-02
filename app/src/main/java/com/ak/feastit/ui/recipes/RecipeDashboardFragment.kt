@@ -42,7 +42,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                 setHasFixedSize(true)
             }
 
-            recipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, event ->
+            recipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!v.text.trim().isBlank())
                         viewModel.searchRecipe(v.text.trim().toString())

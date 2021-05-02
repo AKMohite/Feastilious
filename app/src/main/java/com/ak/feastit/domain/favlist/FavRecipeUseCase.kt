@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 
 class FavRecipeUseCase constructor(
         private val feastDatabase: FeastDatabase,
-        private val recipeDomainMapper: RecipeDomainMapper,
+        private val recipeDomainMapper: RecipeDomainMapper
 ) : UseCaseWithParams<String, Flow<RecipeResult<List<Recipe>>>>() {
 
     private val recipeDAO = feastDatabase.recipeDAO()

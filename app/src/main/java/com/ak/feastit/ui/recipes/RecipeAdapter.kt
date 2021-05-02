@@ -10,7 +10,7 @@ import com.ak.feastit.databinding.RecipeItemBinding
 import com.ak.feastit.domain.recipelist.Recipe
 
 class RecipeAdapter(
-        private val onItemClick: (Recipe) -> Unit,
+        private val onItemClick: (Recipe) -> Unit
 ): ListAdapter<Recipe, RecipeAdapter.RecipeViewHolder>(RecipeComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {

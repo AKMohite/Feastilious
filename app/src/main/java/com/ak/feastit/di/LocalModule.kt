@@ -18,7 +18,7 @@ object LocalModule {
     @Singleton
     @Provides
     fun provideDataBase(
-            app: Application,
+            app: Application
     ) = Room.databaseBuilder(app, FeastDatabase::class.java, FEAST_DB)
             .fallbackToDestructiveMigration() // TODO room migration
             .build()

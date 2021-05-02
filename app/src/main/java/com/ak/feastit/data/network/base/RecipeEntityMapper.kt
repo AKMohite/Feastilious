@@ -37,7 +37,6 @@ class RecipeEntityMapper @Inject constructor(): DataMapper<RecipeDTO, RecipeDeta
     }
 
     private fun toIngredientsEntity(recipeId: Long, ingredients: List<ExtendedIngredientDTO>?): List<IngredientEntity> {
-        val spaceRegex = " [a-zA-Z]".toRegex()
         return ingredients?.map { ing ->
             IngredientEntity(
                     recipeId = recipeId,

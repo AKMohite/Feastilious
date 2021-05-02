@@ -6,11 +6,8 @@ import com.ak.feastit.domain.recipedetails.FavParams
 import com.ak.feastit.domain.recipedetails.RecipeDetail
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
-import com.ak.feastit.domain.recipelist.Recipe
-import com.ak.feastit.domain.utils.RecipeResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -18,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
         private val detailUseCase: RecipeDetailUseCase,
-        private val toggleFavUseCase: ToggleFavUseCase,
+        private val toggleFavUseCase: ToggleFavUseCase
 ) : ViewModel() {
     val recipeDetail: MutableStateFlow<RecipeDetail?> = MutableStateFlow(null)
     val favRecipe: MutableStateFlow<Boolean> = MutableStateFlow(false)

@@ -15,13 +15,12 @@ import com.ak.feastit.utils.QUERY_SEARCH
 import com.ak.feastit.utils.QUERY_TYPE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
 class RecipeRepositoryImpl constructor(
     private val apiService: FeastAPIService,
     private val feastDatabase: FeastDatabase,
     private val recipeEntityMapper: RecipeEntityMapper,
-    private val recipeDomainMapper: RecipeDomainMapper,
+    private val recipeDomainMapper: RecipeDomainMapper
 ) : RecipeRepository {
 
     private val recipeDAO = feastDatabase.recipeDAO()

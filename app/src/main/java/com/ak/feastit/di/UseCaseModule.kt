@@ -38,7 +38,7 @@ object UseCaseModule {
     @Provides
     fun provideFavRecipeUseCase(
             feastDatabase: FeastDatabase,
-            recipeDomainMapper: RecipeDomainMapper,
+            recipeDomainMapper: RecipeDomainMapper
     ) = FavRecipeUseCase(feastDatabase, recipeDomainMapper)
 
 }
