@@ -3,6 +3,9 @@ package com.ak.feastit.di
 import com.ak.feastit.BuildConfig
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.MockInterceptor
+import com.ak.feastit.data.network.base.RecipeEntityMapper
+import com.ak.feastit.data.network.datasource.RecipeNetworkSource
+import com.ak.feastit.data.network.datasource.RecipeNetworkSourceImpl
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -86,5 +89,11 @@ object NetworkModule {
     fun provideFeastService(retrofit: Retrofit.Builder): FeastAPIService = retrofit
         .build()
         .create(FeastAPIService::class.java)
+
+    @Provides
+    fun provide(
+        apiService: FeastAPIService,
+        recipeEntityMapper: RecipeEntityMapper,
+    ): RecipeNetworkSource = RecipeNetworkSourceImpl(apiService, recipeEntityMapper)
 
 }

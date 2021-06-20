@@ -10,6 +10,7 @@ import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.base.RecipeEntityMapper
+import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import com.ak.feastit.utils.QUERY_SEARCH
@@ -18,9 +19,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RecipeRepositoryImpl constructor(
-    private val apiService: FeastAPIService,
+    private val networkSource: RecipeNetworkSource,
     private val feastDatabase: FeastDatabase,
-    private val recipeEntityMapper: RecipeEntityMapper,
     private val recipeDomainMapper: RecipeDomainMapper
 ) : RecipeRepository {
 
@@ -32,7 +32,7 @@ class RecipeRepositoryImpl constructor(
         try {
             emit(RecipeResult.loading())
             val searchQuery = params[QUERY_SEARCH]?.toLowerCase() ?: ""
-            val apiRecipes = getRemoteRecipes(params)
+            val apiRecipes = networkSource.searchRecipes(params)
             saveNetworkRecipes(apiRecipes)
             val recipes: List<Recipe> = searchLocalRecipes(searchQuery)
             emit(RecipeResult.success(recipes))
@@ -48,7 +48,7 @@ class RecipeRepositoryImpl constructor(
         try {
             emit(RecipeResult.loading())
             val mealType = params[QUERY_TYPE]?.toLowerCase() ?: ""
-            val apiRecipes = getRemoteRecipes(params)
+            val apiRecipes = networkSource.searchRecipes(params)
             saveNetworkRecipes(apiRecipes)
             val recipes: List<Recipe> = searchLocalRecipesByMealType(mealType)
             emit(RecipeResult.success(recipes))
@@ -56,18 +56,6 @@ class RecipeRepositoryImpl constructor(
             emit(RecipeResult.error(e.message ?: "An error occurred"))
             Log.e(APP_TAG, "getRandomRecipes: ${e.message}")
         }
-    }
-
-    private suspend fun getRemoteRecipes(
-        queryParams: HashMap<String, String>
-    ): List<RecipeDetailEntity> {
-        val response = apiService.searchRecipes(queryParams)
-        val apiRecipes = response.results
-        var recipeDetails = emptyList<RecipeDetailEntity>()
-        if (!apiRecipes.isNullOrEmpty()) {
-            recipeDetails = recipeEntityMapper.toEntityList(apiRecipes)
-        }
-        return recipeDetails
     }
 
     private suspend fun saveNetworkRecipes(
