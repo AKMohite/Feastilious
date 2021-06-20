@@ -7,8 +7,10 @@ import com.ak.feastit.data.local.IngredientEntity
 import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
 import com.ak.feastit.data.local.base.RecipeDomainMapper
+import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.base.RecipeEntityMapper
+import com.ak.feastit.data.network.model.RecipeDTO
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import com.ak.feastit.utils.QUERY_SEARCH
@@ -29,45 +31,52 @@ class RecipeRepositoryImpl constructor(
         try {
             emit(RecipeResult.loading())
             val searchQuery = params[QUERY_SEARCH]?.toLowerCase() ?: ""
-            val response = apiService.searchRecipes(params)
-            var recipes = listOf<Recipe>()
-
-            val apiRecipes = response.results
-            if (!apiRecipes.isNullOrEmpty()) {
-
-                val recipeDetails = recipeEntityMapper.toEntityList(apiRecipes)
-
-                if (!recipeDetails.isNullOrEmpty()) {
-                    val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
-                    val ingredients: MutableList<IngredientEntity> = mutableListOf()
-                    val instructions: MutableList<InstructionEntity> = mutableListOf()
-
-//            TODO handle favorite recipes while deleting from DB and null assertion
-                    val favRecipes = recipeDAO.getFavRecipeIds()
-                    recipeDetails.forEach { recipe ->
-                        if (!favRecipes.isNullOrEmpty() && favRecipes.contains(recipe.recipe.id))
-                            dtoRecipes.add(recipe.recipe.copy(isAdded = true))
-                        else
-                            dtoRecipes.add(recipe.recipe)
-                        ingredients.addAll(recipe.ingredients)
-                        instructions.addAll(recipe.instructions)
-                    }
-                    feastDatabase.withTransaction {
-                        recipeDAO.insertRecipes(dtoRecipes)
-                        recipeDAO.insertIngredients(ingredients)
-                        recipeDAO.insertInstructions(instructions)
-                    }
-                }
-            }
-
-            val localRecipes = recipeDAO.searchRecipes(searchQuery)
-            recipes = recipeDomainMapper.toRecipesDomain(localRecipes)
-
-
+            val apiRecipes = getRemoteRecipes(params)
+            saveNetworkRecipes(apiRecipes)
+            val recipes: List<Recipe> = getLocalRecipes(searchQuery)
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))
             Log.e(APP_TAG, "getRandomRecipes: ${e.message}")
+        }
+    }
+
+    private suspend fun getLocalRecipes(searchQuery: String): List<Recipe> {
+        val localRecipes = recipeDAO.searchRecipes(searchQuery)
+        return recipeDomainMapper.toRecipesDomain(localRecipes)
+    }
+
+    private suspend fun getRemoteRecipes(queryParams: HashMap<String, String>): List<RecipeDetailEntity> {
+        val response = apiService.searchRecipes(queryParams)
+        val apiRecipes = response.results
+        var recipeDetails = emptyList<RecipeDetailEntity>()
+        if (!apiRecipes.isNullOrEmpty()) {
+            recipeDetails = recipeEntityMapper.toEntityList(apiRecipes)
+        }
+        return recipeDetails
+    }
+
+    private suspend fun saveNetworkRecipes(recipeDetails: List<RecipeDetailEntity>) {
+        if (!recipeDetails.isNullOrEmpty()) {
+            val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
+            val ingredients: MutableList<IngredientEntity> = mutableListOf()
+            val instructions: MutableList<InstructionEntity> = mutableListOf()
+
+//            TODO handle favorite recipes while deleting from DB and null assertion
+            val favRecipes = recipeDAO.getFavRecipeIds()
+            recipeDetails.forEach { recipe ->
+                if (!favRecipes.isNullOrEmpty() && recipe.recipe.id in favRecipes)
+                    dtoRecipes.add(recipe.recipe.copy(isAdded = true))
+                else
+                    dtoRecipes.add(recipe.recipe)
+                ingredients.addAll(recipe.ingredients)
+                instructions.addAll(recipe.instructions)
+            }
+            feastDatabase.withTransaction {
+                recipeDAO.insertRecipes(dtoRecipes)
+                recipeDAO.insertIngredients(ingredients)
+                recipeDAO.insertInstructions(instructions)
+            }
         }
     }
 
