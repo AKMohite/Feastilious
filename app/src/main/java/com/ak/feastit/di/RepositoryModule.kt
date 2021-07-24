@@ -1,7 +1,5 @@
 package com.ak.feastit.di
 
-import com.ak.feastit.data.local.FeastDatabase
-import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.category.CategoryRepository
@@ -30,7 +28,6 @@ object RepositoryModule {
 
     @Provides
     fun provideRecipeDetailRepository(
-            feastDatabase: FeastDatabase,
-            recipeDomainMapper: RecipeDomainMapper
-    ): RecipeDetailRepository = RecipeDetailRepositoryImpl(feastDatabase, recipeDomainMapper)
+        localDataSource: RecipeLocalDataSource
+    ): RecipeDetailRepository = RecipeDetailRepositoryImpl(localDataSource)
 }

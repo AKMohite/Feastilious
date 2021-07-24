@@ -7,6 +7,7 @@ import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
 import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
+import com.ak.feastit.domain.recipedetails.RecipeDetail
 import com.ak.feastit.domain.recipelist.Recipe
 
 class RecipeLocalDataSourceImpl(
@@ -50,5 +51,15 @@ class RecipeLocalDataSourceImpl(
     override suspend fun searchLocalRecipesByMealType(mealType: String): List<Recipe> {
         val localRecipes = recipeDAO.getRecipesByMealType(mealType)
         return recipeDomainMapper.toRecipesDomain(localRecipes)
+    }
+
+    override suspend fun getRecipeDetail(recipeId: Long): RecipeDetail {
+        val recipeDetail = recipeDAO.getRecipeDetail(recipeId)
+        return recipeDomainMapper.toRecipeDetailDomain(recipeDetail)
+    }
+
+    override suspend fun toggleFav(recipeId: Long, isFav: Boolean): Boolean {
+        val rowsUpdated = recipeDAO.toggleFav(recipeId, isFav)
+        return rowsUpdated > 0
     }
 }
