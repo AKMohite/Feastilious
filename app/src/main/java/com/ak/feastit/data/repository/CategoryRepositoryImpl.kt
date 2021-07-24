@@ -1,12 +1,12 @@
 package com.ak.feastit.data.repository
 
 import com.ak.feastit.domain.model.RecipeCategory
-import com.ak.feastit.domain.repository.CategoryRepository
+import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class CategoryRepositoryImpl : CategoryRepository {
+class CategoryRepositoryImpl : ICategoryRepository {
 
     override fun getFoodCategories(): Flow<RecipeResult<List<RecipeCategory>>> = flow {
         emit(RecipeResult.success(getStaticMealCategories()))

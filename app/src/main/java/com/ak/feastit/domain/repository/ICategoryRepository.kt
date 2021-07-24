@@ -4,8 +4,6 @@ import com.ak.feastit.domain.model.RecipeCategory
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 
-interface CategoryRepository {
-
+interface ICategoryRepository {
     fun getFoodCategories(): Flow<RecipeResult<List<RecipeCategory>>>
-
 }

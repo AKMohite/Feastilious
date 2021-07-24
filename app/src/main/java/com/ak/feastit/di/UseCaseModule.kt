@@ -2,14 +2,14 @@ package com.ak.feastit.di
 
 import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.base.RecipeDomainMapper
-import com.ak.feastit.domain.repository.CategoryRepository
+import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.domain.usecase.GetCategoriesUseCase
 import com.ak.feastit.domain.usecase.FavRecipeUseCase
-import com.ak.feastit.domain.repository.RecipeDetailRepository
+import com.ak.feastit.domain.repository.IRecipeDetailRepository
 import com.ak.feastit.domain.usecase.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
 import com.ak.feastit.domain.usecase.MealTypeRecipeUseCase
-import com.ak.feastit.domain.repository.RecipeRepository
+import com.ak.feastit.domain.repository.IRecipeRepository
 import com.ak.feastit.domain.usecase.SearchRecipeUseCase
 import dagger.Module
 import dagger.Provides
@@ -21,19 +21,19 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 object UseCaseModule {
 
     @Provides
-    fun provideGetCategoriesUseCase(categoryRepository: CategoryRepository) = GetCategoriesUseCase(categoryRepository)
+    fun provideGetCategoriesUseCase(categoryRepository: ICategoryRepository) = GetCategoriesUseCase(categoryRepository)
 
     @Provides
-    fun provideSearchRecipeUseCase(recipeRepository: RecipeRepository) = SearchRecipeUseCase(recipeRepository)
+    fun provideSearchRecipeUseCase(recipeRepository: IRecipeRepository) = SearchRecipeUseCase(recipeRepository)
 
     @Provides
-    fun provideMealTypeRecipeUseCase(recipeRepository: RecipeRepository) = MealTypeRecipeUseCase(recipeRepository)
+    fun provideMealTypeRecipeUseCase(recipeRepository: IRecipeRepository) = MealTypeRecipeUseCase(recipeRepository)
 
     @Provides
-    fun provideRecipeDetailUseCase(recipeDetailRepository: RecipeDetailRepository) = RecipeDetailUseCase(recipeDetailRepository)
+    fun provideRecipeDetailUseCase(recipeDetailRepository: IRecipeDetailRepository) = RecipeDetailUseCase(recipeDetailRepository)
 
     @Provides
-    fun provideToggleFavUseCase(recipeDetailRepository: RecipeDetailRepository) = ToggleFavUseCase(recipeDetailRepository)
+    fun provideToggleFavUseCase(recipeDetailRepository: IRecipeDetailRepository) = ToggleFavUseCase(recipeDetailRepository)
 
     @Provides
     fun provideFavRecipeUseCase(
