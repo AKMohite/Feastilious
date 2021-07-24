@@ -1,6 +1,7 @@
 package com.ak.feastit.domain.category
 import com.ak.feastit.domain.base.UseCaseWithParams
 import com.ak.feastit.domain.model.RecipeCategory
+import com.ak.feastit.domain.repository.CategoryRepository
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 

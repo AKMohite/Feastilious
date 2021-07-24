@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.recipedetails
+package com.ak.feastit.domain.repository
 
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.utils.RecipeResult
