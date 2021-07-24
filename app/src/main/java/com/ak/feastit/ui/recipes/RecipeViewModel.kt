@@ -4,11 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.data.utils.FeastPrefManager
-import com.ak.feastit.domain.category.GetCategoriesUseCase
+import com.ak.feastit.domain.usecase.GetCategoriesUseCase
 import com.ak.feastit.domain.model.RecipeCategory
-import com.ak.feastit.domain.recipelist.MealTypeRecipeUseCase
+import com.ak.feastit.domain.usecase.MealTypeRecipeUseCase
 import com.ak.feastit.domain.model.Recipe
-import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
+import com.ak.feastit.domain.usecase.SearchRecipeUseCase
 import com.ak.feastit.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +22,11 @@ import kotlin.collections.set
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-        private val getCategoriesUseCase: GetCategoriesUseCase,
-        private val searchRecipeUseCase: SearchRecipeUseCase,
-        private val mealTypeRecipeUseCase: MealTypeRecipeUseCase,
-        val prefManager: FeastPrefManager,
-        val savedStateHandle: SavedStateHandle
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    private val searchRecipeUseCase: SearchRecipeUseCase,
+    private val mealTypeRecipeUseCase: MealTypeRecipeUseCase,
+    val prefManager: FeastPrefManager,
+    val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())

@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.favlist
+package com.ak.feastit.domain.usecase
 
 import android.util.Log
 import com.ak.feastit.data.local.FeastDatabase

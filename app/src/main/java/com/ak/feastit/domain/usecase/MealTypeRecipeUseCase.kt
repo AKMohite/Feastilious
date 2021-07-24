@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.recipelist
+package com.ak.feastit.domain.usecase
 
 import com.ak.feastit.domain.base.UseCaseWithParams
 import com.ak.feastit.domain.model.Recipe

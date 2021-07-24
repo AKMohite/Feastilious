@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.domain.recipedetails.FavParams
 import com.ak.feastit.domain.model.RecipeDetail
-import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
+import com.ak.feastit.domain.usecase.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeDetailViewModel @Inject constructor(
-        private val detailUseCase: RecipeDetailUseCase,
-        private val toggleFavUseCase: ToggleFavUseCase
+    private val detailUseCase: RecipeDetailUseCase,
+    private val toggleFavUseCase: ToggleFavUseCase
 ) : ViewModel() {
     val recipeDetail: MutableStateFlow<RecipeDetail?> = MutableStateFlow(null)
     val favRecipe: MutableStateFlow<Boolean> = MutableStateFlow(false)
