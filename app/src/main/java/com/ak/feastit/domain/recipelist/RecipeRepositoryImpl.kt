@@ -3,6 +3,7 @@ package com.ak.feastit.domain.recipelist
 import android.util.Log
 import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
+import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import com.ak.feastit.utils.QUERY_SEARCH

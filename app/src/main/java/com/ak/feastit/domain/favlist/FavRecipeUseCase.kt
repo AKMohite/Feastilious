@@ -4,7 +4,7 @@ import android.util.Log
 import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.domain.base.UseCaseWithParams
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import kotlinx.coroutines.flow.Flow

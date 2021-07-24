@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.RecipeStepItemBinding
-import com.ak.feastit.domain.recipelist.Instruction
+import com.ak.feastit.domain.model.Instruction
 
 class RecipeInstructionAdapter : ListAdapter<Instruction, RecipeInstructionAdapter.InstructionViewHolder>(InstructionComparator()) {
 

@@ -3,7 +3,7 @@ package com.ak.feastit.ui.recipedetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.domain.recipedetails.FavParams
-import com.ak.feastit.domain.recipedetails.RecipeDetail
+import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.recipedetails.RecipeDetailUseCase
 import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

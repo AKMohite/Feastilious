@@ -1,6 +1,4 @@
-package com.ak.feastit.domain.recipedetails
-
-import com.ak.feastit.domain.recipelist.Instruction
+package com.ak.feastit.domain.model
 
 
 data class RecipeDetail(

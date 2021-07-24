@@ -1,8 +1,8 @@
 package com.ak.feastit.data.local.datasource
 
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.domain.recipedetails.RecipeDetail
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.RecipeDetail
+import com.ak.feastit.domain.model.Recipe
 
 interface RecipeLocalDataSource {
     suspend fun saveNetworkRecipes(recipeDetails: List<RecipeDetailEntity>): Boolean

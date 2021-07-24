@@ -5,10 +5,10 @@ import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.domain.base.DataMapper
-import com.ak.feastit.domain.recipedetails.Ingredient
-import com.ak.feastit.domain.recipedetails.RecipeDetail
-import com.ak.feastit.domain.recipelist.Instruction
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.Ingredient
+import com.ak.feastit.domain.model.RecipeDetail
+import com.ak.feastit.domain.model.Instruction
+import com.ak.feastit.domain.model.Recipe
 
 class RecipeDomainMapper: DataMapper<RecipeEntity, Recipe>{
 

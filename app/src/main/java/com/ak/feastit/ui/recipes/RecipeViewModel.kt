@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.data.utils.FeastPrefManager
 import com.ak.feastit.domain.category.GetCategoriesUseCase
-import com.ak.feastit.domain.category.RecipeCategory
+import com.ak.feastit.domain.model.RecipeCategory
 import com.ak.feastit.domain.recipelist.MealTypeRecipeUseCase
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.recipelist.SearchRecipeUseCase
 import com.ak.feastit.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel

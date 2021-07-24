@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.recipedetails
+package com.ak.feastit.domain.model
 
 data class RecipeInstruction(
         val number: Int,

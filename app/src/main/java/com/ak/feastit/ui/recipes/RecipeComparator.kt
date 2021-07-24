@@ -1,7 +1,7 @@
 package com.ak.feastit.ui.recipes
 
 import androidx.recyclerview.widget.DiffUtil
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.Recipe
 
 class RecipeComparator : DiffUtil.ItemCallback<Recipe>() {
 

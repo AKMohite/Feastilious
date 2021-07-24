@@ -3,7 +3,7 @@ package com.ak.feastit.ui.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.domain.favlist.FavRecipeUseCase
-import com.ak.feastit.domain.recipelist.Recipe
+import com.ak.feastit.domain.model.Recipe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

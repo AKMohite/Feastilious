@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.recipelist
+package com.ak.feastit.domain.model
 
 data class Instruction(
         val stepNo: String,

@@ -2,7 +2,6 @@ package com.ak.feastit.data.local
 
 import androidx.room.*
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.domain.recipelist.Recipe
 import com.ak.feastit.utils.*
 
 @Dao

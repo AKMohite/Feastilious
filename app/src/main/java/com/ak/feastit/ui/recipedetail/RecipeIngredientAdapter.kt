@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeIngredItemBinding
-import com.ak.feastit.domain.recipedetails.Ingredient
+import com.ak.feastit.domain.model.Ingredient
 
 class RecipeIngredientAdapter : ListAdapter<Ingredient, RecipeIngredientAdapter.IngredientViewHolder>(IngredientComparator()) {
 

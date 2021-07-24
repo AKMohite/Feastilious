@@ -1,4 +1,4 @@
-package com.ak.feastit.domain.category
+package com.ak.feastit.domain.model
 
 data class RecipeCategory (
     val id: Int,
