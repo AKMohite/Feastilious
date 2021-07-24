@@ -4,9 +4,9 @@ import com.ak.feastit.data.local.IngredientEntity
 import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.data.network.model.AnalyzedInstructionDTO
-import com.ak.feastit.data.network.model.ExtendedIngredientDTO
-import com.ak.feastit.data.network.model.RecipeDTO
+import com.ak.feastit.data.network.dto.AnalyzedInstructionDTO
+import com.ak.feastit.data.network.dto.ExtendedIngredientDTO
+import com.ak.feastit.data.network.dto.RecipeDTO
 import com.ak.feastit.domain.base.DataMapper
 import com.ak.feastit.utils.IMG_INGREDIENT_BASE_URL
 import java.util.*

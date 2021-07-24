@@ -1,4 +1,4 @@
-package com.ak.feastit.data.network.model
+package com.ak.feastit.data.network.dto
 
 import com.squareup.moshi.JsonClass
 

@@ -1,6 +1,6 @@
 package com.ak.feastit.data.network
 
-import com.ak.feastit.data.network.model.ComplexSearchDTO
+import com.ak.feastit.data.network.dto.ComplexSearchDTO
 import com.ak.feastit.utils.API_COMPLEX_SEARCH_RECIPES
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
