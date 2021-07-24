@@ -5,7 +5,7 @@ import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.base.RecipeEntityMapper
 import com.ak.feastit.domain.datasource.IRecipeNetworkSource
 
-class RecipeNetworkSourceImpl(
+class RecipeNetworkSource(
     private val apiService: FeastAPIService,
     private val recipeEntityMapper: RecipeEntityMapper
 ) : IRecipeNetworkSource {

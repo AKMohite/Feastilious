@@ -6,7 +6,7 @@ import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.RecipeDAO
 import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
-import com.ak.feastit.data.local.datasource.RecipeLocalDataSourceImpl
+import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.utils.FEAST_DB
 import dagger.Module
 import dagger.Provides
@@ -36,6 +36,6 @@ object LocalModule {
     fun provideRecipeLocalSource(
         feastDatabase: FeastDatabase,
         recipeDomainMapper: RecipeDomainMapper
-    ): IRecipeLocalDataSource = RecipeLocalDataSourceImpl(feastDatabase, recipeDomainMapper)
+    ): IRecipeLocalDataSource = RecipeLocalDataSource(feastDatabase, recipeDomainMapper)
 
 }

@@ -11,7 +11,7 @@ import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.model.Recipe
 
-class RecipeLocalDataSourceImpl(
+class RecipeLocalDataSource(
     private val feastDatabase: FeastDatabase,
     private val recipeDomainMapper: RecipeDomainMapper
 ) : IRecipeLocalDataSource {
