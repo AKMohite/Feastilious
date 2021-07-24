@@ -3,7 +3,7 @@ package com.ak.feastit.di
 import com.ak.feastit.BuildConfig
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.MockInterceptor
-import com.ak.feastit.data.network.base.RecipeEntityMapper
+import com.ak.feastit.domain.mapper.RecipeEntityMapper
 import com.ak.feastit.domain.datasource.IRecipeNetworkSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.squareup.moshi.Moshi

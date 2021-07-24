@@ -1,4 +1,4 @@
-package com.ak.feastit.data.local.base
+package com.ak.feastit.domain.mapper
 
 import com.ak.feastit.data.local.IngredientEntity
 import com.ak.feastit.data.local.InstructionEntity

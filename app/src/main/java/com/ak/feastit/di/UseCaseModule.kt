@@ -1,7 +1,7 @@
 package com.ak.feastit.di
 
 import com.ak.feastit.data.local.FeastDatabase
-import com.ak.feastit.data.local.base.RecipeDomainMapper
+import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.domain.usecase.GetCategoriesUseCase
 import com.ak.feastit.domain.usecase.FavRecipeUseCase
