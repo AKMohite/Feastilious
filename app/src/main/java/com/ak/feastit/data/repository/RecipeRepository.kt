@@ -12,7 +12,7 @@ import com.ak.feastit.utils.QUERY_TYPE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class RecipeRepositoryImpl constructor(
+class RecipeRepository constructor(
     private val networkSource: RecipeNetworkSource,
     private val localDataSource: RecipeLocalDataSource
 ) : IRecipeRepository {

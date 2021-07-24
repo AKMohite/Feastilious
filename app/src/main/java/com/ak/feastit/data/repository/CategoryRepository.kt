@@ -6,7 +6,7 @@ import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class CategoryRepositoryImpl : ICategoryRepository {
+class CategoryRepository : ICategoryRepository {
 
     override fun getFoodCategories(): Flow<RecipeResult<List<RecipeCategory>>> = flow {
         emit(RecipeResult.success(getStaticMealCategories()))

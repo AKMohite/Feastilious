@@ -9,7 +9,7 @@ import com.ak.feastit.utils.APP_TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class RecipeDetailRepositoryImpl constructor(
+class RecipeDetailRepository constructor(
     private val localDataSource: RecipeLocalDataSource
 ) : IRecipeDetailRepository {
 
