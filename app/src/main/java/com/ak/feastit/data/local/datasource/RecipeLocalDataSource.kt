@@ -49,6 +49,11 @@ class RecipeLocalDataSource(
         return recipeDomainMapper.toRecipesDomain(localRecipes)
     }
 
+    override suspend fun getFavRecipes(searchQuery: String): List<Recipe> {
+        val localRecipes = recipeDAO.getFavRecipes(searchQuery)
+        return recipeDomainMapper.toRecipesDomain(localRecipes)
+    }
+
     override suspend fun searchLocalRecipesByMealType(mealType: String): List<Recipe> {
         val localRecipes = recipeDAO.getRecipesByMealType(mealType)
         return recipeDomainMapper.toRecipesDomain(localRecipes)

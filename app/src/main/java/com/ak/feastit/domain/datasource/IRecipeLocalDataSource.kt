@@ -7,6 +7,7 @@ import com.ak.feastit.domain.model.Recipe
 interface IRecipeLocalDataSource {
     suspend fun saveNetworkRecipes(recipeDetails: List<RecipeDetailEntity>): Boolean
     suspend fun searchLocalRecipes(searchQuery: String): List<Recipe>
+    suspend fun getFavRecipes(searchQuery: String): List<Recipe>
     suspend fun searchLocalRecipesByMealType(mealType: String): List<Recipe>
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetail
     suspend fun toggleFav(recipeId: Long, isFav: Boolean): Boolean
