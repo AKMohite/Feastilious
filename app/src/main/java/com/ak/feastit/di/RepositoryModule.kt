@@ -3,11 +3,11 @@ package com.ak.feastit.di
 import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.repository.CategoryRepository
-import com.ak.feastit.domain.category.CategoryRepositoryImpl
+import com.ak.feastit.data.repository.CategoryRepositoryImpl
 import com.ak.feastit.domain.repository.RecipeDetailRepository
-import com.ak.feastit.domain.recipedetails.RecipeDetailRepositoryImpl
+import com.ak.feastit.data.repository.RecipeDetailRepositoryImpl
 import com.ak.feastit.domain.repository.RecipeRepository
-import com.ak.feastit.domain.recipelist.RecipeRepositoryImpl
+import com.ak.feastit.data.repository.RecipeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
