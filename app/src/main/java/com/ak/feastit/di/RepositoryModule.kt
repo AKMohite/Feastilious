@@ -2,6 +2,7 @@ package com.ak.feastit.di
 
 import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.base.RecipeDomainMapper
+import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.category.CategoryRepository
 import com.ak.feastit.domain.category.CategoryRepositoryImpl
@@ -22,14 +23,10 @@ object RepositoryModule {
     fun provideCategoryRepository(): CategoryRepository = CategoryRepositoryImpl()
 
     @Provides
-    fun provideDomainMapper(): RecipeDomainMapper = RecipeDomainMapper()
-
-    @Provides
     fun provideRecipeRepository(
         networkSource: RecipeNetworkSource,
-        feastDatabase: FeastDatabase,
-        recipeDomainMapper: RecipeDomainMapper,
-    ): RecipeRepository = RecipeRepositoryImpl(networkSource, feastDatabase, recipeDomainMapper)
+        localDataSource: RecipeLocalDataSource
+    ): RecipeRepository = RecipeRepositoryImpl(networkSource, localDataSource)
 
     @Provides
     fun provideRecipeDetailRepository(

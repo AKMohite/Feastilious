@@ -1,15 +1,7 @@
 package com.ak.feastit.domain.recipelist
 
 import android.util.Log
-import androidx.room.withTransaction
-import com.ak.feastit.data.local.FeastDatabase
-import com.ak.feastit.data.local.IngredientEntity
-import com.ak.feastit.data.local.InstructionEntity
-import com.ak.feastit.data.local.RecipeEntity
-import com.ak.feastit.data.local.base.RecipeDomainMapper
-import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.data.network.FeastAPIService
-import com.ak.feastit.data.network.base.RecipeEntityMapper
+import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
@@ -20,11 +12,8 @@ import kotlinx.coroutines.flow.flow
 
 class RecipeRepositoryImpl constructor(
     private val networkSource: RecipeNetworkSource,
-    private val feastDatabase: FeastDatabase,
-    private val recipeDomainMapper: RecipeDomainMapper
+    private val localDataSource: RecipeLocalDataSource
 ) : RecipeRepository {
-
-    private val recipeDAO = feastDatabase.recipeDAO()
 
     override fun searchRecipes(
         params: HashMap<String, String>
@@ -33,8 +22,8 @@ class RecipeRepositoryImpl constructor(
             emit(RecipeResult.loading())
             val searchQuery = params[QUERY_SEARCH]?.toLowerCase() ?: ""
             val apiRecipes = networkSource.searchRecipes(params)
-            saveNetworkRecipes(apiRecipes)
-            val recipes: List<Recipe> = searchLocalRecipes(searchQuery)
+            localDataSource.saveNetworkRecipes(apiRecipes)
+            val recipes: List<Recipe> = localDataSource.searchLocalRecipes(searchQuery)
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))
@@ -49,52 +38,12 @@ class RecipeRepositoryImpl constructor(
             emit(RecipeResult.loading())
             val mealType = params[QUERY_TYPE]?.toLowerCase() ?: ""
             val apiRecipes = networkSource.searchRecipes(params)
-            saveNetworkRecipes(apiRecipes)
-            val recipes: List<Recipe> = searchLocalRecipesByMealType(mealType)
+            localDataSource.saveNetworkRecipes(apiRecipes)
+            val recipes: List<Recipe> = localDataSource.searchLocalRecipesByMealType(mealType)
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))
             Log.e(APP_TAG, "getRandomRecipes: ${e.message}")
         }
-    }
-
-    private suspend fun saveNetworkRecipes(
-        recipeDetails: List<RecipeDetailEntity>
-    ) {
-        if (!recipeDetails.isNullOrEmpty()) {
-            val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
-            val ingredients: MutableList<IngredientEntity> = mutableListOf()
-            val instructions: MutableList<InstructionEntity> = mutableListOf()
-
-//            TODO handle favorite recipes while deleting from DB and null assertion
-            val favRecipes = recipeDAO.getFavRecipeIds()
-            recipeDetails.forEach { recipe ->
-                if (!favRecipes.isNullOrEmpty() && recipe.recipe.id in favRecipes)
-                    dtoRecipes.add(recipe.recipe.copy(isAdded = true))
-                else
-                    dtoRecipes.add(recipe.recipe)
-                ingredients.addAll(recipe.ingredients)
-                instructions.addAll(recipe.instructions)
-            }
-            feastDatabase.withTransaction {
-                recipeDAO.insertRecipes(dtoRecipes)
-                recipeDAO.insertIngredients(ingredients)
-                recipeDAO.insertInstructions(instructions)
-            }
-        }
-    }
-
-    private suspend fun searchLocalRecipes(
-        searchQuery: String
-    ): List<Recipe> {
-        val localRecipes = recipeDAO.searchRecipes(searchQuery)
-        return recipeDomainMapper.toRecipesDomain(localRecipes)
-    }
-
-    private suspend fun searchLocalRecipesByMealType(
-        mealType: String
-    ): List<Recipe> {
-        val localRecipes = recipeDAO.getRecipesByMealType(mealType)
-        return recipeDomainMapper.toRecipesDomain(localRecipes)
     }
 }

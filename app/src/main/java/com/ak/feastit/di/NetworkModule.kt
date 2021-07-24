@@ -91,7 +91,7 @@ object NetworkModule {
         .create(FeastAPIService::class.java)
 
     @Provides
-    fun provide(
+    fun provideRecipeNetworkSource(
         apiService: FeastAPIService,
         recipeEntityMapper: RecipeEntityMapper,
     ): RecipeNetworkSource = RecipeNetworkSourceImpl(apiService, recipeEntityMapper)
