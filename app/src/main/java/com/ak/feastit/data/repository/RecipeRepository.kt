@@ -1,8 +1,8 @@
 package com.ak.feastit.data.repository
 
 import android.util.Log
-import com.ak.feastit.domain.datasource.RecipeLocalDataSource
-import com.ak.feastit.domain.datasource.RecipeNetworkSource
+import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
+import com.ak.feastit.domain.datasource.IRecipeNetworkSource
 import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.repository.IRecipeRepository
 import com.ak.feastit.domain.utils.RecipeResult
@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RecipeRepository constructor(
-    private val networkSource: RecipeNetworkSource,
-    private val localDataSource: RecipeLocalDataSource
+    private val networkSource: IRecipeNetworkSource,
+    private val localDataSource: IRecipeLocalDataSource
 ) : IRecipeRepository {
 
     override fun searchRecipes(

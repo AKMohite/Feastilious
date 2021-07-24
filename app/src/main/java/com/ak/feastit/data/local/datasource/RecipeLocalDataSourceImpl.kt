@@ -7,14 +7,14 @@ import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
 import com.ak.feastit.data.local.base.RecipeDomainMapper
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.domain.datasource.RecipeLocalDataSource
+import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.model.Recipe
 
 class RecipeLocalDataSourceImpl(
     private val feastDatabase: FeastDatabase,
     private val recipeDomainMapper: RecipeDomainMapper
-) : RecipeLocalDataSource {
+) : IRecipeLocalDataSource {
 
     private val recipeDAO = feastDatabase.recipeDAO()
 

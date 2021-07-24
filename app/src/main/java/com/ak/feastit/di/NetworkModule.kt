@@ -4,7 +4,7 @@ import com.ak.feastit.BuildConfig
 import com.ak.feastit.data.network.FeastAPIService
 import com.ak.feastit.data.network.MockInterceptor
 import com.ak.feastit.data.network.base.RecipeEntityMapper
-import com.ak.feastit.domain.datasource.RecipeNetworkSource
+import com.ak.feastit.domain.datasource.IRecipeNetworkSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSourceImpl
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -94,6 +94,6 @@ object NetworkModule {
     fun provideRecipeNetworkSource(
         apiService: FeastAPIService,
         recipeEntityMapper: RecipeEntityMapper,
-    ): RecipeNetworkSource = RecipeNetworkSourceImpl(apiService, recipeEntityMapper)
+    ): IRecipeNetworkSource = RecipeNetworkSourceImpl(apiService, recipeEntityMapper)
 
 }

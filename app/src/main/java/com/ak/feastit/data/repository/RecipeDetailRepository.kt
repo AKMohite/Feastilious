@@ -1,7 +1,7 @@
 package com.ak.feastit.data.repository
 
 import android.util.Log
-import com.ak.feastit.domain.datasource.RecipeLocalDataSource
+import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.repository.IRecipeDetailRepository
 import com.ak.feastit.domain.utils.RecipeResult
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RecipeDetailRepository constructor(
-    private val localDataSource: RecipeLocalDataSource
+    private val localDataSource: IRecipeLocalDataSource
 ) : IRecipeDetailRepository {
 
     override fun getRecipeDetail(id: Long): Flow<RecipeResult<RecipeDetail>> = flow {
