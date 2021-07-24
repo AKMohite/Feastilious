@@ -1,7 +1,7 @@
 package com.ak.feastit.di
 
-import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
-import com.ak.feastit.data.network.datasource.RecipeNetworkSource
+import com.ak.feastit.domain.datasource.RecipeLocalDataSource
+import com.ak.feastit.domain.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.data.repository.CategoryRepository
 import com.ak.feastit.domain.repository.IRecipeDetailRepository

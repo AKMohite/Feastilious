@@ -1,4 +1,4 @@
-package com.ak.feastit.data.network.datasource
+package com.ak.feastit.domain.datasource
 
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 

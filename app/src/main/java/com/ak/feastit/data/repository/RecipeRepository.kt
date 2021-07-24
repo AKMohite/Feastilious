@@ -1,8 +1,8 @@
 package com.ak.feastit.data.repository
 
 import android.util.Log
-import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
-import com.ak.feastit.data.network.datasource.RecipeNetworkSource
+import com.ak.feastit.domain.datasource.RecipeLocalDataSource
+import com.ak.feastit.domain.datasource.RecipeNetworkSource
 import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.repository.IRecipeRepository
 import com.ak.feastit.domain.utils.RecipeResult
