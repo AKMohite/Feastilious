@@ -22,7 +22,7 @@ class FavoriteRecipesViewModel @Inject constructor(
     }
 
     fun favSearchRecipe(searchQuery: String) {
-        favRecipeUseCase.execute(searchQuery)
+        favRecipeUseCase(searchQuery)
                 .onEach {  recipeResult ->
                     recipeResult.data?.let { recipes ->
                         favRecipes.value = recipes

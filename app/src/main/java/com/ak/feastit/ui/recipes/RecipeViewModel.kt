@@ -76,7 +76,7 @@ class RecipeViewModel @Inject constructor(
 
     fun searchRecipe(searchQuery: String) {
         selectedCategory.value = ""
-        searchRecipeUseCase.execute(applySearchQuery(searchQuery = searchQuery))
+        searchRecipeUseCase(applySearchQuery(searchQuery = searchQuery))
                 .onEach {  recipeResult ->
                     recipeResult.data?.let { recipes ->
                         dashboardRecipes.value = recipes
@@ -95,7 +95,7 @@ class RecipeViewModel @Inject constructor(
     }
 
     private fun getRecipesByMealType() {
-        mealTypeRecipeUseCase.execute(applyQueries())
+        mealTypeRecipeUseCase(applyQueries())
                 .onEach {  recipeResult ->
                     recipeResult.data?.let { recipes ->
                         dashboardRecipes.value = recipes

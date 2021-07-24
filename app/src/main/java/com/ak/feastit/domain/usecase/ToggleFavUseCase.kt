@@ -1,6 +1,5 @@
-package com.ak.feastit.domain.recipedetails
+package com.ak.feastit.domain.usecase
 
-import com.ak.feastit.domain.base.UseCaseWithParams
 import com.ak.feastit.domain.repository.IRecipeDetailRepository
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
@@ -8,14 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class ToggleFavUseCase constructor(
     private val repository: IRecipeDetailRepository
-): UseCaseWithParams<FavParams, Flow<RecipeResult<Boolean>>>() {
-
-    override fun buildUseCase(params: FavParams): Flow<RecipeResult<Boolean>> {
-        return repository.toggleRecipeFav(params.id, params.isAdded)
+) {
+    operator fun invoke(id: Long, isAdded: Boolean): Flow<RecipeResult<Boolean>> {
+        return repository.toggleRecipeFav(id, isAdded)
     }
 }
-
-data class FavParams(
-        val id: Long,
-        val isAdded: Boolean
-)

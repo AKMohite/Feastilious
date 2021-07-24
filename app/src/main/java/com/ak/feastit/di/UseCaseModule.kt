@@ -1,13 +1,11 @@
 package com.ak.feastit.di
 
-import com.ak.feastit.data.local.FeastDatabase
-import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.domain.usecase.GetCategoriesUseCase
 import com.ak.feastit.domain.usecase.FavRecipeUseCase
 import com.ak.feastit.domain.repository.IRecipeDetailRepository
 import com.ak.feastit.domain.usecase.RecipeDetailUseCase
-import com.ak.feastit.domain.recipedetails.ToggleFavUseCase
+import com.ak.feastit.domain.usecase.ToggleFavUseCase
 import com.ak.feastit.domain.usecase.MealTypeRecipeUseCase
 import com.ak.feastit.domain.repository.IRecipeRepository
 import com.ak.feastit.domain.usecase.SearchRecipeUseCase
