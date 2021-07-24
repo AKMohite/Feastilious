@@ -33,7 +33,7 @@ object UseCaseModule {
     fun provideRecipeDetailUseCase(recipeDetailRepository: RecipeDetailRepository) = RecipeDetailUseCase(recipeDetailRepository)
 
     @Provides
-    fun provideToggleFavUseCase(feastDatabase: FeastDatabase) = ToggleFavUseCase(feastDatabase)
+    fun provideToggleFavUseCase(recipeDetailRepository: RecipeDetailRepository) = ToggleFavUseCase(recipeDetailRepository)
 
     @Provides
     fun provideFavRecipeUseCase(
