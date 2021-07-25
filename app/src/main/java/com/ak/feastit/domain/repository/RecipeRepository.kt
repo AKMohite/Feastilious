@@ -3,6 +3,8 @@ package com.ak.feastit.domain.repository
 import android.util.Log
 import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.IRecipeNetworkSource
+import com.ak.feastit.domain.mapper.RecipeDomainMapper
+import com.ak.feastit.domain.mapper.RecipeEntityMapper
 import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
@@ -16,6 +18,9 @@ class RecipeRepository constructor(
         private val localDataSource: IRecipeLocalDataSource
 ) : IRecipeRepository {
 
+    private val domainMapper = RecipeDomainMapper()
+    private val entityMapper = RecipeEntityMapper()
+
     override fun searchRecipes(
         params: HashMap<String, String>
     ): Flow<RecipeResult<List<Recipe>>> = flow {
@@ -23,8 +28,8 @@ class RecipeRepository constructor(
             emit(RecipeResult.loading())
             val searchQuery = params[QUERY_SEARCH]?.toLowerCase() ?: ""
             val apiRecipes = networkSource.searchRecipes(params)
-            localDataSource.saveNetworkRecipes(apiRecipes)
-            val recipes: List<Recipe> = localDataSource.searchLocalRecipes(searchQuery)
+            localDataSource.saveNetworkRecipes(entityMapper.toEntityList(apiRecipes))
+            val recipes: List<Recipe> = domainMapper.toRecipesDomain(localDataSource.searchLocalRecipes(searchQuery))
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))
@@ -39,8 +44,8 @@ class RecipeRepository constructor(
             emit(RecipeResult.loading())
             val mealType = params[QUERY_TYPE]?.toLowerCase() ?: ""
             val apiRecipes = networkSource.searchRecipes(params)
-            localDataSource.saveNetworkRecipes(apiRecipes)
-            val recipes: List<Recipe> = localDataSource.searchLocalRecipesByMealType(mealType)
+            localDataSource.saveNetworkRecipes(entityMapper.toEntityList(apiRecipes))
+            val recipes: List<Recipe> = domainMapper.toRecipesDomain(localDataSource.searchLocalRecipesByMealType(mealType))
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))
@@ -53,7 +58,7 @@ class RecipeRepository constructor(
     ): Flow<RecipeResult<List<Recipe>>> = flow {
         try {
             emit(RecipeResult.loading())
-            val recipes = localDataSource.getFavRecipes(params)
+            val recipes = domainMapper.toRecipesDomain(localDataSource.getFavRecipes(params))
             emit(RecipeResult.success(recipes))
         } catch (e: Exception) {
             emit(RecipeResult.error(e.message ?: "An error occurred"))

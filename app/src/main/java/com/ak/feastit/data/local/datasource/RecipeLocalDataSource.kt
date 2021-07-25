@@ -5,14 +5,10 @@ import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.IngredientEntity
 import com.ak.feastit.data.local.InstructionEntity
 import com.ak.feastit.data.local.RecipeEntity
-import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.domain.model.RecipeDetail
-import com.ak.feastit.domain.model.Recipe
 
 class RecipeLocalDataSource(
-    private val feastDatabase: FeastDatabase,
-    private val recipeDomainMapper: RecipeDomainMapper
+    private val feastDatabase: FeastDatabase
 ) : IRecipeLocalDataSource {
 
     private val recipeDAO = feastDatabase.recipeDAO()
@@ -43,24 +39,20 @@ class RecipeLocalDataSource(
         return true
     }
 
-    override suspend fun searchLocalRecipes(searchQuery: String): List<Recipe> {
-        val localRecipes = recipeDAO.searchRecipes(searchQuery)
-        return recipeDomainMapper.toRecipesDomain(localRecipes)
+    override suspend fun searchLocalRecipes(searchQuery: String): List<RecipeEntity> {
+        return recipeDAO.searchRecipes(searchQuery)
     }
 
-    override suspend fun getFavRecipes(searchQuery: String): List<Recipe> {
-        val localRecipes = recipeDAO.getFavRecipes(searchQuery)
-        return recipeDomainMapper.toRecipesDomain(localRecipes)
+    override suspend fun getFavRecipes(searchQuery: String): List<RecipeEntity> {
+        return recipeDAO.getFavRecipes(searchQuery)
     }
 
-    override suspend fun searchLocalRecipesByMealType(mealType: String): List<Recipe> {
-        val localRecipes = recipeDAO.getRecipesByMealType(mealType)
-        return recipeDomainMapper.toRecipesDomain(localRecipes)
+    override suspend fun searchLocalRecipesByMealType(mealType: String): List<RecipeEntity> {
+        return recipeDAO.getRecipesByMealType(mealType)
     }
 
-    override suspend fun getRecipeDetail(recipeId: Long): RecipeDetail {
-        val recipeDetail = recipeDAO.getRecipeDetail(recipeId)
-        return recipeDomainMapper.toRecipeDetailDomain(recipeDetail)
+    override suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity {
+        return recipeDAO.getRecipeDetail(recipeId)
     }
 
     override suspend fun toggleFav(recipeId: Long, isFav: Boolean): Boolean {

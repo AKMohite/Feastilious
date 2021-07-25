@@ -27,15 +27,8 @@ object LocalModule {
             .build()
 
     @Provides
-    fun provideRecipeDAO(db: FeastDatabase): RecipeDAO = db.recipeDAO()
-
-    @Provides
-    fun provideDomainMapper(): RecipeDomainMapper = RecipeDomainMapper()
-
-    @Provides
     fun provideRecipeLocalSource(
-        feastDatabase: FeastDatabase,
-        recipeDomainMapper: RecipeDomainMapper
-    ): IRecipeLocalDataSource = RecipeLocalDataSource(feastDatabase, recipeDomainMapper)
+        feastDatabase: FeastDatabase
+    ): IRecipeLocalDataSource = RecipeLocalDataSource(feastDatabase)
 
 }

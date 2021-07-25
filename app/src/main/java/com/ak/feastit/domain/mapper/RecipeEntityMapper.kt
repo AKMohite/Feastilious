@@ -12,7 +12,7 @@ import com.ak.feastit.utils.IMG_INGREDIENT_BASE_URL
 import java.util.*
 import javax.inject.Inject
 
-class RecipeEntityMapper @Inject constructor(): DataMapper<RecipeDTO, RecipeDetailEntity> {
+class RecipeEntityMapper: DataMapper<RecipeDTO, RecipeDetailEntity> {
 
     override fun mapToDomainModel(model: RecipeDTO): RecipeDetailEntity {
         return RecipeDetailEntity(

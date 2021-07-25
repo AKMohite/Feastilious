@@ -92,8 +92,7 @@ object NetworkModule {
 
     @Provides
     fun provideRecipeNetworkSource(
-        apiService: FeastAPIService,
-        recipeEntityMapper: RecipeEntityMapper,
-    ): IRecipeNetworkSource = RecipeNetworkSource(apiService, recipeEntityMapper)
+        apiService: FeastAPIService
+    ): IRecipeNetworkSource = RecipeNetworkSource(apiService)
 
 }

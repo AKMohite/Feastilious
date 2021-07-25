@@ -2,6 +2,7 @@ package com.ak.feastit.domain.repository
 
 import android.util.Log
 import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
+import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
@@ -12,10 +13,12 @@ class RecipeDetailRepository constructor(
     private val localDataSource: IRecipeLocalDataSource
 ) : IRecipeDetailRepository {
 
+    private val domainMapper = RecipeDomainMapper()
+
     override fun getRecipeDetail(id: Long): Flow<RecipeResult<RecipeDetail>> = flow {
         try {
             emit(RecipeResult.loading())
-            val recipe = localDataSource.getRecipeDetail(recipeId = id)
+            val recipe = domainMapper.toRecipeDetailDomain(localDataSource.getRecipeDetail(recipeId = id))
             emit(RecipeResult.success(recipe))
         } catch (error: Exception) {
             emit(RecipeResult.error(error.message ?: "An error occurred"))
