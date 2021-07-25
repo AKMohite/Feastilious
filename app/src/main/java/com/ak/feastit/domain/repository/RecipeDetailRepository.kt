@@ -1,9 +1,8 @@
 package com.ak.feastit.domain.repository
 
 import android.util.Log
-import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
+import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.model.RecipeDetail
-import com.ak.feastit.domain.repository.IRecipeDetailRepository
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import kotlinx.coroutines.flow.Flow

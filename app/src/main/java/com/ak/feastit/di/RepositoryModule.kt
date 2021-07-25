@@ -1,7 +1,7 @@
 package com.ak.feastit.di
 
-import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
-import com.ak.feastit.domain.datasource.IRecipeNetworkSource
+import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
+import com.ak.feastit.data.network.datasource.IRecipeNetworkSource
 import com.ak.feastit.domain.repository.ICategoryRepository
 import com.ak.feastit.domain.repository.CategoryRepository
 import com.ak.feastit.domain.repository.IRecipeDetailRepository
@@ -22,8 +22,8 @@ object RepositoryModule {
 
     @Provides
     fun provideRecipeRepository(
-        networkSource: IRecipeNetworkSource,
-        localDataSource: IRecipeLocalDataSource
+            networkSource: IRecipeNetworkSource,
+            localDataSource: IRecipeLocalDataSource
     ): IRecipeRepository = RecipeRepository(networkSource, localDataSource)
 
     @Provides
