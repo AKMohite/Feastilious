@@ -1,4 +1,4 @@
-package com.ak.feastit.data.repository
+package com.ak.feastit.domain.repository
 
 import android.util.Log
 import com.ak.feastit.domain.datasource.IRecipeLocalDataSource

@@ -1,10 +1,9 @@
-package com.ak.feastit.data.repository
+package com.ak.feastit.domain.repository
 
 import android.util.Log
 import com.ak.feastit.domain.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.datasource.IRecipeNetworkSource
 import com.ak.feastit.domain.model.Recipe
-import com.ak.feastit.domain.repository.IRecipeRepository
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
 import com.ak.feastit.utils.QUERY_SEARCH
