@@ -16,7 +16,7 @@ class SplashFragment : Fragment(R.layout.splash_fragment) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-TODO(https://www.youtube.com/watch?v=bbvYidjZ_CE)
+//TODO(https://www.youtube.com/watch?v=bbvYidjZ_CE)
         setFlowObservers()
     }
 
