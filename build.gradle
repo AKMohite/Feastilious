@@ -6,10 +6,10 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath deps.android_gradle_plugin
-        classpath deps.kotlin.plugin
-        classpath deps.hilt.hilt_plugin
-        classpath deps.navigation.safe_args_plugin
+        classpath libs.android.gradle.plugin
+        classpath libs.kotlin.plugin
+        classpath libs.hilt.plugin
+        classpath libs.navigation.safe.args.plugin
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

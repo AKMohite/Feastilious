@@ -7,15 +7,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion build_versions.compile_sdk
-    buildToolsVersion build_versions.build_tools
+    compileSdkVersion Integer.parseInt(libs.versions.compileSDK.get())
 
     defaultConfig {
         applicationId "com.ak.feastit"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
-        versionCode build_versions.version_code
-        versionName build_versions.version_name
+        minSdkVersion Integer.parseInt(libs.versions.minSDK.get())
+        targetSdkVersion Integer.parseInt(libs.versions.targetSDK.get())
+        versionCode Integer.parseInt(libs.versions.versionCode.get())
+        versionName libs.versions.versionName.get()
         buildConfigField("String", "API_KEY", "\"${SPOONACULAR_KEY}\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -53,51 +52,31 @@ android {
 }
 
 dependencies {
+    implementation libs.app.compat
+    implementation libs.coil.runtime
+    implementation libs.constraint.layout
+    implementation libs.core.ktx
+    implementation libs.coroutines.android
+    implementation libs.coroutines.core
+    implementation libs.data.store
+    implementation libs.hilt.android
+    implementation libs.kotlin.stdlib
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.material
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
+    implementation libs.okhttp.logging.interceptor
+    implementation libs.recyclerview
+    implementation libs.retrofit.moshi
+    implementation libs.retrofit.moshi.converter
+    implementation libs.retrofit.runtime
+    implementation libs.room.ktx
+    implementation libs.room.runtime
 
-    implementation deps.kotlin.stdlib
-    implementation deps.core_ktx
-    implementation deps.app_compat
-    implementation deps.material
-    implementation deps.constraint_layout
+    kapt libs.hilt.android.compiler
+    kapt libs.retrofit.moshi.codegen
+    kapt libs.room.compiler
 
-    // Coroutines
-    implementation deps.coroutines.core
-    implementation deps.coroutines.android
-
-    implementation deps.lifecycle.viewmodel_ktx
-    implementation deps.lifecycle.livedata_ktx
-
-//    navigation
-    implementation deps.navigation.fragment_ktx
-    implementation deps.navigation.ui_ktx
-
-//    recyclerview for concat adapter
-    implementation deps.recyclerview
-
-    // Dagger Hilt
-    implementation deps.hilt.hilt_android
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt deps.hilt.hilt_android_compiler
-
-    // DataStore
-    implementation deps.data_store
-
-//    retrofit
-    implementation deps.retrofit.runtime
-    implementation deps.okhttp_logging_interceptor
-    implementation deps.retrofit.moshi
-    implementation deps.retrofit.moshi_converter
-    kapt deps.retrofit.moshi_codegen
-
-//    coil image loading
-    implementation deps.coil.runtime
-
-//    room
-    implementation deps.room.runtime
-    implementation deps.room.ktx
-    kapt deps.room.compiler
-
-    testImplementation deps.junit
-    androidTestImplementation deps.atsl.ext_junit
-    androidTestImplementation deps.espresso.core
+    testImplementation libs.junit
 }
