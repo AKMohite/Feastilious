@@ -3,7 +3,6 @@ apply(plugin = "com.github.ben-manes.versions")
 buildscript {
     repositories {
         google()
-        jcenter()
         gradlePluginPortal()
     }
     dependencies {
@@ -21,7 +20,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
     }
 }
 
