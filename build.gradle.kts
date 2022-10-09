@@ -3,6 +3,7 @@ apply(plugin = "com.github.ben-manes.versions")
 buildscript {
     repositories {
         google()
+        mavenCentral()
         gradlePluginPortal()
     }
     dependencies {
@@ -20,6 +21,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
     }
 }
 
