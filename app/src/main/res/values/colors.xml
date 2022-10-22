@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
     <color name="grey">#D3D1D1</color>
     <color name="dark_grey">#787878</color>
     <color name="white">#FFFFFFFF</color>
@@ -13,4 +8,36 @@
     <color name="white_alpha">#1AFFFFFF</color>
     <color name="recipe_fav">#AC203E</color>
     <color name="card_bg_color">#F6F6F6</color>
+
+
+    <color name="seed">#E81514</color>
+    <color name="md_theme_primary">#C00007</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#FFDAD5</color>
+    <color name="md_theme_onPrimaryContainer">#410001</color>
+    <color name="md_theme_secondary">#7F5700</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FFDEAD</color>
+    <color name="md_theme_onSecondaryContainer">#281900</color>
+    <color name="md_theme_tertiary">#7E5700</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#FFDEAC</color>
+    <color name="md_theme_onTertiaryContainer">#281900</color>
+    <color name="md_theme_error">#BA1A1A</color>
+    <color name="md_theme_errorContainer">#FFDAD6</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_onErrorContainer">#410002</color>
+    <color name="md_theme_background">#FFFBFF</color>
+    <color name="md_theme_onBackground">#201A19</color>
+    <color name="md_theme_surface">#FFFBFF</color>
+    <color name="md_theme_onSurface">#201A19</color>
+    <color name="md_theme_surfaceVariant">#F5DDDA</color>
+    <color name="md_theme_onSurfaceVariant">#534341</color>
+    <color name="md_theme_outline">#857370</color>
+    <color name="md_theme_inverseOnSurface">#FBEEEC</color>
+    <color name="md_theme_inverseSurface">#362F2E</color>
+    <color name="md_theme_inversePrimary">#FFB4A9</color>
+    <color name="md_theme_shadow">#000000</color>
+    <color name="md_theme_surfaceTint">#C00007</color>
+    <color name="md_theme_surfaceTintColor">#C00007</color>
 </resources>
