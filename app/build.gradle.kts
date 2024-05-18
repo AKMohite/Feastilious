@@ -7,6 +7,7 @@ plugins {
 }
 
 android {
+    namespace = "com.ak.feastit"
     compileSdk = libs.versions.compileSDK.get().toInt()
 
     defaultConfig {
