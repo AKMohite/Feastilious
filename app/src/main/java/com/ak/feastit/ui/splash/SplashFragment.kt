@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.splash
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +15,9 @@ import kotlinx.coroutines.flow.collect
 class SplashFragment : Fragment(R.layout.splash_fragment) {
     private val viewModel: SplashViewModel by viewModels()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-//TODO(https://www.youtube.com/watch?v=bbvYidjZ_CE)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //TODO(https://www.youtube.com/watch?v=bbvYidjZ_CE)
         setFlowObservers()
     }
 
