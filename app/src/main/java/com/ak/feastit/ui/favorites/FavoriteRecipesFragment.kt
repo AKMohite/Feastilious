@@ -41,7 +41,7 @@ class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
 
             favRecipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!v.text.trim().isBlank())
+                    if (v.text.trim().isNotBlank())
                         viewModel.favSearchRecipe(v.text.trim().toString())
                     return@setOnEditorActionListener true
                 }

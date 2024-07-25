@@ -11,6 +11,7 @@ android {
     compileSdk = libs.versions.compileSDK.get().toInt()
 
     defaultConfig {
+        namespace = "com.ak.feastit"
         applicationId = "com.ak.feastit"
         minSdk = libs.versions.minSDK.get().toInt()
         targetSdk = libs.versions.targetSDK.get().toInt()

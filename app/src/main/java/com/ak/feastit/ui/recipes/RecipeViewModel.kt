@@ -86,7 +86,7 @@ class RecipeViewModel @Inject constructor(
     }
 
     fun searchByCategory(mealCategory: String) {
-        if (!mealCategory.isBlank()) {
+        if (mealCategory.isNotBlank()) {
             selectedCategory.value = mealCategory
             getRecipesByMealType()
         } else

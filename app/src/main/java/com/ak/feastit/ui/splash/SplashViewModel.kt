@@ -7,13 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val prefManager: FeastPrefManager
+    prefManager: FeastPrefManager
 ) : ViewModel() {
     val splashState: StateFlow<SplashState>
         get() = mutableSplashState
