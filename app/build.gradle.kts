@@ -39,6 +39,11 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             resValue("string", "app_version", "${defaultConfig.versionName}")
         }
+
+        create("staging") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".staging"
+        }
     }
 
     buildFeatures {
