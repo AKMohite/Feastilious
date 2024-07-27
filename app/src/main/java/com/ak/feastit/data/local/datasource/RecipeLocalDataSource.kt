@@ -1,14 +1,13 @@
 package com.ak.feastit.data.local.datasource
 
-import androidx.room.withTransaction
-import com.ak.feastit.data.local.FeastDatabase
+import com.ak.feastit.data.local.FeastDB
 import com.ak.feastit.data.local.entity.IngredientEntity
 import com.ak.feastit.data.local.entity.InstructionEntity
 import com.ak.feastit.data.local.entity.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 
 class RecipeLocalDataSource(
-    private val feastDatabase: FeastDatabase
+    private val feastDatabase: FeastDB
 ) : IRecipeLocalDataSource {
 
     private val recipeDAO = feastDatabase.recipeDAO()
@@ -29,7 +28,7 @@ class RecipeLocalDataSource(
                 ingredients.addAll(recipe.ingredients)
                 instructions.addAll(recipe.instructions)
             }
-            feastDatabase.withTransaction {
+            feastDatabase.blockTransaction {
                 recipeDAO.insertRecipes(dtoRecipes)
                 recipeDAO.insertIngredients(ingredients)
                 recipeDAO.insertInstructions(instructions)

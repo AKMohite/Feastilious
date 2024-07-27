@@ -2,6 +2,7 @@ package com.ak.feastit.di
 
 import android.app.Application
 import androidx.room.Room
+import com.ak.feastit.data.local.FeastDB
 import com.ak.feastit.data.local.FeastDatabase
 import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
 import com.ak.feastit.data.local.datasource.RecipeLocalDataSource
@@ -20,13 +21,13 @@ object LocalModule {
     @Provides
     fun provideDataBase(
             app: Application
-    ) = Room.databaseBuilder(app, FeastDatabase::class.java, FEAST_DB)
+    ): FeastDB = Room.databaseBuilder(app, FeastDatabase::class.java, FEAST_DB)
             .fallbackToDestructiveMigration() // TODO room migration
             .build()
 
     @Provides
     fun provideRecipeLocalSource(
-        feastDatabase: FeastDatabase
+        feastDatabase: FeastDB
     ): IRecipeLocalDataSource = RecipeLocalDataSource(feastDatabase)
 
 }
