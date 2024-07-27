@@ -28,6 +28,15 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "feast-debug"
+            keyPassword = "feast-debug"
+            storeFile = rootProject.file("release/app-debug.keystore")
+            storePassword = "feast-debug"
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             versionNameSuffix = ".debug"
@@ -36,12 +45,14 @@ android {
 
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             resValue("string", "app_version", "${defaultConfig.versionName}")
         }
 
         create("staging") {
             initWith(getByName("release"))
+            signingConfig = signingConfigs.findByName("debug")
             applicationIdSuffix = ".staging"
         }
     }
