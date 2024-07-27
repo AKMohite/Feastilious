@@ -58,7 +58,7 @@ object NetworkModule {
                 chain.proceed(request.build())
             }
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(mockInterceptor)
+//            .addInterceptor(mockInterceptor)
             .build()
     }
 

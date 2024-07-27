@@ -1,6 +1,9 @@
-package com.ak.feastit.data.local
+package com.ak.feastit.data.local.dao
 
 import androidx.room.*
+import com.ak.feastit.data.local.entity.IngredientEntity
+import com.ak.feastit.data.local.entity.InstructionEntity
+import com.ak.feastit.data.local.entity.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.utils.*
 

@@ -1,8 +1,8 @@
 package com.ak.feastit.domain.mapper
 
-import com.ak.feastit.data.local.IngredientEntity
-import com.ak.feastit.data.local.InstructionEntity
-import com.ak.feastit.data.local.RecipeEntity
+import com.ak.feastit.data.local.entity.IngredientEntity
+import com.ak.feastit.data.local.entity.InstructionEntity
+import com.ak.feastit.data.local.entity.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 import com.ak.feastit.data.network.dto.AnalyzedInstructionDTO
 import com.ak.feastit.data.network.dto.ExtendedIngredientDTO
@@ -10,7 +10,6 @@ import com.ak.feastit.data.network.dto.RecipeDTO
 import com.ak.feastit.domain.base.DataMapper
 import com.ak.feastit.utils.IMG_INGREDIENT_BASE_URL
 import java.util.*
-import javax.inject.Inject
 
 class RecipeEntityMapper: DataMapper<RecipeDTO, RecipeDetailEntity> {
 

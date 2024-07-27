@@ -2,9 +2,9 @@ package com.ak.feastit.data.local.datasource
 
 import androidx.room.withTransaction
 import com.ak.feastit.data.local.FeastDatabase
-import com.ak.feastit.data.local.IngredientEntity
-import com.ak.feastit.data.local.InstructionEntity
-import com.ak.feastit.data.local.RecipeEntity
+import com.ak.feastit.data.local.entity.IngredientEntity
+import com.ak.feastit.data.local.entity.InstructionEntity
+import com.ak.feastit.data.local.entity.RecipeEntity
 import com.ak.feastit.data.local.relations.RecipeDetailEntity
 
 class RecipeLocalDataSource(

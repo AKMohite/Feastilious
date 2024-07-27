@@ -1,4 +1,4 @@
-package com.ak.feastit.data.local
+package com.ak.feastit.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
