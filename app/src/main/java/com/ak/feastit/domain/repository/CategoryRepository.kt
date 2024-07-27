@@ -1,33 +1,32 @@
 package com.ak.feastit.domain.repository
 
-import com.ak.feastit.domain.model.RecipeCategory
-import com.ak.feastit.domain.repository.ICategoryRepository
+import com.ak.feastit.domain.model.MealType
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class CategoryRepository : ICategoryRepository {
 
-    override fun getFoodCategories(): Flow<RecipeResult<List<RecipeCategory>>> = flow {
+    override fun getFoodCategories(): Flow<RecipeResult<List<MealType>>> = flow {
         emit(RecipeResult.success(getStaticMealCategories()))
     }
 
-    private fun getStaticMealCategories(): List<RecipeCategory> {
-        val categoryList = mutableListOf<RecipeCategory>()
-        categoryList.add(RecipeCategory(1, "Main course"))
-        categoryList.add(RecipeCategory(2, "Side dish"))
-        categoryList.add(RecipeCategory(3, "Bread"))
-        categoryList.add(RecipeCategory(4, "Marinade"))
-        categoryList.add(RecipeCategory(5, "Breakfast"))
-        categoryList.add(RecipeCategory(6, "Fingerfood"))
-        categoryList.add(RecipeCategory(7, "Dessert"))
-        categoryList.add(RecipeCategory(8, "Soup"))
-        categoryList.add(RecipeCategory(9, "Snack"))
-        categoryList.add(RecipeCategory(10, "Appetizer"))
-        categoryList.add(RecipeCategory(11, "Beverage"))
-        categoryList.add(RecipeCategory(12, "Drink"))
-        categoryList.add(RecipeCategory(13, "Salad"))
-        categoryList.add(RecipeCategory(14, "Sauce"))
+    private fun getStaticMealCategories(): List<MealType> {
+        val categoryList = mutableListOf<MealType>()
+        categoryList.add(MealType(1, "Main course"))
+        categoryList.add(MealType(2, "Side dish"))
+        categoryList.add(MealType(3, "Bread"))
+        categoryList.add(MealType(4, "Marinade"))
+        categoryList.add(MealType(5, "Breakfast"))
+        categoryList.add(MealType(6, "Fingerfood"))
+        categoryList.add(MealType(7, "Dessert"))
+        categoryList.add(MealType(8, "Soup"))
+        categoryList.add(MealType(9, "Snack"))
+        categoryList.add(MealType(10, "Appetizer"))
+        categoryList.add(MealType(11, "Beverage"))
+        categoryList.add(MealType(12, "Drink"))
+        categoryList.add(MealType(13, "Salad"))
+        categoryList.add(MealType(14, "Sauce"))
         return categoryList
     }
 }

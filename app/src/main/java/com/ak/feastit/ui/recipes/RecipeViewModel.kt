@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.data.utils.FeastPrefManager
 import com.ak.feastit.domain.usecase.GetCategoriesUseCase
-import com.ak.feastit.domain.model.RecipeCategory
+import com.ak.feastit.domain.model.MealType
 import com.ak.feastit.domain.usecase.MealTypeRecipeUseCase
 import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.domain.usecase.SearchRecipeUseCase
@@ -29,7 +29,7 @@ class RecipeViewModel @Inject constructor(
     val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    val allCategories = MutableStateFlow<List<RecipeCategory>>(emptyList())
+    val allCategories = MutableStateFlow<List<MealType>>(emptyList())
     val dashboardRecipes = MutableStateFlow<List<Recipe>>(emptyList())
     val selectedCategory = MutableStateFlow("")
 
