@@ -19,7 +19,7 @@ import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
 import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Dao
-internal interface RecipeDAO {
+interface RecipeDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipe: RecipeEntity)

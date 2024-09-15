@@ -21,7 +21,7 @@ internal abstract class FeastDatabase: RoomDatabase(), FeastDB {
     }
 }
 
-internal interface FeastDB {
+interface FeastDB {
     fun recipeDAO(): RecipeDAO
 
     suspend fun blockTransaction(block: suspend () -> Unit)

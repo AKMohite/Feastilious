@@ -21,10 +21,4 @@ internal object LocalModule {
         .fallbackToDestructiveMigration() // TODO room migration
         .build()
 
-    @Provides
-    fun provideRecipeLocalSource(
-        feastDatabase: com.mak.feastit.database.FeastDB
-    ): com.mak.feastit.database.datasource.IRecipeLocalDataSource =
-        com.mak.feastit.database.datasource.RecipeLocalDataSource(feastDatabase)
-
 }

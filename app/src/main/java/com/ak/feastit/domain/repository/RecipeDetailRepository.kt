@@ -1,16 +1,17 @@
 package com.ak.feastit.domain.repository
 
 import android.util.Log
-import com.mak.feastit.database.datasource.IRecipeLocalDataSource
 import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.utils.RecipeResult
 import com.ak.feastit.utils.APP_TAG
+import com.mak.feastit.database.FeastDB
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class RecipeDetailRepository constructor(
-    private val localDataSource: com.mak.feastit.database.datasource.IRecipeLocalDataSource
+class RecipeDetailRepository @Inject constructor(
+    private val db: FeastDB
 ) : IRecipeDetailRepository {
 
     private val domainMapper = RecipeDomainMapper()
@@ -18,7 +19,7 @@ class RecipeDetailRepository constructor(
     override fun getRecipeDetail(id: Long): Flow<RecipeResult<RecipeDetail>> = flow {
         try {
             emit(RecipeResult.loading())
-            val recipe = domainMapper.toRecipeDetailDomain(localDataSource.getRecipeDetail(recipeId = id))
+            val recipe = domainMapper.toRecipeDetailDomain(db.recipeDAO().getRecipeDetail(recipeId = id))
             emit(RecipeResult.success(recipe))
         } catch (error: Exception) {
             emit(RecipeResult.error(error.message ?: "An error occurred"))
@@ -30,7 +31,7 @@ class RecipeDetailRepository constructor(
         return flow {
             try {
                 emit(RecipeResult.loading())
-                val isUpdated = localDataSource.toggleFav(recipeId = id, isFav = isAdded)
+                val isUpdated = (db.recipeDAO().toggleFav(id, isAdded) > 0)
                 emit(RecipeResult.success(isUpdated))
             } catch (error: Exception) {
                 emit(RecipeResult.error(error.message ?: "An error occurred"))

@@ -4,8 +4,9 @@ import com.ak.feastit.domain.model.MealType
 import com.ak.feastit.domain.utils.RecipeResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class CategoryRepository : ICategoryRepository {
+class CategoryRepository @Inject constructor() : ICategoryRepository {
 
     override fun getFoodCategories(): Flow<RecipeResult<List<MealType>>> = flow {
         emit(RecipeResult.success(getStaticMealCategories()))
