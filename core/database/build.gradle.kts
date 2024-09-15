@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -12,6 +14,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {
@@ -23,6 +31,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("staging") {
+            initWith(getByName("release"))
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -33,4 +44,10 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+}

@@ -1,7 +1,7 @@
-package com.ak.feastit.data.local.datasource
+package com.mak.feastit.database.datasource
 
-import com.ak.feastit.data.local.entity.RecipeEntity
-import com.ak.feastit.data.local.relations.RecipeDetailEntity
+import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.relations.RecipeDetailEntity
 
 interface IRecipeLocalDataSource {
     suspend fun saveNetworkRecipes(recipeDetails: List<RecipeDetailEntity>): Boolean

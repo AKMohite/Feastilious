@@ -1,10 +1,16 @@
-package com.ak.feastit.data.local.entity
+package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.ak.feastit.utils.*
+import com.mak.feastit.database.util.Constants.DB_INSTRUCTION_TABLE
+import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
+import com.mak.feastit.database.util.Constants.DB_STEP_DESC
+import com.mak.feastit.database.util.Constants.DB_STEP_EQUIPMENTS
+import com.mak.feastit.database.util.Constants.DB_STEP_ID
+import com.mak.feastit.database.util.Constants.DB_STEP_INGREDIENTS
+import com.mak.feastit.database.util.Constants.DB_STEP_NUMBER
 
 @Entity(
         tableName = DB_INSTRUCTION_TABLE,

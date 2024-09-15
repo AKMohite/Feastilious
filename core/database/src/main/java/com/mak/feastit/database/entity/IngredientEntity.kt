@@ -1,9 +1,17 @@
-package com.ak.feastit.data.local.entity
+package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ak.feastit.utils.*
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_AMOUNT
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_CONSISTENCY
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_ID
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_NAME
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_SPEC
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_TABLE
+import com.mak.feastit.database.util.Constants.DB_INGREDIENT_UNIT
+import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
 
 @Entity(
         tableName = DB_INGREDIENT_TABLE

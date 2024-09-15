@@ -1,12 +1,12 @@
-package com.ak.feastit.data.local.relations
+package com.mak.feastit.database.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.ak.feastit.data.local.entity.IngredientEntity
-import com.ak.feastit.data.local.entity.InstructionEntity
-import com.ak.feastit.data.local.entity.RecipeEntity
-import com.ak.feastit.utils.DB_RECIPE_ID
-import com.ak.feastit.utils.DB_TABLE_ID
+import com.mak.feastit.database.entity.IngredientEntity
+import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
+import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 data class RecipeDetailEntity(
     @Embedded

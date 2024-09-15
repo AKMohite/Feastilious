@@ -1,24 +1,24 @@
 package com.ak.feastit.domain.mapper
 
-import com.ak.feastit.data.local.entity.IngredientEntity
-import com.ak.feastit.data.local.entity.InstructionEntity
-import com.ak.feastit.data.local.entity.RecipeEntity
-import com.ak.feastit.data.local.relations.RecipeDetailEntity
+import com.mak.feastit.database.entity.IngredientEntity
+import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.relations.RecipeDetailEntity
 import com.ak.feastit.domain.base.DataMapper
 import com.ak.feastit.domain.model.Ingredient
 import com.ak.feastit.domain.model.RecipeDetail
 import com.ak.feastit.domain.model.Instruction
 import com.ak.feastit.domain.model.Recipe
 
-class RecipeDomainMapper: DataMapper<RecipeEntity, Recipe>{
+class RecipeDomainMapper: DataMapper<com.mak.feastit.database.entity.RecipeEntity, Recipe>{
 
-    override fun mapToDomainModel(model: RecipeEntity): Recipe = Recipe(
+    override fun mapToDomainModel(model: com.mak.feastit.database.entity.RecipeEntity): Recipe = Recipe(
             id = model.id,
             recipeName = model.recipeName,
             recipeImgUrl = model.recipeImg
     )
 
-    fun toRecipeDetailDomain(detail: RecipeDetailEntity): RecipeDetail {
+    fun toRecipeDetailDomain(detail: com.mak.feastit.database.relations.RecipeDetailEntity): RecipeDetail {
         val recipe = detail.recipe
         return RecipeDetail(
                 recipeId = recipe.id,
@@ -36,15 +36,15 @@ class RecipeDomainMapper: DataMapper<RecipeEntity, Recipe>{
         )
     }
 
-    fun toRecipesDomain(recipes: List<RecipeEntity>): List<Recipe> = recipes.map { recipe-> mapToDomainModel(recipe) }
+    fun toRecipesDomain(recipes: List<com.mak.feastit.database.entity.RecipeEntity>): List<Recipe> = recipes.map { recipe-> mapToDomainModel(recipe) }
 
-    fun toInstructionsDomain(instructions: List<InstructionEntity>): List<Instruction> = instructions.map { inst ->
+    fun toInstructionsDomain(instructions: List<com.mak.feastit.database.entity.InstructionEntity>): List<Instruction> = instructions.map { inst ->
         Instruction(
                 stepNo = "Step ${inst.stepNo}",
                 stepDesc = inst.stepDesc
         ) }
 
-    fun toIngredientsDomain(ingredients: List<IngredientEntity>): List<Ingredient> = ingredients.map { ing ->
+    fun toIngredientsDomain(ingredients: List<com.mak.feastit.database.entity.IngredientEntity>): List<Ingredient> = ingredients.map { ing ->
         Ingredient(
                 id = ing.ingredientUnique,
                 image = ing.ingredientImg,

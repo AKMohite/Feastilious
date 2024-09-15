@@ -1,7 +1,7 @@
 package com.ak.feastit.domain.repository
 
 import android.util.Log
-import com.ak.feastit.data.local.datasource.IRecipeLocalDataSource
+import com.mak.feastit.database.datasource.IRecipeLocalDataSource
 import com.ak.feastit.data.network.datasource.IRecipeNetworkSource
 import com.ak.feastit.domain.mapper.RecipeDomainMapper
 import com.ak.feastit.domain.mapper.RecipeEntityMapper
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 
 class RecipeRepository constructor(
         private val networkSource: IRecipeNetworkSource,
-        private val localDataSource: IRecipeLocalDataSource
+        private val localDataSource: com.mak.feastit.database.datasource.IRecipeLocalDataSource
 ) : IRecipeRepository {
 
     private val domainMapper = RecipeDomainMapper()

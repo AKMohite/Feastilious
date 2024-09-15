@@ -1,14 +1,25 @@
-package com.ak.feastit.data.local.dao
+package com.mak.feastit.database.dao
 
-import androidx.room.*
-import com.ak.feastit.data.local.entity.IngredientEntity
-import com.ak.feastit.data.local.entity.InstructionEntity
-import com.ak.feastit.data.local.entity.RecipeEntity
-import com.ak.feastit.data.local.relations.RecipeDetailEntity
-import com.ak.feastit.utils.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import com.mak.feastit.database.entity.IngredientEntity
+import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.relations.RecipeDetailEntity
+import com.mak.feastit.database.util.Constants.DB_MY_RECIPE_BOOK
+import com.mak.feastit.database.util.Constants.DB_RECIPE_CUISINES
+import com.mak.feastit.database.util.Constants.DB_RECIPE_DIETS
+import com.mak.feastit.database.util.Constants.DB_RECIPE_DISH_TYPES
+import com.mak.feastit.database.util.Constants.DB_RECIPE_TABLE
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_NAME
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
+import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Dao
-interface RecipeDAO {
+internal interface RecipeDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipe: RecipeEntity)

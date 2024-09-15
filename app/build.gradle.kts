@@ -20,12 +20,6 @@ android {
         buildConfigField("String", "API_KEY", "\"" + propOrDef("SPOONACULAR_KEY", "") + "\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
     }
 
     signingConfigs {
@@ -71,6 +65,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:database"))
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)
@@ -89,12 +84,9 @@ dependencies {
     implementation(libs.retrofit.moshi)
     implementation(libs.retrofit.moshi.converter)
     implementation(libs.retrofit.runtime)
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
 
     kapt(libs.hilt.android.compiler)
     kapt(libs.retrofit.moshi.codegen)
-    kapt(libs.room.compiler)
 
     testImplementation(libs.junit)
 }

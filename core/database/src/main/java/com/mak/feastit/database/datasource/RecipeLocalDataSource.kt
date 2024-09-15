@@ -1,12 +1,12 @@
-package com.ak.feastit.data.local.datasource
+package com.mak.feastit.database.datasource
 
-import com.ak.feastit.data.local.FeastDB
-import com.ak.feastit.data.local.entity.IngredientEntity
-import com.ak.feastit.data.local.entity.InstructionEntity
-import com.ak.feastit.data.local.entity.RecipeEntity
-import com.ak.feastit.data.local.relations.RecipeDetailEntity
+import com.mak.feastit.database.FeastDB
+import com.mak.feastit.database.entity.IngredientEntity
+import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.relations.RecipeDetailEntity
 
-class RecipeLocalDataSource(
+internal class RecipeLocalDataSource(
     private val feastDatabase: FeastDB
 ) : IRecipeLocalDataSource {
 

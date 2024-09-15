@@ -1,9 +1,22 @@
-package com.ak.feastit.data.local.entity
+package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ak.feastit.utils.*
+import com.mak.feastit.database.util.Constants.DB_MY_RECIPE_BOOK
+import com.mak.feastit.database.util.Constants.DB_RECIPE_CUISINES
+import com.mak.feastit.database.util.Constants.DB_RECIPE_DIETS
+import com.mak.feastit.database.util.Constants.DB_RECIPE_DISH_TYPES
+import com.mak.feastit.database.util.Constants.DB_RECIPE_PRICE
+import com.mak.feastit.database.util.Constants.DB_RECIPE_READY_IN_MIN
+import com.mak.feastit.database.util.Constants.DB_RECIPE_SERVINGS
+import com.mak.feastit.database.util.Constants.DB_RECIPE_SOURCE_NAME
+import com.mak.feastit.database.util.Constants.DB_RECIPE_TABLE
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_NAME
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SOURCE
+import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
+import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Entity(
     tableName = DB_RECIPE_TABLE
