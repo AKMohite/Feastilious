@@ -66,6 +66,7 @@ android {
 
 dependencies {
     implementation(project(":core:database"))
+    implementation(project(":core:remote"))
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)
@@ -79,14 +80,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.recyclerview)
-    implementation(libs.retrofit.moshi)
-    implementation(libs.retrofit.moshi.converter)
-    implementation(libs.retrofit.runtime)
 
     kapt(libs.hilt.android.compiler)
-    kapt(libs.retrofit.moshi.codegen)
 
     testImplementation(libs.junit)
 }

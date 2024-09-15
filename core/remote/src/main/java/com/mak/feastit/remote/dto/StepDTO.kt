@@ -1,4 +1,4 @@
-package com.ak.feastit.data.network.dto
+package com.mak.feastit.remote.dto
 
 import com.squareup.moshi.JsonClass
 

@@ -1,9 +1,8 @@
 package com.ak.feastit.di
 
 import com.ak.feastit.BuildConfig
-import com.ak.feastit.data.network.FeastAPIService
-import com.ak.feastit.data.network.MockInterceptor
-import com.ak.feastit.domain.mapper.RecipeEntityMapper
+import com.mak.feastit.remote.FeastAPIService
+import com.mak.feastit.remote.MockInterceptor
 import com.ak.feastit.data.network.datasource.IRecipeNetworkSource
 import com.ak.feastit.data.network.datasource.RecipeNetworkSource
 import com.squareup.moshi.Moshi
@@ -42,7 +41,7 @@ object NetworkModule {
     @Singleton
     @Provides
     @Named("MockInterceptor")
-    fun provideMockInterceptor(): Interceptor = MockInterceptor()
+    fun provideMockInterceptor(): Interceptor = com.mak.feastit.remote.MockInterceptor()
 
     @Singleton
     @Provides
@@ -86,13 +85,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideFeastService(retrofit: Retrofit.Builder): FeastAPIService = retrofit
+    fun provideFeastService(retrofit: Retrofit.Builder): com.mak.feastit.remote.FeastAPIService = retrofit
         .build()
-        .create(FeastAPIService::class.java)
+        .create(com.mak.feastit.remote.FeastAPIService::class.java)
 
     @Provides
     fun provideRecipeNetworkSource(
-        apiService: FeastAPIService
+        apiService: com.mak.feastit.remote.FeastAPIService
     ): IRecipeNetworkSource = RecipeNetworkSource(apiService)
 
 }

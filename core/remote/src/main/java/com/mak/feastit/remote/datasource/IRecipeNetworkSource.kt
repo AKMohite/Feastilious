@@ -1,6 +1,6 @@
-package com.ak.feastit.data.network.datasource
+package com.mak.feastit.remote.datasource
 
-import com.ak.feastit.data.network.dto.RecipeDTO
+import com.mak.feastit.remote.dto.RecipeDTO
 
 interface IRecipeNetworkSource {
     suspend fun searchRecipes(queryParams: HashMap<String, String>): List<RecipeDTO>

@@ -1,0 +1,46 @@
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+}
+
+android {
+    namespace = "com.mak.feastit.remote"
+    compileSdk = libs.versions.compileSDK.get().toInt()
+
+    defaultConfig {
+        minSdk = libs.versions.minSDK.get().toInt()
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.retrofit.moshi.converter)
+    implementation(libs.retrofit.runtime)
+    implementation(libs.retrofit.moshi)
+    kapt(libs.retrofit.moshi.codegen)
+}

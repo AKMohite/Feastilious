@@ -1,9 +1,9 @@
-package com.ak.feastit.data.network.datasource
+package com.mak.feastit.remote.datasource
 
-import com.ak.feastit.data.network.FeastAPIService
-import com.ak.feastit.data.network.dto.RecipeDTO
+import com.mak.feastit.remote.FeastAPIService
+import com.mak.feastit.remote.dto.RecipeDTO
 
-class RecipeNetworkSource(
+internal class RecipeNetworkSource(
     private val apiService: FeastAPIService
 ) : IRecipeNetworkSource {
 
