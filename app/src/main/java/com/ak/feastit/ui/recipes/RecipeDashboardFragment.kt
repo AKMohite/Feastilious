@@ -11,10 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FragmentRecipeDashboardBinding
-import com.ak.feastit.domain.model.Recipe
 import com.google.android.material.chip.Chip
+import com.mak.feastit.data.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint

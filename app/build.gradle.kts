@@ -65,8 +65,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:database"))
-    implementation(project(":core:remote"))
+    implementation(project(":core:data"))
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)

@@ -1,0 +1,31 @@
+package com.mak.feastit.data.model
+
+enum class Cuisine(val type: String) {
+    AFRICAN("African"),
+    AMERICAN("American"),
+    BRITISH("British"),
+    ASIAN("Asian"),
+    CAJUN("Cajun"),
+    CARIBBEAN("Caribbean"),
+    CHINESE("Chinese"),
+    EASTERN("Eastern"),
+    EUROPEAN("European"),
+    FRENCH("French"),
+    GERMAN("German"),
+    GREEK("Greek"),
+    INDIAN("Indian"),
+    IRISH("Irish"),
+    ITALIAN("Italian"),
+    JAPANESE("Japanese"),
+    JEWISH("Jewish"),
+    KOREAN("Korean"),
+    LATIN_AMERICAN("Latin American"),
+    MEDITERRANEAN("Mediterranean"),
+    MEXICAN("Mexican"),
+    MIDDLE_EASTERN("Middle Eastern"),
+    NORTHERN("Nordic"),
+    SOUTHERN("Southern"),
+    SPANISH("Spanish"),
+    THAI("Thai"),
+    VIETNAMESE("Vietnamese")
+}

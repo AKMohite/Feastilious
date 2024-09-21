@@ -10,10 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
-import com.ak.feastit.domain.model.Recipe
 import com.ak.feastit.ui.recipes.RecipeAdapter
+import com.mak.feastit.data.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {

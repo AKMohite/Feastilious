@@ -4,25 +4,29 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ak.feastit.data.utils.FeastPrefManager
-import com.ak.feastit.domain.usecase.GetCategoriesUseCase
-import com.ak.feastit.domain.model.MealType
-import com.ak.feastit.domain.usecase.MealTypeRecipeUseCase
-import com.ak.feastit.domain.model.Recipe
-import com.ak.feastit.domain.usecase.SearchRecipeUseCase
-import com.ak.feastit.utils.*
+import com.ak.feastit.utils.DEFAULT_PAGE_SIZE
+import com.ak.feastit.utils.QUERY_ADD_RECIPE_INFORMATION
+import com.ak.feastit.utils.QUERY_DIET
+import com.ak.feastit.utils.QUERY_FILL_INGREDIENTS
+import com.ak.feastit.utils.QUERY_NUMBER
+import com.ak.feastit.utils.QUERY_OFFSET
+import com.ak.feastit.utils.QUERY_SEARCH
+import com.mak.feastit.data.model.MealType
+import com.mak.feastit.data.model.Recipe
+import com.mak.feastit.data.usecase.GetCategoriesUseCase
+import com.mak.feastit.data.usecase.MealTypeRecipeUseCase
+import com.mak.feastit.data.usecase.SearchRecipeUseCase
+import com.mak.feastit.data.utils.QUERY_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.emptyList
 import kotlin.collections.set
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase,
+    getCategoriesUseCase: GetCategoriesUseCase,
     private val searchRecipeUseCase: SearchRecipeUseCase,
     private val mealTypeRecipeUseCase: MealTypeRecipeUseCase,
     val prefManager: FeastPrefManager,
