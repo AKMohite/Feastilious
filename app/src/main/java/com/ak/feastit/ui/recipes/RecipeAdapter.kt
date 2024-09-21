@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeItemBinding
-import com.mak.feastit.data.model.Recipe
+import com.mak.feastit.domain.model.Recipe
 
 class RecipeAdapter(
         private val onItemClick: (Recipe) -> Unit

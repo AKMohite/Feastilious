@@ -1,7 +1,8 @@
 package com.mak.feastit.data.repository
 
-import com.mak.feastit.data.model.MealType
-import com.mak.feastit.data.utils.RecipeResult
+import com.mak.feastit.domain.model.MealType
+import com.mak.feastit.domain.model.RecipeResult
+import com.mak.feastit.domain.repository.ICategoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

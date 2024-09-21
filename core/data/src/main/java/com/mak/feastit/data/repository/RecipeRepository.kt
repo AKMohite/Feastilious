@@ -2,15 +2,16 @@ package com.mak.feastit.data.repository
 
 import com.mak.feastit.data.mapper.RecipeDomainMapper
 import com.mak.feastit.data.mapper.RecipeEntityMapper
-import com.mak.feastit.data.model.Recipe
-import com.mak.feastit.data.utils.QUERY_SEARCH
-import com.mak.feastit.data.utils.QUERY_TYPE
-import com.mak.feastit.data.utils.RecipeResult
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.InstructionEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.relations.RecipeDetailEntity
+import com.mak.feastit.domain.model.QUERY_SEARCH
+import com.mak.feastit.domain.model.QUERY_TYPE
+import com.mak.feastit.domain.model.Recipe
+import com.mak.feastit.domain.model.RecipeResult
+import com.mak.feastit.domain.repository.IRecipeRepository
 import com.mak.feastit.remote.FeastAPIService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

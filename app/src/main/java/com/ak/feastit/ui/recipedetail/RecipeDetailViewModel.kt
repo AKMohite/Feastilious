@@ -2,9 +2,9 @@ package com.ak.feastit.ui.recipedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mak.feastit.data.model.RecipeDetail
-import com.mak.feastit.data.usecase.RecipeDetailUseCase
-import com.mak.feastit.data.usecase.ToggleFavUseCase
+import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.usecase.RecipeDetailUseCase
+import com.mak.feastit.domain.usecase.ToggleFavUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

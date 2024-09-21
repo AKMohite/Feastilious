@@ -1,4 +1,4 @@
-package com.mak.feastit.data.model
+package com.mak.feastit.domain.model
 
 enum class DietType(val type: String) {
     GLUTEN_FREE("Gluten Free"),

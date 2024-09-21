@@ -1,12 +1,12 @@
 package com.mak.feastit.data.mapper
 
-import com.mak.feastit.data.utils.IMG_INGREDIENT_BASE_URL
+import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.ExtendedIngredientDTO
 import com.mak.feastit.remote.dto.RecipeDTO
 import java.util.Locale
 
-class RecipeEntityMapper:
+internal class RecipeEntityMapper:
     com.mak.feastit.data.base.DataMapper<RecipeDTO, com.mak.feastit.database.relations.RecipeDetailEntity> {
 
     override fun mapToDomainModel(model: RecipeDTO): com.mak.feastit.database.relations.RecipeDetailEntity {

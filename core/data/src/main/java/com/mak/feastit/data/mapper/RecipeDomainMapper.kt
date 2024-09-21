@@ -1,11 +1,11 @@
 package com.mak.feastit.data.mapper
 
-import com.mak.feastit.data.model.Ingredient
-import com.mak.feastit.data.model.Instruction
-import com.mak.feastit.data.model.Recipe
-import com.mak.feastit.data.model.RecipeDetail
+import com.mak.feastit.domain.model.Ingredient
+import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.Recipe
+import com.mak.feastit.domain.model.RecipeDetail
 
-class RecipeDomainMapper:
+internal class RecipeDomainMapper:
     com.mak.feastit.data.base.DataMapper<com.mak.feastit.database.entity.RecipeEntity, Recipe> {
 
     override fun mapToDomainModel(model: com.mak.feastit.database.entity.RecipeEntity): Recipe = Recipe(

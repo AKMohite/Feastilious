@@ -1,4 +1,4 @@
-package com.mak.feastit.data.base
+package com.mak.feastit.domain.usecase
 
 abstract class UseCaseWithParams<in Params, out R> {
     /**

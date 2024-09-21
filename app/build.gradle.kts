@@ -65,7 +65,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)

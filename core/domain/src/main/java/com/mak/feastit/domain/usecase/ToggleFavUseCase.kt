@@ -1,11 +1,12 @@
-package com.mak.feastit.data.usecase
+package com.mak.feastit.domain.usecase
 
-import com.mak.feastit.data.repository.IRecipeDetailRepository
-import com.mak.feastit.data.utils.RecipeResult
+import com.mak.feastit.domain.model.RecipeResult
+import com.mak.feastit.domain.repository.IRecipeDetailRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
-class ToggleFavUseCase constructor(
+class ToggleFavUseCase @Inject constructor(
     private val repository: IRecipeDetailRepository
 ) {
     operator fun invoke(id: Long, isAdded: Boolean): Flow<RecipeResult<Boolean>> {

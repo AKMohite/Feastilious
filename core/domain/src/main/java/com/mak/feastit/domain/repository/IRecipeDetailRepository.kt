@@ -1,7 +1,7 @@
-package com.mak.feastit.data.repository
+package com.mak.feastit.domain.repository
 
-import com.mak.feastit.data.model.RecipeDetail
-import com.mak.feastit.data.utils.RecipeResult
+import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.RecipeResult
 import kotlinx.coroutines.flow.Flow
 
 interface IRecipeDetailRepository {

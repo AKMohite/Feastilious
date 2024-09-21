@@ -1,4 +1,4 @@
-package com.mak.feastit.data.model
+package com.mak.feastit.domain.model
 
 data class Instruction(
         val stepNo: String,

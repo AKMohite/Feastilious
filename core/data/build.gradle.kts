@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
     implementation(project(":core:database"))
     implementation(project(":core:remote"))
     implementation(libs.hilt.android)

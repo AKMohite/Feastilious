@@ -1,11 +1,11 @@
-package com.mak.feastit.data.utils
+package com.mak.feastit.domain.model
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-internal const val IMG_INGREDIENT_BASE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
-internal const val QUERY_SEARCH = "query"
+const val IMG_INGREDIENT_BASE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
+const val QUERY_SEARCH = "query"
 const val QUERY_TYPE = "type"
 
 /**
@@ -16,9 +16,13 @@ const val QUERY_TYPE = "type"
 fun <T> Flow<T>.asResult(): Flow<RecipeResult<T>> {
     return this
         .map<T, RecipeResult<T>> {
-            RecipeResult.success(it)
+            com.mak.feastit.domain.model.RecipeResult.success(it)
         }.catch {
-            emit(RecipeResult.error(it.message ?: "Cannot get result. Please try again later")) }
+            emit(
+                com.mak.feastit.domain.model.RecipeResult.error(
+                    it.message ?: "Cannot get result. Please try again later"
+                )
+            ) }
 }
 
 data class RecipeResult<out T>(
@@ -30,7 +34,7 @@ data class RecipeResult<out T>(
 
         fun <T> success(
             data: T
-        ): RecipeResult<T>{
+        ): RecipeResult<T> {
             return RecipeResult(
                 data = data
             )
@@ -38,7 +42,7 @@ data class RecipeResult<out T>(
 
         fun <T> error(
             message: String
-        ): RecipeResult<T>{
+        ): RecipeResult<T> {
             return RecipeResult(
                 error = message
             )

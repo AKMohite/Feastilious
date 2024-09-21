@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
 import com.ak.feastit.ui.recipes.RecipeAdapter
-import com.mak.feastit.data.model.Recipe
+import com.mak.feastit.domain.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

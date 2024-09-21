@@ -1,9 +1,9 @@
 package com.mak.feastit.data.di
 
 import com.mak.feastit.data.repository.CategoryRepository
-import com.mak.feastit.data.repository.ICategoryRepository
-import com.mak.feastit.data.repository.IRecipeDetailRepository
-import com.mak.feastit.data.repository.IRecipeRepository
+import com.mak.feastit.domain.repository.ICategoryRepository
+import com.mak.feastit.domain.repository.IRecipeDetailRepository
+import com.mak.feastit.domain.repository.IRecipeRepository
 import com.mak.feastit.data.repository.RecipeDetailRepository
 import com.mak.feastit.data.repository.RecipeRepository
 import dagger.Binds
