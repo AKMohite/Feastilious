@@ -1,0 +1,48 @@
+package com.ak.feastit.data.network.dto
+
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
+data class RecipeDTO(
+//        val aggregateLikes: Int?,
+        val analyzedInstructions: List<AnalyzedInstructionDTO>? = emptyList(),
+//        val cheap: Boolean?,
+//        val cookingMinutes: Int?,
+//        val creditsText: String?,
+        val cuisines: List<String>? = emptyList(),
+//        val dairyFree: Boolean?,
+        val diets: List<String>? = emptyList(),
+        val dishTypes: List<String>? = emptyList(),
+        val extendedIngredients: List<ExtendedIngredientDTO>? = emptyList(),
+//        val gaps: String?,
+//        val glutenFree: Boolean?,
+//        val healthScore: Double?,
+        val id: Long = 0L,
+        val image: String = "",
+//        val imageType: String?,
+//        val license: String?,
+//        val likes: Int?,
+//        val lowFodmap: Boolean?,
+//        val missedIngredientCount: Int?,
+//        val missedIngredients: List<MissedIngredientDTO>?,
+//        val occasions: List<String?>?,
+//        val preparationMinutes: Int?,
+        val pricePerServing: Double? = 0.0,
+        val readyInMinutes: Int? = 0,
+        val servings: Int? = 0,
+        val sourceName: String? = "",
+        val sourceUrl: String? = "",
+//        val spoonacularScore: Double?,
+//        val spoonacularSourceUrl: String?,
+        val summary: String? = "",
+//        val sustainable: Boolean?,
+        val title: String = "",
+//        val unusedIngredients: List<Any?>?,
+//        val usedIngredientCount: Int?,
+//        val usedIngredients: List<Any?>?,
+//        val vegan: Boolean?,
+//        val vegetarian: Boolean?,
+//        val veryHealthy: Boolean?,
+//        val veryPopular: Boolean?,
+//        val weightWatcherSmartPoints: Int?
+)

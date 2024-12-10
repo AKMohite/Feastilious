@@ -4,8 +4,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class EquipmentDTO(
-    val id: Int?,
-    val image: String?,
-    val localizedName: String?,
-    val name: String?
+    val id: Int? = null,
+//    val image: String?,
+//    val localizedName: String?,
+    val name: String? = ""
 )

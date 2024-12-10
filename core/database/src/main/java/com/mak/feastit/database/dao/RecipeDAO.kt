@@ -39,9 +39,6 @@ interface RecipeDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInstructions(instructions: List<InstructionEntity>)
 
-    @Query("SELECT * FROM $DB_RECIPE_TABLE")
-    suspend fun getRecipes(): List<RecipeEntity>
-
     @Query("SELECT $DB_TABLE_ID FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1")
     suspend fun getFavRecipeIds(): List<Long>
 

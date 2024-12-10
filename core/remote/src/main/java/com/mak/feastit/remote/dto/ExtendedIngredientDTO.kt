@@ -4,18 +4,18 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ExtendedIngredientDTO(
-    val aisle: String?,
-    val amount: Double?,
-    val consistency: String?,
-    val id: Int?,
-    val image: String?,
-    val measures: MeasuresDTO?,
-    val meta: List<String>?,
-    val metaInformation: List<String>?,
-    val name: String?,
-    val nameClean: String?,
-    val original: String?,
-    val originalName: String?,
-    val originalString: String?,
-    val unit: String?
+//    val aisle: String?,
+    val amount: Double? = null,
+    val consistency: String? = null,
+    val id: Int? = null,
+    val image: String? = null,
+//    val measures: MeasuresDTO?,
+//    val meta: List<String>?,
+//    val metaInformation: List<String>?,
+    val name: String? = null,
+//    val nameClean: String?,
+    val original: String? = null,
+//    val originalName: String?,
+//    val originalString: String?,
+    val unit: String? = null
 )

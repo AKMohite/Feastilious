@@ -31,13 +31,35 @@ android {
         }
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file("release/app-debug.jks")
+            storePassword = "foodie"
+            keyAlias = "androidDebug"
+            keyPassword = "foodie"
+        }
+
+        create("release") {
+            if (rootProject.file("release/app-release.jks").exists()) {
+                storeFile = rootProject.file("release/app-release.jks")
+                storePassword = properties["FEAST_IT_STORE_PWD"]?.toString() ?: ""
+                keyAlias = "feast-it"
+                keyPassword = properties["FEAST_IT_KEY_PWD"]?.toString() ?: ""
+            }
+        }
+    }
+
     buildTypes {
         getByName("debug") {
+            signingConfig = signingConfigs["debug"]
+            isMinifyEnabled = false
+            isShrinkResources = false
             versionNameSuffix = ".debug"
             resValue("string", "app_version", "${defaultConfig.versionName}${versionNameSuffix}")
         }
 
         getByName("release") {
+            signingConfig = signingConfigs["release"] ?: signingConfigs["debug"]
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

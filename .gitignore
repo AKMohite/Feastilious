@@ -8,3 +8,7 @@
 .cxx
 local.properties
 .idea
+
+app-release.jks
+
+google-services.json
