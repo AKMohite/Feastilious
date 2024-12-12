@@ -78,6 +78,7 @@ android {
 }
 
 dependencies {
+//    todo need to have feature based modularization
     implementation(project(":core:domain"))
     implementation(project(":core:database"))
     implementation(project(":core:remote"))
