@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
 }
@@ -20,15 +20,6 @@ android {
         buildConfigField("String", "API_KEY", "\"" + propOrDef("SPOONACULAR_KEY", "") + "\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        getByName("debug") {
-            keyAlias = "feast-debug"
-            keyPassword = "feast-debug"
-            storeFile = rootProject.file("release/app-debug.keystore")
-            storePassword = "feast-debug"
-        }
     }
 
     signingConfigs {
@@ -78,15 +69,19 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:database"))
+    implementation(project(":core:remote"))
+    implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
@@ -103,7 +98,7 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.recyclerview)
 
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
 }

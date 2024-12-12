@@ -1,13 +1,8 @@
 package com.mak.feastit.remote.di
 
 
-import com.mak.feastit.remote.BuildConfig
-import com.ak.feastit.BuildConfig
 import com.ak.feastit.data.network.ErrorInterceptor
-import com.ak.feastit.data.network.FeastAPIService
-import com.ak.feastit.data.network.MockInterceptor
-import com.ak.feastit.data.network.datasource.IRecipeNetworkSource
-import com.ak.feastit.data.network.datasource.RecipeNetworkSource
+import com.mak.feastit.remote.BuildConfig
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -21,12 +16,10 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
 const val BASE_URL = "https://api.spoonacular.com"
-//const val API_KEY = BuildConfig.API_KEY
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,7 +43,9 @@ internal object NetworkModule {
     @Singleton
     @Provides
     @Named("ErrorInterceptor")
-    fun provideErrorInterceptor(): Interceptor = ErrorInterceptor(API_KEY)
+    fun provideErrorInterceptor(
+        @Named("FEAST_KEY") key: String
+    ): Interceptor = ErrorInterceptor(key)
 
     @Singleton
     @Provides

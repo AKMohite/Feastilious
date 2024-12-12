@@ -11,6 +11,7 @@ buildscript {
         classpath(libs.kotlin.plugin)
         classpath(libs.hilt.plugin)
         classpath(libs.navigation.safe.args.plugin)
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.0.21-1.0.27")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.42.0")
 
         // NOTE: Do not place your application dependencies here; they belong
