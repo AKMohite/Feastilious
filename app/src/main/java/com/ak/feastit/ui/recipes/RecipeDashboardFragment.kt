@@ -15,8 +15,6 @@ import com.google.android.material.chip.Chip
 import com.mak.feastit.domain.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
 
-
-@AndroidEntryPoint
 class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
 
     private var recipeAdapter: RecipeAdapter? = null
@@ -61,7 +59,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                             resources.displayMetrics
                     ).toInt()
                     chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp)
-                    chip.text = category.name
+                    chip.text = category.categoryName
                     chip.setOnCheckedChangeListener { selectChip, isChecked ->
                         if (isChecked) {
                             binding.recipeSearch.feastSearchEt.setText("")

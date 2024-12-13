@@ -1,7 +1,7 @@
 package com.ak.feastit.ui.explore
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import com.ak.feastit.base.BaseViewModel
 import com.ak.feastit.ui.recipes.DiscoverState
 import com.ak.feastit.ui.recipes.ExploreCategory
 import com.ak.feastit.ui.recipes.ExploreChip
@@ -10,11 +10,8 @@ import com.ak.feastit.ui.recipes.ExploreSection
 import com.mak.feastit.domain.model.Cuisine
 import com.mak.feastit.domain.model.DietType
 import com.mak.feastit.domain.model.RecipeMealType
+import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,29 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ExploreViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
-): ViewModel() {
-
-    /**
-     * This is the job for all coroutines started by this ViewModel.
-     * Cancelling this job will cancel all coroutines started by this ViewModel.
-     */
-    private val superVisorJob = SupervisorJob()
-
-    /**
-     * Handle exception to display a message instead of crashing
-     */
-    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        handleError(exception)
-    }
-
-    /**
-     * This is the main scope for all coroutines launched by this ViewModel.
-     * Since we pass [superVisorJob], you can cancel all coroutines
-     * launched by viewModelScope by calling [viewModelJob.cancel()]
-     */
-    final val uiScope
-        get() = CoroutineScope(Dispatchers.Main + superVisorJob + exceptionHandler)
+    dispatcher: DispatcherProvider,
+    savedStateHandle: SavedStateHandle
+): BaseViewModel(dispatcher) {
 
     private val selectedCategory = savedStateHandle.getStateFlow<String?>(
         "selectedCategory",
@@ -70,10 +47,6 @@ internal class ExploreViewModel @Inject constructor(
 
         observeCategories()
         refreshCategories()
-    }
-
-    protected fun handleError(exception: Throwable) {
-
     }
 
     private fun initCategories() {

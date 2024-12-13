@@ -17,10 +17,21 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_recipeDashboardFragment"
-            app:destination="@id/recipeDashboardFragment"
+            app:destination="@id/exploreFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.ak.feastit.ui.explore.ExploreFragment"
+        android:label="explore_fragment"
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/explore_to_recipeDetail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
+
     <fragment
         android:id="@+id/recipeDashboardFragment"
         android:name="com.ak.feastit.ui.recipes.RecipeDashboardFragment"
@@ -37,7 +48,7 @@
         tools:layout="@layout/fragment_on_boarding" >
         <action
             android:id="@+id/action_onBoardingFragment_to_recipeDashboardFragment"
-            app:destination="@id/recipeDashboardFragment"
+            app:destination="@id/exploreFragment"
             app:popUpTo="@id/onBoardingFragment"
             app:popUpToInclusive="true" />
     </fragment>
