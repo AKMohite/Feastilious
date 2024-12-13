@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
+    private val adapter: ExploreAdapter
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreBinding.inflate(inflater)
