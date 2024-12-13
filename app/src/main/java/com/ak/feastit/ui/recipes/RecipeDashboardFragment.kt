@@ -61,7 +61,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                             resources.displayMetrics
                     ).toInt()
                     chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp)
-                    chip.text = category.categoryName
+                    chip.text = category.name
                     chip.setOnCheckedChangeListener { selectChip, isChecked ->
                         if (isChecked) {
                             binding.recipeSearch.feastSearchEt.setText("")

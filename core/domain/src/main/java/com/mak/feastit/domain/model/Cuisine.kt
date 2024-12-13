@@ -1,6 +1,6 @@
 package com.mak.feastit.domain.model
 
-enum class Cuisine(val type: String) {
+enum class Cuisine(val title: String) {
     AFRICAN("African"),
     AMERICAN("American"),
     BRITISH("British"),

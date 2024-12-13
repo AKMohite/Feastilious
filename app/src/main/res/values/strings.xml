@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Feast It</string>
+    <string name="app_name">Yum Byte</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="next">Next</string>
     <string name="search">Search</string>
@@ -11,4 +11,18 @@
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
     <string name="cart">Cart</string>
+    <string name="meal_type_main_course">Main Course</string>
+    <string name="meal_type_appetizer">Appetizer</string>
+    <string name="meal_type_side_dish">Side dish</string>
+    <string name="meal_type_dessert">Dessert</string>
+    <string name="meal_type_salad">Salad</string>
+    <string name="meal_type_bread">bread</string>
+    <string name="meal_type_breakfast">Breakfast</string>
+    <string name="meal_type_soup">Soup</string>
+    <string name="meal_type_beverage">Beverage</string>
+    <string name="meal_type_sauce">Sauce</string>
+    <string name="meal_type_marinade">Marinade</string>
+    <string name="meal_type_finger_food">Finger food</string>
+    <string name="meal_type_snack">Snack</string>
+    <string name="meal_type_drink">Drink</string>
 </resources>
