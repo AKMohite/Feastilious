@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.recipes
 
 import com.mak.feastit.domain.model.Recipe
+import java.util.Locale
 
 internal data class DiscoverState(
     // this is loading state of whole screen
@@ -27,7 +28,12 @@ internal enum class ExploreCategory {
     HEALTHY_RECIPES,
     DIET_TYPE_CHIPS,
     QUICK_RECIPES,
-    POCKET_FRIENDLY_RECIPES
+    POCKET_FRIENDLY_RECIPES;
+
+    fun getTitle(): String {
+        return this.name.replace("_", " ")
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+    }
 }
 
 internal data class ExploreChip(

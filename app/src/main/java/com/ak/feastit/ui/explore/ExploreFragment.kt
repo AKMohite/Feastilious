@@ -28,7 +28,9 @@ class ExploreFragment : BaseFragment() {
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state -> }
+                viewModel.state.collect { state ->
+                    val sections = state.displayableSections()
+                }
             }
         }
     }
