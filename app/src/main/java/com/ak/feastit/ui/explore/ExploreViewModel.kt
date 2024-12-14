@@ -64,6 +64,10 @@ internal class ExploreViewModel @Inject constructor(
         _state.update { newState }
     }
 
+    override fun handleError(exception: Throwable) {
+        super.handleError(exception)
+    }
+
     private fun refreshCategories() {
         uiScope.launch {
 //            TODO use supervisor

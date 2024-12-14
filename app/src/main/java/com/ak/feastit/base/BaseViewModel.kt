@@ -28,10 +28,10 @@ internal open class BaseViewModel(
      * Since we pass [superVisorJob], you can cancel all coroutines
      * launched by viewModelScope by calling [viewModelJob.cancel()]
      */
-    final val uiScope
+    val uiScope
         get() = CoroutineScope(dispatcher.main + superVisorJob + exceptionHandler)
 
-    protected fun handleError(exception: Throwable) {
+    protected open fun handleError(exception: Throwable) {
 
     }
 
