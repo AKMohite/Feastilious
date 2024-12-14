@@ -11,6 +11,8 @@ import com.mak.feastit.domain.model.Cuisine
 import com.mak.feastit.domain.model.DietType
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeMealType
+import com.mak.feastit.domain.model.SyncType
+import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ExploreViewModel @Inject constructor(
+    private val recipesRepository: RecipesRepository,
     dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
 ): BaseViewModel(dispatcher) {
@@ -70,6 +73,11 @@ internal class ExploreViewModel @Inject constructor(
 
     private fun refreshCategories() {
         uiScope.launch {
+            recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1)
+            recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1)
+            recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1)
+            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
+            recipesRepository.refreshRecipes(SyncType.POCKET_FRIENDLY_RECIPES, 1)
 //            TODO use supervisor
 //            refresh popular
 //            refresh top rated

@@ -1,7 +1,7 @@
 package com.mak.feastit.domain.repository
 
-import com.mak.feastit.domain.model.Recipe
+import com.mak.feastit.domain.model.SyncType
 
 interface RecipesRepository {
-    suspend fun fetchRecipeFor(params: Int): List<Recipe>
+    suspend fun refreshRecipes(request: SyncType, page: Int)
 }

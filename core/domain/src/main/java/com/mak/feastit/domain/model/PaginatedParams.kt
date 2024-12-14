@@ -1,4 +1,4 @@
-package com.mak.feastit.domain.common
+package com.mak.feastit.domain.model
 
 data class PaginatedParams(
     val page: Int = 1,
