@@ -9,6 +9,7 @@ import com.ak.feastit.ui.recipes.ExploreRow
 import com.ak.feastit.ui.recipes.ExploreSection
 import com.mak.feastit.domain.model.Cuisine
 import com.mak.feastit.domain.model.DietType
+import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeMealType
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -137,7 +138,10 @@ internal class ExploreViewModel @Inject constructor(
                     ExploreSection(
                     isLoading = false,
                     category = category,
-                    row = ExploreRow.RecipeRows(emptyList())
+                        hasMoreItems = true,
+                    row = ExploreRow.RecipeRows(listOf(
+                        Recipe(1L, "", "")
+                    ))
                 )
                 )
             }

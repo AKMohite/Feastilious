@@ -6,12 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.explore.ExploreFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Explore"
-        android:textSize="40.sp"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/explore_items"
         android:layout_width="0dp"

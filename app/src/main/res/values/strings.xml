@@ -25,4 +25,5 @@
     <string name="meal_type_finger_food">Finger food</string>
     <string name="meal_type_snack">Snack</string>
     <string name="meal_type_drink">Drink</string>
+    <string name="section_see_all">See all items for section</string>
 </resources>

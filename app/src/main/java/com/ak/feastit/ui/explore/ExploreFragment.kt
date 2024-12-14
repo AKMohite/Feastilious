@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
-    private val adapter: ExploreAdapter
+    private val adapter: ExploreSectionAdapter by lazy { ExploreSectionAdapter() }
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreBinding.inflate(inflater)
@@ -27,10 +28,13 @@ class ExploreFragment : BaseFragment() {
         get() = baseBinding as FragmentExploreBinding
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        binding.exploreItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.exploreItems.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     val sections = state.displayableSections()
+                    adapter.submitList(sections)
                 }
             }
         }

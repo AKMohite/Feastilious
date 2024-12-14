@@ -32,6 +32,8 @@ internal enum class ExploreCategory {
 
     fun getTitle(): String {
         return this.name.replace("_", " ")
+            .replace(" chips", "", ignoreCase = true)
+            .lowercase(Locale.getDefault())
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
     }
 }
@@ -58,5 +60,6 @@ internal data class ExploreSection(
     // this is loading state of each section in screen
     val isLoading: Boolean,
     val category: ExploreCategory,
+    val hasMoreItems: Boolean = false,
     val row: ExploreRow<*>? = null // TODO why we need to pass any *, need to check other
 )
