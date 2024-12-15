@@ -2,12 +2,9 @@ package com.mak.feastit.data.repository
 
 import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.database.FeastDB
-import com.mak.feastit.database.entity.LastSyncEntity
-import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
-import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
@@ -26,10 +23,13 @@ internal class RealRecipesRepository @Inject constructor(
     private val api: FeastAPIService,
     private val db: FeastDB,
     private val dispatcher: DispatcherProvider
-): RecipesRepository {
+): BaseRecipeRepository(
+    api = api,
+    db = db,
+    dispatcher = dispatcher
+) {
 
-    private val recipesMapper = RecipesMapper()
-
+    override val recipesMapper = RecipesMapper()
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
         if (!forceRefresh) {
@@ -43,72 +43,9 @@ internal class RealRecipesRepository @Inject constructor(
         saveRemoteRecipes(dtos, page, request)
     }
 
-    private suspend fun saveRemoteRecipes(
-        dtos: List<RecipeDTO>,
-        page: Int,
-        request: SyncType
-    ) {
-        val recipeEntities = recipesMapper.jsonToEntities(dtos)
-        val popularRecipeEntities = recipesMapper.jsonToPopularEntities(dtos, page)
-        db.blockTransaction {
-            if (page == 1) {
-                val currentSynced = LastSyncEntity(
-                    id = 0,
-                    entityType = request.name,
-                    lastSyncedAt = Instant.now()
-                )
-                db.lastSyncDao().insertEntity(currentSynced)
-                deleteRecipes(request)
-            } else {
-                deletePage(page, request)
-            }
-            insertInLocalDB(popularRecipeEntities, request)
-            chunkUpdate(recipeEntities)
-        }
-    }
-
-    private suspend fun insertInLocalDB(
-        popularRecipeEntities: List<PopularRecipeEntity>,
-        request: SyncType
-    ) {
-        when(request) {
-            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().insert(popularRecipeEntities)
-            else -> throw IllegalArgumentException("$request cannot be handled")
-
-        }
-    }
-
-    private suspend fun deletePage(page: Int, request: SyncType) {
-        when(request) {
-            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deletePage(page)
-            SyncType.TOP_RATED_RECIPES -> TODO()
-            SyncType.HEALTHY_RECIPES -> TODO()
-            SyncType.QUICK_RECIPES -> TODO()
-            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
-            SyncType.RECIPE_DETAILS -> throw IllegalArgumentException("$request cannot be handled")
-        }
-    }
-
-    private suspend fun deleteRecipes(request: SyncType) {
-        when(request) {
-            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deleteRecipes()
-            SyncType.TOP_RATED_RECIPES -> TODO()
-            SyncType.HEALTHY_RECIPES -> TODO()
-            SyncType.QUICK_RECIPES -> TODO()
-            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
-            else -> throw IllegalArgumentException("$request cannot be handled")
-        }
-    }
-
-//    override fun getRecipes(request: SyncType, page: Int) = db.popularRecipeDAO().getRecipes(page)
-
     override fun getRecipes(request: SyncType, page: Int): Flow<List<Recipe>> {
         val flow: Flow<List<RecipeEntity>> = when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
-            SyncType.TOP_RATED_RECIPES -> TODO()
-            SyncType.HEALTHY_RECIPES -> TODO()
-            SyncType.QUICK_RECIPES -> TODO()
-            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
             else -> throw IllegalArgumentException("$request must not be requested")
         }
         return flow
@@ -142,11 +79,5 @@ internal class RealRecipesRepository @Inject constructor(
     private fun getOffset(page: Int): String {
         if (page < 1) throw IllegalStateException("page must be greater than 0")
         return ((page - 1) * LIMIT_ITEMS).toString()
-    }
-
-    private suspend fun chunkUpdate(entities: List<RecipeEntity>) {
-        for (chunk in entities.chunked(20)) {
-            db.recipeDAO().insertRecipes(chunk)
-        }
     }
 }

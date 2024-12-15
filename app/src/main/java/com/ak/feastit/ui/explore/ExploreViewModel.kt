@@ -133,7 +133,11 @@ internal class ExploreViewModel @Inject constructor(
                 )
                 )
             }
-//            ExploreCategory.TOP_RATED_RECIPES -> TODO()
+            ExploreCategory.TOP_RATED_RECIPES -> recipesRepository.getRecipes(SyncType.TOP_RATED_RECIPES, 1)
+                .map { recipes ->
+                    recipeToExploreSection(recipes, category)
+                }
+                .flowOn(dispatcher.computation)
             ExploreCategory.CUISINE_TYPE_CHIPS -> {
                 flowOf(
                     ExploreSection(
