@@ -2,6 +2,7 @@ package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.TopRecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.remote.dto.RecipeDTO
 
@@ -36,6 +37,15 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
     fun jsonToPopularEntities(dtos: List<RecipeDTO>, page: Int): List<PopularRecipeEntity> {
         return dtos.map { dto ->
             PopularRecipeEntity(
+                recipeId = dto.id,
+                page = page
+            )
+        }
+    }
+
+    fun jsonToTopEntities(dtos: List<RecipeDTO>, page: Int): List<TopRecipeEntity> {
+        return dtos.map { dto ->
+            TopRecipeEntity(
                 recipeId = dto.id,
                 page = page
             )

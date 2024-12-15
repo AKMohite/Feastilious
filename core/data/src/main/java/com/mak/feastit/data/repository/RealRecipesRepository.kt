@@ -46,6 +46,7 @@ internal class RealRecipesRepository @Inject constructor(
     override fun getRecipes(request: SyncType, page: Int): Flow<List<Recipe>> {
         val flow: Flow<List<RecipeEntity>> = when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
+            SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().getRecipes(page)
             else -> throw IllegalArgumentException("$request must not be requested")
         }
         return flow

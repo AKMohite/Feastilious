@@ -52,6 +52,10 @@ internal abstract class BaseRecipeRepository(
                 val popularRecipeEntities = recipesMapper.jsonToPopularEntities(dtos, page)
                 db.popularRecipeDAO().insert(popularRecipeEntities)
             }
+            SyncType.TOP_RATED_RECIPES -> {
+                val topRecipeEntities = recipesMapper.jsonToTopEntities(dtos, page)
+                db.topRecipesDAO().insert(topRecipeEntities)
+            }
             else -> throw IllegalArgumentException("$request cannot be handled")
 
         }
@@ -60,6 +64,7 @@ internal abstract class BaseRecipeRepository(
     private suspend fun deletePage(page: Int, request: SyncType) {
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deletePage(page)
+            SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deletePage(page)
             else -> throw IllegalArgumentException("$request cannot be handled")
         }
     }
@@ -67,6 +72,7 @@ internal abstract class BaseRecipeRepository(
     private suspend fun deleteRecipes(request: SyncType) {
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deleteRecipes()
+            SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deleteRecipes()
             else -> throw IllegalArgumentException("$request cannot be handled")
         }
     }
