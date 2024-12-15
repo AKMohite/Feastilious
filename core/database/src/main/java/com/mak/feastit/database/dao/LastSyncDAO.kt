@@ -1,7 +1,20 @@
 package com.mak.feastit.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.mak.feastit.database.entity.LastSyncEntity
 
 @Dao
 interface LastSyncDAO {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEntity(entities: LastSyncEntity)
+
+    @Query("SELECT * FROM last_syncs WHERE entity_type = :entityType AND entity_id = :entityId")
+    suspend fun getLastSync(entityType: String, entityId: Long = 0L): LastSyncEntity?
+
+    @Query("DELETE FROM last_syncs WHERE entity_type = :entityType AND entity_id = :entityId")
+    suspend fun deleteEntity(entityType: String, entityId: String?)
 }

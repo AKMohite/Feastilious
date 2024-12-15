@@ -74,10 +74,10 @@ internal class ExploreViewModel @Inject constructor(
     private fun refreshCategories() {
         uiScope.launch {
             recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1)
-            recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1)
-            recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1)
-            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
-            recipesRepository.refreshRecipes(SyncType.POCKET_FRIENDLY_RECIPES, 1)
+//            recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1)
+//            recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1)
+//            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
+//            recipesRepository.refreshRecipes(SyncType.POCKET_FRIENDLY_RECIPES, 1)
 //            TODO use supervisor
 //            refresh popular
 //            refresh top rated
