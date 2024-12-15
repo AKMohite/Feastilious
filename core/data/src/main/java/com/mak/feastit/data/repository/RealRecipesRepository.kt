@@ -3,6 +3,7 @@ package com.mak.feastit.data.repository
 import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.LastSyncEntity
+import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
@@ -39,6 +40,14 @@ internal class RealRecipesRepository @Inject constructor(
         }
         val dtos = fetchRecipes(request, page) ?: return@withContext
         if (dtos.isEmpty()) return@withContext
+        saveRemoteRecipes(dtos, page, request)
+    }
+
+    private suspend fun saveRemoteRecipes(
+        dtos: List<RecipeDTO>,
+        page: Int,
+        request: SyncType
+    ) {
         val recipeEntities = recipesMapper.jsonToEntities(dtos)
         val popularRecipeEntities = recipesMapper.jsonToPopularEntities(dtos, page)
         db.blockTransaction {
@@ -49,12 +58,45 @@ internal class RealRecipesRepository @Inject constructor(
                     lastSyncedAt = Instant.now()
                 )
                 db.lastSyncDao().insertEntity(currentSynced)
-                db.popularRecipeDAO().deletePopularRecipes()
+                deleteRecipes(request)
             } else {
-                db.popularRecipeDAO().deletePage(page)
+                deletePage(page, request)
             }
-            db.popularRecipeDAO().insert(popularRecipeEntities)
+            insertInLocalDB(popularRecipeEntities, request)
             chunkUpdate(recipeEntities)
+        }
+    }
+
+    private suspend fun insertInLocalDB(
+        popularRecipeEntities: List<PopularRecipeEntity>,
+        request: SyncType
+    ) {
+        when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().insert(popularRecipeEntities)
+            else -> throw IllegalArgumentException("$request cannot be handled")
+
+        }
+    }
+
+    private suspend fun deletePage(page: Int, request: SyncType) {
+        when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deletePage(page)
+            SyncType.TOP_RATED_RECIPES -> TODO()
+            SyncType.HEALTHY_RECIPES -> TODO()
+            SyncType.QUICK_RECIPES -> TODO()
+            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
+            SyncType.RECIPE_DETAILS -> throw IllegalArgumentException("$request cannot be handled")
+        }
+    }
+
+    private suspend fun deleteRecipes(request: SyncType) {
+        when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deleteRecipes()
+            SyncType.TOP_RATED_RECIPES -> TODO()
+            SyncType.HEALTHY_RECIPES -> TODO()
+            SyncType.QUICK_RECIPES -> TODO()
+            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
+            else -> throw IllegalArgumentException("$request cannot be handled")
         }
     }
 
