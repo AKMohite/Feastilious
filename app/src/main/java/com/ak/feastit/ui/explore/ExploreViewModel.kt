@@ -20,7 +20,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -32,7 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ExploreViewModel @Inject constructor(
     private val recipesRepository: RecipesRepository,
-    dispatcher: DispatcherProvider,
+    private val dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
 ): BaseViewModel(dispatcher) {
 
@@ -50,7 +52,8 @@ internal class ExploreViewModel @Inject constructor(
         initCategories()
 
         observeCategories()
-        refreshCategories()
+//        TODO: maybe force refresh in initialisation
+        refreshCategories(false)
     }
 
     private fun initCategories() {
@@ -71,9 +74,9 @@ internal class ExploreViewModel @Inject constructor(
         super.handleError(exception)
     }
 
-    private fun refreshCategories() {
+    private fun refreshCategories(forceRefresh: Boolean = false) {
         uiScope.launch {
-            recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1)
+            recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1, forceRefresh)
 //            recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1)
 //            recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1)
 //            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
@@ -111,8 +114,16 @@ internal class ExploreViewModel @Inject constructor(
 
     private fun observeCategory(category: ExploreCategory): Flow<ExploreSection> {
         val section: Flow<ExploreSection> = when(category) {
-//            ExploreCategory.BANNER_RECIPES -> TODO()
-//            ExploreCategory.POPULAR_RECIPES -> TODO()
+            ExploreCategory.BANNER_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
+                .map { recipes ->
+                    recipeToExploreSection(recipes, category)
+                }
+                .flowOn(dispatcher.computation)
+            ExploreCategory.POPULAR_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
+                .map { recipes ->
+                    recipeToExploreSection(recipes, category)
+                }
+                .flowOn(dispatcher.computation)
             ExploreCategory.MEAL_TYPE_CHIPS -> {
                 flowOf(
                     ExploreSection(
@@ -150,7 +161,6 @@ internal class ExploreViewModel @Inject constructor(
                     ExploreSection(
                     isLoading = false,
                     category = category,
-                        hasMoreItems = true,
                     row = ExploreRow.RecipeRows(listOf(
                         Recipe(1L, "", "")
                     ))
@@ -159,6 +169,13 @@ internal class ExploreViewModel @Inject constructor(
             }
         }
         return section
+    }
+
+    private fun recipeToExploreSection(recipes: List<Recipe>, category: ExploreCategory): ExploreSection {
+        return ExploreSection(
+            isLoading = false,
+            category = category,
+            row = ExploreRow.RecipeRows(recipes))
     }
 }
 

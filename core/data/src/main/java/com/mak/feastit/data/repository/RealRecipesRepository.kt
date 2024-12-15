@@ -4,11 +4,15 @@ import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.Instant
@@ -53,6 +57,24 @@ internal class RealRecipesRepository @Inject constructor(
             chunkUpdate(recipeEntities)
         }
     }
+
+//    override fun getRecipes(request: SyncType, page: Int) = db.popularRecipeDAO().getRecipes(page)
+
+    override fun getRecipes(request: SyncType, page: Int): Flow<List<Recipe>> {
+        val flow: Flow<List<RecipeEntity>> = when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
+            SyncType.TOP_RATED_RECIPES -> TODO()
+            SyncType.HEALTHY_RECIPES -> TODO()
+            SyncType.QUICK_RECIPES -> TODO()
+            SyncType.POCKET_FRIENDLY_RECIPES -> TODO()
+            else -> throw IllegalArgumentException("$request must not be requested")
+        }
+        return flow
+            .flowOn(dispatcher.io)
+            .map(recipesMapper::entitiesToModels)
+            .flowOn(dispatcher.computation)
+    }
+
 
     private fun isRequestValid(lastSyncedAt: Instant): Boolean {
         return lastSyncedAt > (Instant.now() - Duration.of(3, ChronoUnit.HOURS))

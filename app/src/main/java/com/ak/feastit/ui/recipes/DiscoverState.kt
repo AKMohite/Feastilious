@@ -60,6 +60,7 @@ internal data class ExploreSection(
     // this is loading state of each section in screen
     val isLoading: Boolean,
     val category: ExploreCategory,
-    val hasMoreItems: Boolean = false,
     val row: ExploreRow<*>? = null // TODO why we need to pass any *, need to check other
-)
+) {
+    val hasMoreItems: Boolean = row is ExploreRow.RecipeRows
+}
