@@ -9,6 +9,7 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -32,6 +33,7 @@ internal class RealRecipesRepository @Inject constructor(
     override val recipesMapper = RecipesMapper()
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
+        if (page > 5) return@withContext // just have limited API calls condition can be removed
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
             if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt)) {
@@ -47,9 +49,11 @@ internal class RealRecipesRepository @Inject constructor(
         val flow: Flow<List<RecipeEntity>> = when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().getRecipes(page)
+            SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().getRecipes(page)
             else -> throw IllegalArgumentException("$request must not be requested")
         }
         return flow
+            .distinctUntilChanged()
             .flowOn(dispatcher.io)
             .map(recipesMapper::entitiesToModels)
             .flowOn(dispatcher.computation)

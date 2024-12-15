@@ -56,6 +56,10 @@ internal abstract class BaseRecipeRepository(
                 val topRecipeEntities = recipesMapper.jsonToTopEntities(dtos, page)
                 db.topRecipesDAO().insert(topRecipeEntities)
             }
+            SyncType.HEALTHY_RECIPES -> {
+                val healthyRecipeEntities = recipesMapper.jsonToHealthyEntities(dtos, page)
+                db.healthyRecipeDAO().insert(healthyRecipeEntities)
+            }
             else -> throw IllegalArgumentException("$request cannot be handled")
 
         }
@@ -65,6 +69,7 @@ internal abstract class BaseRecipeRepository(
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deletePage(page)
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deletePage(page)
+            SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().deletePage(page)
             else -> throw IllegalArgumentException("$request cannot be handled")
         }
     }
@@ -73,12 +78,13 @@ internal abstract class BaseRecipeRepository(
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deleteRecipes()
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deleteRecipes()
+            SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().deleteRecipes()
             else -> throw IllegalArgumentException("$request cannot be handled")
         }
     }
 
     private suspend fun chunkUpdate(entities: List<RecipeEntity>) {
-        for (chunk in entities.chunked(20)) {
+        for (chunk in entities.chunked(LIMIT_ITEMS)) {
             db.recipeDAO().insertRecipes(chunk)
         }
     }

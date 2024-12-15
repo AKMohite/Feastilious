@@ -5,10 +5,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.withTransaction
 import com.mak.feastit.database.converters.InstantConverter
+import com.mak.feastit.database.dao.HealthyRecipeDAO
 import com.mak.feastit.database.dao.LastSyncDAO
 import com.mak.feastit.database.dao.PopularRecipeDAO
 import com.mak.feastit.database.dao.RecipeDAO
 import com.mak.feastit.database.dao.TopRecipesDAO
+import com.mak.feastit.database.entity.HealthyRecipeEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.InstructionEntity
 import com.mak.feastit.database.entity.LastSyncEntity
@@ -20,6 +22,7 @@ import com.mak.feastit.database.entity.TopRecipeEntity
     entities = [
         PopularRecipeEntity::class,
         TopRecipeEntity::class,
+        HealthyRecipeEntity::class,
         RecipeEntity::class,
         IngredientEntity::class,
         InstructionEntity::class,
@@ -41,7 +44,8 @@ interface FeastDB {
     fun recipeDAO(): RecipeDAO
     fun popularRecipeDAO(): PopularRecipeDAO
     fun topRecipesDAO(): TopRecipesDAO
-    fun lastSyncDao(): LastSyncDAO
+    fun healthyRecipeDAO(): HealthyRecipeDAO
 
+    fun lastSyncDao(): LastSyncDAO
     suspend fun blockTransaction(block: suspend () -> Unit)
 }

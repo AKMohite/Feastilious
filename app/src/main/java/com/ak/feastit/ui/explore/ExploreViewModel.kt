@@ -15,6 +15,8 @@ import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -76,9 +78,11 @@ internal class ExploreViewModel @Inject constructor(
 
     private fun refreshCategories(forceRefresh: Boolean = false) {
         uiScope.launch {
-            recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1, forceRefresh)
-            recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1)
-//            recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1)
+            listOf(
+                async{ recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1, forceRefresh) },
+                async{ recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1) },
+                async{ recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1) }
+            ).awaitAll()
 //            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
 //            recipesRepository.refreshRecipes(SyncType.POCKET_FRIENDLY_RECIPES, 1)
 //            TODO use supervisor
@@ -147,7 +151,11 @@ internal class ExploreViewModel @Inject constructor(
                 )
                 )
             }
-//            ExploreCategory.HEALTHY_RECIPES -> TODO()
+            ExploreCategory.HEALTHY_RECIPES -> recipesRepository.getRecipes(SyncType.HEALTHY_RECIPES, 1)
+                .map { recipes ->
+                    recipeToExploreSection(recipes, category)
+                }
+                .flowOn(dispatcher.computation)
             ExploreCategory.DIET_TYPE_CHIPS -> {
                 flowOf(
                     ExploreSection(
