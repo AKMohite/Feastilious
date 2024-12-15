@@ -71,7 +71,7 @@ internal class RecipeRepository @Inject constructor(
                 ingredients.addAll(recipe.ingredients)
                 instructions.addAll(recipe.instructions)
             }
-            db.blockTransaction {
+            db.handleTransaction {
                 with(db.recipeDAO()) {
                     insertRecipes(dtoRecipes)
                     insertIngredients(ingredients)

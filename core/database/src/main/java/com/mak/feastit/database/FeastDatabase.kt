@@ -33,7 +33,7 @@ import com.mak.feastit.database.entity.TopRecipeEntity
 @TypeConverters(InstantConverter::class)
 internal abstract class FeastDatabase: RoomDatabase(), FeastDB {
 
-    override suspend fun blockTransaction(block: suspend () -> Unit) {
+    override suspend fun handleTransaction(block: suspend () -> Unit) {
         this.withTransaction {
             block()
         }
@@ -45,7 +45,7 @@ interface FeastDB {
     fun popularRecipeDAO(): PopularRecipeDAO
     fun topRecipesDAO(): TopRecipesDAO
     fun healthyRecipeDAO(): HealthyRecipeDAO
-
     fun lastSyncDao(): LastSyncDAO
-    suspend fun blockTransaction(block: suspend () -> Unit)
+
+    suspend fun handleTransaction(block: suspend () -> Unit)
 }

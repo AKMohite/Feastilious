@@ -25,7 +25,7 @@ internal abstract class BaseRecipeRepository(
         request: SyncType
     ) {
         val recipeEntities = recipesMapper.jsonToEntities(dtos)
-        db.blockTransaction {
+        db.handleTransaction {
             if (page == 1) {
                 val currentSynced = LastSyncEntity(
                     id = 0,
