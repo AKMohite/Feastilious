@@ -2,6 +2,7 @@ package com.ak.feastit.ui.explore
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentExploreSectionBinding
 import com.ak.feastit.ui.explore.components.SectionViewHolder
@@ -25,6 +26,17 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<SectionViewHolder>() 
     fun submitList(sections: List<ExploreSection>) {
         this.sections = sections
         notifyDataSetChanged()
+    }
+
+}
+
+internal class SectionComparator: DiffUtil.ItemCallback<ExploreSection>() {
+    override fun areItemsTheSame(oldItem: ExploreSection, newItem: ExploreSection): Boolean {
+        return oldItem.category == newItem.category
+    }
+
+    override fun areContentsTheSame(oldItem: ExploreSection, newItem: ExploreSection): Boolean {
+        return oldItem == newItem
     }
 
 }

@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -108,6 +109,8 @@ internal class ExploreViewModel @Inject constructor(
     private fun observeCategory(category: ExploreCategory): Flow<ExploreSection> {
         return when {
             category == ExploreCategory.BANNER_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
+//                .
+                .take(6)
                 .map { recipes ->
                     recipeToExploreSection(recipes, category)
                 }
@@ -174,7 +177,6 @@ private fun List<Cuisine>.toCuisineExploreChips(): List<ExploreChip> {
         )
     }
 }
-
 
 private fun List<RecipeMealType>.toMealExploreChips(): List<ExploreChip> {
     return this.map { mealType ->
