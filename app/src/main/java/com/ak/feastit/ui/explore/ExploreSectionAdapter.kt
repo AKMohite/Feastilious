@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentExploreSectionBinding
 import com.ak.feastit.ui.explore.components.SectionViewHolder
-import com.ak.feastit.ui.recipes.ExploreSection
 
 internal class ExploreSectionAdapter: RecyclerView.Adapter<SectionViewHolder>() {
 

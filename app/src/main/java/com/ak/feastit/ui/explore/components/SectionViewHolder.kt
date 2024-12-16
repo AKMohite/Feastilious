@@ -2,9 +2,8 @@ package com.ak.feastit.ui.explore.components
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.ak.feastit.databinding.ComponentExploreSectionBinding
-import com.ak.feastit.ui.recipes.ExploreSection
+import com.ak.feastit.ui.explore.ExploreSection
 
 internal class SectionViewHolder(
     private val binding: ComponentExploreSectionBinding

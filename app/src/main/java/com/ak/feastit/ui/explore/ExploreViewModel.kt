@@ -2,11 +2,6 @@ package com.ak.feastit.ui.explore
 
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
-import com.ak.feastit.ui.recipes.DiscoverState
-import com.ak.feastit.ui.recipes.ExploreCategory
-import com.ak.feastit.ui.recipes.ExploreChip
-import com.ak.feastit.ui.recipes.ExploreRow
-import com.ak.feastit.ui.recipes.ExploreSection
 import com.mak.feastit.domain.model.Cuisine
 import com.mak.feastit.domain.model.DietType
 import com.mak.feastit.domain.model.Recipe
@@ -20,6 +15,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -45,14 +41,11 @@ internal class ExploreViewModel @Inject constructor(
         initialValue = null
     )
 
-
     private val _state = MutableStateFlow(DiscoverState())
     val state = _state.asStateFlow()
 
     init {
-
         initCategories()
-
         observeCategories()
 //        TODO: maybe force refresh in initialisation
         refreshCategories(false)
@@ -78,109 +71,80 @@ internal class ExploreViewModel @Inject constructor(
 
     private fun refreshCategories(forceRefresh: Boolean = false) {
         uiScope.launch {
-            listOf(
-                async{ recipesRepository.refreshRecipes(SyncType.POPULAR_RECIPES, 1, forceRefresh) },
-                async{ recipesRepository.refreshRecipes(SyncType.TOP_RATED_RECIPES, 1) },
-                async{ recipesRepository.refreshRecipes(SyncType.HEALTHY_RECIPES, 1) }
-            ).awaitAll()
-//            recipesRepository.refreshRecipes(SyncType.QUICK_RECIPES, 1)
-//            recipesRepository.refreshRecipes(SyncType.POCKET_FRIENDLY_RECIPES, 1)
-//            TODO use supervisor
-//            refresh popular
-//            refresh top rated
-//            refresh healthy
-//            refresh quick
-//            refresh pocket friendly
+            _state.update { it.refreshSections(true) }
+//            TODO check exception handling
+            ExploreCategory.getRefreshExploreEntries().map{ category ->
+                async { refreshCategory(category, forceRefresh) }
+            }.awaitAll()
+        }.invokeOnCompletion {
+            _state.update { it.refreshSections(false) }
         }
+    }
+
+    private suspend fun refreshCategory(category: ExploreCategory, forceRefresh: Boolean = false) {
+        recipesRepository.refreshRecipes(category.toSyncType(), 1, forceRefresh)
     }
 
     private fun observeCategories() {
         combine(
             flows = ExploreCategory.entries.map(::observeCategory),
             transform = { it.toList() }
-        )
-            .onStart {
-                _state.update { it.copy(isLoading = true) }
+        ).onStart {
+                _state.update { it.loading(true) }
             }
-//            .filter {  } // maybe filter out empty sections here instead of state
+//            .filter {  } // TODO maybe filter out empty sections here instead of state
             .onEach { sections ->
-                val newState = DiscoverState(
-                    isLoading = false,
-                    sections = sections
-                )
-                _state.update { newState }
+                _state.update { it.copy(sections = sections) }
             }
             .onCompletion {
-                _state.update { it.copy(isLoading = false) }
+                _state.update { it.loading(false) }
+            }
+            .catch { cause ->
+                handleError(cause)
             }
             .launchIn(uiScope)
     }
 
     private fun observeCategory(category: ExploreCategory): Flow<ExploreSection> {
-        val section: Flow<ExploreSection> = when(category) {
-            ExploreCategory.BANNER_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
+        return when {
+            category == ExploreCategory.BANNER_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
                 .map { recipes ->
                     recipeToExploreSection(recipes, category)
                 }
                 .flowOn(dispatcher.computation)
-            ExploreCategory.POPULAR_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
-                .map { recipes ->
-                    recipeToExploreSection(recipes, category)
-                }
-                .flowOn(dispatcher.computation)
-            ExploreCategory.MEAL_TYPE_CHIPS -> {
-                flowOf(
-                    ExploreSection(
+
+            category == ExploreCategory.MEAL_TYPE_CHIPS -> flowOf(
+                ExploreSection(
                     isLoading = false,
                     category = category,
                     row = ExploreRow.Chips(RecipeMealType.entries.toMealExploreChips())
                 )
-                )
-            }
-            ExploreCategory.TOP_RATED_RECIPES -> recipesRepository.getRecipes(SyncType.TOP_RATED_RECIPES, 1)
-                .map { recipes ->
-                    recipeToExploreSection(recipes, category)
-                }
-                .flowOn(dispatcher.computation)
-            ExploreCategory.CUISINE_TYPE_CHIPS -> {
-                flowOf(
-                    ExploreSection(
+            )
+
+            category == ExploreCategory.CUISINE_TYPE_CHIPS -> flowOf(
+                ExploreSection(
                     isLoading = false,
                     category = category,
                     row = ExploreRow.Chips(Cuisine.entries.toCuisineExploreChips())
                 )
-                )
-            }
-            ExploreCategory.HEALTHY_RECIPES -> recipesRepository.getRecipes(SyncType.HEALTHY_RECIPES, 1)
-                .map { recipes ->
-                    recipeToExploreSection(recipes, category)
-                }
-                .flowOn(dispatcher.computation)
-            ExploreCategory.DIET_TYPE_CHIPS -> {
-                flowOf(
-                    ExploreSection(
+            )
+
+            category == ExploreCategory.DIET_TYPE_CHIPS -> flowOf(
+                ExploreSection(
                     isLoading = false,
                     category = category,
                     row = ExploreRow.Chips(DietType.entries.toDietExploreChips())
                 )
-                )
-            }
-//            ExploreCategory.QUICK_RECIPES -> TODO()
-//            ExploreCategory.POCKET_FRIENDLY_RECIPES -> TODO()
-            else -> {
-//                todo remove else block after implementing all sections
-                flowOf(
-                    ExploreSection(
-                    isLoading = false,
-                    category = category,
-                    row = ExploreRow.RecipeRows(listOf(
-                        Recipe(1L, "", "")
-                    ))
-                )
-                )
-            }
+            )
+
+            ExploreCategory.observerExploreEntries().any { it == category } -> recipesRepository.getRecipes(category.toSyncType(), 1)
+                .map { recipes ->
+                    recipeToExploreSection(recipes, category)
+                }
+                .flowOn(dispatcher.computation)
+
+            else -> throw IllegalArgumentException("$category cannot be observed")
         }
-        return section
     }
 
     private fun recipeToExploreSection(recipes: List<Recipe>, category: ExploreCategory): ExploreSection {

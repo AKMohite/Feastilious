@@ -31,8 +31,6 @@ internal open class BaseViewModel(
     val uiScope
         get() = CoroutineScope(dispatcher.main + superVisorJob + exceptionHandler)
 
-    protected open fun handleError(exception: Throwable) {
-
-    }
+    protected open fun handleError(exception: Throwable) {}
 
 }

@@ -2,7 +2,6 @@ package com.mak.feastit.data.repository
 
 import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.database.FeastDB
-import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Duration
-import java.time.Instant
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -36,7 +34,9 @@ internal class RealRecipesRepository @Inject constructor(
         if (page > 5) return@withContext // just have limited API calls condition can be removed
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
-            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt)) {
+            //        TODO validity duration can be less but for now kept 6hours
+            val duration = Duration.of(6, ChronoUnit.DAYS)
+            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
                 return@withContext
             }
         }
@@ -46,22 +46,17 @@ internal class RealRecipesRepository @Inject constructor(
     }
 
     override fun getRecipes(request: SyncType, page: Int): Flow<List<Recipe>> {
-        val flow: Flow<List<RecipeEntity>> = when(request) {
+        return when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().getRecipes(page)
             SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().getRecipes(page)
+            SyncType.QUICK_RECIPES -> db.quickRecipeDAO().getRecipes(page)
+            SyncType.POCKET_FRIENDLY_RECIPES -> db.pocketFriendlyRecipeDAO().getRecipes(page)
             else -> throw IllegalArgumentException("$request must not be requested")
-        }
-        return flow
-            .distinctUntilChanged()
+        }.distinctUntilChanged()
             .flowOn(dispatcher.io)
             .map(recipesMapper::entitiesToModels)
             .flowOn(dispatcher.computation)
-    }
-
-
-    private fun isRequestValid(lastSyncedAt: Instant): Boolean {
-        return lastSyncedAt > (Instant.now() - Duration.of(3, ChronoUnit.HOURS))
     }
 
     private suspend fun fetchRecipes(request: SyncType, page: Int): List<RecipeDTO>? {
@@ -79,10 +74,5 @@ internal class RealRecipesRepository @Inject constructor(
             else -> throw IllegalArgumentException("$request must not be requested")
         }
         return api.searchRecipes(searchParams).results
-    }
-
-    private fun getOffset(page: Int): String {
-        if (page < 1) throw IllegalStateException("page must be greater than 0")
-        return ((page - 1) * LIMIT_ITEMS).toString()
     }
 }

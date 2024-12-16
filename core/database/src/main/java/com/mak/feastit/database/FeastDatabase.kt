@@ -7,14 +7,18 @@ import androidx.room.withTransaction
 import com.mak.feastit.database.converters.InstantConverter
 import com.mak.feastit.database.dao.HealthyRecipeDAO
 import com.mak.feastit.database.dao.LastSyncDAO
+import com.mak.feastit.database.dao.PocketFriendlyRecipeDAO
 import com.mak.feastit.database.dao.PopularRecipeDAO
+import com.mak.feastit.database.dao.QuickRecipeDAO
 import com.mak.feastit.database.dao.RecipeDAO
 import com.mak.feastit.database.dao.TopRecipesDAO
 import com.mak.feastit.database.entity.HealthyRecipeEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.InstructionEntity
 import com.mak.feastit.database.entity.LastSyncEntity
+import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
+import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
 
@@ -23,6 +27,8 @@ import com.mak.feastit.database.entity.TopRecipeEntity
         PopularRecipeEntity::class,
         TopRecipeEntity::class,
         HealthyRecipeEntity::class,
+        QuickRecipeEntity::class,
+        PocketFriendlyRecipeEntity::class,
         RecipeEntity::class,
         IngredientEntity::class,
         InstructionEntity::class,
@@ -45,6 +51,8 @@ interface FeastDB {
     fun popularRecipeDAO(): PopularRecipeDAO
     fun topRecipesDAO(): TopRecipesDAO
     fun healthyRecipeDAO(): HealthyRecipeDAO
+    fun quickRecipeDAO(): QuickRecipeDAO
+    fun pocketFriendlyRecipeDAO(): PocketFriendlyRecipeDAO
     fun lastSyncDao(): LastSyncDAO
 
     suspend fun handleTransaction(block: suspend () -> Unit)

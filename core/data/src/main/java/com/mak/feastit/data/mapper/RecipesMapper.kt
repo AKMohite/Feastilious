@@ -1,7 +1,9 @@
 package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.HealthyRecipeEntity
+import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
+import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
 import com.mak.feastit.domain.model.Recipe
@@ -56,6 +58,27 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
     fun jsonToHealthyEntities(dtos: List<RecipeDTO>, page: Int): List<HealthyRecipeEntity> {
         return dtos.map { dto ->
             HealthyRecipeEntity(
+                recipeId = dto.id,
+                page = page
+            )
+        }
+    }
+
+    fun jsonToQuickEntities(dtos: List<RecipeDTO>, page: Int): List<QuickRecipeEntity> {
+        return dtos.map { dto ->
+            QuickRecipeEntity(
+                recipeId = dto.id,
+                page = page
+            )
+        }
+    }
+
+    fun jsonToPocketFriendlyEntities(
+        dtos: List<RecipeDTO>,
+        page: Int
+    ): List<PocketFriendlyRecipeEntity> {
+        return dtos.map { dto ->
+            PocketFriendlyRecipeEntity(
                 recipeId = dto.id,
                 page = page
             )

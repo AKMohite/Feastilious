@@ -1,7 +1,6 @@
-package com.ak.feastit.ui.recipes
+package com.ak.feastit.ui.explore
 
 import com.mak.feastit.domain.model.Recipe
-import java.util.Locale
 
 internal data class DiscoverState(
     // this is loading state of whole screen
@@ -14,27 +13,32 @@ internal data class DiscoverState(
             .sortedBy { section -> section.category.ordinal }
     }
 
+    fun loading(isLoading: Boolean = false): DiscoverState {
+        return this.copy(isLoading = isLoading)
+    }
+
+    fun sectionLoading(category: ExploreCategory, isLoading: Boolean): DiscoverState {
+        val currentSections = this.sections
+        val updatedSections = currentSections.map { section ->
+            if (section.category == category) {
+                section.copy(isLoading = isLoading)
+            } else {
+                section
+            }
+        }
+        return this.copy(sections = updatedSections)
+    }
+
     fun isEmpty(): Boolean {
         return displayableSections().isEmpty()
     }
-}
 
-internal enum class ExploreCategory {
-    BANNER_RECIPES,
-    POPULAR_RECIPES,
-    MEAL_TYPE_CHIPS,
-    TOP_RATED_RECIPES,
-    CUISINE_TYPE_CHIPS,
-    HEALTHY_RECIPES,
-    DIET_TYPE_CHIPS,
-    QUICK_RECIPES,
-    POCKET_FRIENDLY_RECIPES;
-
-    fun getTitle(): String {
-        return this.name.replace("_", " ")
-            .replace(" chips", "", ignoreCase = true)
-            .lowercase(Locale.getDefault())
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+    fun refreshSections(isLoading: Boolean): DiscoverState {
+        val currentSections = this.sections
+        val updatedSections = currentSections.map { section ->
+            section.copy(isLoading = isLoading)
+        }
+        return this.copy(sections = updatedSections)
     }
 }
 
