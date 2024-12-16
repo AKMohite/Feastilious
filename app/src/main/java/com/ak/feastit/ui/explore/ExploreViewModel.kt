@@ -162,7 +162,7 @@ private fun List<DietType>.toDietExploreChips(): List<ExploreChip> {
     return this.map { dietType ->
         ExploreChip(
             id = dietType.ordinal + 1, // just to not have 0 as chip id
-            title = dietType.name,
+            title = dietType.type,
             name = dietType.name
         )
     }
@@ -172,7 +172,7 @@ private fun List<Cuisine>.toCuisineExploreChips(): List<ExploreChip> {
     return this.map { cuisine ->
         ExploreChip(
             id = cuisine.ordinal + 1, // just to not have 0 as chip id
-            title = cuisine.name,
+            title = cuisine.title,
             name = cuisine.name
         )
     }
@@ -182,7 +182,7 @@ private fun List<RecipeMealType>.toMealExploreChips(): List<ExploreChip> {
     return this.map { mealType ->
         ExploreChip(
             id = mealType.ordinal + 1, // just to not have 0 as chip id
-            title = mealType.name,
+            title = mealType.getTitle(),
             name = mealType.name
         )
     }

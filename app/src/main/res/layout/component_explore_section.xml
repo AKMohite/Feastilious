@@ -14,6 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="4dp"
         android:layout_marginStart="4dp"
+        android:textColor="@color/md_theme_onSurface"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Popular recipes" />
@@ -23,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/section_see_all"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/section_name"
+        app:layout_constraintBottom_toBottomOf="@id/section_name"
         app:layout_constraintEnd_toEndOf="parent"
         android:clickable="true"
         android:src="@drawable/icon_see_all"
