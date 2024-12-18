@@ -2,6 +2,7 @@ package com.ak.feastit.ui.explore
 
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
+import com.ak.feastit.utils.getEnumTitle
 import com.mak.feastit.domain.model.Cuisine
 import com.mak.feastit.domain.model.DietType
 import com.mak.feastit.domain.model.Recipe
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -109,10 +109,8 @@ internal class ExploreViewModel @Inject constructor(
     private fun observeCategory(category: ExploreCategory): Flow<ExploreSection> {
         return when {
             category == ExploreCategory.BANNER_RECIPES -> recipesRepository.getRecipes(SyncType.POPULAR_RECIPES, 1)
-//                .
-                .take(6)
                 .map { recipes ->
-                    recipeToExploreSection(recipes, category)
+                    recipeToExploreSection(recipes.shuffled().take(6), category)
                 }
                 .flowOn(dispatcher.computation)
 
@@ -163,7 +161,8 @@ private fun List<DietType>.toDietExploreChips(): List<ExploreChip> {
         ExploreChip(
             id = dietType.ordinal + 1, // just to not have 0 as chip id
             title = dietType.type,
-            name = dietType.name
+            name = dietType.name,
+            type = ExploreCategory.DIET_TYPE_CHIPS
         )
     }
 }
@@ -173,7 +172,8 @@ private fun List<Cuisine>.toCuisineExploreChips(): List<ExploreChip> {
         ExploreChip(
             id = cuisine.ordinal + 1, // just to not have 0 as chip id
             title = cuisine.title,
-            name = cuisine.name
+            name = cuisine.name,
+            type = ExploreCategory.CUISINE_TYPE_CHIPS
         )
     }
 }
@@ -182,8 +182,9 @@ private fun List<RecipeMealType>.toMealExploreChips(): List<ExploreChip> {
     return this.map { mealType ->
         ExploreChip(
             id = mealType.ordinal + 1, // just to not have 0 as chip id
-            title = mealType.getTitle(),
-            name = mealType.name
+            title = mealType.name.getEnumTitle(),
+            name = mealType.name,
+            type = ExploreCategory.MEAL_TYPE_CHIPS
         )
     }
 }

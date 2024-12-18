@@ -1,7 +1,6 @@
 package com.ak.feastit.ui.explore
 
 import com.mak.feastit.domain.model.SyncType
-import java.util.Locale
 
 internal enum class ExploreCategory {
     BANNER_RECIPES,
@@ -13,13 +12,6 @@ internal enum class ExploreCategory {
     DIET_TYPE_CHIPS,
     QUICK_RECIPES,
     POCKET_FRIENDLY_RECIPES;
-
-    fun getTitle(): String {
-        return this.name.replace("_", " ")
-            .replace(" chips", "", ignoreCase = true)
-            .lowercase(Locale.getDefault())
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-    }
 
     fun toSyncType(): SyncType {
         return when(this) {

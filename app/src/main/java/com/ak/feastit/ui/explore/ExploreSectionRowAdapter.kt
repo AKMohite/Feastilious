@@ -7,9 +7,11 @@ import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.databinding.FilterTypeTextBinding
 import com.ak.feastit.ui.explore.components.ExploreRecipeViewHolder
 import com.ak.feastit.ui.explore.components.FilterTypeViewHolder
+import com.ak.feastit.utils.onClick
 
 internal class ExploreSectionRowAdapter(
-    private val row: ExploreRow<*>
+    private val row: ExploreRow<*>,
+    private val eventListener: SectionEventListener?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -29,8 +31,18 @@ internal class ExploreSectionRowAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(row) {
-            is ExploreRow.Chips -> (holder as FilterTypeViewHolder).bind(row.contents[position])
-            is ExploreRow.RecipeRows -> (holder as ExploreRecipeViewHolder).bind(row.contents[position])
+            is ExploreRow.Chips -> {
+                val viewHolder = holder as FilterTypeViewHolder
+                val chip = row.contents[position]
+                viewHolder.itemView.onClick { eventListener?.onChipClick(chip) }
+                viewHolder.bind(row.contents[position])
+            }
+            is ExploreRow.RecipeRows -> {
+                val viewHolder = holder as ExploreRecipeViewHolder
+                val recipe = row.contents[position]
+                viewHolder.itemView.onClick { eventListener?.onRecipeClick(recipe.id) }
+                viewHolder.bind(row.contents[position])
+            }
         }
     }
 

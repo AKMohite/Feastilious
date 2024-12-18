@@ -26,4 +26,6 @@
     <string name="meal_type_snack">Snack</string>
     <string name="meal_type_drink">Drink</string>
     <string name="section_see_all">See all items for section</string>
+    <string name="search_recipes">Search recipes</string>
+    <string name="section_view_more">More</string>
 </resources>

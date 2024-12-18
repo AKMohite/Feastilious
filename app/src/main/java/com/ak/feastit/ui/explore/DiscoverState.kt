@@ -47,7 +47,8 @@ internal data class ExploreChip(
 //    @StringRes
 //    val titleId: Int,
     val title: String,
-    val name: String
+    val name: String,
+    val type: ExploreCategory
 )
 
 internal sealed interface ExploreRow<T> {
@@ -60,6 +61,7 @@ internal sealed interface ExploreRow<T> {
     ): ExploreRow<ExploreChip>
 }
 
+// TODO check [ExploreAdapterItem] to have multi view type items directly
 internal data class ExploreSection(
     // this is loading state of each section in screen
     val isLoading: Boolean,

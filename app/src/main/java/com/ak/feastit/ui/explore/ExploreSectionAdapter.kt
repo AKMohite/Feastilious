@@ -10,6 +10,11 @@ import com.ak.feastit.ui.explore.components.SectionViewHolder
 internal class ExploreSectionAdapter: RecyclerView.Adapter<SectionViewHolder>() {
 
     private var sections: List<ExploreSection> = emptyList()
+    private var eventListener: SectionEventListener? = null
+
+    fun setEventListener(eventListener: SectionEventListener?) {
+        this.eventListener = eventListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
         val binding = ComponentExploreSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,7 +25,7 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<SectionViewHolder>() 
 
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
         val section = sections[position]
-        holder.bind(section)
+        holder.bind(section, eventListener)
     }
 
     fun submitList(sections: List<ExploreSection>) {
@@ -28,6 +33,12 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<SectionViewHolder>() 
         notifyDataSetChanged()
     }
 
+}
+
+internal interface SectionEventListener {
+    fun viewAll(category: ExploreCategory)
+    fun onRecipeClick(recipeId: Long)
+    fun onChipClick(chip: ExploreChip)
 }
 
 internal class SectionComparator: DiffUtil.ItemCallback<ExploreSection>() {

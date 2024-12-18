@@ -27,8 +27,29 @@ class ExploreFragment : BaseFragment() {
     private val binding: FragmentExploreBinding
         get() = baseBinding as FragmentExploreBinding
 
+    private val eventListener by lazy {
+        object : SectionEventListener {
+            override fun viewAll(category: ExploreCategory) {
+                if (ExploreCategory.getRefreshExploreEntries().contains(category)) {
+//                navigate to pagination/search screen
+                } else {
+                    throw IllegalStateException("$category cannot have more items to load")
+                }
+            }
+
+            override fun onRecipeClick(recipeId: Long) {
+//            navigate to recipe details screen
+            }
+
+            override fun onChipClick(chip: ExploreChip) {
+//            navigate to pagination/search screen
+            }
+        }
+    }
+
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.exploreItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter.setEventListener(eventListener)
         binding.exploreItems.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -38,5 +59,10 @@ class ExploreFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        adapter.setEventListener(null)
+        super.onDestroyView()
     }
 }
