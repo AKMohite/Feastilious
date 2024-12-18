@@ -3,26 +3,35 @@ package com.ak.feastit.ui.explore.experimental
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ak.feastit.databinding.ComponentExploreSectionBinding
+import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
+import com.ak.feastit.databinding.ComponentExploreSectionRecipeBinding
 import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
 
+
+/**
+ * This adapter is for parent recycler view showing different views in it
+ * for eg. top banner, horizontal chips and horizontal recipes
+ * and each view has its own view holder containing child items to display in respective viewholder
+ * and adapters
+ */
 internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var sections: List<ExploreAdapterItem> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            TOP_BANNER -> {
+            TOP_HORIZONTAL_BANNER -> {
                 val binding = ExploreRecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//                TODO handle list for banners
                 TopBannerViewHolder(binding)
             }
             HORIZONTAL_CHIPS -> {
-                val binding = ComponentExploreSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ComponentExploreSectionChipsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 SectionChipsViewHolder(binding)
             }
             HORIZONTAL_RECIPES -> {
-                val binding = ComponentExploreSectionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ComponentExploreSectionRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 SectionRecipesViewHolder(binding)
             }
             else -> throw IllegalStateException("Invalid view type $viewType rendering")
@@ -41,7 +50,7 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
 
     override fun getItemViewType(position: Int): Int {
         when(sections[position]) {
-            is ExploreAdapterItem.TopBanner -> TOP_BANNER
+            is ExploreAdapterItem.TopBanner -> TOP_HORIZONTAL_BANNER
             is ExploreAdapterItem.HorizontalChips -> HORIZONTAL_CHIPS
             is ExploreAdapterItem.HorizontalRecipes -> HORIZONTAL_RECIPES
         }
@@ -54,7 +63,7 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     companion object {
-        const val TOP_BANNER = 1
+        const val TOP_HORIZONTAL_BANNER = 1
         const val HORIZONTAL_CHIPS = 3
         const val HORIZONTAL_RECIPES = 4
     }

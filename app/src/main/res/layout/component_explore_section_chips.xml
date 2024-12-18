@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="4dp">
         <TextView
-            android:id="@+id/section_name"
+            android:id="@+id/section_filter_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
@@ -24,31 +24,18 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="Popular recipes" />
-
-        <TextView
-            android:id="@+id/section_see_all_items"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/section_view_more"
-            app:layout_constraintTop_toTopOf="@id/section_name"
-            app:layout_constraintBottom_toBottomOf="@id/section_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="18sp"
-            app:drawableTint="?attr/colorTertiary"
-            android:textColor="?attr/colorTertiary"
-            android:layout_marginEnd="8dp" />
+            tools:text="Cuisines" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/section_items"
+            android:id="@+id/section_filter_items"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/section_name"
+            app:layout_constraintTop_toBottomOf="@id/section_filter_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/explore_recipe_item"
+            tools:listitem="@layout/filter_type_text"
             tools:itemCount="1"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

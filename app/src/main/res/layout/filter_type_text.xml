@@ -14,6 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Hello World"
-        android:textColor="@color/md_theme_surface"
+        android:textColor="?attr/colorSurface"
         android:textSize="18sp" />
 </FrameLayout>

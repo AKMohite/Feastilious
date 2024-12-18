@@ -1,12 +1,22 @@
 package com.ak.feastit.ui.explore.experimental
 
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ak.feastit.databinding.ComponentExploreSectionBinding
+import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
+import com.ak.feastit.utils.getEnumTitle
 
-internal class SectionChipsViewHolder(binding: ComponentExploreSectionBinding) : RecyclerView.ViewHolder(binding.root) {
+/**
+ * This viewholder holds horizontal chips list and need to render all list items in recycler view
+ */
+internal class SectionChipsViewHolder(
+    private val binding: ComponentExploreSectionChipsBinding
+) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(adapterItem: ExploreAdapterItem.HorizontalChips) {
-        TODO("Not yet implemented")
+        binding.sectionFilterName.text = adapterItem.category.name.getEnumTitle()
+        binding.sectionFilterItems.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.sectionFilterItems.adapter = FilterChipsAdapter(adapterItem.items)
     }
 
 }
