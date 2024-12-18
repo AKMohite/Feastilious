@@ -41,10 +41,19 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
     override fun getItemCount(): Int = sections.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(val adapterItem = sections[position]) {
-            is ExploreAdapterItem.TopBanner -> (holder as TopBannerViewHolder).bind(adapterItem)
-            is ExploreAdapterItem.HorizontalChips -> (holder as SectionChipsViewHolder).bind(adapterItem)
-            is ExploreAdapterItem.HorizontalRecipes -> (holder as SectionRecipesViewHolder).bind(adapterItem)
+        when(getItemViewType(position)) {
+            TOP_HORIZONTAL_BANNER -> {
+                val adapterItem = sections[position] as ExploreAdapterItem.TopBanner
+                (holder as TopBannerViewHolder).bind(adapterItem)
+            }
+            HORIZONTAL_CHIPS -> {
+                val adapterItem = sections[position] as ExploreAdapterItem.HorizontalChips
+                (holder as SectionChipsViewHolder).bind(adapterItem)
+            }
+            HORIZONTAL_RECIPES -> {
+                val adapterItem = sections[position] as ExploreAdapterItem.HorizontalRecipes
+                (holder as SectionRecipesViewHolder).bind(adapterItem)
+            }
         }
     }
 
@@ -63,8 +72,8 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     companion object {
-        const val TOP_HORIZONTAL_BANNER = 1
-        const val HORIZONTAL_CHIPS = 3
-        const val HORIZONTAL_RECIPES = 4
+        const val TOP_HORIZONTAL_BANNER = 0
+        const val HORIZONTAL_CHIPS = 1
+        const val HORIZONTAL_RECIPES = 2
     }
 }
