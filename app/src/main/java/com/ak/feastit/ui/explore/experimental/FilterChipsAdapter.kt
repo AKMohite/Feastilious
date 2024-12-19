@@ -3,7 +3,7 @@ package com.ak.feastit.ui.explore.experimental
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
+import com.ak.feastit.databinding.FilterTypeTextBinding
 import com.ak.feastit.ui.explore.ExploreChip
 
 internal class FilterChipsAdapter(
@@ -13,7 +13,7 @@ internal class FilterChipsAdapter(
         parent: ViewGroup,
         viewType: Int
     ): FilterViewHolder {
-        val binding = ComponentExploreSectionChipsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = FilterTypeTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FilterViewHolder(binding)
     }
 

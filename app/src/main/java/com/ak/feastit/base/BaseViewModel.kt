@@ -5,6 +5,7 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import java.util.concurrent.CancellationException
 
 internal open class BaseViewModel(
     private val dispatcher: DispatcherProvider
@@ -37,7 +38,7 @@ internal open class BaseViewModel(
      * Cancel all coroutines when the ViewModel is cleared
      */
     override fun onCleared() {
-        superVisorJob.cancel()
+        superVisorJob.cancel(cause = CancellationException("viewModel cleared"))
         super.onCleared()
     }
 

@@ -1,6 +1,8 @@
 package com.ak.feastit.ui.explore.experimental
 
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.ak.feastit.R
 import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
 
@@ -13,8 +15,12 @@ internal class TopBannerViewHolder(
 
     fun bind(adapterItem: ExploreAdapterItem.TopBanner) {
         binding.apply {
-//            recipeImg.setImageResource(adapterItem.items[0].recipeImgUrl)
-            recipeName.text = adapterItem.items[0].recipeName
+            val recipe = adapterItem.items[0]
+            recipeImg.load(recipe.recipeImgUrl) {
+                placeholder(R.drawable.ic_recipe_img_placeholder)
+                error(R.drawable.ic_recipe_img_placeholder)
+            }
+            recipeName.text = recipe.recipeName
         }
     }
 }
