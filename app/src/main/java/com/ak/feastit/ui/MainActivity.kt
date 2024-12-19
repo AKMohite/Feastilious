@@ -1,12 +1,13 @@
 package com.ak.feastit.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ActivityMainBinding
+import com.ak.feastit.utils.hide
+import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,8 +22,8 @@ class MainActivity : AppCompatActivity() {
         val navController= navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.onBoardingFragment -> binding.mainBottomNavigation.visibility = View.GONE
-                else -> binding.mainBottomNavigation.visibility = View.VISIBLE
+                R.id.splashFragment, R.id.onBoardingFragment -> binding.mainBottomNavigation.hide()
+                else -> binding.mainBottomNavigation.show()
             }
         }
 

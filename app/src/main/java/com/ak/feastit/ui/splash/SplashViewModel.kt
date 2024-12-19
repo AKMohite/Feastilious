@@ -1,38 +1,55 @@
 package com.ak.feastit.ui.splash
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.ak.feastit.base.BaseViewModel
 import com.ak.feastit.data.utils.FeastPrefManager
+import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-    prefManager: FeastPrefManager
-) : ViewModel() {
-    val splashState: StateFlow<SplashState>
-        get() = mutableSplashState
+internal class SplashViewModel @Inject constructor(
+    prefManager: FeastPrefManager,
+    dispatcher: DispatcherProvider
+) : BaseViewModel(dispatcher) {
+
     private val mutableSplashState = MutableStateFlow<SplashState>(SplashState.Empty)
+    val splashState: StateFlow<SplashState>
+        get() = mutableSplashState.asStateFlow()
+
     init {
-        viewModelScope.launch {
-            delay(3000)
-            prefManager.preferencesFlow.collect { prefs ->
+        prefManager.preferencesFlow
+//            .debounce(2_500)
+            .onEach { prefs ->
                 if (prefs.isFirstInstall) {
-                    mutableSplashState.value = SplashState.NavigateToOnBoarding
+                    mutableSplashState.update { SplashState.NavigateToOnBoarding }
                 } else {
-                    mutableSplashState.value = SplashState.NavigateToHome
+                    mutableSplashState.update { SplashState.NavigateToHome }
                 }
-            }
-        }
+            }.launchIn(uiScope)
+
+//        uiScope.launch {
+////            delay(2_500)
+//            prefManager.preferencesFlow
+//            .debounce(2_500)
+//                .collectLatest { prefs ->
+//                    if (prefs.isFirstInstall) {
+//                        mutableSplashState.value = SplashState.NavigateToOnBoarding
+//                    } else {
+//                        mutableSplashState.value = SplashState.NavigateToHome
+//                    }
+//                }
+//        }
     }
 
     sealed class SplashState {
-        object NavigateToHome : SplashState()
-        object NavigateToOnBoarding : SplashState()
-        object Empty : SplashState()
+        data object NavigateToHome : SplashState()
+        data object NavigateToOnBoarding : SplashState()
+        data object Empty : SplashState()
     }
 }
