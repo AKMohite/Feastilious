@@ -58,12 +58,11 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     override fun getItemViewType(position: Int): Int {
-        when(sections[position]) {
+        return when(sections[position]) {
             is ExploreAdapterItem.TopBanner -> TOP_HORIZONTAL_BANNER
             is ExploreAdapterItem.HorizontalChips -> HORIZONTAL_CHIPS
             is ExploreAdapterItem.HorizontalRecipes -> HORIZONTAL_RECIPES
         }
-        return super.getItemViewType(position)
     }
 
     fun submitList(sections: List<ExploreAdapterItem>) {
