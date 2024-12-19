@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":core:remote"))
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
+    debugImplementation(libs.leakcanary.android)
     implementation(libs.app.compat)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)
