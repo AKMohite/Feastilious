@@ -33,4 +33,12 @@ internal open class BaseViewModel(
 
     protected open fun handleError(exception: Throwable) {}
 
+    /**
+     * Cancel all coroutines when the ViewModel is cleared
+     */
+    override fun onCleared() {
+        superVisorJob.cancel()
+        super.onCleared()
+    }
+
 }
