@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
-    private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy { ExploreSectionAdapter() }
+    private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy { ExploreSectionAdapter(requireActivity().supportFragmentManager, lifecycle) }
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreBinding.inflate(inflater)

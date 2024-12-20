@@ -2,9 +2,12 @@ package com.ak.feastit.ui.explore.experimental
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
 import com.ak.feastit.databinding.ComponentExploreSectionRecipeBinding
+import com.ak.feastit.databinding.ComponetExploreHeaderBannerBinding
 import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
 
@@ -15,14 +18,17 @@ import com.ak.feastit.ui.explore.ExploreAdapterItem
  * and each view has its own view holder containing child items to display in respective viewholder
  * and adapters
  */
-internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+internal class ExploreSectionAdapter(
+    private val fragmentManager: FragmentManager,
+    private val lifecycle: Lifecycle
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var sections: List<ExploreAdapterItem> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
             TOP_HORIZONTAL_BANNER -> {
-                val binding = ExploreRecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ComponetExploreHeaderBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 //                TODO handle list for banners
                 TopBannerViewHolder(binding)
             }
@@ -44,7 +50,7 @@ internal class ExploreSectionAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
         when(getItemViewType(position)) {
             TOP_HORIZONTAL_BANNER -> {
                 val adapterItem = sections[position] as ExploreAdapterItem.TopBanner
-                (holder as TopBannerViewHolder).bind(adapterItem)
+                (holder as TopBannerViewHolder).bind(adapterItem, fragmentManager, lifecycle)
             }
             HORIZONTAL_CHIPS -> {
                 val adapterItem = sections[position] as ExploreAdapterItem.HorizontalChips

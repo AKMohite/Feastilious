@@ -17,7 +17,8 @@
         android:textSize="18sp"
         tools:text="Step 1"
         android:padding="8dp"
-        android:background="@drawable/recipe_steo_no_bg"
+        android:textColor="?attr/colorOnSecondaryContainer"
+        android:background="@drawable/recipe_step_no_bg"
         android:textStyle="bold" />
 
     <TextView
@@ -26,7 +27,8 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:padding="8dp"
-        android:background="@drawable/recipe_steo_desc_bg"
+        android:textColor="?attr/colorOnSecondaryContainer"
+        android:background="@drawable/recipe_step_desc_bg"
         tools:text="Simple Title Text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore" />
 
 </LinearLayout>

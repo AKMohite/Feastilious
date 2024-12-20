@@ -1,4 +1,8 @@
 <resources>
+
+    <color name="recipe_fav">#F48FB1</color>
+
+    <!-- region default theme -->
     <color name="md_theme_primary">#FFB2BA</color>
     <color name="md_theme_onPrimary">#561D27</color>
     <color name="md_theme_primaryContainer">#72333C</color>
@@ -140,4 +144,6 @@
     <color name="md_theme_surfaceContainer_highContrast">#261D1E</color>
     <color name="md_theme_surfaceContainerHigh_highContrast">#312828</color>
     <color name="md_theme_surfaceContainerHighest_highContrast">#3D3233</color>
+    <!-- endregion -->
+
 </resources>
