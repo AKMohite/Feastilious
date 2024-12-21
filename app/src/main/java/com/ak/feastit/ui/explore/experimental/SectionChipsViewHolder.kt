@@ -10,13 +10,14 @@ import com.ak.feastit.utils.getEnumTitle
  * This viewholder holds horizontal chips list and need to render all list items in recycler view
  */
 internal class SectionChipsViewHolder(
-    private val binding: ComponentExploreSectionChipsBinding
+    private val binding: ComponentExploreSectionChipsBinding,
+    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(adapterItem: ExploreAdapterItem.HorizontalChips) {
         binding.sectionFilterName.text = adapterItem.category.name.getEnumTitle()
         binding.sectionFilterItems.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
-        binding.sectionFilterItems.adapter = FilterChipsAdapter(adapterItem.items)
+        binding.sectionFilterItems.adapter = FilterChipsAdapter(adapterItem.items, sectionEvents)
     }
 
 }

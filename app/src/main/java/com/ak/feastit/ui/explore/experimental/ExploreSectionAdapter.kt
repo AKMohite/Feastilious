@@ -10,6 +10,8 @@ import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
 import com.ak.feastit.databinding.ComponentExploreSectionRecipeBinding
 import com.ak.feastit.databinding.ComponetExploreHeaderBannerBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
+import com.ak.feastit.ui.explore.ExploreCategory
+import com.ak.feastit.ui.explore.ExploreChip
 
 
 /**
@@ -20,7 +22,8 @@ import com.ak.feastit.ui.explore.ExploreAdapterItem
  */
 internal class ExploreSectionAdapter(
     private val fragmentManager: FragmentManager,
-    private val lifecycle: Lifecycle
+    private val lifecycle: Lifecycle,
+    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(), AsyncListDiffer.ListListener<ExploreAdapterItem> {
 
     private val asyncDiff = AsyncListDiffer(this, ExploreAdapterDiff())
@@ -30,15 +33,15 @@ internal class ExploreSectionAdapter(
             TOP_HORIZONTAL_BANNER -> {
                 val binding = ComponetExploreHeaderBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 //                TODO handle list for banners
-                TopBannerViewHolder(binding)
+                TopBannerViewHolder(binding, sectionEvents)
             }
             HORIZONTAL_CHIPS -> {
                 val binding = ComponentExploreSectionChipsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                SectionChipsViewHolder(binding)
+                SectionChipsViewHolder(binding, sectionEvents)
             }
             HORIZONTAL_RECIPES -> {
                 val binding = ComponentExploreSectionRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                SectionRecipesViewHolder(binding)
+                SectionRecipesViewHolder(binding, sectionEvents)
             }
             else -> throw IllegalStateException("Invalid view type $viewType rendering")
         }
@@ -75,7 +78,9 @@ internal class ExploreSectionAdapter(
     override fun onCurrentListChanged(
         previousList: MutableList<ExploreAdapterItem>,
         currentList: MutableList<ExploreAdapterItem>
-    ) {}
+    ) {
+        sectionEvents?.invoke(ExploreItemAction.ListUpdate)
+    }
 
     fun submitList(sections: List<ExploreAdapterItem>) {
         with(asyncDiff) {
@@ -90,4 +95,11 @@ internal class ExploreSectionAdapter(
         const val HORIZONTAL_CHIPS = 1
         const val HORIZONTAL_RECIPES = 2
     }
+}
+
+internal sealed interface ExploreItemAction {
+    data class ViewAll(val category: ExploreCategory): ExploreItemAction
+    data class RecipeClick(val recipeId: Long): ExploreItemAction
+    data class ChipClick(val chip: ExploreChip): ExploreItemAction
+    data object ListUpdate: ExploreItemAction
 }

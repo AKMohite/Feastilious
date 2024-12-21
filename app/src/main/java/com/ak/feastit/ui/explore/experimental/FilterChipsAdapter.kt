@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.FilterTypeTextBinding
 import com.ak.feastit.ui.explore.ExploreChip
+import com.ak.feastit.utils.onClick
 
 internal class FilterChipsAdapter(
-    private val items: List<ExploreChip>
+    private val items: List<ExploreChip>,
+    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
 ) : RecyclerView.Adapter<FilterViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -19,6 +21,7 @@ internal class FilterChipsAdapter(
 
     override fun onBindViewHolder(holder: FilterViewHolder, position: Int) {
         holder.bind(items[position])
+//        holder.itemView.onClick { sectionEvents(ExploreItemAction.ChipClick(items[position])) }
     }
 
     override fun getItemCount(): Int = items.size

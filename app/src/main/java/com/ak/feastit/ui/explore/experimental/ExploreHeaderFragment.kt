@@ -8,12 +8,14 @@ import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreHeaderBinding
+import com.ak.feastit.utils.onClick
 
 internal class ExploreHeaderFragment: BaseFragment() {
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreHeaderBinding.inflate(inflater)
 
+    private var sectionEvents: ((ExploreItemAction) -> Unit)? = null
     private val binding: FragmentExploreHeaderBinding
         get() = baseBinding as FragmentExploreHeaderBinding
 
@@ -21,19 +23,23 @@ internal class ExploreHeaderFragment: BaseFragment() {
         val args = arguments ?: throw IllegalStateException("Nothing to show in pager")
         val image = args.getString(ARGS_IMG_URL)
         val recipeTitle = args.getString(ARGS_TITLE)
+        val recipeId = args.getLong(ARGS_RECIPE_ID)
         binding.recipeImg.load(image) {
             placeholder(R.drawable.ic_recipe_img_placeholder)
             error(R.drawable.ic_recipe_img_placeholder)
         }
         binding.recipeName.text = recipeTitle
+//        binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipeId)) }
     }
     
     companion object {
         const val ARGS_IMG_URL = "args-recipe-img-url"
         const val ARGS_TITLE = "args-recipe-title"
-        fun newInstance(args: Bundle): ExploreHeaderFragment {
+        const val ARGS_RECIPE_ID = "args-recipe-id"
+        fun newInstance(args: Bundle, sectionEvents: ((ExploreItemAction) -> Unit)? = null): ExploreHeaderFragment {
             val fragment = ExploreHeaderFragment()
             fragment.arguments = args
+            fragment.sectionEvents = sectionEvents
             return fragment
         }
     }

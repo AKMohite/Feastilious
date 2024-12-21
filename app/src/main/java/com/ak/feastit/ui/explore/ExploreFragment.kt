@@ -1,7 +1,6 @@
 package com.ak.feastit.ui.explore
 
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
+import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
 import com.ak.feastit.utils.onClick
-import com.ak.feastit.utils.setReadOnly
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -24,7 +24,16 @@ import kotlinx.coroutines.launch
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
-    private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy { ExploreSectionAdapter(requireActivity().supportFragmentManager, lifecycle) }
+    private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy {
+        ExploreSectionAdapter(
+            fragmentManager = requireActivity().supportFragmentManager,
+            lifecycle = lifecycle,
+//            sectionEvents = ::handleSectionEvents
+            sectionEvents = null
+        ).apply {
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+    }
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreBinding.inflate(inflater)
@@ -72,6 +81,15 @@ class ExploreFragment : BaseFragment() {
 
     private fun navigateToSearch() {
         Log.d("hello","navigateToSearch")
+    }
+
+    private fun handleSectionEvents(exploreItemAction: ExploreItemAction) {
+        /*when(exploreItemAction) {
+            is ExploreItemAction.ChipClick -> TODO()
+            ExploreItemAction.ListUpdate -> TODO()
+            is ExploreItemAction.RecipeClick -> TODO()
+            is ExploreItemAction.ViewAll -> TODO()
+        }*/
     }
 
     private fun List<ExploreSection>.toAdapterItems(): List<ExploreAdapterItem> {

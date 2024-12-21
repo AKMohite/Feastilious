@@ -7,10 +7,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mak.feastit.domain.model.Recipe
 
-class ExploreHeaderPagerAdapter(
+internal class ExploreHeaderPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val items: List<Recipe>
+    private val items: List<Recipe>,
+    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
 ): FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int = items.size
@@ -20,6 +21,15 @@ class ExploreHeaderPagerAdapter(
         val args = Bundle()
         args.putString(ExploreHeaderFragment.ARGS_IMG_URL, recipe.recipeImgUrl)
         args.putString(ExploreHeaderFragment.ARGS_TITLE, recipe.recipeName)
-        return ExploreHeaderFragment.newInstance(args)
+        args.putLong(ExploreHeaderFragment.ARGS_RECIPE_ID, recipe.id)
+        return ExploreHeaderFragment.newInstance(args, sectionEvents)
     }
+
+//    override fun onBindViewHolder(
+//        holder: FragmentViewHolder,
+//        position: Int,
+//        payloads: MutableList<Any>
+//    ) {
+//        holder.itemView.onClick { sectionEvents(ExploreItemAction.RecipeClick(items[position].id)) }
+//    }
 }
