@@ -1,7 +1,9 @@
 package com.ak.feastit.utils
 
 import android.os.SystemClock
+import android.text.InputType
 import android.view.View
+import androidx.appcompat.widget.SearchView
 
 internal fun View.show(toShow: Boolean, gone: Boolean = true) {
     if (toShow) {
@@ -48,4 +50,10 @@ private class DebouncingOnClickListener(
     companion object {
         const val DEFAULT_THRESHOLD: Long = 500
     }
+}
+
+internal fun SearchView.setReadOnly(focusable: Boolean = true, inputType: Int = InputType.TYPE_CLASS_TEXT) {
+    isFocusable = !focusable
+    isFocusableInTouchMode = !focusable
+    this.inputType = inputType
 }

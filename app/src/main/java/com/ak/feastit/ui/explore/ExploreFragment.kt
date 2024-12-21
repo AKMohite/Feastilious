@@ -1,6 +1,8 @@
 package com.ak.feastit.ui.explore
 
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +14,8 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
+import com.ak.feastit.utils.onClick
+import com.ak.feastit.utils.setReadOnly
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,6 +53,10 @@ class ExploreFragment : BaseFragment() {
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+//        binding.searchView.setReadOnly(focusable = false, inputType = InputType.TYPE_NULL)
+        binding.searchCard.onClick {
+            navigateToSearch()
+        }
         binding.exploreItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 //        adapter.setEventListener(eventListener)
         binding.exploreItems.adapter = adapter
@@ -60,6 +68,10 @@ class ExploreFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun navigateToSearch() {
+        Log.d("hello","navigateToSearch")
     }
 
     private fun List<ExploreSection>.toAdapterItems(): List<ExploreAdapterItem> {

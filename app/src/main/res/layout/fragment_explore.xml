@@ -1,26 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
     tools:context=".ui.explore.ExploreFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:layout_height="wrap_content"
+        android:translationZ="1dp"
+        android:outlineSpotShadowColor="@android:color/transparent"
+        android:outlineAmbientShadowColor="@android:color/transparent"
+        app:liftOnScroll="false"
+        app:elevation="0dp"
+        tools:targetApi="p"
+        android:background="@android:color/transparent">
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
-            <EditText
-                android:id="@+id/explore_search"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            android:background="@android:color/transparent">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/search_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/search_recipes"
-                android:layout_margin="8dp"/>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_search"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/img_search"
+                        app:tint="?attr/colorControlNormal"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/search_recipes" />
+
+                    <!--<androidx.appcompat.widget.SearchView
+                        android:id="@+id/search_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:defaultQueryHint="@string/search_recipes"
+                        app:searchIcon="@null"
+                        style="@style/Widget.FeastIt.SearchView" />-->
+                    <TextView
+                        android:id="@+id/search_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/search_recipes"/>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btn_filter"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_filter"
+                        app:tint="?attr/colorControlNormal"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        tools:visibility="visible"
+                        android:contentDescription="@string/title_filter" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
