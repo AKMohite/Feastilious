@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentExploreSectionChipsBinding
 import com.ak.feastit.databinding.ComponentExploreSectionRecipeBinding
 import com.ak.feastit.databinding.ComponetExploreHeaderBannerBinding
-import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.ExploreAdapterItem
 
 
@@ -21,9 +21,9 @@ import com.ak.feastit.ui.explore.ExploreAdapterItem
 internal class ExploreSectionAdapter(
     private val fragmentManager: FragmentManager,
     private val lifecycle: Lifecycle
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): RecyclerView.Adapter<RecyclerView.ViewHolder>(), AsyncListDiffer.ListListener<ExploreAdapterItem> {
 
-    private var sections: List<ExploreAdapterItem> = emptyList()
+    private val asyncDiff = AsyncListDiffer(this, ExploreAdapterDiff())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
@@ -44,36 +44,45 @@ internal class ExploreSectionAdapter(
         }
     }
 
-    override fun getItemCount(): Int = sections.size
+    override fun getItemCount(): Int = asyncDiff.currentList.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(getItemViewType(position)) {
+        val section = asyncDiff.currentList[position]
+        when(holder.itemViewType) {
             TOP_HORIZONTAL_BANNER -> {
-                val adapterItem = sections[position] as ExploreAdapterItem.TopBanner
+                val adapterItem = section as ExploreAdapterItem.TopBanner
                 (holder as TopBannerViewHolder).bind(adapterItem, fragmentManager, lifecycle)
             }
             HORIZONTAL_CHIPS -> {
-                val adapterItem = sections[position] as ExploreAdapterItem.HorizontalChips
+                val adapterItem = section as ExploreAdapterItem.HorizontalChips
                 (holder as SectionChipsViewHolder).bind(adapterItem)
             }
             HORIZONTAL_RECIPES -> {
-                val adapterItem = sections[position] as ExploreAdapterItem.HorizontalRecipes
+                val adapterItem = section as ExploreAdapterItem.HorizontalRecipes
                 (holder as SectionRecipesViewHolder).bind(adapterItem)
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(sections[position]) {
+        return when(asyncDiff.currentList[position]) {
             is ExploreAdapterItem.TopBanner -> TOP_HORIZONTAL_BANNER
             is ExploreAdapterItem.HorizontalChips -> HORIZONTAL_CHIPS
             is ExploreAdapterItem.HorizontalRecipes -> HORIZONTAL_RECIPES
         }
     }
 
+    override fun onCurrentListChanged(
+        previousList: MutableList<ExploreAdapterItem>,
+        currentList: MutableList<ExploreAdapterItem>
+    ) {}
+
     fun submitList(sections: List<ExploreAdapterItem>) {
-        this.sections = sections
-        notifyDataSetChanged()
+        with(asyncDiff) {
+            removeListListener(this@ExploreSectionAdapter)
+            addListListener(this@ExploreSectionAdapter)
+            submitList(sections)
+        }
     }
 
     companion object {
