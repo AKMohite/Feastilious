@@ -13,7 +13,10 @@ import com.ak.feastit.utils.onClick
 internal class SectionRecipesViewHolder(
     private val binding: ComponentExploreSectionRecipeBinding,
     private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root), NestedRecyclerViewViewHolder {
+
+    override val layoutManager: RecyclerView.LayoutManager?
+        get() = binding.sectionItems.layoutManager
 
     fun bind(adapterItem: ExploreAdapterItem.HorizontalRecipes) {
         binding.sectionName.text = adapterItem.category.name.getEnumTitle()

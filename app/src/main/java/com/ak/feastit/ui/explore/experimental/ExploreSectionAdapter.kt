@@ -1,5 +1,6 @@
 package com.ak.feastit.ui.explore.experimental
 
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
@@ -27,6 +28,7 @@ internal class ExploreSectionAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>(), AsyncListDiffer.ListListener<ExploreAdapterItem> {
 
     private val asyncDiff = AsyncListDiffer(this, ExploreAdapterDiff())
+    private val states = mutableMapOf<Int, Parcelable?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
@@ -65,6 +67,38 @@ internal class ExploreSectionAdapter(
                 (holder as SectionRecipesViewHolder).bind(adapterItem)
             }
         }
+
+        val state = states[position]
+//        if (state != null) {
+//            when(holder) {
+//                is TopBannerViewHolder -> holder.itemView.rootView.
+//                is SectionChipsViewHolder -> holder.itemView.restoreHierarchyState(state)
+//                is SectionRecipesViewHolder -> holder.itemView.restoreHierarchyState(state)
+//            }
+//        }
+        if (state != null) {
+            when(holder) {
+                is TopBannerViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
+                is SectionChipsViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
+                is SectionRecipesViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
+            }
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        /*states[holder.layoutPosition] = when(holder) {
+            is TopBannerViewHolder -> holder.itemView.rootView.layoutManager?.onSaveInstanceState()
+            is SectionChipsViewHolder -> holder.itemView.layoutManager?.onSaveInstanceState()
+            is SectionRecipesViewHolder -> holder.itemView.layoutManager?.onSaveInstanceState()
+            else -> null
+        }*/
+        states[holder.layoutPosition] = when(holder) {
+            is TopBannerViewHolder -> holder.layoutManager?.onSaveInstanceState()
+            is SectionChipsViewHolder -> holder.layoutManager?.onSaveInstanceState()
+            is SectionRecipesViewHolder -> holder.layoutManager?.onSaveInstanceState()
+            else -> null
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -102,4 +136,11 @@ internal sealed interface ExploreItemAction {
     data class RecipeClick(val recipeId: Long): ExploreItemAction
     data class ChipClick(val chip: ExploreChip): ExploreItemAction
     data object ListUpdate: ExploreItemAction
+}
+
+// ViewHolders containing a RecyclerView should inherit this interface.
+// An alternative solution could be manually searching if the view constains a RecyclerView
+interface NestedRecyclerViewViewHolder {
+//    fun getId(): String
+    val layoutManager: RecyclerView.LayoutManager?
 }

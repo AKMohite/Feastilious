@@ -12,7 +12,14 @@ import com.ak.feastit.ui.explore.ExploreAdapterItem
 internal class TopBannerViewHolder(
     private val binding: ComponetExploreHeaderBannerBinding,
     private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
-) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root), NestedRecyclerViewViewHolder {
+
+    override val layoutManager: RecyclerView.LayoutManager?
+        get() = binding.headerPager.javaClass
+            .getDeclaredField("mRecyclerView").let {
+                it.isAccessible = true
+                (it.get(binding.headerPager) as? RecyclerView)?.layoutManager
+            }
 
     fun bind(adapterItem: ExploreAdapterItem.TopBanner, fragmentManager: FragmentManager, lifecycle: Lifecycle) {
         binding.headerPager.adapter = ExploreHeaderPagerAdapter(
