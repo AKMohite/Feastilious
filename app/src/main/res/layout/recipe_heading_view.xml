@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingEnd="4dp"
-    android:paddingTop="8dp"
-    android:paddingStart="4dp"
-    android:paddingBottom="8dp">
+    android:paddingEnd="@dimen/space_tiny"
+    android:paddingTop="@dimen/space_small"
+    android:paddingStart="@dimen/space_tiny"
+    android:paddingBottom="@dimen/space_small">
 
     <TextView
         android:id="@+id/tv_heading_title"
@@ -25,11 +25,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@string/lorem_ipsum"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:textSize="14sp"
-        android:layout_margin="4dp"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:layout_margin="@dimen/space_tiny"
+        android:paddingStart="@dimen/space_tiny"
+        android:paddingEnd="@dimen/space_tiny"
+        tools:visibility="visible"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

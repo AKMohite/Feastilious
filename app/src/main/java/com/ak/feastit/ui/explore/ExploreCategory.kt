@@ -27,9 +27,12 @@ internal enum class ExploreCategory {
     companion object {
         fun getRefreshExploreEntries(): List<ExploreCategory> {
             return entries.filterNot { category ->
-                listOf(BANNER_RECIPES, MEAL_TYPE_CHIPS, CUISINE_TYPE_CHIPS, DIET_TYPE_CHIPS).contains(category)
+                staticCategoryElements().contains(category)
             }
         }
+
+        fun staticCategoryElements() =
+            listOf(BANNER_RECIPES, MEAL_TYPE_CHIPS, CUISINE_TYPE_CHIPS, DIET_TYPE_CHIPS)
 
         fun observerExploreEntries(): List<ExploreCategory> {
             return listOf(

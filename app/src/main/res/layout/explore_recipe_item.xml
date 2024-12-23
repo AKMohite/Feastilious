@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="@dimen/space_tiny"
+    app:cardCornerRadius="@dimen/space_small"
+    app:cardElevation="@dimen/space_tiny">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,10 +39,10 @@
             app:layout_constraintBottom_toBottomOf="@+id/blur_view"
             app:layout_constraintStart_toStartOf="@+id/blur_view"
             app:layout_constraintEnd_toEndOf="@+id/blur_view"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/space_small"
             android:maxLines="3"
-            android:textSize="16sp"
-            android:layout_margin="8dp"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:layout_margin="@dimen/space_small"
             tools:text="Lorem ipsum"
             android:textColor="?attr/colorSurface"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

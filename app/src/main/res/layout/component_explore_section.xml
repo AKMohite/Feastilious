@@ -5,25 +5,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="3dp"
-    android:layout_marginTop="4dp"
-    android:padding="4dp"
+    app:cardElevation="@dimen/space_micro"
+    android:layout_marginTop="@dimen/space_tiny"
+    android:padding="@dimen/space_tiny"
     tools:context=".ui.explore.ExploreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="4dp">
+        android:paddingVertical="@dimen/space_tiny">
         <TextView
             android:id="@+id/section_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/space_small"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             tools:text="Popular recipes" />
 
         <TextView
@@ -34,16 +33,16 @@
             app:layout_constraintTop_toTopOf="@id/section_name"
             app:layout_constraintBottom_toBottomOf="@id/section_name"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="18sp"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             app:drawableTint="?attr/colorTertiary"
             android:textColor="?attr/colorTertiary"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="@dimen/space_small" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/section_items"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/space_tiny"
             app:layout_constraintTop_toBottomOf="@id/section_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

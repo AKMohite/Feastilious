@@ -6,18 +6,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp">
+    android:layout_marginTop="@dimen/space_small"
+    android:layout_marginBottom="@dimen/space_tiny"
+    android:layout_marginStart="@dimen/space_small"
+    android:layout_marginEnd="@dimen/space_small">
 
 
     <RelativeLayout
-        android:paddingBottom="16dp"
+        android:paddingBottom="@dimen/space_normal"
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="@dimen/space_big"
         android:background="@drawable/recipe_ingred_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,20 +31,18 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="40dp"
             android:layout_marginTop="20dp"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textColor="?attr/colorOnSecondary"
-            tools:text="Simple Title Text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore"
-            android:textStyle="bold" />
+            tools:text="Simple Title Text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore" />
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/img_ingredient"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="@dimen/space_small"
+        android:layout_marginTop="@dimen/space_normal"
+        android:layout_marginEnd="@dimen/space_small"
         app:layout_constraintEnd_toStartOf="@+id/container"
         app:layout_constraintStart_toStartOf="@+id/container"
         app:layout_constraintTop_toTopOf="@+id/container"

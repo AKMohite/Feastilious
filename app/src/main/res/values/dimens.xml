@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="space_none">0dp</dimen>
+    <dimen name="space_nano">1dp</dimen>
+    <dimen name="space_micro">2dp</dimen>
+    <dimen name="space_tiny">4dp</dimen>
+    <dimen name="space_small">8dp</dimen>
+    <dimen name="space_medium">12dp</dimen>
+    <dimen name="space_normal">16dp</dimen>
+    <dimen name="space_big">24dp</dimen>
+    <dimen name="space_huge">48dp</dimen>
+
+    <!-- This is to have floatable bottom navigation -->
+    <dimen name="bottom_screen_padding">92dp</dimen>
+</resources>

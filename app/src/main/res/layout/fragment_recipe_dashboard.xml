@@ -13,8 +13,8 @@
         android:id="@+id/category_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingStart="@dimen/space_small"
+        android:paddingEnd="@dimen/space_small"
         android:scrollbarSize="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,11 +35,11 @@
         app:layout_constraintTop_toBottomOf="@+id/category_scroll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:paddingStart="@dimen/space_small"
+        android:paddingEnd="@dimen/space_small"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:spanCount="2"
-        android:paddingTop="8dp"
+        android:paddingTop="@dimen/space_small"
         tools:listitem="@layout/recipe_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

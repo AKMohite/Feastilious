@@ -7,10 +7,33 @@ internal data class DiscoverState(
     val isLoading: Boolean = false,
     private val sections: List<ExploreSection> = emptyList()
 ) {
-    fun displayableSections(): List<ExploreSection> {
-        return sections
-            .filter { section -> section.row != null && section.row.contents.isNotEmpty() }
-            .sortedBy { section -> section.category.ordinal }
+    fun displayableSections(): List<ExploreAdapterItem> {
+        val exploreSections = exploreSections()
+        return exploreSections.toAdapterItems()
+    }
+
+    private fun exploreSections() = sections
+        .filter { section -> section.row != null && section.row.contents.isNotEmpty() }
+        .sortedBy { section -> section.category.ordinal }
+
+    private fun List<ExploreSection>.toAdapterItems(): List<ExploreAdapterItem> {
+        val mutableList = mutableListOf<ExploreAdapterItem>()
+        val sections = this.toMutableList()
+        this.firstOrNull { section ->
+            section.category == ExploreCategory.BANNER_RECIPES && section.row?.contents?.isNotEmpty() == true
+        }?.let { exploreSection ->
+            val items = (exploreSection.row as? ExploreRow.RecipeRows)?.contents ?: return@let
+            mutableList.add(ExploreAdapterItem.TopBanner(items = items))
+            sections.removeIf { section ->  section.category == ExploreCategory.BANNER_RECIPES }
+        }
+        sections.forEach { section ->
+            when(section.row) {
+                is ExploreRow.Chips -> mutableList.add(ExploreAdapterItem.HorizontalChips(section.category, section.row.contents))
+                is ExploreRow.RecipeRows -> mutableList.add(ExploreAdapterItem.HorizontalRecipes(section.category, section.row.contents, section.isLoading))
+                null -> Unit
+            }
+        }
+        return mutableList.sortedBy { item -> item.category.ordinal }
     }
 
     fun loading(isLoading: Boolean = false): DiscoverState {
@@ -30,7 +53,9 @@ internal data class DiscoverState(
     }
 
     fun isEmpty(): Boolean {
-        return displayableSections().isEmpty()
+        return exploreSections().none { section ->
+            ExploreCategory.staticCategoryElements().any { it == section.category && section.row?.contents?.isEmpty() == true }.not()
+        }
     }
 
     fun refreshSections(isLoading: Boolean): DiscoverState {

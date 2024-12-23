@@ -6,16 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".ui.explore.ExploreFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationZ="1dp"
+        android:translationZ="@dimen/space_nano"
         android:outlineSpotShadowColor="@android:color/transparent"
         android:outlineAmbientShadowColor="@android:color/transparent"
         app:liftOnScroll="false"
-        app:elevation="0dp"
+        app:elevation="@dimen/space_none"
         tools:targetApi="p"
         android:background="@android:color/transparent">
         <FrameLayout
@@ -27,9 +28,9 @@
                 android:id="@+id/search_card"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="8dp"
-                app:cardCornerRadius="24dp"
+                android:layout_marginHorizontal="@dimen/space_small"
+                android:layout_marginVertical="@dimen/space_small"
+                app:cardCornerRadius="@dimen/space_big"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp">
                 <LinearLayout
@@ -43,9 +44,9 @@
 
                     <androidx.appcompat.widget.AppCompatImageButton
                         android:id="@+id/btn_search"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="8dp"
+                        android:layout_width="@dimen/space_big"
+                        android:layout_height="@dimen/space_big"
+                        android:layout_marginStart="@dimen/space_small"
                         android:src="@drawable/img_search"
                         app:tint="?attr/colorControlNormal"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -65,15 +66,15 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="16sp"
-                        android:layout_marginStart="8dp"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:layout_marginStart="@dimen/space_small"
                         android:text="@string/search_recipes"/>
 
                     <androidx.appcompat.widget.AppCompatImageButton
                         android:id="@+id/btn_filter"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_width="@dimen/space_big"
+                        android:layout_height="@dimen/space_big"
+                        android:layout_marginEnd="@dimen/space_small"
                         android:src="@drawable/ic_filter"
                         app:tint="?attr/colorControlNormal"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -92,6 +93,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="@dimen/bottom_screen_padding"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
         tools:listitem="@layout/component_explore_section"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 

@@ -5,5 +5,5 @@
         android:color="?attr/colorSecondary"/>
 
     <corners
-        android:radius="16dp"/>
+        android:radius="@dimen/space_normal"/>
 </shape>

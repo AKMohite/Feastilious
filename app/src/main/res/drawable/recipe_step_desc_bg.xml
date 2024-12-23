@@ -5,7 +5,7 @@
         android:color="?attr/colorSecondaryContainer"/>
 
     <corners
-        android:topRightRadius="16dp"
-        android:bottomLeftRadius="16dp"
-        android:bottomRightRadius="16dp"/>
+        android:topRightRadius="@dimen/space_normal"
+        android:bottomLeftRadius="@dimen/space_normal"
+        android:bottomRightRadius="@dimen/space_normal"/>
 </shape>

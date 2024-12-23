@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="@dimen/space_tiny"
     android:paddingTop="6dp"
     android:paddingBottom="6dp"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp"
+    android:paddingStart="@dimen/space_small"
+    android:paddingEnd="@dimen/space_small"
     android:background="@drawable/rounded_border">
     <TextView
         android:id="@+id/filter_text"
@@ -15,5 +15,5 @@
         android:layout_height="wrap_content"
         tools:text="Hello World"
         android:textColor="?attr/colorSurface"
-        android:textSize="18sp" />
+        android:textAppearance="?attr/textAppearanceBodyMedium" />
 </FrameLayout>

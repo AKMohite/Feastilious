@@ -26,8 +26,8 @@ class ExploreFragment : BaseFragment() {
     private val viewModel: ExploreViewModel by viewModels()
     private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy {
         ExploreSectionAdapter(
-            fragmentManager = requireActivity().supportFragmentManager,
-            lifecycle = lifecycle,
+            fragmentManager = this@ExploreFragment.childFragmentManager,
+            lifecycle = this.viewLifecycleOwner.lifecycle,
 //            sectionEvents = ::handleSectionEvents
             sectionEvents = null
         ).apply {
@@ -72,7 +72,7 @@ class ExploreFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    val sections = state.displayableSections().toAdapterItems()
+                    val sections = state.displayableSections()
                     adapter.submitList(sections)
                 }
             }
@@ -90,26 +90,6 @@ class ExploreFragment : BaseFragment() {
             is ExploreItemAction.RecipeClick -> TODO()
             is ExploreItemAction.ViewAll -> TODO()
         }*/
-    }
-
-    private fun List<ExploreSection>.toAdapterItems(): List<ExploreAdapterItem> {
-        val mutableList = mutableListOf<ExploreAdapterItem>()
-        val sections = this.toMutableList()
-        this.firstOrNull { section ->
-            section.category == ExploreCategory.BANNER_RECIPES && section.row?.contents?.isNotEmpty() == true
-        }?.let { exploreSection ->
-            val items = (exploreSection.row as? ExploreRow.RecipeRows)?.contents ?: return@let
-            mutableList.add(ExploreAdapterItem.TopBanner(items = items))
-            sections.removeIf { section ->  section.category == ExploreCategory.BANNER_RECIPES }
-        }
-        sections.forEach { section ->
-            when(section.row) {
-                is ExploreRow.Chips -> mutableList.add(ExploreAdapterItem.HorizontalChips(section.category, section.row.contents))
-                is ExploreRow.RecipeRows -> mutableList.add(ExploreAdapterItem.HorizontalRecipes(section.category, section.row.contents, section.isLoading))
-                null -> Unit
-            }
-        }
-        return mutableList.sortedBy { item -> item.category.ordinal }
     }
 
     override fun onDestroyView() {

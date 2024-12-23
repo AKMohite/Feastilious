@@ -5,12 +5,12 @@
     android:id="@+id/search_card"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/space_small"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="@dimen/space_small"
+    app:cardElevation="@dimen/space_tiny"
     tools:showIn="@layout/fragment_recipe_dashboard">
 
     <RelativeLayout
@@ -21,7 +21,7 @@
             android:id="@+id/feast_search_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="@dimen/space_small"
             android:background="@null"
             android:hint="@string/search"
             android:drawableEnd="@drawable/img_search"
