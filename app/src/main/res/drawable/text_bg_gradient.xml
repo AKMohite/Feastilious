@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <gradient
-        android:startColor="?attr/colorOnSurface"
+        android:startColor="?attr/colorSecondary"
         android:endColor="@android:color/transparent"
         android:angle="90"/>
 

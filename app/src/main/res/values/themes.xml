@@ -1,5 +1,6 @@
 <resources>
-    <style name="Theme.FeastIt" parent="Theme.Material3.Light.NoActionBar">
+
+    <style name="Theme.FeastIt.BaseTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
@@ -46,7 +47,12 @@
         <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+
+        <item name="shapeAppearanceOverlay">@style/ThemeOverlay.ShapeCornerSize.Small</item>
+        <item name="shapeCornerFamily">rounded</item>
     </style>
+
+    <style name="Theme.FeastIt" parent="Theme.FeastIt.BaseTheme" />
 
     <style name="Widget.FeastIt.SearchView" parent="@style/Widget.AppCompat.SearchView">
         <item name="iconifiedByDefault">false</item>

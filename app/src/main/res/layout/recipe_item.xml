@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/space_tiny"
-    app:cardCornerRadius="@dimen/space_small"
     app:cardElevation="@dimen/space_tiny">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,4 +45,4 @@
             tools:text="Lorem ipsum"
             android:textColor="?attr/colorSurface"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

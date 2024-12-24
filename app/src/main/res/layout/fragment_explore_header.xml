@@ -37,6 +37,6 @@
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:layout_margin="@dimen/space_small"
         tools:text="Lorem ipsum"
-        android:textColor="?attr/colorSurface"/>
+        android:textColor="?attr/colorOnSecondary"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
