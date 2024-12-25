@@ -22,7 +22,7 @@ internal class SectionRecipesViewHolder(
         binding.sectionName.text = adapterItem.category.name.getEnumTitle()
         binding.sectionItems.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
         binding.sectionItems.adapter = ExploreRecipeAdapter(adapterItem.items, sectionEvents)
-//        binding.sectionSeeAllItems.onClick { sectionEvents(ExploreItemAction.ViewAll(adapterItem.category)) }
+        binding.sectionSeeAllItems.onClick { sectionEvents?.invoke(ExploreItemAction.ViewAll(adapterItem.category)) }
     }
 
 }

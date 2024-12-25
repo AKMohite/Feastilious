@@ -22,7 +22,7 @@ internal class ExploreSectionRowAdapter(
             }
             is ExploreRow.RecipeRows -> {
                 val binding = ExploreRecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ExploreRecipeViewHolder(binding)
+                ExploreRecipeViewHolder(binding, null)
             }
         }
     }

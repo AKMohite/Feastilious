@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import androidx.viewbinding.ViewBinding
@@ -15,6 +16,7 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
 import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
+import com.ak.feastit.ui.recipes.RecipeDashboardFragmentDirections
 import com.ak.feastit.utils.onClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,8 +30,8 @@ class ExploreFragment : BaseFragment() {
         ExploreSectionAdapter(
             fragmentManager = this@ExploreFragment.childFragmentManager,
             lifecycle = this.viewLifecycleOwner.lifecycle,
-//            sectionEvents = ::handleSectionEvents
-            sectionEvents = null
+            sectionEvents = ::handleSectionEvents
+//            sectionEvents = null
         ).apply {
             stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
@@ -83,13 +85,18 @@ class ExploreFragment : BaseFragment() {
         Log.d("hello","navigateToSearch")
     }
 
-    private fun handleSectionEvents(exploreItemAction: ExploreItemAction) {
-        /*when(exploreItemAction) {
-            is ExploreItemAction.ChipClick -> TODO()
-            ExploreItemAction.ListUpdate -> TODO()
-            is ExploreItemAction.RecipeClick -> TODO()
-            is ExploreItemAction.ViewAll -> TODO()
-        }*/
+    private fun handleSectionEvents(action: ExploreItemAction) {
+        when(action) {
+            is ExploreItemAction.ChipClick -> {}
+            ExploreItemAction.ListUpdate -> {}
+            is ExploreItemAction.RecipeClick -> {
+                findNavController().navigate(
+                    ExploreFragmentDirections.exploreToRecipeDetail(
+                    recipeId = action.recipeId
+                ))
+            }
+            is ExploreItemAction.ViewAll -> {}
+        }
     }
 
     override fun onDestroyView() {

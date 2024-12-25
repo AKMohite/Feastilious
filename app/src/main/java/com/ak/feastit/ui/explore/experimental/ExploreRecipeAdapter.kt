@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.components.ExploreRecipeViewHolder
-import com.ak.feastit.utils.onClick
 import com.mak.feastit.domain.model.Recipe
 
 internal class ExploreRecipeAdapter(
@@ -14,7 +13,7 @@ internal class ExploreRecipeAdapter(
 ) : RecyclerView.Adapter<ExploreRecipeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreRecipeViewHolder {
         val binding = ExploreRecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ExploreRecipeViewHolder(binding)
+        return ExploreRecipeViewHolder(binding, sectionEvents)
     }
 
     override fun getItemCount(): Int = items.size

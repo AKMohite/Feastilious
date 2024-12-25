@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- region BaseTheme -->
     <style name="Theme.FeastIt.BaseTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -51,6 +52,7 @@
         <item name="shapeAppearanceOverlay">@style/ThemeOverlay.ShapeCornerSize.Small</item>
         <item name="shapeCornerFamily">rounded</item>
     </style>
+    <!-- endregion -->
 
     <style name="Theme.FeastIt" parent="Theme.FeastIt.BaseTheme" />
 

@@ -29,7 +29,7 @@ internal class ExploreHeaderFragment: BaseFragment() {
             error(R.drawable.ic_recipe_img_placeholder)
         }
         binding.recipeName.text = recipeTitle
-//        binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipeId)) }
+        binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipeId)) }
     }
     
     companion object {
