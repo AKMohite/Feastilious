@@ -24,7 +24,7 @@
         android:id="@+id/tv_step_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
         android:padding="@dimen/space_small"
         android:textColor="?attr/colorOnSecondaryContainer"
         android:background="@drawable/recipe_step_desc_bg"

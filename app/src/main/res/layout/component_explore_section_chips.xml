@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/space_small"
             android:textColor="?attr/colorOnSurface"
-            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
             tools:text="Cuisines" />
 
         <androidx.recyclerview.widget.RecyclerView

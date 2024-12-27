@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/space_small"
             android:textColor="?attr/colorOnSurface"
-            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
             tools:text="Popular recipes" />
 
         <TextView
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="@id/section_name"
             app:layout_constraintBottom_toBottomOf="@id/section_name"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
             app:drawableTint="?attr/colorTertiary"
             android:textColor="?attr/colorTertiary"
             android:layout_marginEnd="@dimen/space_small" />

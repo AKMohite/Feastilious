@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 class FeastApplication: Application() {
 
     override fun onCreate() {
-        StrictMode.setThreadPolicy(
+        /*StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -25,7 +25,7 @@ class FeastApplication: Application() {
                 .penaltyLog()
                 .penaltyDeath()
                 .build()
-        )
+        )*/
         super.onCreate()
     }
 }
