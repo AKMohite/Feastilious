@@ -33,6 +33,6 @@
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:layout_margin="@dimen/space_small"
             tools:text="Lorem ipsum"
-            android:textColor="?attr/colorOnSecondary"/>
+            android:textColor="?attr/colorOnSurface"/>
     </FrameLayout>
 </com.google.android.material.card.MaterialCardView>

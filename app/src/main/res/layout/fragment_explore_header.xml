@@ -33,10 +33,10 @@
         app:layout_constraintStart_toStartOf="@+id/blur_view"
         app:layout_constraintEnd_toEndOf="@+id/blur_view"
         android:layout_marginBottom="@dimen/space_small"
-        android:maxLines="3"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:maxLines="2"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
         android:layout_margin="@dimen/space_small"
         tools:text="Lorem ipsum"
-        android:textColor="?attr/colorOnSecondary"/>
+        android:textColor="?attr/colorOnSurface"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

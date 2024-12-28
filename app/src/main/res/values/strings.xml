@@ -29,4 +29,5 @@
     <string name="search_recipes">Search recipes</string>
     <string name="section_view_more">More</string>
     <string name="title_filter">Filter Search</string>
+    <string name="add_to_favorite">Add to favorite</string>
 </resources>

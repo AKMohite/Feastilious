@@ -7,44 +7,41 @@
     android:layout_height="wrap_content"
     app:cardElevation="@dimen/space_micro"
     android:layout_marginTop="@dimen/space_tiny"
-    android:padding="@dimen/space_tiny"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None"
     tools:context=".ui.explore.ExploreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/space_tiny">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/section_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/section_see_all_items"
+            app:layout_constraintBottom_toBottomOf="@id/section_see_all_items"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/space_small"
             android:textColor="?attr/colorOnSurface"
             android:textAppearance="?attr/textAppearanceTitleLarge"
             tools:text="Popular recipes" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/section_see_all_items"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/section_view_more"
-            app:layout_constraintTop_toTopOf="@id/section_name"
-            app:layout_constraintBottom_toBottomOf="@id/section_name"
+            android:contentDescription="@string/section_view_more"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            app:drawableTint="?attr/colorTertiary"
-            android:textColor="?attr/colorTertiary"
+            style="?attr/materialIconButtonStyle"
+            app:icon="@drawable/icon_see_all"
             android:layout_marginEnd="@dimen/space_small" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/section_items"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_tiny"
-            app:layout_constraintTop_toBottomOf="@id/section_name"
+            android:layout_marginTop="@dimen/space_nano"
+            app:layout_constraintTop_toBottomOf="@id/section_see_all_items"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
