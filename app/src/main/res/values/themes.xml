@@ -52,7 +52,6 @@
         <!-- endregion -->
 
         <!-- region type -->
-        <item name="fontFamily">@font/quicksand_regular</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.FeastIt.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.FeastIt.DisplayMedium</item>
         <item name="textAppearanceDisplaySmall">@style/TextAppearance.FeastIt.DisplaySmall</item>
