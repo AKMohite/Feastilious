@@ -16,7 +16,6 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
 import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
-import com.ak.feastit.ui.recipes.RecipeDashboardFragmentDirections
 import com.ak.feastit.utils.onClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,7 +25,7 @@ import kotlinx.coroutines.launch
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
-    private val adapter: com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter by lazy {
+    private val adapter: ExploreSectionAdapter by lazy {
         ExploreSectionAdapter(
             fragmentManager = this@ExploreFragment.childFragmentManager,
             lifecycle = this.viewLifecycleOwner.lifecycle,

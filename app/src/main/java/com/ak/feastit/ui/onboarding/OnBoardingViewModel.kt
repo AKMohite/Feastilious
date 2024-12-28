@@ -24,6 +24,6 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     sealed class OnBoardingState {
-        object NavigateToHome: OnBoardingState()
+        data object NavigateToHome: OnBoardingState()
     }
 }

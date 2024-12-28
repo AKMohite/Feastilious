@@ -30,4 +30,13 @@
     <string name="section_view_more">More</string>
     <string name="title_filter">Filter Search</string>
     <string name="add_to_favorite">Add to favorite</string>
+    <string name="skip">Skip</string>
+    <string name="onboarding_pager">Onboarding pager</string>
+    <string name="onboarding_title_1">Welcome to \n Yum Byte</string>
+    <string name="onboarding_sub_title_1">Say goodbye to same meals and discover inspiration for your recipes at comfort</string>
+    <string name="onboarding_title_2">Plan meal, \nEat well</string>
+    <string name="onboarding_sub_title_2">Plan your recipes for day and remind you for preparation</string>
+    <string name="onboarding_title_3">Personal recipe collection</string>
+    <string name="onboarding_sub_title_3">Your yummy treasures all in one place. Add recipes to favorite for easy access</string>
+    <string name="get_started">Get started</string>
 </resources>
