@@ -63,15 +63,15 @@ internal class RealRecipeRepository @Inject constructor(
 
     private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>, recipeId: Long) {
         db.handleTransaction {
-//            db.recipeDAO().deleteSteps(id = recipeId)
-            db.recipeDAO().insertSteps(stepEntities)
+            db.recipeStepDAO().deleteRecipe(recipeId = recipeId)
+            db.recipeStepDAO().insert(stepEntities)
             val currentSynced = LastSyncEntity(
                 id = 0L,
                 entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
                 entityId = stepEntities.first().recipeId,
                 lastSyncedAt = Instant.now()
             )
-            db.lastSyncDao().insertEntity(currentSynced)
+            db.lastSyncDao().insert(currentSynced)
         }
     }
 
@@ -89,9 +89,10 @@ internal class RealRecipeRepository @Inject constructor(
         ingredientEntities: List<IngredientEntity>
     ) {
         db.handleTransaction {
-            db.recipeDAO().insertRecipe(entity)
-//            db.recipeDAO().deleteIngredients(entity.id)
-            db.recipeDAO().insertIngredients(ingredientEntities)
+            db.recipeDAO().insert(entity)
+            db.ingredientDAO().deleteRecipe(entity.id)
+//            TODO delete nutrition
+            db.ingredientDAO().insert(ingredientEntities)
 //            TODO save nutrition
             val currentSynced = LastSyncEntity(
                 id = 0,
@@ -99,7 +100,7 @@ internal class RealRecipeRepository @Inject constructor(
                 entityId = entity.id,
                 lastSyncedAt = Instant.now()
             )
-            db.lastSyncDao().insertEntity(currentSynced)
+            db.lastSyncDao().insert(currentSynced)
         }
     }
 

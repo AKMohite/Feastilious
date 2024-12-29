@@ -56,10 +56,8 @@ internal class LegacyRecipeEntityMapper:
                 recipeId = recipeId,
                 stepId = "$recipeId-${inst.number ?: 0}",
                 stepNo = inst.number ?: 0,
-                stepDescription = inst.step,
-                stepIngredients = inst.ingredients?.filter { ingred -> !ingred.name.isNullOrEmpty() }
-                    ?.joinToString(",") { ingred -> ingred.name ?: "" } ?: "",
-                stepEquipments = "",
+                stepDescription = "inst.step",
+                stepName = ""
             )
         } ?: emptyList()
     }

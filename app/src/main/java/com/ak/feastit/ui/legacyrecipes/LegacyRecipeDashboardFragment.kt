@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
-import com.ak.feastit.databinding.FragmentRecipeDashboardBinding
+import com.ak.feastit.databinding.LegacyFragmentRecipeDashboardBinding
 import com.google.android.material.chip.Chip
 
 class LegacyRecipeDashboardFragment : Fragment(R.layout.legacy_fragment_recipe_dashboard) {
@@ -25,7 +25,7 @@ class LegacyRecipeDashboardFragment : Fragment(R.layout.legacy_fragment_recipe_d
 
     private fun setFlowObservers(view: View) {
 
-        val binding =  FragmentRecipeDashboardBinding.bind(view)
+        val binding =  LegacyFragmentRecipeDashboardBinding.bind(view)
         recipeAdapter = LegacyRecipeAdapter {  }
         binding.apply {
             recipeRv.apply {

@@ -71,13 +71,6 @@ internal class LegacyRecipeRepository @Inject constructor(
                 ingredients.addAll(recipe.ingredients)
                 instructions.addAll(recipe.instructions)
             }
-            db.handleTransaction {
-                with(db.recipeDAO()) {
-                    insertRecipes(dtoRecipes)
-                    insertIngredients(ingredients)
-                    insertSteps(instructions)
-                }
-            }
         }
     }
 

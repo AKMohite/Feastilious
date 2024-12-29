@@ -22,18 +22,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecipeDAO: BaseDAO<RecipeEntity> {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertIngredient(ingredient: IngredientEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertIngredients(ingredient: List<IngredientEntity>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInstruction(instruction: RecipeStepEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSteps(instructions: List<RecipeStepEntity>)
-
     @Query("SELECT $DB_TABLE_ID FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1")
     suspend fun getFavRecipeIds(): List<Long>
 

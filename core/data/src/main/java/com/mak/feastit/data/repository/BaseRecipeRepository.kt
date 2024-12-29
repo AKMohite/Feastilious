@@ -33,7 +33,7 @@ internal abstract class BaseRecipeRepository(
                     entityType = request.name,
                     lastSyncedAt = Instant.now()
                 )
-                db.lastSyncDao().insertEntity(currentSynced)
+                db.lastSyncDao().insert(currentSynced)
                 deleteRecipes(request)
             } else {
                 deletePage(page, request)
@@ -117,7 +117,7 @@ internal abstract class BaseRecipeRepository(
 
     private suspend fun chunkUpdate(entities: List<RecipeEntity>) {
         for (chunk in entities.chunked(LIMIT_ITEMS)) {
-            db.recipeDAO().insertRecipes(chunk)
+            db.recipeDAO().insert(chunk)
         }
     }
 

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.ak.feastit.R
-import com.ak.feastit.databinding.RecipeDetailFragmentBinding
+import com.ak.feastit.databinding.LegacyRecipeDetailFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +24,7 @@ class LegacyRecipeDetailFragment : Fragment(R.layout.legacy_recipe_detail_fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = RecipeDetailFragmentBinding.bind(view)
+        val binding = LegacyRecipeDetailFragmentBinding.bind(view)
 
 //        viewModel.getRecipe(args.recipeId)
 
