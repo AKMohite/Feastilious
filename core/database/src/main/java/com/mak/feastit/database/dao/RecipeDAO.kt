@@ -20,13 +20,7 @@ import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface RecipeDAO {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipe(recipe: RecipeEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipes(recipes: List<RecipeEntity>)
+interface RecipeDAO: BaseDAO<RecipeEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertIngredient(ingredient: IngredientEntity)

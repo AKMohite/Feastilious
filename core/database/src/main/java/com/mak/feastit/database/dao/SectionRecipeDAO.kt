@@ -7,10 +7,7 @@ import com.mak.feastit.database.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface SectionRecipeDAO<Entity> {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entities: List<Entity>)
+interface SectionRecipeDAO<Entity>: BaseDAO<Entity> {
 
     fun getRecipes(page: Int): Flow<List<RecipeEntity>>
 
