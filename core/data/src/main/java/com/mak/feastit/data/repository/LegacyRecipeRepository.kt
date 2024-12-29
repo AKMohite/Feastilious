@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class RecipeRepository @Inject constructor(
+internal class LegacyRecipeRepository @Inject constructor(
     private val api: FeastAPIService,
     private val db: FeastDB
 ) : IRecipeRepository {

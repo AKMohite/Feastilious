@@ -11,7 +11,9 @@ import com.ak.feastit.databinding.FragmentYumDetailBinding
 import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 internal class YumDetailFragment: BaseFragment() {
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding
@@ -43,6 +45,7 @@ internal class YumDetailFragment: BaseFragment() {
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.recipeDetailPager.adapter = detailPagerAdapter
         tabLayoutMediator.attach()
+        viewModel.load()
     }
 
     override fun onDestroyView() {

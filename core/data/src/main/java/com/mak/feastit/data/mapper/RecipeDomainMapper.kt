@@ -45,7 +45,7 @@ internal class RecipeDomainMapper:
                 id = ing.ingredientUnique,
                 image = ing.ingredientImg,
                 localizedName = ing.ingredientName,
-                name = ing.ingredientSpec
+                name = ing.ingredientName
         ) }
 
 }

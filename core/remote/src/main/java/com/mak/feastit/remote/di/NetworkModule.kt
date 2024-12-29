@@ -1,7 +1,7 @@
 package com.mak.feastit.remote.di
 
 
-import com.ak.feastit.data.network.ErrorInterceptor
+import com.mak.feastit.remote.ErrorInterceptor
 import com.mak.feastit.remote.BuildConfig
 import com.squareup.moshi.Moshi
 import dagger.Module

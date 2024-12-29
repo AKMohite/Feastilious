@@ -22,14 +22,14 @@ data class IngredientEntity(
     val ingredientUnique: String,
     @ColumnInfo(name = DB_RECIPE_ID)
     val recipeId: Long,
+    @ColumnInfo(name = "aisle_category")
+    val aisle: String? = null,
     @ColumnInfo(name = DB_INGREDIENT_NAME)
     val ingredientName: String,
-    @ColumnInfo(name = DB_INGREDIENT_CONSISTENCY)
-    val ingredientConsistency: String,
+//    @ColumnInfo(name = DB_INGREDIENT_CONSISTENCY)
+//    val ingredientConsistency: String,
     @ColumnInfo(name = DB_TABLE_COL_IMG)
     val ingredientImg: String,
-    @ColumnInfo(name = DB_INGREDIENT_SPEC)
-    val ingredientSpec: String,
     @ColumnInfo(name = DB_INGREDIENT_AMOUNT)
     val amount: Double,
     @ColumnInfo(name = DB_INGREDIENT_UNIT)

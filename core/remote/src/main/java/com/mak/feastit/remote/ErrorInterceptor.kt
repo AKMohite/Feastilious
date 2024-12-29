@@ -1,4 +1,4 @@
-package com.ak.feastit.data.network
+package com.mak.feastit.remote
 
 import okhttp3.Interceptor
 import okhttp3.Response

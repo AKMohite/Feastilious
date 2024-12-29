@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Duration
+import java.time.Period
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -35,7 +36,8 @@ internal class RealRecipesRepository @Inject constructor(
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
 //        TODO validity duration can be less but for now kept 6hours
-            val duration = Duration.of(6, ChronoUnit.WEEKS)
+            val duration = Duration.of(60, ChronoUnit.DAYS)
+//            val duration = Period.ofWeeks(6)
             if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
                 return@withContext
             }

@@ -38,10 +38,8 @@ internal class RecipeEntityMapper:
                 ingredientUnique = "$recipeId-${
                     ing.name?.capitalize(Locale.getDefault())?.replace(" ", "") ?: ""
                 }",
-                ingredientConsistency = ing.consistency ?: "",
                 ingredientImg = if (!ing.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${ing.image}" else "",
                 ingredientName = ing.name?.capitalize(Locale.getDefault()) ?: "",
-                ingredientSpec = ing.original ?: "",
                 amount = ing.amount ?: 0.0,
                 unit = ing.unit ?: ""
             )
