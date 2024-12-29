@@ -34,10 +34,10 @@ internal class LegacyRecipeDomainMapper:
 
     fun toRecipesDomain(recipes: List<com.mak.feastit.database.entity.RecipeEntity>): List<Recipe> = recipes.map { recipe-> mapToDomainModel(recipe) }
 
-    fun toInstructionsDomain(instructions: List<com.mak.feastit.database.entity.InstructionEntity>): List<Instruction> = instructions.map { inst ->
+    fun toInstructionsDomain(instructions: List<com.mak.feastit.database.entity.RecipeStepEntity>): List<Instruction> = instructions.map { inst ->
         Instruction(
                 stepNo = "Step ${inst.stepNo}",
-                stepDesc = inst.stepDesc
+                stepDesc = inst.stepDescription
         ) }
 
     fun toIngredientsDomain(ingredients: List<com.mak.feastit.database.entity.IngredientEntity>): List<Ingredient> = ingredients.map { ing ->

@@ -4,7 +4,7 @@ import com.mak.feastit.data.mapper.LegacyRecipeDomainMapper
 import com.mak.feastit.data.mapper.LegacyRecipeEntityMapper
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.IngredientEntity
-import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.relations.RecipeDetailEntity
 import com.mak.feastit.domain.model.QUERY_SEARCH
@@ -59,7 +59,7 @@ internal class LegacyRecipeRepository @Inject constructor(
         if (recipeDetails.isNotEmpty()) {
             val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
             val ingredients: MutableList<IngredientEntity> = mutableListOf()
-            val instructions: MutableList<InstructionEntity> = mutableListOf()
+            val instructions: MutableList<RecipeStepEntity> = mutableListOf()
 
 //            TODO handle favorite recipes while deleting from DB and null assertion
             val favRecipes = db.recipeDAO().getFavRecipeIds()
@@ -75,7 +75,7 @@ internal class LegacyRecipeRepository @Inject constructor(
                 with(db.recipeDAO()) {
                     insertRecipes(dtoRecipes)
                     insertIngredients(ingredients)
-                    insertInstructions(instructions)
+                    insertSteps(instructions)
                 }
             }
         }

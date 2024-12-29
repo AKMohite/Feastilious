@@ -45,22 +45,21 @@ internal class LegacyRecipeEntityMapper:
         } ?: emptyList()
     }
 
-    private fun toInstructionsEntity(recipeId: Long, instructions: List<AnalyzedInstructionDTO>?): List<com.mak.feastit.database.entity.InstructionEntity> {
+    private fun toInstructionsEntity(recipeId: Long, instructions: List<AnalyzedInstructionDTO>?): List<com.mak.feastit.database.entity.RecipeStepEntity> {
         val recipeSteps = if (!instructions.isNullOrEmpty()) {
             instructions[0].steps
         } else {
             emptyList()
         }
         return recipeSteps?.map { inst ->
-            com.mak.feastit.database.entity.InstructionEntity(
+            com.mak.feastit.database.entity.RecipeStepEntity(
                 recipeId = recipeId,
                 stepId = "$recipeId-${inst.number ?: 0}",
                 stepNo = inst.number ?: 0,
-                stepDesc = inst.step,
+                stepDescription = inst.step,
                 stepIngredients = inst.ingredients?.filter { ingred -> !ingred.name.isNullOrEmpty() }
                     ?.joinToString(",") { ingred -> ingred.name ?: "" } ?: "",
-                stepEquipments = inst.equipment?.filter { equip -> !equip.name.isNullOrEmpty() }
-                    ?.joinToString(",") { equip -> equip.name ?: "" } ?: "",
+                stepEquipments = "",
             )
         } ?: emptyList()
     }

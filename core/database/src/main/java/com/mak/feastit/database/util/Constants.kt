@@ -28,6 +28,7 @@ internal object Constants {
     const val DB_STEP_ID = "step_id"
     const val DB_STEP_NUMBER = "step_no"
     const val DB_STEP_DESC = "step_desc"
+    const val DB_STEP_NAME = "step_name"
     const val DB_STEP_INGREDIENTS = "step_ingredients"
     const val DB_STEP_EQUIPMENTS = "step_equipments"
 }

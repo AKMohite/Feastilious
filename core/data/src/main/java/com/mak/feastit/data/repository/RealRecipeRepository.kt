@@ -5,6 +5,7 @@ import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -27,14 +28,7 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        if (!forceRefresh) {
-            val lastSynced = db.lastSyncDao().getLastSync(SyncType.RECIPE_DETAILS.name, id)
-//        TODO validity duration can be less but for now kept 6hours
-            val duration = Duration.of(60, ChronoUnit.DAYS)
-            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
-                return@withContext
-            }
-        }
+        if (!needRefresh(forceRefresh, id, SyncType.RECIPE_DETAILS)) return@withContext
         val query = mapOf(
             "includeNutrition" to true.toString(),
             "addWinePairing" to false.toString(),
@@ -50,6 +44,38 @@ internal class RealRecipeRepository @Inject constructor(
 //        TODO add nutrition table
 //        val nutritionEntities = mapper.jsonToNutritionEntity(recipeDTO.id, nutrients, calorieBreakdown)
         saveRemoteRecipe(recipeEntity, ingredientEntities)
+    }
+
+    override suspend fun refreshAnalyzedInstruction(
+        id: Long,
+        forceRefresh: Boolean
+    ) = withContext(dispatcher.io) {
+        if (!needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
+        val query = mapOf(
+            "stepBreakdown" to true.toString()
+        )
+        val instructionsDTO = api.getAnalyzedInstructions(recipeId = id, query = query)
+//        val ingredientEntities = mapper.jsonToAnalysedIngredientsEntity(id, instructionsDTO)
+        val stepEntities = mapper.jsonToStepEntities(id, instructionsDTO)
+        saveRemoteInstructions(stepEntities)
+
+    }
+
+    private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>) {
+        db.handleTransaction {
+            db.recipeDAO().insertSteps(stepEntities)
+            val currentSynced = LastSyncEntity(
+                id = 0L,
+                entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
+                entityId = stepEntities.first().recipeId,
+                lastSyncedAt = Instant.now()
+            )
+            db.lastSyncDao().insertEntity(currentSynced)
+        }
+    }
+
+    override suspend fun refreshSimilarRecipes(id: Long, forceRefresh: Boolean) {
+
     }
 
     override fun getRecipe(id: Long) {
@@ -73,6 +99,22 @@ internal class RealRecipeRepository @Inject constructor(
             )
             db.lastSyncDao().insertEntity(currentSynced)
         }
+    }
+
+    private suspend fun needRefresh(
+        forceRefresh: Boolean,
+        id: Long,
+        syncType: SyncType,
+        duration: Duration = Duration.of(60, ChronoUnit.DAYS)
+    ): Boolean {
+        if (!forceRefresh) {
+            val lastSynced = db.lastSyncDao().getLastSync(syncType.name, id)
+//        TODO validity duration can be less but for now kept 6hours
+            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
+                return false
+            }
+        }
+        return true
     }
 
     private fun isRequestValid(lastSyncedAt: Instant, duration: Duration): Boolean {

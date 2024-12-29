@@ -14,7 +14,7 @@ import com.mak.feastit.database.dao.RecipeDAO
 import com.mak.feastit.database.dao.TopRecipesDAO
 import com.mak.feastit.database.entity.HealthyRecipeEntity
 import com.mak.feastit.database.entity.IngredientEntity
-import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
@@ -31,7 +31,7 @@ import com.mak.feastit.database.entity.TopRecipeEntity
         PocketFriendlyRecipeEntity::class,
         RecipeEntity::class,
         IngredientEntity::class,
-        InstructionEntity::class,
+        RecipeStepEntity::class,
         LastSyncEntity::class
     ],
     version = 1

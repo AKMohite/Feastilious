@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.mak.feastit.database.entity.IngredientEntity
-import com.mak.feastit.database.entity.InstructionEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.relations.RecipeDetailEntity
 import com.mak.feastit.database.util.Constants.DB_MY_RECIPE_BOOK
@@ -35,10 +35,10 @@ interface RecipeDAO {
     suspend fun insertIngredients(ingredient: List<IngredientEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInstruction(instruction: InstructionEntity)
+    suspend fun insertInstruction(instruction: RecipeStepEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInstructions(instructions: List<InstructionEntity>)
+    suspend fun insertSteps(instructions: List<RecipeStepEntity>)
 
     @Query("SELECT $DB_TABLE_ID FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1")
     suspend fun getFavRecipeIds(): List<Long>

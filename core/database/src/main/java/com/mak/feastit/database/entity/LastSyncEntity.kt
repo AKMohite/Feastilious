@@ -12,7 +12,7 @@ import java.time.Instant
 )
 data class LastSyncEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = "entity_type")
     val entityType: String,
     @ColumnInfo(name = "entity_id")

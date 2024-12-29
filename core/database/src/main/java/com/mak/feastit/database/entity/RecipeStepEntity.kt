@@ -7,16 +7,15 @@ import androidx.room.PrimaryKey
 import com.mak.feastit.database.util.Constants.DB_INSTRUCTION_TABLE
 import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
 import com.mak.feastit.database.util.Constants.DB_STEP_DESC
-import com.mak.feastit.database.util.Constants.DB_STEP_EQUIPMENTS
 import com.mak.feastit.database.util.Constants.DB_STEP_ID
-import com.mak.feastit.database.util.Constants.DB_STEP_INGREDIENTS
+import com.mak.feastit.database.util.Constants.DB_STEP_NAME
 import com.mak.feastit.database.util.Constants.DB_STEP_NUMBER
 
 @Entity(
         tableName = DB_INSTRUCTION_TABLE,
         indices = [Index(value = [DB_STEP_ID], unique = true)]
 )
-data class InstructionEntity(
+data class RecipeStepEntity(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = DB_STEP_ID) // recipeId+stepNo
     val stepId: String,
@@ -25,9 +24,11 @@ data class InstructionEntity(
     @ColumnInfo(name = DB_STEP_NUMBER)
     val stepNo: Int,
     @ColumnInfo(name = DB_STEP_DESC)
-    val stepDesc: String,
-    @ColumnInfo(name = DB_STEP_INGREDIENTS)
-    val stepIngredients: String,
-    @ColumnInfo(name = DB_STEP_EQUIPMENTS)
-    val stepEquipments: String
+    val stepDescription: String,
+    @ColumnInfo(name = DB_STEP_NAME)
+    val stepName: String,
+//    @ColumnInfo(name = DB_STEP_INGREDIENTS)
+//    val stepIngredients: String,
+//    @ColumnInfo(name = DB_STEP_EQUIPMENTS)
+//    val stepEquipments: String
 )

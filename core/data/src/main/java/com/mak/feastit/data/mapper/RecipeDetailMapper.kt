@@ -1,8 +1,10 @@
 package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.IngredientEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.RecipeInformationDTO
 import com.mak.feastit.remote.dto.RecipeIngredientDTO
 import javax.inject.Inject
@@ -61,5 +63,50 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 ingredientImg = dto.image.orEmpty()
             )
         } ?: return emptyList()
+    }
+
+    fun jsonToAnalysedIngredientsEntity(
+        id: Long,
+        instructionsDTO: List<AnalyzedInstructionDTO>
+    ): List<IngredientEntity> {
+        val ingredientDTOs = instructionsDTO.flatMap { instruction ->
+            instruction.steps ?: emptyList()
+        }.flatMap { step ->
+            step.ingredients ?: emptyList()
+        }.distinctBy { ingredient -> ingredient.id }
+        return ingredientDTOs.map { dto ->
+            IngredientEntity(
+                id = "${id}_${dto.id}",
+                ingredientId = dto.id,
+                aisle = "No category",
+                recipeId = id,
+                ingredientName = dto.name.orEmpty(),
+                amount = 0.0,
+                unit = "",
+                ingredientImg = dto.image.orEmpty()
+            )
+        }
+    }
+
+    fun jsonToStepEntities(id: Long, instructionsDTO: List<AnalyzedInstructionDTO>): List<RecipeStepEntity> {
+        val dtos = instructionsDTO.mapIndexed { index: Int, analyzedInstructionDTO: AnalyzedInstructionDTO ->
+            val stepName = analyzedInstructionDTO.name ?: "Analysed Steps $index"
+            Pair(stepName, analyzedInstructionDTO.steps)
+        }.mapNotNull { (key, value) ->
+            if (value.isNullOrEmpty()) return@mapNotNull null
+            Pair(key, value)
+        }
+        val entities = dtos.flatMap { (name, steps) ->
+            steps.map { step ->
+                RecipeStepEntity(
+                    stepId = "${id}_${step.number}",
+                    recipeId = id,
+                    stepNo = step.number ?: 0,
+                    stepDescription = step.step.orEmpty(),
+                    stepName = name
+                )
+            }
+        }
+        return entities
     }
 }

@@ -31,6 +31,8 @@ internal class YumDetailViewModel @Inject constructor(
     private fun refreshRecipeInfo(recipeId: Long, forceRefresh: Boolean = false) {
         uiScope.launch {
             repository.refreshRecipe(id = recipeId, forceRefresh = forceRefresh)
+            repository.refreshAnalyzedInstruction(id = recipeId, forceRefresh = forceRefresh)
+            repository.refreshSimilarRecipes(id = recipeId, forceRefresh = forceRefresh)
         }
     }
 

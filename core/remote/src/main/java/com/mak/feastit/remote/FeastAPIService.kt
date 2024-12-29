@@ -1,5 +1,6 @@
 package com.mak.feastit.remote
 
+import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.ComplexSearchDTO
 import com.mak.feastit.remote.dto.RecipeInformationDTO
 import retrofit2.http.GET
@@ -19,6 +20,12 @@ interface FeastAPIService {
         @Path(API_PATH_ID) recipeId: Long,
         @QueryMap recipeQuery: Map<String, String>
     ): RecipeInformationDTO
+
+    @GET(API_GET_RECIPE_ANALYSED_INSTRUCTION)
+    suspend fun getAnalyzedInstructions(
+        @Path(API_PATH_ID) recipeId: Long,
+        @QueryMap query: Map<String, String>
+    ): List<AnalyzedInstructionDTO>
 
     /*@GET(API_GET_RECIPE_ANALYSED_INSTRUCTION)
     suspend fun getAnalysedDetail(
