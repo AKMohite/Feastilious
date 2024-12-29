@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.collect
 class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
 
     private val viewModel: RecipeDetailViewModel by viewModels()
-    private val args: RecipeDetailFragmentArgs by navArgs()
+//    private val args: RecipeDetailFragmentArgs by navArgs()
     private val ingredsAdapter = RecipeIngredientAdapter()
     private val instsAdapter = RecipeInstructionAdapter()
 
@@ -28,7 +28,7 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val binding = RecipeDetailFragmentBinding.bind(view)
 
-        viewModel.getRecipe(args.recipeId)
+//        viewModel.getRecipe(args.recipeId)
 
         val headingAdapter = RecipeHeadingAdapter(getString(R.string.summary))
 

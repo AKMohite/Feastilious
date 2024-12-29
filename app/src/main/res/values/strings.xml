@@ -5,6 +5,15 @@
     <string name="search">Search</string>
     <string name="txt_wip">Work in progress</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Facilisi cras fermentum odio eu feugiat pretium nibh. Pretium viverra suspendisse potenti nullam. Amet tellus cras adipiscing enim eu turpis. Malesuada fames ac turpis egestas maecenas pharetra convallis. Est velit egestas dui id ornare arcu odio ut sem. Facilisis gravida neque convallis a cras semper auctor neque.</string>
+    <string name="long_lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec vehicula ex. Vivamus vestibulum dui sit amet posuere commodo. Nulla sit amet molestie dui. Nunc dictum, leo a accumsan pretium, leo metus sagittis libero, eu rutrum ligula erat ac urna. Pellentesque ac egestas nisi. Donec dignissim magna eget turpis laoreet fringilla. Pellentesque vitae efficitur elit. Quisque lacus diam, finibus eget ornare quis, dictum ac nunc. Praesent suscipit ac nulla sit amet pretium.
+
+Vivamus gravida vestibulum consequat. Nulla viverra accumsan libero ut pulvinar. Donec eleifend porttitor erat, vel blandit risus vulputate eget. Duis cursus lacus nec dapibus imperdiet. Proin accumsan ligula at mollis egestas. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus maximus eget tortor at lobortis. Etiam sed malesuada purus. Vivamus molestie, ex vitae laoreet suscipit, felis magna imperdiet metus, a dictum diam quam et augue. Maecenas velit tortor, sagittis vel est sed, ultricies aliquam turpis. Maecenas congue, lorem ut ornare pulvinar, metus dolor tempor ipsum, in vestibulum ante enim vel velit. Nullam porttitor ac ex vel cursus. Suspendisse vitae consectetur metus. Maecenas vestibulum augue vel magna scelerisque ullamcorper vitae vitae arcu.
+
+Praesent cursus ex et turpis molestie, ut congue erat posuere. Proin eget erat eu lacus molestie auctor nec ut augue. Maecenas quis vehicula augue. Proin sollicitudin est ligula, et aliquam sem ornare sit amet. Pellentesque aliquam ipsum placerat nisl fermentum, non vestibulum leo pellentesque. Aenean feugiat urna in leo pharetra finibus. Sed quis arcu at nunc ultricies tincidunt quis in libero. In consequat ligula a fringilla finibus. Morbi massa libero, cursus ut ipsum a, pulvinar feugiat dolor. Ut a nisl quam. Pellentesque vel orci eu erat aliquam suscipit ac ut eros.
+
+Nunc in posuere purus. Curabitur tempor purus ut molestie tristique. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec sit amet arcu elementum, iaculis turpis eu, efficitur ex. Nam quis enim finibus, consectetur augue non, consequat magna. Donec faucibus nunc ut blandit malesuada. In hac habitasse platea dictumst. Vestibulum rutrum est vel fermentum scelerisque. Proin tempus et justo et eleifend.
+
+Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Etiam in iaculis tellus, quis sollicitudin metus. Duis sed est sed eros gravida mattis. Sed efficitur nulla interdum laoreet porttitor. Sed eu ligula nec enim lobortis laoreet sit amet sed metus. Suspendisse dictum elit sit amet ipsum pulvinar, vel consectetur purus congue. Nullam non congue purus, eget hendrerit eros. In placerat sodales velit. In interdum at augue id commodo. Aliquam nec erat maximus, euismod ante sed, congue elit. Donec aliquet rutrum ex quis accumsan.</string>
     <string name="summary">Summary:</string>
     <string name="ingredients">Ingredients:</string>
     <string name="instructions">Instructions:</string>
@@ -39,4 +48,9 @@
     <string name="onboarding_title_3">Personal recipe collection</string>
     <string name="onboarding_sub_title_3">Your yummy treasures all in one place. Add recipes to favorite for easy access</string>
     <string name="get_started">Get started</string>
+    <string name="recipe_image">Recipe image</string>
+    <string name="detail_overview">Overview</string>
+    <string name="detail_ingredients">Ingredients</string>
+    <string name="detail_instructions">Instructions</string>
+    <string name="detail_nutrition">Nutrition</string>
 </resources>

@@ -17,6 +17,7 @@ import com.mak.feastit.database.util.Constants.DB_RECIPE_TABLE
 import com.mak.feastit.database.util.Constants.DB_TABLE_COL_NAME
 import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
 import com.mak.feastit.database.util.Constants.DB_TABLE_ID
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDAO {
@@ -67,6 +68,9 @@ interface RecipeDAO {
                     LOWER($DB_RECIPE_DISH_TYPES) LIKE '%' || :searchQuery || '%' OR 
                     LOWER($DB_RECIPE_DIETS) LIKE '%' || :searchQuery || '%')""")
     suspend fun getFavRecipes(searchQuery: String): List<RecipeEntity>
+
+    @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID = :id")
+    fun getRecipe(id: Long): Flow<RecipeEntity?>
 
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

@@ -54,9 +54,9 @@
     </fragment>
     <fragment
         android:id="@+id/recipeDetailFragment"
-        android:name="com.ak.feastit.ui.recipedetail.RecipeDetailFragment"
+        android:name="com.ak.feastit.ui.yumdetail.YumDetailFragment"
         android:label="recipe_detail_fragment"
-        tools:layout="@layout/recipe_detail_fragment" >
+        tools:layout="@layout/fragment_yum_detail" >
         <argument
             android:name="recipeId"
             app:argType="long" />

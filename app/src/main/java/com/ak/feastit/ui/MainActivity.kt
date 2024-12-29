@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val navController= navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.onBoardingFragment -> binding.mainBottomNavigation.hide()
+                R.id.splashFragment, R.id.onBoardingFragment, R.id.recipeDetailFragment -> binding.mainBottomNavigation.hide()
                 else -> binding.mainBottomNavigation.show()
             }
         }

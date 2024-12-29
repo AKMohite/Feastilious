@@ -31,11 +31,11 @@ internal class RealRecipesRepository @Inject constructor(
     override val recipesMapper = RecipesMapper()
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
-        if (page > 5) return@withContext // just have limited API calls condition can be removed
+        if (page > 5) return@withContext // TODO Use pro just have limited API calls condition can be removed
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
-            //        TODO validity duration can be less but for now kept 6hours
-            val duration = Duration.of(6, ChronoUnit.DAYS)
+//        TODO validity duration can be less but for now kept 6hours
+            val duration = Duration.of(6, ChronoUnit.WEEKS)
             if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
                 return@withContext
             }
