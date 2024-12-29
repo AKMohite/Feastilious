@@ -5,7 +5,7 @@ import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 
-internal class RecipeDomainMapper:
+internal class LegacyRecipeDomainMapper:
     com.mak.feastit.data.base.DataMapper<com.mak.feastit.database.entity.RecipeEntity, Recipe> {
 
     override fun mapToDomainModel(model: com.mak.feastit.database.entity.RecipeEntity): Recipe = Recipe(
@@ -42,7 +42,7 @@ internal class RecipeDomainMapper:
 
     fun toIngredientsDomain(ingredients: List<com.mak.feastit.database.entity.IngredientEntity>): List<Ingredient> = ingredients.map { ing ->
         Ingredient(
-                id = ing.ingredientId,
+                id = throw Exception("Delete class No usage"),
                 image = ing.ingredientImg,
                 localizedName = ing.ingredientName,
                 name = ing.ingredientName

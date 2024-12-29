@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeIngredItemBinding
 import com.mak.feastit.domain.model.Ingredient
 
-class RecipeIngredientAdapter : ListAdapter<Ingredient, RecipeIngredientAdapter.IngredientViewHolder>(IngredientComparator()) {
+class LegacyRecipeIngredientAdapter : ListAdapter<Ingredient, LegacyRecipeIngredientAdapter.IngredientViewHolder>(LegacyIngredientComparator()) {
 
     class IngredientViewHolder(private val binding: RecipeIngredItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bindData(ingredient: Ingredient) {

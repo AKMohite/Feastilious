@@ -1,13 +1,13 @@
 package com.mak.feastit.domain.usecase
 
 import com.mak.feastit.domain.model.RecipeResult
-import com.mak.feastit.domain.repository.IRecipeDetailRepository
+import com.mak.feastit.domain.repository.ILegacyRecipeDetailRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class ToggleFavUseCase @Inject constructor(
-    private val repository: IRecipeDetailRepository
+class LegacyToggleFavUseCase @Inject constructor(
+    private val repository: ILegacyRecipeDetailRepository
 ) {
     operator fun invoke(id: Long, isAdded: Boolean): Flow<RecipeResult<Boolean>> {
         return repository.toggleRecipeFav(id, isAdded)

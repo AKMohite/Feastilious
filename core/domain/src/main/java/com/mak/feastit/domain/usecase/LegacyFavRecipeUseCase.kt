@@ -2,12 +2,12 @@ package com.mak.feastit.domain.usecase
 
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeResult
-import com.mak.feastit.domain.repository.IRecipeRepository
+import com.mak.feastit.domain.repository.ILegacyRecipeRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FavRecipeUseCase @Inject constructor(
-    private val recipeRepository: IRecipeRepository
+class LegacyFavRecipeUseCase @Inject constructor(
+    private val recipeRepository: ILegacyRecipeRepository
 ) {
 
     operator fun invoke(params: String): Flow<RecipeResult<List<Recipe>>> {

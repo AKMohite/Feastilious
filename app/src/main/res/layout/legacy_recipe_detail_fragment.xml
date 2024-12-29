@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.recipedetail.RecipeDetailFragment">
+    tools:context=".ui.legacyrecipedetail.LegacyRecipeDetailFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/recipe_app_bar"

@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipes
+package com.ak.feastit.ui.legacyrecipes
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,9 +13,9 @@ import com.ak.feastit.utils.QUERY_OFFSET
 import com.ak.feastit.utils.QUERY_SEARCH
 import com.mak.feastit.domain.model.MealType
 import com.mak.feastit.domain.model.Recipe
-import com.mak.feastit.domain.usecase.GetCategoriesUseCase
-import com.mak.feastit.domain.usecase.MealTypeRecipeUseCase
-import com.mak.feastit.domain.usecase.SearchRecipeUseCase
+import com.mak.feastit.domain.usecase.LegacyCategoriesUseCase
+import com.mak.feastit.domain.usecase.LegacyMealTypeRecipeUseCase
+import com.mak.feastit.domain.usecase.LegacySearchRecipeUseCase
 import com.mak.feastit.domain.model.QUERY_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,10 +25,10 @@ import javax.inject.Inject
 import kotlin.collections.set
 
 @HiltViewModel
-class RecipeViewModel @Inject constructor(
-    getCategoriesUseCase: GetCategoriesUseCase,
-    private val searchRecipeUseCase: SearchRecipeUseCase,
-    private val mealTypeRecipeUseCase: MealTypeRecipeUseCase,
+class LegacyRecipeViewModel @Inject constructor(
+    getCategoriesUseCase: LegacyCategoriesUseCase,
+    private val searchRecipeUseCase: LegacySearchRecipeUseCase,
+    private val mealTypeRecipeUseCase: LegacyMealTypeRecipeUseCase,
     val prefManager: FeastPrefManager,
     val savedStateHandle: SavedStateHandle
 ): ViewModel() {

@@ -6,7 +6,7 @@ import com.mak.feastit.remote.dto.ExtendedIngredientDTO
 import com.mak.feastit.remote.dto.RecipeDTO
 import java.util.Locale
 
-internal class RecipeEntityMapper:
+internal class LegacyRecipeEntityMapper:
     com.mak.feastit.data.base.DataMapper<RecipeDTO, com.mak.feastit.database.relations.RecipeDetailEntity> {
 
     override fun mapToDomainModel(model: RecipeDTO): com.mak.feastit.database.relations.RecipeDetailEntity {
@@ -35,9 +35,8 @@ internal class RecipeEntityMapper:
         return ingredients?.map { ing ->
             com.mak.feastit.database.entity.IngredientEntity(
                 recipeId = recipeId,
-                ingredientId = "$recipeId-${
-                    ing.name?.capitalize(Locale.getDefault())?.replace(" ", "") ?: ""
-                }",
+                id = "0",
+                ingredientId = throw Exception("Delete class No usage"),
                 ingredientImg = if (!ing.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${ing.image}" else "",
                 ingredientName = ing.name?.capitalize(Locale.getDefault()) ?: "",
                 amount = ing.amount ?: 0.0,

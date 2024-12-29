@@ -2,12 +2,12 @@ package com.mak.feastit.data.repository
 
 import com.mak.feastit.domain.model.MealType
 import com.mak.feastit.domain.model.RecipeResult
-import com.mak.feastit.domain.repository.ICategoryRepository
+import com.mak.feastit.domain.repository.ILegacyCategoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class CategoryRepository @Inject constructor() : ICategoryRepository {
+internal class LegacyCategoryRepository @Inject constructor() : ILegacyCategoryRepository {
 
     override fun getFoodCategories(): Flow<RecipeResult<List<MealType>>> = flow {
         emit(RecipeResult.success(getStaticMealCategories()))

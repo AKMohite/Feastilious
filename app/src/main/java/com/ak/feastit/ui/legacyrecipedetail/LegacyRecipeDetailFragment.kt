@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import android.os.Build
 import android.os.Bundle
@@ -7,22 +7,20 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeDetailFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
+class LegacyRecipeDetailFragment : Fragment(R.layout.legacy_recipe_detail_fragment) {
 
-    private val viewModel: RecipeDetailViewModel by viewModels()
+    private val viewModel: LegacyRecipeDetailViewModel by viewModels()
 //    private val args: RecipeDetailFragmentArgs by navArgs()
-    private val ingredsAdapter = RecipeIngredientAdapter()
-    private val instsAdapter = RecipeInstructionAdapter()
+    private val ingredsAdapter = LegacyRecipeIngredientAdapter()
+    private val instsAdapter = LegacyRecipeInstructionAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,16 +28,16 @@ class RecipeDetailFragment : Fragment(R.layout.recipe_detail_fragment) {
 
 //        viewModel.getRecipe(args.recipeId)
 
-        val headingAdapter = RecipeHeadingAdapter(getString(R.string.summary))
+        val headingAdapter = LegacyRecipeHeadingAdapter(getString(R.string.summary))
 
         binding.apply {
             recipeDetailsRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = ConcatAdapter(
                     headingAdapter,
-                    RecipeHeadingAdapter(getString(R.string.ingredients)),
+                    LegacyRecipeHeadingAdapter(getString(R.string.ingredients)),
                     ingredsAdapter,
-                    RecipeHeadingAdapter(getString(R.string.instructions)),
+                    LegacyRecipeHeadingAdapter(getString(R.string.instructions)),
                     instsAdapter
 
                 )

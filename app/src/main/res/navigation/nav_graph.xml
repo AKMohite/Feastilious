@@ -33,15 +33,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/recipeDashboardFragment"
-        android:name="com.ak.feastit.ui.recipes.RecipeDashboardFragment"
-        android:label="fragment_recipe_dashboard"
-        tools:layout="@layout/fragment_recipe_dashboard" >
-        <action
-            android:id="@+id/recipe_to_recipeDetail"
-            app:destination="@id/recipeDetailFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/onBoardingFragment"
         android:name="com.ak.feastit.ui.onboarding.OnBoardingFragment"
         android:label="fragment_on_boarding"

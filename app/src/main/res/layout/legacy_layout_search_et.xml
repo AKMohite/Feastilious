@@ -11,7 +11,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
     app:cardElevation="@dimen/space_tiny"
-    tools:showIn="@layout/fragment_recipe_dashboard">
+    tools:showIn="@layout/legacy_fragment_recipe_dashboard">
 
     <RelativeLayout
         android:layout_width="match_parent"

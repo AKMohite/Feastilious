@@ -1,7 +1,7 @@
 package com.mak.feastit.data.repository
 
-import com.mak.feastit.data.mapper.RecipeDomainMapper
-import com.mak.feastit.data.mapper.RecipeEntityMapper
+import com.mak.feastit.data.mapper.LegacyRecipeDomainMapper
+import com.mak.feastit.data.mapper.LegacyRecipeEntityMapper
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.InstructionEntity
@@ -11,7 +11,7 @@ import com.mak.feastit.domain.model.QUERY_SEARCH
 import com.mak.feastit.domain.model.QUERY_TYPE
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeResult
-import com.mak.feastit.domain.repository.IRecipeRepository
+import com.mak.feastit.domain.repository.ILegacyRecipeRepository
 import com.mak.feastit.remote.FeastAPIService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,10 +20,10 @@ import javax.inject.Inject
 internal class LegacyRecipeRepository @Inject constructor(
     private val api: FeastAPIService,
     private val db: FeastDB
-) : IRecipeRepository {
+) : ILegacyRecipeRepository {
 
-    private val domainMapper = RecipeDomainMapper()
-    private val entityMapper = RecipeEntityMapper()
+    private val domainMapper = LegacyRecipeDomainMapper()
+    private val entityMapper = LegacyRecipeEntityMapper()
 
     override fun searchRecipes(
         params: HashMap<String, String>

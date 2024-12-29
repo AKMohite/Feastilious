@@ -1,9 +1,9 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import androidx.recyclerview.widget.DiffUtil
 import com.mak.feastit.domain.model.Ingredient
 
-class IngredientComparator : DiffUtil.ItemCallback<Ingredient>() {
+class LegacyIngredientComparator : DiffUtil.ItemCallback<Ingredient>() {
 
     override fun areItemsTheSame(oldItem: Ingredient, newItem: Ingredient) =
             oldItem.id == newItem.id

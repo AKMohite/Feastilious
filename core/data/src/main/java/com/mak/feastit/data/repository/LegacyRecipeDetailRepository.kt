@@ -1,19 +1,19 @@
 package com.mak.feastit.data.repository
 
-import com.mak.feastit.data.mapper.RecipeDomainMapper
+import com.mak.feastit.data.mapper.LegacyRecipeDomainMapper
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.model.RecipeResult
 import com.mak.feastit.database.FeastDB
-import com.mak.feastit.domain.repository.IRecipeDetailRepository
+import com.mak.feastit.domain.repository.ILegacyRecipeDetailRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-internal class RecipeDetailRepository @Inject constructor(
+internal class LegacyRecipeDetailRepository @Inject constructor(
     private val db: FeastDB
-) : IRecipeDetailRepository {
+) : ILegacyRecipeDetailRepository {
 
-    private val domainMapper = RecipeDomainMapper()
+    private val domainMapper = LegacyRecipeDomainMapper()
 
     override fun getRecipeDetail(id: Long): Flow<RecipeResult<RecipeDetail>> = flow {
         try {

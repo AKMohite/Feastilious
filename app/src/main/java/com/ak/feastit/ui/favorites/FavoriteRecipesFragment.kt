@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
-import com.ak.feastit.ui.recipes.RecipeAdapter
+import com.ak.feastit.ui.legacyrecipes.LegacyRecipeAdapter
 import com.mak.feastit.domain.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
 
     private val viewModel: FavoriteRecipesViewModel by viewModels()
-    private var recipeAdapter: RecipeAdapter = RecipeAdapter { recipe ->
+    private var recipeAdapter: LegacyRecipeAdapter = LegacyRecipeAdapter { recipe ->
         navigateToDetails(recipe)
     }
 

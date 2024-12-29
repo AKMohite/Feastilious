@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.RecipeStepItemBinding
 import com.mak.feastit.domain.model.Instruction
 
-class RecipeInstructionAdapter : ListAdapter<Instruction, RecipeInstructionAdapter.InstructionViewHolder>(InstructionComparator()) {
+class LegacyRecipeInstructionAdapter : ListAdapter<Instruction, LegacyRecipeInstructionAdapter.InstructionViewHolder>(LegacyInstructionComparator()) {
 
     class InstructionViewHolder(private val binding: RecipeStepItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bindData(instruction: Instruction) {

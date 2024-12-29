@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipes
+package com.ak.feastit.ui.legacyrecipes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,9 +9,9 @@ import com.ak.feastit.R
 import com.ak.feastit.databinding.RecipeItemBinding
 import com.mak.feastit.domain.model.Recipe
 
-class RecipeAdapter(
+class LegacyRecipeAdapter(
         private val onItemClick: (Recipe) -> Unit
-): ListAdapter<Recipe, RecipeAdapter.RecipeViewHolder>(RecipeComparator()) {
+): ListAdapter<Recipe, LegacyRecipeAdapter.RecipeViewHolder>(LegacyRecipeComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
         val binding = RecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

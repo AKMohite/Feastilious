@@ -3,7 +3,7 @@ package com.ak.feastit.ui.favorites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mak.feastit.domain.model.Recipe
-import com.mak.feastit.domain.usecase.FavRecipeUseCase
+import com.mak.feastit.domain.usecase.LegacyFavRecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteRecipesViewModel @Inject constructor(
-        private val favRecipeUseCase: FavRecipeUseCase
+        private val favRecipeUseCase: LegacyFavRecipeUseCase
 ) : ViewModel() {
 
     val favRecipes = MutableStateFlow<List<Recipe>>(emptyList())

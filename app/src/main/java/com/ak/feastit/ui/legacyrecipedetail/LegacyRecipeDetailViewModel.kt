@@ -1,10 +1,10 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.usecase.RecipeDetailUseCase
-import com.mak.feastit.domain.usecase.ToggleFavUseCase
+import com.mak.feastit.domain.usecase.LegacyRecipeDetailUseCase
+import com.mak.feastit.domain.usecase.LegacyToggleFavUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipeDetailViewModel @Inject constructor(
-    private val detailUseCase: RecipeDetailUseCase,
-    private val toggleFavUseCase: ToggleFavUseCase
+class LegacyRecipeDetailViewModel @Inject constructor(
+    private val detailUseCase: LegacyRecipeDetailUseCase,
+    private val toggleFavUseCase: LegacyToggleFavUseCase
 ) : ViewModel() {
     val recipeDetail: MutableStateFlow<RecipeDetail?> = MutableStateFlow(null)
     val favRecipe: MutableStateFlow<Boolean> = MutableStateFlow(false)

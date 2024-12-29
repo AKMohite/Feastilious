@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipes
+package com.ak.feastit.ui.legacyrecipes
 
 import android.os.Bundle
 import android.util.TypedValue
@@ -7,18 +7,15 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
 import com.ak.feastit.databinding.FragmentRecipeDashboardBinding
 import com.google.android.material.chip.Chip
-import com.mak.feastit.domain.model.Recipe
-import dagger.hilt.android.AndroidEntryPoint
 
-class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
+class LegacyRecipeDashboardFragment : Fragment(R.layout.legacy_fragment_recipe_dashboard) {
 
-    private var recipeAdapter: RecipeAdapter? = null
-    private val viewModel: RecipeViewModel by viewModels()
+    private var recipeAdapter: LegacyRecipeAdapter? = null
+    private val viewModel: LegacyRecipeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,9 +26,7 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
     private fun setFlowObservers(view: View) {
 
         val binding =  FragmentRecipeDashboardBinding.bind(view)
-        recipeAdapter = RecipeAdapter { recipe ->
-            navigateToDetails(recipe)
-        }
+        recipeAdapter = LegacyRecipeAdapter {  }
         binding.apply {
             recipeRv.apply {
                 adapter = recipeAdapter
@@ -87,11 +82,5 @@ class RecipeDashboardFragment : Fragment(R.layout.fragment_recipe_dashboard) {
                 }
             }
         }
-    }
-
-    private fun navigateToDetails(recipe: Recipe) {
-        findNavController().navigate(RecipeDashboardFragmentDirections.recipeToRecipeDetail(
-                recipeId = recipe.id
-        ))
     }
 }

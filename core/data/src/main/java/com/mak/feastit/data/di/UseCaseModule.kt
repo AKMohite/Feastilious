@@ -1,19 +1,5 @@
 package com.mak.feastit.data.di
 
-import com.mak.feastit.domain.repository.ICategoryRepository
-import com.mak.feastit.domain.repository.IRecipeDetailRepository
-import com.mak.feastit.domain.repository.IRecipeRepository
-import com.mak.feastit.domain.usecase.FavRecipeUseCase
-import com.mak.feastit.domain.usecase.GetCategoriesUseCase
-import com.mak.feastit.domain.usecase.MealTypeRecipeUseCase
-import com.mak.feastit.domain.usecase.RecipeDetailUseCase
-import com.mak.feastit.domain.usecase.SearchRecipeUseCase
-import com.mak.feastit.domain.usecase.ToggleFavUseCase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
-
 //@Module
 //@InstallIn(ActivityRetainedComponent::class)
 //internal object UseCaseModule {

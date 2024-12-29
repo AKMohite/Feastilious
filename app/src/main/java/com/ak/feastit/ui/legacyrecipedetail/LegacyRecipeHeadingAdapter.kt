@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.recipedetail
+package com.ak.feastit.ui.legacyrecipedetail
 
 import android.text.Spanned
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.RecipeHeadingViewBinding
 
-class RecipeHeadingAdapter(private val heading: String) : RecyclerView.Adapter<RecipeHeadingAdapter.HeadingViewHolder>() {
+class LegacyRecipeHeadingAdapter(private val heading: String) : RecyclerView.Adapter<LegacyRecipeHeadingAdapter.HeadingViewHolder>() {
 
     var subtitle: Spanned? = null
         set(value) {
