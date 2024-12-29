@@ -42,7 +42,7 @@ internal class RecipeDomainMapper:
 
     fun toIngredientsDomain(ingredients: List<com.mak.feastit.database.entity.IngredientEntity>): List<Ingredient> = ingredients.map { ing ->
         Ingredient(
-                id = ing.ingredientUnique,
+                id = ing.ingredientId,
                 image = ing.ingredientImg,
                 localizedName = ing.ingredientName,
                 name = ing.ingredientName

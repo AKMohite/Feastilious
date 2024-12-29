@@ -35,7 +35,7 @@ internal class RecipeEntityMapper:
         return ingredients?.map { ing ->
             com.mak.feastit.database.entity.IngredientEntity(
                 recipeId = recipeId,
-                ingredientUnique = "$recipeId-${
+                ingredientId = "$recipeId-${
                     ing.name?.capitalize(Locale.getDefault())?.replace(" ", "") ?: ""
                 }",
                 ingredientImg = if (!ing.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${ing.image}" else "",

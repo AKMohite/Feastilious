@@ -51,7 +51,8 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
     fun jsonToIngredientsEntity(recipeId: Long, ingredients: List<RecipeIngredientDTO>?): List<IngredientEntity> {
         return ingredients?.map { dto ->
             IngredientEntity(
-                ingredientUnique = "${recipeId}_${dto.id}",
+                id = "${recipeId}_${dto.id}",
+                ingredientId = dto.id,
                 aisle = dto.aisle ?: "No category",
                 recipeId = recipeId,
                 ingredientName = dto.name.orEmpty(),

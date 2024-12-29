@@ -92,7 +92,7 @@ data class RecipeIngredientDTO(
 //        @Json(name = "consistency")
 //        val consistency: String? = null,
     @Json(name = "id")
-    val id: Int? = null,
+    val id: Long,
     @Json(name = "image")
     val image: String? = null,
     @Json(name = "measures")
