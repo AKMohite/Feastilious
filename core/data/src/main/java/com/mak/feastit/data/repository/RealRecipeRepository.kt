@@ -12,6 +12,7 @@ import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.Instant
@@ -29,7 +30,8 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        if (!needRefresh(forceRefresh, id, SyncType.RECIPE_DETAILS)) return@withContext
+        val local = db.recipeDAO().getRecipe(id).firstOrNull()
+        if (local != null && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAILS)) return@withContext
         val query = mapOf(
             "includeNutrition" to true.toString(),
             "addWinePairing" to false.toString(),
@@ -51,7 +53,8 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        if (!needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
+        val local = db.recipeStepDAO().getCountForRecipe(id)
+        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
         val query = mapOf(
             "stepBreakdown" to true.toString()
         )
@@ -66,7 +69,8 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        if (!needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
+        val local = db.similarRecipeDao().getCountForRecipe(id)
+        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
         val query = mapOf( "number" to "10" )
         val dto = api.getSimilarRecipes(recipeId = id, query = query)
         val ids = dto.map { it.id }

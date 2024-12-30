@@ -20,4 +20,7 @@ interface HealthyRecipeDAO: SectionRecipeDAO<HealthyRecipeEntity> {
 
     @Query("DELETE FROM healthy_recipes")
     override suspend fun deleteRecipes()
+
+    @Query("SELECT COUNT(*) FROM healthy_recipes WHERE page = :page LIMIT 1")
+    suspend fun getCount(page: Int): Int
 }

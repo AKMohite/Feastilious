@@ -121,4 +121,15 @@ internal abstract class BaseRecipeRepository(
         }
     }
 
+    suspend fun isLocallyAvailable(page: Int, request: SyncType): Boolean {
+        return when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getCount(page) > 0
+            SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().getCount(page) > 0
+            SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().getCount(page) > 0
+            SyncType.QUICK_RECIPES -> db.quickRecipeDAO().getCount(page) > 0
+            SyncType.POCKET_FRIENDLY_RECIPES -> db.pocketFriendlyRecipeDAO().getCount(page) > 0
+            else -> throw IllegalArgumentException("$request should not be requested")
+        }
+    }
+
 }
