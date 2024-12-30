@@ -6,6 +6,7 @@ import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
+import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -61,6 +62,20 @@ internal class RealRecipeRepository @Inject constructor(
 
     }
 
+    override suspend fun refreshSimilarRecipes(
+        id: Long,
+        forceRefresh: Boolean
+    ) = withContext(dispatcher.io) {
+        if (!needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
+        val query = mapOf( "number" to "10" )
+        val dto = api.getSimilarRecipes(recipeId = id, query = query)
+        val ids = dto.map { it.id }
+        val existingRecipes = db.recipeDAO().getRecipes(ids).associateBy { recipe -> recipe.id }
+        val entities = mapper.jsonToRecipeEntities(dto, existingRecipes)
+        val similarEntities = mapper.jsonToSimilarEntities(dto, id)
+        saveRemoteSimilarRecipes(entities, similarEntities)
+    }
+
     private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>, recipeId: Long) {
         db.handleTransaction {
             db.recipeStepDAO().deleteRecipe(recipeId = recipeId)
@@ -75,13 +90,26 @@ internal class RealRecipeRepository @Inject constructor(
         }
     }
 
-    override suspend fun refreshSimilarRecipes(id: Long, forceRefresh: Boolean) {
-
-    }
-
     override fun getRecipe(id: Long) {
         db.recipeDAO().getRecipe(id)
             .filterNotNull()
+    }
+
+    private suspend fun saveRemoteSimilarRecipes(entities: List<RecipeEntity>, similarEntities: List<SimilarRecipeEntity>) {
+        if (similarEntities.isEmpty()) return
+        db.handleTransaction {
+            val recipeId = similarEntities.first().parentRecipeId
+            db.similarRecipeDao().deleteRecipe(recipeId)
+            db.similarRecipeDao().insert(similarEntities)
+            db.recipeDAO().insert(entities)
+            val currentSynced = LastSyncEntity(
+                id = 0L,
+                entityType = SyncType.SIMILAR_RECIPES.name,
+                entityId = recipeId,
+                lastSyncedAt = Instant.now()
+            )
+            db.lastSyncDao().insert(currentSynced)
+        }
     }
 
     private suspend fun saveRemoteRecipe(

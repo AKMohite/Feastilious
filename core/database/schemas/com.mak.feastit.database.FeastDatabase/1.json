@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "170b80109cd96e8bb17d351552c787dc",
+    "identityHash": "539351d61d13ccb900d5a5c5a0e952a8",
     "entities": [
       {
         "tableName": "popular_recipes",
@@ -157,6 +157,38 @@
         ],
         "primaryKey": {
           "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "similar_recipes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `recipeId` INTEGER NOT NULL, `parentRecipeId` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentRecipeId",
+            "columnName": "parentRecipeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
@@ -425,7 +457,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '170b80109cd96e8bb17d351552c787dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '539351d61d13ccb900d5a5c5a0e952a8')"
     ]
   }
 }

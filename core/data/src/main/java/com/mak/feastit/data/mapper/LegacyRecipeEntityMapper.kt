@@ -15,7 +15,7 @@ internal class LegacyRecipeEntityMapper:
                 id = model.id,
                 recipeName = model.title,
                 recipeSummary = model.summary ?: "",
-                recipeImg = model.image,
+                recipeImg = "model.image",
                 recipeSource = model.sourceUrl ?: "",
                 recipeReadyInMins = model.readyInMinutes ?: 0,
                 servings = model.servings ?: 0,

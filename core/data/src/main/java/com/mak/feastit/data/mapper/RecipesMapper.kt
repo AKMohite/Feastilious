@@ -16,7 +16,7 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
                 id = json.id,
                 recipeName = json.title,
                 recipeSummary = json.summary ?: "",
-                recipeImg = json.image,
+                recipeImg = json.image.orEmpty(),
                 recipeSource = json.sourceUrl ?: "",
                 recipeReadyInMins = json.readyInMinutes ?: 0,
                 servings = json.servings ?: 0,

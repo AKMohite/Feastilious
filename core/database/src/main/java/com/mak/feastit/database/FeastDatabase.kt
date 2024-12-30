@@ -13,6 +13,7 @@ import com.mak.feastit.database.dao.PopularRecipeDAO
 import com.mak.feastit.database.dao.QuickRecipeDAO
 import com.mak.feastit.database.dao.RecipeDAO
 import com.mak.feastit.database.dao.RecipeStepDAO
+import com.mak.feastit.database.dao.SimilarRecipeDAO
 import com.mak.feastit.database.dao.TopRecipesDAO
 import com.mak.feastit.database.entity.HealthyRecipeEntity
 import com.mak.feastit.database.entity.IngredientEntity
@@ -22,6 +23,7 @@ import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
 
 @Database(
@@ -31,6 +33,7 @@ import com.mak.feastit.database.entity.TopRecipeEntity
         HealthyRecipeEntity::class,
         QuickRecipeEntity::class,
         PocketFriendlyRecipeEntity::class,
+        SimilarRecipeEntity::class,
         RecipeEntity::class,
         IngredientEntity::class,
         RecipeStepEntity::class,
@@ -55,6 +58,7 @@ interface FeastDB {
     fun healthyRecipeDAO(): HealthyRecipeDAO
     fun quickRecipeDAO(): QuickRecipeDAO
     fun pocketFriendlyRecipeDAO(): PocketFriendlyRecipeDAO
+    fun similarRecipeDao(): SimilarRecipeDAO
     fun lastSyncDao(): LastSyncDAO
 
     fun ingredientDAO(): IngredientDAO

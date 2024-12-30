@@ -3,8 +3,10 @@ package com.mak.feastit.data.mapper
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
+import com.mak.feastit.remote.dto.RecipeDTO
 import com.mak.feastit.remote.dto.RecipeInformationDTO
 import com.mak.feastit.remote.dto.RecipeIngredientDTO
 import javax.inject.Inject
@@ -108,5 +110,39 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             }
         }
         return entities
+    }
+
+    fun jsonToRecipeEntities(dtos: List<RecipeDTO>, existingRecipes: Map<Long, RecipeEntity>): List<RecipeEntity> {
+        return dtos.map { dto ->
+            val existingRecipe = existingRecipes[dto.id]
+            val cuisines = existingRecipe?.cuisines ?: get(dto.cuisines)
+            val dishTypes = existingRecipe?.dishTypes ?: get(dto.dishTypes)
+            val diets = existingRecipe?.diets ?: get(dto.diets)
+            RecipeEntity(
+                id = dto.id,
+                recipeName = dto.title,
+                recipeSummary = dto.summary ?: existingRecipe?.recipeSummary.orEmpty(),
+                recipeImg = dto.image?.ifEmpty { existingRecipe?.recipeImg.orEmpty() } ?: existingRecipe?.recipeImg.orEmpty(),
+                recipeReadyInMins = dto.readyInMinutes ?: existingRecipe?.recipeReadyInMins ?: 0,
+                servings = dto.servings ?: existingRecipe?.servings ?:  0,
+                pricePerServing = dto.pricePerServing ?: existingRecipe?.pricePerServing ?: 0.0,
+                sourceName = dto.sourceName ?: existingRecipe?.sourceName.orEmpty(),
+                recipeSource = dto.sourceUrl ?: existingRecipe?.recipeSource.orEmpty(),
+                isAdded = false,
+                cuisines = cuisines,
+                dishTypes = dishTypes,
+                diets = diets
+            )
+        }
+    }
+
+    fun jsonToSimilarEntities(dtos: List<RecipeDTO>, id: Long): List<SimilarRecipeEntity> {
+        return dtos.map { dto ->
+            SimilarRecipeEntity(
+                id = "${id}_${dto.id}",
+                recipeId = dto.id,
+                parentRecipeId = id
+            )
+        }
     }
 }
