@@ -2,9 +2,16 @@ package com.ak.feastit.ui.yumdetail
 
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
+import com.mak.feastit.domain.model.Ingredient
+import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,9 +26,13 @@ internal class YumDetailViewModel @Inject constructor(
     dispatcher
 ) {
 
+    private val _state = MutableStateFlow(YumDetailState())
+    val state = _state.asStateFlow()
+
     init {
         val id = savedStateHandle.get<Long>(ARGS_RECIPE_ID) ?: throw IllegalArgumentException("Recipe id is required")
         refreshRecipeInfo(id)
+        observeRecipe(id)
     }
 
     override fun handleError(exception: Throwable) {
@@ -36,7 +47,20 @@ internal class YumDetailViewModel @Inject constructor(
         }
     }
 
+    private fun observeRecipe(id: Long) {
+        repository.observerRecipe(id)
+            .onEach { recipe ->
+
+            }.launchIn(uiScope)
+    }
+
     fun load() {
 
     }
 }
+
+data class YumDetailState(
+    val overview: RecipeDetail? = null,
+    val instructions: List<Instruction> = emptyList(),
+    val ingredients: List<Ingredient> = emptyList()
+)

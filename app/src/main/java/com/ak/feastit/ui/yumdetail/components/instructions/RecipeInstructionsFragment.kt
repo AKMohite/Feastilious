@@ -3,10 +3,14 @@ package com.ak.feastit.ui.yumdetail.components.instructions
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentDetailTabInstructionsBinding
+import com.ak.feastit.ui.yumdetail.YumDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 internal class RecipeInstructionsFragment : BaseFragment() {
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
@@ -14,6 +18,8 @@ internal class RecipeInstructionsFragment : BaseFragment() {
 
     private val binding: FragmentDetailTabInstructionsBinding
         get() = baseBinding as FragmentDetailTabInstructionsBinding
+
+    private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
 

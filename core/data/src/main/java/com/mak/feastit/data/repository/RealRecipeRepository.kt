@@ -7,12 +7,15 @@ import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.Instant
@@ -94,9 +97,12 @@ internal class RealRecipeRepository @Inject constructor(
         }
     }
 
-    override fun getRecipe(id: Long) {
-        db.recipeDAO().getRecipe(id)
+    override fun observerRecipe(id: Long): Flow<RecipeDetail> {
+        return db.recipeDAO().getRecipe(id)
             .filterNotNull()
+            .map { entity ->
+                mapper.entityToModel(entity)
+            }
     }
 
     private suspend fun saveRemoteSimilarRecipes(entities: List<RecipeEntity>, similarEntities: List<SimilarRecipeEntity>) {
