@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentYumDetailBinding
@@ -12,6 +16,9 @@ import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class YumDetailFragment: BaseFragment() {
@@ -45,7 +52,19 @@ internal class YumDetailFragment: BaseFragment() {
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.recipeDetailPager.adapter = detailPagerAdapter
         tabLayoutMediator.attach()
-        viewModel.load()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.state
+                        .filter { state -> state.overview != null }
+                        .collectLatest { state ->
+                            val recipe = state.overview!!
+                            binding.recipeName.text = recipe.recipeName
+                            binding.recipeImg.load(recipe.recipeImg)
+                        }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

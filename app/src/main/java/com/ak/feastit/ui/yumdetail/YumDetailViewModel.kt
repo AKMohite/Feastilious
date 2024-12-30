@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,7 +51,7 @@ internal class YumDetailViewModel @Inject constructor(
     private fun observeRecipe(id: Long) {
         repository.observerRecipe(id)
             .onEach { recipe ->
-
+                _state.update { it.copy(overview = recipe) }
             }.launchIn(uiScope)
     }
 
