@@ -1,0 +1,35 @@
+package com.mak.feastit.data.repository
+
+import com.mak.feastit.database.FeastDB
+import com.mak.feastit.domain.repository.StaleRepository
+import javax.inject.Inject
+
+internal class RealStaleRepository @Inject constructor(
+    private val db: FeastDB
+): StaleRepository {
+
+    override suspend fun removeStaleData() {
+        val neededIds = mutableSetOf<Long>()
+
+        val healthyIds = db.healthyRecipeDAO().getAllIds()
+        neededIds.addAll(healthyIds)
+
+        val popularIds = db.popularRecipeDAO().getAllIds()
+        neededIds.addAll(popularIds)
+
+        val quickIds = db.quickRecipeDAO().getAllIds()
+        neededIds.addAll(quickIds)
+
+        val topIds = db.topRecipesDAO().getAllIds()
+        neededIds.addAll(topIds)
+
+        val similarIds = db.similarRecipeDao().getAllIds()
+        neededIds.addAll(similarIds)
+
+        val pocketIds = db.pocketFriendlyRecipeDAO().getAllIds()
+        neededIds.addAll(pocketIds)
+
+        db.recipeDAO().deleteRecipesNotIn(neededIds)
+    }
+
+}

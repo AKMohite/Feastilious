@@ -18,6 +18,9 @@ interface QuickRecipeDAO: SectionRecipeDAO<QuickRecipeEntity> {
     @Query("DELETE FROM quick_recipes")
     override suspend fun deleteRecipes()
 
+    @Query("SELECT recipe_id FROM quick_recipes")
+    override suspend fun getAllIds(): List<Long>
+
     @Query("SELECT COUNT(*) FROM quick_recipes WHERE page = :page LIMIT 1")
     suspend fun getCount(page: Int): Int
 }

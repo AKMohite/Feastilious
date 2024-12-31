@@ -57,5 +57,8 @@ interface RecipeDAO: BaseDAO<RecipeEntity> {
     @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID IN (:ids)")
     suspend fun getRecipes(ids: List<Long>): List<RecipeEntity>
 
+    @Query("DELETE FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID NOT IN (:neededIds)")
+    suspend fun deleteRecipesNotIn(neededIds: Set<Long>)
+
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

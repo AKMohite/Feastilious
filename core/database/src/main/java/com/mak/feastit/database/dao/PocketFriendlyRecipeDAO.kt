@@ -18,6 +18,9 @@ interface PocketFriendlyRecipeDAO: SectionRecipeDAO<PocketFriendlyRecipeEntity> 
     @Query("DELETE FROM pocket_friendly_recipes")
     override suspend fun deleteRecipes()
 
+    @Query("SELECT recipe_id FROM pocket_friendly_recipes")
+    override suspend fun getAllIds(): List<Long>
+
     @Query("SELECT COUNT(*) FROM pocket_friendly_recipes WHERE page = :page LIMIT 1")
     suspend fun getCount(page: Int): Int
 }

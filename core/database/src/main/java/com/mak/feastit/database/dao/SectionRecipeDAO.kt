@@ -14,4 +14,6 @@ interface SectionRecipeDAO<Entity>: BaseDAO<Entity> {
     suspend fun deletePage(page: Int)
 
     suspend fun deleteRecipes()
+
+    suspend fun getAllIds(): List<Long>
 }

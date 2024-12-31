@@ -5,11 +5,13 @@ import com.mak.feastit.data.repository.LegacyRecipeRepository
 import com.mak.feastit.data.repository.RealRecipeRepository
 import com.mak.feastit.data.repository.RealRecipesRepository
 import com.mak.feastit.data.repository.LegacyRecipeDetailRepository
+import com.mak.feastit.data.repository.RealStaleRepository
 import com.mak.feastit.domain.repository.ILegacyCategoryRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeDetailRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeRepository
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.repository.RecipesRepository
+import com.mak.feastit.domain.repository.StaleRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,6 +27,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun provideRecipeRepository(repo: RealRecipeRepository): RecipeRepository
+
+    @Binds
+    abstract fun provideStaleRepository(repo: RealStaleRepository): StaleRepository
 
 
     @Binds

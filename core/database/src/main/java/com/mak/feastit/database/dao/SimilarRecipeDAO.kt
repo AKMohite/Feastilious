@@ -17,4 +17,7 @@ interface SimilarRecipeDAO: BaseDAO<SimilarRecipeEntity> {
 
     @Query("SELECT r.* FROM similar_recipes s INNER JOIN recipes r ON s.recipe_id = r.id WHERE s.parent_id = :id")
     fun getRecipes(id: Long): Flow<List<RecipeEntity>>
+
+    @Query("SELECT recipe_id FROM similar_recipes")
+    suspend fun getAllIds(): List<Long>
 }
