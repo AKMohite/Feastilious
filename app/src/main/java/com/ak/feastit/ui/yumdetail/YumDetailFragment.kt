@@ -50,6 +50,7 @@ internal class YumDetailFragment: BaseFragment() {
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        binding.recipeDetailPager.isUserInputEnabled = false
         binding.recipeDetailPager.adapter = detailPagerAdapter
         tabLayoutMediator.attach()
         lifecycleScope.launch {
