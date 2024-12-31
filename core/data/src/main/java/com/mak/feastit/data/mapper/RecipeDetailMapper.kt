@@ -4,6 +4,7 @@ import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.RecipeDTO
@@ -142,6 +143,16 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 id = "${id}_${dto.id}",
                 recipeId = dto.id,
                 parentRecipeId = id
+            )
+        }
+    }
+
+    fun entityToRecipe(entities: List<RecipeEntity>): List<Recipe> {
+        return entities.map { entity ->
+            Recipe(
+                id = entity.id,
+                recipeName = entity.recipeName,
+                recipeImgUrl = entity.recipeImg
             )
         }
     }

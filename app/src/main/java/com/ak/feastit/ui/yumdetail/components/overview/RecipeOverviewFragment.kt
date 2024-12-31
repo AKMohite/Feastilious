@@ -43,7 +43,7 @@ internal class RecipeOverviewFragment : BaseFragment() {
                         RecipeOverviewItem.Heading("Summary"),
                         RecipeOverviewItem.Text(overview.recipeSummary),
                         RecipeOverviewItem.Heading("Similar Recipes"),
-                        RecipeOverviewItem.Recipes(listOf(Recipe(1L, "test1", "test1"), Recipe(2L, "test2", "test2"), Recipe(3L, "test3", "test3"), Recipe(4L, "test4", "test1"), Recipe(5L, "test5", "test1"),Recipe(6L, "test6", "test1")))
+                        RecipeOverviewItem.Recipes(state.similarRecipes)
                     )
                     adapter.reload(items)
                 }
