@@ -14,11 +14,13 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentYumDetailBinding
 import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @AndroidEntryPoint
 internal class YumDetailFragment: BaseFragment() {
@@ -49,9 +51,20 @@ internal class YumDetailFragment: BaseFragment() {
         DetailPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
     }
 
+    private var recipeName: String? = null
+
+    private val offsetChangeListener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+        if (abs(verticalOffset) >= binding.appBar.totalScrollRange) {
+            binding.collapsingToolbar.title = recipeName ?: ""
+        } else {
+            binding.collapsingToolbar.title = ""
+        }
+    }
+
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.recipeDetailPager.isUserInputEnabled = false
         binding.recipeDetailPager.adapter = detailPagerAdapter
+        binding.appBar.addOnOffsetChangedListener(offsetChangeListener)
         tabLayoutMediator.attach()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -60,8 +73,8 @@ internal class YumDetailFragment: BaseFragment() {
                         .filter { state -> state.overview != null }
                         .collectLatest { state ->
                             val recipe = state.overview!!
-                            binding.recipeName.text = recipe.recipeName
-//                            binding.detailToolbar.title = recipe.recipeName
+                            recipeName = recipe.recipeName
+                            binding.recipeName.text = recipeName
                             binding.recipeImg.load(recipe.recipeImg)
                         }
                 }
@@ -70,6 +83,7 @@ internal class YumDetailFragment: BaseFragment() {
     }
 
     override fun onDestroyView() {
+        binding.appBar.removeOnOffsetChangedListener(offsetChangeListener)
         tabLayoutMediator.detach()
         super.onDestroyView()
     }
