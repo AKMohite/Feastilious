@@ -7,10 +7,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentDetailTabIngredientsBinding
 import com.ak.feastit.ui.yumdetail.YumDetailViewModel
+import com.ak.feastit.ui.yumdetail.components.ingredients.component.RecipeIngredientsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,12 +28,18 @@ internal class RecipeIngredientsFragment : BaseFragment() {
 
     private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
+    private val adapter: RecipeIngredientsAdapter by lazy {
+        RecipeIngredientsAdapter()
+    }
+
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        binding.recipeIngredients.layoutManager = LinearLayoutManager(requireContext())
+        binding.recipeIngredients.adapter = adapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.state.collectLatest { state ->
-                        state.ingredients
+                        adapter.reload(state.ingredients)
                     }
                 }
             }

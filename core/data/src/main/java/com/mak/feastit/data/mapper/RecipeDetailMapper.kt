@@ -4,6 +4,9 @@ import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
+import com.mak.feastit.domain.model.Ingredient
+import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
@@ -63,7 +66,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 ingredientName = dto.name.orEmpty(),
                 amount = dto.amount ?: 0.0,
                 unit = dto.unit.orEmpty(),
-                ingredientImg = dto.image.orEmpty()
+                ingredientImg = if (!dto.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${dto.image}" else "",
             )
         } ?: return emptyList()
     }
@@ -153,6 +156,26 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 id = entity.id,
                 recipeName = entity.recipeName,
                 recipeImgUrl = entity.recipeImg
+            )
+        }
+    }
+
+    fun entitiesToIngredients(entities: List<IngredientEntity>): List<Ingredient> {
+        return entities.map { entity ->
+            Ingredient(
+                id = entity.id,
+                image = entity.ingredientImg,
+                localizedName = entity.ingredientName,
+                name = entity.ingredientName
+            )
+        }
+    }
+
+    fun entitiesToSteps(entities: List<RecipeStepEntity>): List<Instruction> {
+        return entities.map { entity ->
+            Instruction(
+                stepNo = "Step ${entity.stepNo}",
+                stepDesc = entity.stepDescription
             )
         }
     }

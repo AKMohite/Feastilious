@@ -51,8 +51,13 @@ internal class YumDetailViewModel @Inject constructor(
     }
 
     private fun observeRecipe(id: Long) {
-        combine(repository.observerRecipe(id), repository.observerSimilarRecipes(id)) { recipe, similarRecipes ->
-            _state.update { it.copy(overview = recipe, similarRecipes = similarRecipes) }
+        combine(
+            repository.observerRecipe(id),
+            repository.observerSimilarRecipes(id),
+            repository.observeIngredients(id),
+            repository.observeInstructions(id)
+        ) { recipe, similarRecipes, ingredients, instructions ->
+            _state.update { it.copy(overview = recipe, similarRecipes = similarRecipes, ingredients = ingredients, instructions = instructions) }
         }.launchIn(uiScope)
     }
 

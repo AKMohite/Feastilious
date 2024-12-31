@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ak.feastit.R
-import com.ak.feastit.databinding.RecipeIngredItemBinding
+import com.ak.feastit.databinding.ComponentRecipeIngredientBinding
 import com.mak.feastit.domain.model.Ingredient
 
-class LegacyRecipeIngredientAdapter : ListAdapter<Ingredient, LegacyRecipeIngredientAdapter.IngredientViewHolder>(LegacyIngredientComparator()) {
+class LegacyRecipeIngredientAdapter : ListAdapter<Ingredient, LegacyRecipeIngredientAdapter.LegacyIngredientViewHolder>(LegacyIngredientComparator()) {
 
-    class IngredientViewHolder(private val binding: RecipeIngredItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class LegacyIngredientViewHolder(private val binding: ComponentRecipeIngredientBinding): RecyclerView.ViewHolder(binding.root) {
         fun bindData(ingredient: Ingredient) {
 
             binding.apply {
@@ -26,14 +26,14 @@ class LegacyRecipeIngredientAdapter : ListAdapter<Ingredient, LegacyRecipeIngred
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
-        val binding = RecipeIngredItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return IngredientViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegacyIngredientViewHolder {
+        val binding = ComponentRecipeIngredientBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LegacyIngredientViewHolder(
                 binding
         )
     }
 
-    override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LegacyIngredientViewHolder, position: Int) {
         val ingredient =getItem(position)
         if (ingredient != null)
             holder.bindData(ingredient)

@@ -87,7 +87,9 @@ class ExploreFragment : BaseFragment() {
     private fun handleSectionEvents(action: ExploreItemAction) {
         when(action) {
             is ExploreItemAction.ChipClick -> {}
-            ExploreItemAction.ListUpdate -> {}
+            ExploreItemAction.ListUpdate -> {
+                binding.exploreItems.smoothScrollToPosition(0)
+            }
             is ExploreItemAction.RecipeClick -> {
                 findNavController().navigate(
                     ExploreFragmentDirections.exploreToRecipeDetail(

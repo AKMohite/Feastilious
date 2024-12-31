@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recipe_ingredients"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:listitem="@layout/component_recipe_ingredient"
+    android:padding="@dimen/space_tiny"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.yumdetail.components.ingredients.RecipeIngredientsFragment">
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    tools:context=".ui.yumdetail.components.ingredients.RecipeIngredientsFragment"/>

@@ -7,6 +7,8 @@ import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.domain.model.Ingredient
+import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.model.SyncType
@@ -114,6 +116,22 @@ internal class RealRecipeRepository @Inject constructor(
             .map { entity ->
                 mapper.entityToRecipe(entity)
             }.flowOn(dispatcher.computation)
+    }
+
+    override fun observeIngredients(id: Long): Flow<List<Ingredient>> {
+        return db.ingredientDAO().getIngredientsFor(id)
+            .flowOn(dispatcher.io)
+            .map { entities ->
+                mapper.entitiesToIngredients(entities)
+            }.flowOn(dispatcher.io)
+    }
+
+    override fun observeInstructions(id: Long): Flow<List<Instruction>> {
+        return db.recipeStepDAO().getStepsFor(id)
+            .flowOn(dispatcher.io)
+            .map { entities ->
+                mapper.entitiesToSteps(entities)
+            }
     }
 
     private suspend fun saveRemoteSimilarRecipes(entities: List<RecipeEntity>, similarEntities: List<SimilarRecipeEntity>) {

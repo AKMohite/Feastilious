@@ -87,6 +87,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/space_tiny"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/recipe_ingred_item"/>
+        tools:listitem="@layout/component_recipe_ingredient"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
