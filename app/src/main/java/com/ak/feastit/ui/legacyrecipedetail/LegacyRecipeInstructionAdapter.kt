@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ak.feastit.databinding.RecipeStepItemBinding
+import com.ak.feastit.databinding.ComponentRecipeStepBinding
 import com.mak.feastit.domain.model.Instruction
 
-class LegacyRecipeInstructionAdapter : ListAdapter<Instruction, LegacyRecipeInstructionAdapter.InstructionViewHolder>(LegacyInstructionComparator()) {
+class LegacyRecipeInstructionAdapter : ListAdapter<Instruction, LegacyRecipeInstructionAdapter.LegacyInstructionViewHolder>(LegacyInstructionComparator()) {
 
-    class InstructionViewHolder(private val binding: RecipeStepItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class LegacyInstructionViewHolder(private val binding: ComponentRecipeStepBinding): RecyclerView.ViewHolder(binding.root) {
         fun bindData(instruction: Instruction) {
             binding.tvStepNo.text = instruction.stepNo
             binding.tvStepDesc.text = instruction.stepDesc
@@ -17,14 +17,14 @@ class LegacyRecipeInstructionAdapter : ListAdapter<Instruction, LegacyRecipeInst
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InstructionViewHolder {
-        val binding = RecipeStepItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return InstructionViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LegacyInstructionViewHolder {
+        val binding = ComponentRecipeStepBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LegacyInstructionViewHolder(
                 binding
         )
     }
 
-    override fun onBindViewHolder(holder: InstructionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LegacyInstructionViewHolder, position: Int) {
         val ingredient = getItem(position)
         if (ingredient != null)
             holder.bindData(ingredient)

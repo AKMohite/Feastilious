@@ -5,6 +5,6 @@
         android:color="?attr/colorSecondaryContainer"/>
 
     <corners
-        android:topLeftRadius="@dimen/space_normal"
-        android:topRightRadius="@dimen/space_normal"/>
+        android:topLeftRadius="@dimen/space_tiny"
+        android:topRightRadius="@dimen/space_tiny"/>
 </shape>

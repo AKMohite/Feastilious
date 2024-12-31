@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:padding="@dimen/space_small"
+        android:paddingHorizontal="@dimen/space_small"
+        android:paddingBottom="@dimen/space_tiny"
         android:textColor="?attr/colorOnSecondaryContainer"
         android:background="@drawable/recipe_step_desc_bg"
         tools:text="Simple Title Text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore" />
