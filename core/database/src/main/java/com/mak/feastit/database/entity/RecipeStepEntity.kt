@@ -2,6 +2,7 @@ package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.mak.feastit.database.util.Constants.DB_INSTRUCTION_TABLE
@@ -12,8 +13,16 @@ import com.mak.feastit.database.util.Constants.DB_STEP_NAME
 import com.mak.feastit.database.util.Constants.DB_STEP_NUMBER
 
 @Entity(
-        tableName = DB_INSTRUCTION_TABLE,
-        indices = [Index(value = [DB_STEP_ID], unique = true)]
+    tableName = DB_INSTRUCTION_TABLE,
+    indices = [Index(value = [DB_STEP_ID], unique = true)],
+    foreignKeys = [
+        ForeignKey(
+            entity = RecipeEntity::class,
+            parentColumns = ["id"],
+            childColumns = [DB_RECIPE_ID],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class RecipeStepEntity(
     @PrimaryKey(autoGenerate = false)

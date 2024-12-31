@@ -2,9 +2,20 @@ package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "popular_recipes")
+@Entity(
+    tableName = "popular_recipes",
+    foreignKeys = [
+        ForeignKey(
+            entity = RecipeEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["recipe_id"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class PopularRecipeEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

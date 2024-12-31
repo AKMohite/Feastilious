@@ -2,6 +2,7 @@ package com.mak.feastit.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.mak.feastit.database.util.Constants.DB_INGREDIENT_AMOUNT
 import com.mak.feastit.database.util.Constants.DB_INGREDIENT_ID
@@ -13,7 +14,15 @@ import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
 import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Entity(
-        tableName = DB_INGREDIENT_TABLE
+    tableName = DB_INGREDIENT_TABLE,
+    foreignKeys = [
+        ForeignKey(
+            entity = RecipeEntity::class,
+            parentColumns = ["id"],
+            childColumns = [DB_RECIPE_ID],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
 )
 data class IngredientEntity(
     @PrimaryKey(autoGenerate = false)
