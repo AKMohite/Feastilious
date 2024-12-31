@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.recyclerview.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/overview_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/space_tiny"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.yumdetail.components.overview.RecipeOverviewFragment">
-
-    <TextView
-        android:id="@+id/recipe_summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        tools:text="@string/long_lorem_ipsum"/>
-
-</androidx.core.widget.NestedScrollView>
+    tools:listitem="@layout/component_text_item"
+    tools:context=".ui.yumdetail.components.overview.RecipeOverviewFragment"/>
