@@ -99,6 +99,7 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     implementation(libs.recyclerview)
+    implementation(libs.work.runtime.ktx)
 
     ksp(libs.hilt.android.compiler)
 

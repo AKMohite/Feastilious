@@ -2,10 +2,16 @@ package com.ak.feastit
 
 import android.app.Application
 import android.os.StrictMode
+import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class FeastApplication: Application() {
+class FeastApplication: Application(), Configuration.Provider {
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .build()
 
     override fun onCreate() {
         /*StrictMode.setThreadPolicy(
