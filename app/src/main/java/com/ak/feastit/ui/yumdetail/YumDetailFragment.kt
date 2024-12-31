@@ -60,6 +60,7 @@ internal class YumDetailFragment: BaseFragment() {
                         .collectLatest { state ->
                             val recipe = state.overview!!
                             binding.recipeName.text = recipe.recipeName
+//                            binding.detailToolbar.title = recipe.recipeName
                             binding.recipeImg.load(recipe.recipeImg)
                         }
                 }
