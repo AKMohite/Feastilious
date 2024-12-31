@@ -11,6 +11,7 @@ internal class ExploreRecipeAdapter(
     private val items: List<Recipe>,
     private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
 ) : RecyclerView.Adapter<ExploreRecipeViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreRecipeViewHolder {
         val binding = ExploreRecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ExploreRecipeViewHolder(binding, sectionEvents)

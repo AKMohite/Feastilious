@@ -14,6 +14,7 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentDetailTabOverviewBinding
 import com.ak.feastit.ui.yumdetail.YumDetailViewModel
 import com.ak.feastit.ui.yumdetail.components.overview.component.RecipeOverviewItem
+import com.mak.feastit.domain.model.Recipe
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,7 @@ internal class RecipeOverviewFragment : BaseFragment() {
                         RecipeOverviewItem.Heading("Summary"),
                         RecipeOverviewItem.Text(overview.recipeSummary),
                         RecipeOverviewItem.Heading("Similar Recipes"),
-                        RecipeOverviewItem.Text("all recipes in list")
+                        RecipeOverviewItem.Recipes(listOf(Recipe(1L, "test1", "test1"), Recipe(2L, "test2", "test2"), Recipe(3L, "test3", "test3"), Recipe(4L, "test4", "test1"), Recipe(5L, "test5", "test1"),Recipe(6L, "test6", "test1")))
                     )
                     adapter.reload(items)
                 }
