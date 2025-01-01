@@ -138,7 +138,7 @@ internal class RealRecipeRepository @Inject constructor(
         if (similarEntities.isEmpty()) return
         db.handleTransaction {
             val recipeId = similarEntities.first().parentRecipeId
-            db.recipeDAO().insert(entities)
+            db.recipeDAO().upsert(entities)
             db.similarRecipeDao().deleteRecipe(recipeId)
             db.similarRecipeDao().insert(similarEntities)
             val currentSynced = LastSyncEntity(
@@ -156,7 +156,7 @@ internal class RealRecipeRepository @Inject constructor(
         ingredientEntities: List<IngredientEntity>
     ) {
         db.handleTransaction {
-            db.recipeDAO().update(entity)
+            db.recipeDAO().upsert(entity)
             db.ingredientDAO().deleteRecipe(entity.id)
 //            TODO delete nutrition
             db.ingredientDAO().insert(ingredientEntities)

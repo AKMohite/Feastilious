@@ -117,7 +117,7 @@ internal abstract class BaseRecipeRepository(
 
     private suspend fun chunkUpdate(entities: List<RecipeEntity>) {
         for (chunk in entities.chunked(LIMIT_ITEMS)) {
-            db.recipeDAO().insert(chunk)
+            db.recipeDAO().upsert(chunk)
         }
     }
 
