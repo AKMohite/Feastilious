@@ -38,8 +38,8 @@ internal abstract class BaseRecipeRepository(
             } else {
                 deletePage(page, request)
             }
-            insertInLocalDB(dtos, page, request)
             chunkUpdate(recipeEntities)
+            insertInLocalDB(dtos, page, request)
         }
     }
 
