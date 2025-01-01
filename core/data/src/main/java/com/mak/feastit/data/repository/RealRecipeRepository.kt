@@ -156,7 +156,7 @@ internal class RealRecipeRepository @Inject constructor(
         ingredientEntities: List<IngredientEntity>
     ) {
         db.handleTransaction {
-            db.recipeDAO().insert(entity)
+            db.recipeDAO().update(entity)
             db.ingredientDAO().deleteRecipe(entity.id)
 //            TODO delete nutrition
             db.ingredientDAO().insert(ingredientEntities)
