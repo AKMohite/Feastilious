@@ -65,7 +65,7 @@ internal class LegacyRecipeRepository @Inject constructor(
             val favRecipes = db.recipeDAO().getFavRecipeIds()
             recipeDetails.forEach { recipe ->
                 if (favRecipes.isNotEmpty() && recipe.recipe.id in favRecipes)
-                    dtoRecipes.add(recipe.recipe.copy(isAdded = true))
+                    dtoRecipes.add(recipe.recipe.copy(isAddedToCollection = true))
                 else
                     dtoRecipes.add(recipe.recipe)
                 ingredients.addAll(recipe.ingredients)

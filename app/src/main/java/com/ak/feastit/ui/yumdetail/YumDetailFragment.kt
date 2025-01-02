@@ -16,6 +16,7 @@ import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mak.feastit.domain.model.RecipeDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
@@ -62,10 +63,11 @@ internal class YumDetailFragment: BaseFragment() {
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        binding.recipeDetailPager.isUserInputEnabled = false
-        binding.recipeDetailPager.adapter = detailPagerAdapter
-        binding.appBar.addOnOffsetChangedListener(offsetChangeListener)
-        tabLayoutMediator.attach()
+        setupView()
+        observers()
+    }
+
+    private fun observers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -73,13 +75,28 @@ internal class YumDetailFragment: BaseFragment() {
                         .filter { state -> state.overview != null }
                         .collectLatest { state ->
                             val recipe = state.overview!!
-                            recipeName = recipe.recipeName
-                            binding.recipeName.text = recipeName
-                            binding.recipeImg.load(recipe.recipeImg)
+                            renderView(recipe)
                         }
                 }
             }
         }
+    }
+
+    private fun setupView() {
+        binding.recipeDetailPager.isUserInputEnabled = false
+        binding.recipeDetailPager.adapter = detailPagerAdapter
+        binding.appBar.addOnOffsetChangedListener(offsetChangeListener)
+        tabLayoutMediator.attach()
+    }
+
+    private fun renderView(recipe: RecipeDetail) {
+        recipeName = recipe.recipeName
+        binding.recipeName.text = recipeName
+        binding.recipeImg.load(recipe.recipeImg)
+        val favIcon = if (recipe.isAddedToCollection)
+            R.drawable.ic_favorite_filled
+        else R.drawable.ic_favorite_border
+        binding.addToFavBtn.setIconResource(favIcon)
     }
 
     override fun onDestroyView() {

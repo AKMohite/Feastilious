@@ -40,12 +40,12 @@
                     android:layout_marginStart="@dimen/space_micro"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recipe_img"
-                    app:layout_constraintEnd_toStartOf="@id/add_to_fav_bnt"
+                    app:layout_constraintEnd_toStartOf="@id/add_to_fav_btn"
                     android:textAppearance="?attr/textAppearanceHeadlineSmall"
                     android:textSize="20sp"
                     tools:text="Recipe title name"/>
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/add_to_fav_bnt"
+                    android:id="@+id/add_to_fav_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="@id/recipe_name"

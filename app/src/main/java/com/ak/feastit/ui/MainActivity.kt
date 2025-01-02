@@ -25,7 +25,27 @@ class MainActivity : AppCompatActivity() {
         get() = _binding as ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        edgeToEdge()
         super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+//        setupView()
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController= navHostFragment.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.splashFragment, R.id.onBoardingFragment, R.id.recipeDetailFragment -> binding.mainBottomNavigation.hide()
+                else -> binding.mainBottomNavigation.show()
+            }
+        }
+
+        binding.mainBottomNavigation.setupWithNavController(navController)
+
+    }
+
+    private fun edgeToEdge() {
         // Default behavior, but we override the dark mode detection
         // because we enable a user to change a theme in the settings
         // and it has to be taken into the account here
@@ -45,22 +65,6 @@ class MainActivity : AppCompatActivity() {
 //                detectDarkMode = { true },
             ),
         )
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-//        setupView()
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController= navHostFragment.navController
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.splashFragment, R.id.onBoardingFragment, R.id.recipeDetailFragment -> binding.mainBottomNavigation.hide()
-                else -> binding.mainBottomNavigation.show()
-            }
-        }
-
-        binding.mainBottomNavigation.setupWithNavController(navController)
-
     }
 
     private fun setupView() {

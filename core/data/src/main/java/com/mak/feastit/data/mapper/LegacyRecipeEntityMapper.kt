@@ -21,7 +21,7 @@ internal class LegacyRecipeEntityMapper:
                 servings = model.servings ?: 0,
                 pricePerServing = model.pricePerServing ?: 0.0,
                 sourceName = model.sourceName ?: "",
-                isAdded = false,
+                isAddedToCollection = false,
                 cuisines = model.cuisines?.joinToString(",") ?: "",
                 dishTypes = model.dishTypes?.joinToString(",") ?: "",
                 diets = model.diets?.joinToString(",") ?: ""

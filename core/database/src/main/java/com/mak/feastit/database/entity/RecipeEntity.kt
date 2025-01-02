@@ -42,7 +42,7 @@ data class RecipeEntity(
     @ColumnInfo(name = DB_RECIPE_SOURCE_NAME)
     val sourceName: String,
     @ColumnInfo(name = DB_MY_RECIPE_BOOK)
-    val isAdded: Boolean = false,
+    val isAddedToCollection: Boolean = false,
     @ColumnInfo(name = DB_RECIPE_CUISINES)
     val cuisines: String,
     @ColumnInfo(name = DB_RECIPE_DISH_TYPES)

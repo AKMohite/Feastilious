@@ -22,7 +22,7 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
                 servings = json.servings ?: 0,
                 pricePerServing = json.pricePerServing ?: 0.0,
                 sourceName = json.sourceName ?: "",
-                isAdded = false,
+                isAddedToCollection = false,
                 cuisines = json.cuisines?.joinToString(",") ?: "",
                 dishTypes = json.dishTypes?.joinToString(",") ?: "",
                 diets = json.diets?.joinToString(",") ?: ""

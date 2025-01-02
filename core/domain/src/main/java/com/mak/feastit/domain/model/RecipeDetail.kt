@@ -11,7 +11,7 @@ data class RecipeDetail(
     val servings: Int,
     val pricePerServing: Double,
     val sourceName: String,
-    val isAdded: Boolean = false,
+    val isAddedToCollection: Boolean = false,
     val instructions: List<Instruction> = emptyList(),
     val ingredients: List<Ingredient> = emptyList()
 )

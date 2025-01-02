@@ -57,7 +57,14 @@ internal class YumDetailViewModel @Inject constructor(
             repository.observeIngredients(id),
             repository.observeInstructions(id)
         ) { recipe, similarRecipes, ingredients, instructions ->
-            _state.update { it.copy(overview = recipe, similarRecipes = similarRecipes, ingredients = ingredients, instructions = instructions) }
+            _state.update { currentState ->
+                currentState.copy(
+                    overview = recipe,
+                    similarRecipes = similarRecipes,
+                    ingredients = ingredients,
+                    instructions = instructions
+                )
+            }
         }.launchIn(uiScope)
     }
 

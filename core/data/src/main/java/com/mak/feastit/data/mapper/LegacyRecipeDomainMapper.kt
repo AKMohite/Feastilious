@@ -26,7 +26,7 @@ internal class LegacyRecipeDomainMapper:
                 servings = recipe.servings,
                 pricePerServing = recipe.pricePerServing,
                 sourceName = recipe.sourceName,
-                isAdded = recipe.isAdded,
+                isAddedToCollection = recipe.isAddedToCollection,
                 ingredients = toIngredientsDomain(detail.ingredients),
                 instructions = toInstructionsDomain(detail.instructions)
         )

@@ -23,7 +23,7 @@ class LegacyRecipeDetailViewModel @Inject constructor(
                 .onEach { detailState ->
                     detailState.data?.let { detail ->
                         recipeDetail.value = detail
-                        favRecipe.value = detail.isAdded
+                        favRecipe.value = detail.isAddedToCollection
                     }
                 }
                 .launchIn(viewModelScope)

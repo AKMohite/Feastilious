@@ -28,7 +28,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             pricePerServing = json.pricePerServing ?: 0.0,
             sourceName = json.sourceName.orEmpty(),
             recipeSource = json.sourceUrl.orEmpty(),
-            isAdded = false,
+            isAddedToCollection = false,
             cuisines = get(json.cuisines),
             dishTypes = get(json.dishTypes),
             diets = get(json.diets)
@@ -46,7 +46,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             servings = entity.servings,
             pricePerServing = entity.pricePerServing,
             sourceName = entity.sourceName,
-            isAdded = entity.isAdded,
+            isAddedToCollection = entity.isAddedToCollection,
 //            ingredients = toIngredientsDomain(detail.ingredients),
 //            instructions = toInstructionsDomain(detail.instructions)
         )
@@ -132,7 +132,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 pricePerServing = dto.pricePerServing ?: existingRecipe?.pricePerServing ?: 0.0,
                 sourceName = dto.sourceName ?: existingRecipe?.sourceName.orEmpty(),
                 recipeSource = dto.sourceUrl ?: existingRecipe?.recipeSource.orEmpty(),
-                isAdded = false,
+                isAddedToCollection = false,
                 cuisines = cuisines,
                 dishTypes = dishTypes,
                 diets = diets
