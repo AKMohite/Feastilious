@@ -17,7 +17,7 @@ internal class YumWorkerFactory @Inject constructor(
         appContext: Context,
         workerClassName: String,
         workerParameters: WorkerParameters
-    ): ListenableWorker {
+    ): ListenableWorker? {
         val workerKlass = Class.forName(workerClassName).asSubclass(ListenableWorker::class.java)
 //        val constructor = workerKlass.getDeclaredConstructor(Context::class.java, WorkerParameters::class.java)
 //        return when(val instance = constructor.newInstance(appContext, workerParameters)) {
@@ -36,7 +36,8 @@ internal class YumWorkerFactory @Inject constructor(
                 repository = repository,
                 dispatcher = dispatcher
             )
-            else -> throw IllegalArgumentException("Does not have instance for worker: $workerKlass")
+//            else -> throw IllegalArgumentException("Does not have instance for worker: $workerKlass")
+            else -> null
         }
     }
 
