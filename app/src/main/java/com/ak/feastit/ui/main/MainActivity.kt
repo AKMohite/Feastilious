@@ -1,10 +1,11 @@
-package com.ak.feastit.ui
+package com.ak.feastit.ui.main
 
 import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding
         get() = _binding as ActivityMainBinding
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         edgeToEdge()
         super.onCreate(savedInstanceState)
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 else -> binding.mainBottomNavigation.show()
             }
         }
+        viewModel.reload()
 
         binding.mainBottomNavigation.setupWithNavController(navController)
 

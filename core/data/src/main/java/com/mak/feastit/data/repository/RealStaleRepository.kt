@@ -1,5 +1,6 @@
 package com.mak.feastit.data.repository
 
+import android.util.Log
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.domain.repository.StaleRepository
 import javax.inject.Inject
@@ -9,6 +10,7 @@ internal class RealStaleRepository @Inject constructor(
 ): StaleRepository {
 
     override suspend fun removeStaleData() {
+        Log.e("RealStaleRepo", "removeStaleData:")
         val neededIds = mutableSetOf<Long>()
 
         val healthyIds = db.healthyRecipeDAO().getAllIds()
