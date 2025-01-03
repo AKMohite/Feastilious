@@ -17,4 +17,7 @@ object WorkerModule {
         app: Application
     ): WorkerScheduler = BackgroundScheduler(app)
 
+//    @Binds
+//    abstract fun bindWorkerFactory(workerFactory: YumWorkerFactory): WorkerFactory
+
 }

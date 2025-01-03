@@ -1,20 +1,21 @@
 package com.ak.feastit
 
 import android.app.Application
-import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.ak.feastit.worker.YumWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class FeastApplication: Application(), Configuration.Provider {
+internal class FeastApplication: Application(), Configuration.Provider {
 
-//    @Inject
-//    lateinit var workerFactory: HiltWorkerFactory
+//    TODO lazy initialization of workers
+    @Inject
+    lateinit var workerFactory: YumWorkerFactory
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
-//            .setWorkerFactory(workerFactory)
+            .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(android.util.Log.DEBUG)
             .build()
 

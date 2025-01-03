@@ -25,7 +25,7 @@ internal class BackgroundScheduler @Inject constructor(
             .setRequiresBatteryNotLow(true)
             .setRequiresDeviceIdle(true)
             .build()
-        val work = PeriodicWorkRequestBuilder<StaleDataWorker>(21, TimeUnit.DAYS)
+        val work = PeriodicWorkRequestBuilder<StaleDataWorker>(20, TimeUnit.DAYS)
             .setConstraints(constraints)
             .addTag(STALE_DATA_WORK)
             .build()

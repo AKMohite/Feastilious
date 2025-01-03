@@ -16,6 +16,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -28,9 +29,6 @@ internal abstract class RepositoryModule {
     @Binds
     abstract fun provideRecipeRepository(repo: RealRecipeRepository): RecipeRepository
 
-    @Binds
-    abstract fun provideStaleRepository(repo: RealStaleRepository): StaleRepository
-
 
     @Binds
     abstract fun provideCategoryRepository(repo: LegacyCategoryRepository): ILegacyCategoryRepository
@@ -40,4 +38,13 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun provideRecipeDetailRepository(repo: LegacyRecipeDetailRepository): ILegacyRecipeDetailRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class SingletonRepositoryModule {
+
+    @Binds
+    abstract fun provideStaleRepository(repo: RealStaleRepository): StaleRepository
+
 }
