@@ -1,8 +1,12 @@
 package com.ak.feastit
 
 import android.app.Application
+import android.os.Build
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
+import android.os.StrictMode.VmPolicy
 import androidx.work.Configuration
-import com.ak.feastit.worker.YumWorkerFactory
+import androidx.work.WorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -11,7 +15,7 @@ internal class FeastApplication: Application(), Configuration.Provider {
 
 //    TODO lazy initialization of workers
     @Inject
-    lateinit var workerFactory: YumWorkerFactory
+    lateinit var workerFactory: WorkerFactory
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
@@ -20,24 +24,40 @@ internal class FeastApplication: Application(), Configuration.Provider {
             .build()
 
     override fun onCreate() {
-        /*StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                // or .detectAll() for all detectable problems
+        super.onCreate()
+        setupStrictMode()
+    }
+
+    private fun setupStrictMode() {
+        StrictMode.setThreadPolicy(
+            ThreadPolicy.Builder()
+                .detectAll()
                 .penaltyFlashScreen()
                 .penaltyLog()
-                .build()
+                .build(),
         )
         StrictMode.setVmPolicy(
-            StrictMode.VmPolicy.Builder()
+            VmPolicy.Builder()
                 .detectLeakedSqlLiteObjects()
+                .detectActivityLeaks()
                 .detectLeakedClosableObjects()
+                .detectLeakedRegistrationObjects()
+                .detectFileUriExposure()
+                .detectCleartextNetwork()
+                .apply {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        detectContentUriWithoutPermission()
+                    }
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        detectCredentialProtectedWhileLocked()
+                    }
+                    if (Build.VERSION.SDK_INT >= 31) {
+                        detectIncorrectContextUse()
+                        detectUnsafeIntentLaunch()
+                    }
+                }
                 .penaltyLog()
-                .penaltyDeath()
-                .build()
-        )*/
-        super.onCreate()
+                .build(),
+        )
     }
 }
