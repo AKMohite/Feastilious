@@ -3,6 +3,7 @@ package com.ak.feastit.ui.yumdetail
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -100,7 +101,7 @@ internal class YumDetailFragment: BaseFragment() {
         val favIcon = if (recipe.isAddedToCollection)
             R.drawable.ic_favorite_filled
         else R.drawable.ic_favorite_border
-        binding.addToFavBtn.setIconResource(favIcon)
+        binding.addToFavBtn.icon = ContextCompat.getDrawable(requireContext(), favIcon)
     }
 
     override fun onDestroyView() {
