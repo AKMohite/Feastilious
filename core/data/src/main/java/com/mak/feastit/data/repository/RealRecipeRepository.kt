@@ -87,9 +87,21 @@ internal class RealRecipeRepository @Inject constructor(
         saveRemoteSimilarRecipes(entities, similarEntities)
     }
 
-    override suspend fun toggleFavorite(id: Long) = withContext(dispatcher.io) {
-        val local = db.recipeDAO().getRecipe(id).firstOrNull() ?: return@withContext
+    override suspend fun toggleFavorite(recipeId: Long) = withContext(dispatcher.io) {
+        val local = db.recipeDAO().getRecipe(recipeId).firstOrNull() ?: return@withContext
         db.recipeDAO().update(local.copy(isAddedToCollection = !local.isAddedToCollection))
+    }
+
+    override suspend fun toggleShoppingIngredients(recipeId: Long) = withContext(dispatcher.io) {
+        val shopping = db.shoppingDAO().getCart(recipeId)
+        if (shopping.isEmpty()) {
+//            add to shopping
+            val ingredients = db.ingredientDAO().getIngredientsFor(recipeId).firstOrNull() ?: return@withContext
+            val shoppingCart = mapper.ingredientToShoppingCart(ingredients)
+            db.shoppingDAO().insert(shoppingCart)
+        } else {
+            db.shoppingDAO().deleteCart(recipeId)
+        }
     }
 
     override fun observerRecipe(id: Long): Flow<RecipeDetail> {

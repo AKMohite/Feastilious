@@ -3,6 +3,7 @@ package com.mak.feastit.data.mapper
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
 import com.mak.feastit.domain.model.Ingredient
@@ -176,6 +177,16 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             Instruction(
                 stepNo = "Step ${entity.stepNo}",
                 stepDesc = entity.stepDescription
+            )
+        }
+    }
+
+    fun ingredientToShoppingCart(ingredients: List<IngredientEntity>): List<ShoppingEntity> {
+        return ingredients.map { entity ->
+            ShoppingEntity(
+                id = entity.id,
+                recipeId = entity.recipeId,
+                isBought = false
             )
         }
     }

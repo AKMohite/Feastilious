@@ -13,6 +13,7 @@ import com.mak.feastit.database.dao.PopularRecipeDAO
 import com.mak.feastit.database.dao.QuickRecipeDAO
 import com.mak.feastit.database.dao.RecipeDAO
 import com.mak.feastit.database.dao.RecipeStepDAO
+import com.mak.feastit.database.dao.ShoppingDAO
 import com.mak.feastit.database.dao.SimilarRecipeDAO
 import com.mak.feastit.database.dao.TopRecipesDAO
 import com.mak.feastit.database.entity.HealthyRecipeEntity
@@ -23,6 +24,7 @@ import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
 
@@ -37,7 +39,8 @@ import com.mak.feastit.database.entity.TopRecipeEntity
         RecipeEntity::class,
         IngredientEntity::class,
         RecipeStepEntity::class,
-        LastSyncEntity::class
+        LastSyncEntity::class,
+        ShoppingEntity::class
     ],
     version = 1
 )
@@ -63,6 +66,8 @@ interface FeastDB {
 
     fun ingredientDAO(): IngredientDAO
     fun recipeStepDAO(): RecipeStepDAO
+
+    fun shoppingDAO(): ShoppingDAO
 
     suspend fun handleTransaction(block: suspend () -> Unit)
 }
