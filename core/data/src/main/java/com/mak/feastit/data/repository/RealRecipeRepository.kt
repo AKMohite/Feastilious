@@ -87,18 +87,9 @@ internal class RealRecipeRepository @Inject constructor(
         saveRemoteSimilarRecipes(entities, similarEntities)
     }
 
-    private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>, recipeId: Long) {
-        db.handleTransaction {
-            db.recipeStepDAO().deleteRecipe(recipeId = recipeId)
-            db.recipeStepDAO().insert(stepEntities)
-            val currentSynced = LastSyncEntity(
-                id = 0L,
-                entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
-                entityId = stepEntities.first().recipeId,
-                lastSyncedAt = Instant.now()
-            )
-            db.lastSyncDao().insert(currentSynced)
-        }
+    override suspend fun toggleFavorite(id: Long) = withContext(dispatcher.io) {
+        val local = db.recipeDAO().getRecipe(id).firstOrNull() ?: return@withContext
+        db.recipeDAO().update(local.copy(isAddedToCollection = !local.isAddedToCollection))
     }
 
     override fun observerRecipe(id: Long): Flow<RecipeDetail> {
@@ -145,6 +136,20 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.SIMILAR_RECIPES.name,
                 entityId = recipeId,
+                lastSyncedAt = Instant.now()
+            )
+            db.lastSyncDao().insert(currentSynced)
+        }
+    }
+
+    private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>, recipeId: Long) {
+        db.handleTransaction {
+            db.recipeStepDAO().deleteRecipe(recipeId = recipeId)
+            db.recipeStepDAO().insert(stepEntities)
+            val currentSynced = LastSyncEntity(
+                id = 0L,
+                entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
+                entityId = stepEntities.first().recipeId,
                 lastSyncedAt = Instant.now()
             )
             db.lastSyncDao().insert(currentSynced)

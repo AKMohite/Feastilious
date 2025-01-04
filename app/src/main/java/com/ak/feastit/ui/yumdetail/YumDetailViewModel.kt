@@ -68,9 +68,13 @@ internal class YumDetailViewModel @Inject constructor(
         }.launchIn(uiScope)
     }
 
-    fun load() {
-
+    fun toggleFavorite() {
+        uiScope.launch {
+            val id = state.value.overview?.recipeId ?: return@launch
+            repository.toggleFavorite(id)
+        }
     }
+
 }
 
 data class YumDetailState(

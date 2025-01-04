@@ -14,6 +14,7 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentYumDetailBinding
 import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
+import com.ak.feastit.utils.onClick
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mak.feastit.domain.model.RecipeDetail
@@ -87,6 +88,9 @@ internal class YumDetailFragment: BaseFragment() {
         binding.recipeDetailPager.adapter = detailPagerAdapter
         binding.appBar.addOnOffsetChangedListener(offsetChangeListener)
         tabLayoutMediator.attach()
+        binding.addToFavBtn.onClick {
+            viewModel.toggleFavorite()
+        }
     }
 
     private fun renderView(recipe: RecipeDetail) {
