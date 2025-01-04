@@ -1,8 +1,8 @@
 package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.IngredientEntity
-import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
@@ -16,6 +16,8 @@ import com.mak.feastit.remote.dto.RecipeDTO
 import com.mak.feastit.remote.dto.RecipeInformationDTO
 import com.mak.feastit.remote.dto.RecipeIngredientDTO
 import javax.inject.Inject
+import kotlin.math.pow
+import kotlin.math.round
 
 internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
 
@@ -169,7 +171,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 image = entity.ingredientImg,
                 localizedName = entity.ingredientName,
                 name = entity.ingredientName,
-                quantity = "${entity.quantity} ${entity.unit}"
+                quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}"
             )
         }
     }
@@ -205,4 +207,20 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             )
         }
     }
+}
+
+internal fun getDisplayableDouble(value: Double): String {
+    val intValue = value.toInt()
+
+    val difference = value - intValue
+    return if (difference != 0.0) {
+        "${value.padding(2)}"
+    } else {
+        "$intValue"
+    }
+}
+
+internal fun Double.padding(decimalPrecision: Int): Double {
+    val scale = 10.0.pow(decimalPrecision)
+    return round(this * scale) / scale
 }
