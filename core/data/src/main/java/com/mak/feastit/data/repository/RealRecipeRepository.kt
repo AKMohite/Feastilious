@@ -164,7 +164,7 @@ internal class RealRecipeRepository @Inject constructor(
             db.recipeDAO().upsert(entity)
             db.ingredientDAO().deleteRecipe(entity.id)
 //            TODO delete nutrition
-            db.ingredientDAO().insert(ingredientEntities)
+            db.ingredientDAO().upsert(ingredientEntities)
 //            TODO save nutrition
             val currentSynced = LastSyncEntity(
                 id = 0,
