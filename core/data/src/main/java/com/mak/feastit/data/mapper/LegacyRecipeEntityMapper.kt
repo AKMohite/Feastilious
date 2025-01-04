@@ -39,7 +39,7 @@ internal class LegacyRecipeEntityMapper:
                 ingredientId = throw Exception("Delete class No usage"),
                 ingredientImg = if (!ing.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${ing.image}" else "",
                 ingredientName = ing.name?.capitalize(Locale.getDefault()) ?: "",
-                amount = ing.amount ?: 0.0,
+                quantity = ing.amount ?: 0.0,
                 unit = ing.unit ?: ""
             )
         } ?: emptyList()

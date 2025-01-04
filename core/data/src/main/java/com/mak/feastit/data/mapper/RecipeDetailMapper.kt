@@ -66,7 +66,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 aisle = dto.aisle ?: "No category",
                 recipeId = recipeId,
                 ingredientName = dto.name.orEmpty(),
-                amount = dto.amount ?: 0.0,
+                quantity = dto.amount ?: 0.0,
                 unit = dto.unit.orEmpty(),
                 ingredientImg = if (!dto.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${dto.image}" else "",
             )
@@ -89,7 +89,7 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 aisle = "No category",
                 recipeId = id,
                 ingredientName = dto.name.orEmpty(),
-                amount = 0.0,
+                quantity = 0.0,
                 unit = "",
                 ingredientImg = dto.image.orEmpty()
             )
@@ -168,7 +168,8 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 id = entity.id,
                 image = entity.ingredientImg,
                 localizedName = entity.ingredientName,
-                name = entity.ingredientName
+                name = entity.ingredientName,
+                quantity = "${entity.quantity} ${entity.unit}"
             )
         }
     }

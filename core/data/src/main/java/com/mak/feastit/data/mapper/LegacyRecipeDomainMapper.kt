@@ -45,7 +45,8 @@ internal class LegacyRecipeDomainMapper:
                 id = throw Exception("Delete class No usage"),
                 image = ing.ingredientImg,
                 localizedName = ing.ingredientName,
-                name = ing.ingredientName
+                name = ing.ingredientName,
+            quantity = ""
         ) }
 
 }

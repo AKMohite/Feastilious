@@ -88,7 +88,7 @@ class ExploreFragment : BaseFragment() {
         when(action) {
             is ExploreItemAction.ChipClick -> {}
             ExploreItemAction.ListUpdate -> {
-                binding.exploreItems.smoothScrollToPosition(0)
+//                binding.exploreItems.smoothScrollToPosition(0)
             }
             is ExploreItemAction.RecipeClick -> {
                 findNavController().navigate(

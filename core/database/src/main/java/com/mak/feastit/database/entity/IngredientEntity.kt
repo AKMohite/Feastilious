@@ -4,11 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_AMOUNT
 import com.mak.feastit.database.util.Constants.DB_INGREDIENT_ID
 import com.mak.feastit.database.util.Constants.DB_INGREDIENT_NAME
 import com.mak.feastit.database.util.Constants.DB_INGREDIENT_TABLE
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_UNIT
 import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
 import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
 import com.mak.feastit.database.util.Constants.DB_TABLE_ID
@@ -40,8 +38,8 @@ data class IngredientEntity(
 //    val ingredientConsistency: String,
     @ColumnInfo(name = DB_TABLE_COL_IMG)
     val ingredientImg: String,
-    @ColumnInfo(name = DB_INGREDIENT_AMOUNT)
-    val amount: Double,
-    @ColumnInfo(name = DB_INGREDIENT_UNIT)
+    @ColumnInfo(name = "quantity")
+    val quantity: Double,
+    @ColumnInfo(name = "unit")
     val unit: String
 )
