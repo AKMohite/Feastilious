@@ -10,7 +10,7 @@ class IngredientViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(ingredient: Ingredient) {
-        binding.imgIngredient.load(ingredient.image)
+//        binding.imgIngredient.load(ingredient.image)
         binding.tvIngredientDesc.text = ingredient.name
     }
 }

@@ -1,50 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/space_small"
-    android:layout_marginBottom="@dimen/space_tiny"
-    android:layout_marginStart="@dimen/space_small"
-    android:layout_marginEnd="@dimen/space_small">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="@dimen/space_micro">
 
-
-    <RelativeLayout
-        android:paddingBottom="@dimen/space_normal"
-        android:id="@+id/container"
-        android:layout_width="0dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_to_fav_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_big"
-        android:background="@drawable/recipe_ingred_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:icon="@drawable/ic_add_circle"
+        android:layout_gravity="center_vertical"
+        style="?attr/materialIconButtonStyle"/>
 
-        <TextView
-            android:id="@+id/tv_ingredient_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="20dp"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSecondary"
-            tools:text="Simple Title Text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_ingredient_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:layout_marginHorizontal="@dimen/space_tiny"
+        tools:text="Ingredient name"
+        android:layout_gravity="center_vertical"/>
 
-    <ImageView
-        android:id="@+id/img_ingredient"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="@dimen/space_small"
-        android:layout_marginTop="@dimen/space_normal"
-        android:layout_marginEnd="@dimen/space_small"
-        app:layout_constraintEnd_toStartOf="@+id/container"
-        app:layout_constraintStart_toStartOf="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/container"
-        app:srcCompat="@drawable/ic_recipe_img_placeholder" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -15,10 +15,10 @@ class LegacyRecipeIngredientAdapter : ListAdapter<Ingredient, LegacyRecipeIngred
         fun bindData(ingredient: Ingredient) {
 
             binding.apply {
-                imgIngredient.load(ingredient.image) {
-                    error(R.drawable.ic_recipe_img_placeholder)
-                    placeholder(R.drawable.ic_recipe_img_placeholder)
-                }
+//                imgIngredient.load(ingredient.image) {
+//                    error(R.drawable.ic_recipe_img_placeholder)
+//                    placeholder(R.drawable.ic_recipe_img_placeholder)
+//                }
 
                 tvIngredientDesc.text = ingredient.name
             }

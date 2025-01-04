@@ -10,7 +10,6 @@ internal class IngredientDiffUtil: DiffUtil.ItemCallback<Ingredient>() {
 
     override fun areContentsTheSame(oldItem: Ingredient, newItem: Ingredient): Boolean {
         return oldItem.id == newItem.id &&
-                oldItem.name == newItem.name &&
                 oldItem.isInCart == newItem.isInCart &&
                 oldItem.isBought == newItem.isBought
     }
