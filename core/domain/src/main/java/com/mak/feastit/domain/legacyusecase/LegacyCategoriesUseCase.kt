@@ -1,4 +1,4 @@
-package com.mak.feastit.domain.usecase
+package com.mak.feastit.domain.legacyusecase
 import com.mak.feastit.domain.model.MealType
 import com.mak.feastit.domain.model.RecipeResult
 import com.mak.feastit.domain.repository.ILegacyCategoryRepository
@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class LegacyCategoriesUseCase @Inject constructor(
     private val repository: ILegacyCategoryRepository
-): UseCaseWithParams<Unit, Flow<RecipeResult<List<MealType>>>>() {
+): LegacyUseCaseWithParams<Unit, Flow<RecipeResult<List<MealType>>>>() {
 
     override fun buildUseCase(params: Unit): Flow<RecipeResult<List<MealType>>> {
         return repository.getFoodCategories()

@@ -3,8 +3,8 @@ package com.ak.feastit.ui.legacyrecipedetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.usecase.LegacyRecipeDetailUseCase
-import com.mak.feastit.domain.usecase.LegacyToggleFavUseCase
+import com.mak.feastit.domain.legacyusecase.LegacyRecipeDetailUseCase
+import com.mak.feastit.domain.legacyusecase.LegacyToggleFavUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

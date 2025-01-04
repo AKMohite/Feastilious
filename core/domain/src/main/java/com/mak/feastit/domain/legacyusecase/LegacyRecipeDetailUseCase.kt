@@ -1,4 +1,4 @@
-package com.mak.feastit.domain.usecase
+package com.mak.feastit.domain.legacyusecase
 
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.model.RecipeResult

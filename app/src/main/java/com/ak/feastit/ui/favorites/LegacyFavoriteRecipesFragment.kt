@@ -6,18 +6,17 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.R
-import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
+import com.ak.feastit.databinding.LegacyFavoriteRecipesFragmentBinding
 import com.ak.feastit.ui.legacyrecipes.LegacyRecipeAdapter
 import com.mak.feastit.domain.model.Recipe
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
+class LegacyFavoriteRecipesFragment : Fragment(R.layout.legacy_favorite_recipes_fragment) {
 
-    private val viewModel: FavoriteRecipesViewModel by viewModels()
+    private val viewModel: LegacyFavoriteRecipesViewModel by viewModels()
     private var recipeAdapter: LegacyRecipeAdapter = LegacyRecipeAdapter { recipe ->
         navigateToDetails(recipe)
     }
@@ -29,7 +28,7 @@ class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
     }
 
     private fun setFlowObservers(view: View) {
-        val binding =  FavoriteRecipesFragmentBinding.bind(view)
+        val binding =  LegacyFavoriteRecipesFragmentBinding.bind(view)
 
         binding.apply {
             favRecipeRv.apply {
@@ -56,9 +55,9 @@ class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
     }
 
     private fun navigateToDetails(recipe: Recipe) {
-        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(
-                recipeId = recipe.id
-        ))
+//        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(
+//                recipeId = recipe.id
+//        ))
     }
 
 }

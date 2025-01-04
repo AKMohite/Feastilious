@@ -1,6 +1,6 @@
-package com.mak.feastit.domain.usecase
+package com.mak.feastit.domain.legacyusecase
 
-abstract class UseCaseWithParams<in Params, out R> {
+abstract class LegacyUseCaseWithParams<in Params, out R> {
     /**
      * Build the use case to be executed.
      *

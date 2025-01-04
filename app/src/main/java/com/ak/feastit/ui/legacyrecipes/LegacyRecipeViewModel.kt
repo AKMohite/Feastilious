@@ -13,9 +13,9 @@ import com.ak.feastit.utils.QUERY_OFFSET
 import com.ak.feastit.utils.QUERY_SEARCH
 import com.mak.feastit.domain.model.MealType
 import com.mak.feastit.domain.model.Recipe
-import com.mak.feastit.domain.usecase.LegacyCategoriesUseCase
-import com.mak.feastit.domain.usecase.LegacyMealTypeRecipeUseCase
-import com.mak.feastit.domain.usecase.LegacySearchRecipeUseCase
+import com.mak.feastit.domain.legacyusecase.LegacyCategoriesUseCase
+import com.mak.feastit.domain.legacyusecase.LegacyMealTypeRecipeUseCase
+import com.mak.feastit.domain.legacyusecase.LegacySearchRecipeUseCase
 import com.mak.feastit.domain.model.QUERY_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
