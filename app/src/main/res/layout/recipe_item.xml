@@ -25,7 +25,7 @@
         <View
             android:id="@+id/blur_view"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
             android:background="@drawable/text_bg_gradient"
             app:layout_constraintBottom_toBottomOf="@+id/recipe_img"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +43,6 @@
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:layout_margin="@dimen/space_small"
             tools:text="Lorem ipsum"
-            android:textColor="?attr/colorSurface"/>
+            android:textColor="?attr/colorOnSurface"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
