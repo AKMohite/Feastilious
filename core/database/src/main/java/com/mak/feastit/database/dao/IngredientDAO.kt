@@ -9,8 +9,11 @@ import kotlinx.coroutines.flow.Flow
 interface IngredientDAO: BaseDAO<IngredientEntity> {
 
     @Query("DELETE FROM recipe_ingredients WHERE recipe_id = :recipeId")
-    fun deleteRecipe(recipeId: Long)
+    suspend fun deleteRecipe(recipeId: Long)
 
     @Query("SELECT * FROM recipe_ingredients WHERE recipe_id = :id")
     fun getIngredientsFor(id: Long): Flow<List<IngredientEntity>>
+
+    @Query("SELECT * FROM recipe_ingredients WHERE id = :id")
+    suspend fun getIngredient(id: String): IngredientEntity?
 }

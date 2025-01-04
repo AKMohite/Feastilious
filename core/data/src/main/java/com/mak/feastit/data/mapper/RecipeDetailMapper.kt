@@ -181,13 +181,17 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
         }
     }
 
-    fun ingredientToShoppingCart(ingredients: List<IngredientEntity>): List<ShoppingEntity> {
+    fun ingredientsToShoppingCarts(ingredients: List<IngredientEntity>): List<ShoppingEntity> {
         return ingredients.map { entity ->
-            ShoppingEntity(
-                id = entity.id,
-                recipeId = entity.recipeId,
-                isBought = false
-            )
+            ingredientToShoppingCart(entity)
         }
+    }
+
+    fun ingredientToShoppingCart(entity: IngredientEntity): ShoppingEntity {
+        return ShoppingEntity(
+            id = entity.id,
+            recipeId = entity.recipeId,
+            isBought = false
+        )
     }
 }

@@ -97,10 +97,23 @@ internal class RealRecipeRepository @Inject constructor(
         if (shopping.isEmpty()) {
 //            add to shopping
             val ingredients = db.ingredientDAO().getIngredientsFor(recipeId).firstOrNull() ?: return@withContext
-            val shoppingCart = mapper.ingredientToShoppingCart(ingredients)
+            val shoppingCart = mapper.ingredientsToShoppingCarts(ingredients)
             db.shoppingDAO().insert(shoppingCart)
         } else {
             db.shoppingDAO().deleteCart(recipeId)
+        }
+    }
+
+
+    override suspend fun toggleShoppingIngredient(ingredientId: String) = withContext(dispatcher.io) {
+        val shopping = db.shoppingDAO().getIngredient(ingredientId)
+        if (shopping == null) {
+//            add to shopping
+            val ingredient = db.ingredientDAO().getIngredient(ingredientId) ?: return@withContext
+            val shoppingCart = mapper.ingredientToShoppingCart(ingredient)
+            db.shoppingDAO().insert(shoppingCart)
+        } else {
+            db.shoppingDAO().delete(shopping)
         }
     }
 

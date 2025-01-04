@@ -12,6 +12,7 @@ interface RecipeRepository {
     suspend fun refreshSimilarRecipes(id: Long, forceRefresh: Boolean)
     suspend fun toggleFavorite(recipeId: Long)
     suspend fun toggleShoppingIngredients(recipeId: Long)
+    suspend fun toggleShoppingIngredient(ingredientId: String)
     fun observerRecipe(id: Long): Flow<RecipeDetail>
     fun observerSimilarRecipes(id: Long): Flow<List<Recipe>>
     fun observeIngredients(id: Long): Flow<List<Ingredient>>
