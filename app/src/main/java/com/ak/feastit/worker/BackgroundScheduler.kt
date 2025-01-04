@@ -23,7 +23,7 @@ internal class BackgroundScheduler @Inject constructor(
     override fun scheduleStaleWorker() {
         val constraints = Constraints.Builder()
             .setRequiresBatteryNotLow(true)
-            .setRequiresDeviceIdle(true)
+//            .setRequiresDeviceIdle(true)
             .build()
         val work = PeriodicWorkRequestBuilder<StaleDataWorker>(20, TimeUnit.DAYS)
             .setConstraints(constraints)
