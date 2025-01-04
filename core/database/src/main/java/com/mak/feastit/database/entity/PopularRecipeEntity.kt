@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+// TODO add indices to child column foreign key
 @Entity(
     tableName = "popular_recipes",
     foreignKeys = [
