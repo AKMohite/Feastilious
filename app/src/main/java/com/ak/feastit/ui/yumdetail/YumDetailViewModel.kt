@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -77,6 +76,12 @@ internal class YumDetailViewModel @Inject constructor(
         }
     }
 
+    fun toggleIngredientCart(id: String) {
+        uiScope.launch {
+            repository.toggleShoppingIngredient(id)
+        }
+    }
+
 }
 
 data class YumDetailState(
@@ -84,4 +89,8 @@ data class YumDetailState(
     val similarRecipes: List<Recipe> = emptyList(),
     val instructions: List<Instruction> = emptyList(),
     val ingredients: List<Ingredient> = emptyList()
-)
+) {
+    val areIngredientsInCart = ingredients.any { ingredient ->
+        ingredient.isInCart
+    }
+}

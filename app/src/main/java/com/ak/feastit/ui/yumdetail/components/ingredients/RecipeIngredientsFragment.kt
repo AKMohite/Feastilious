@@ -29,7 +29,11 @@ internal class RecipeIngredientsFragment : BaseFragment() {
     private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
     private val adapter: RecipeIngredientsAdapter by lazy {
-        RecipeIngredientsAdapter()
+        RecipeIngredientsAdapter(
+            onToggleAddToCart = { id ->
+                viewModel.toggleIngredientCart(id)
+            }
+        )
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {

@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentRecipeIngredientBinding
 import com.mak.feastit.domain.model.Ingredient
 
-internal class RecipeIngredientsAdapter : RecyclerView.Adapter<IngredientViewHolder>() {
+internal class RecipeIngredientsAdapter(
+    private val onToggleAddToCart: (String) -> Unit
+) : RecyclerView.Adapter<IngredientViewHolder>() {
 
     private val asyncDiffUtil = AsyncListDiffer(this, IngredientDiffUtil())
 
@@ -20,7 +22,7 @@ internal class RecipeIngredientsAdapter : RecyclerView.Adapter<IngredientViewHol
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = asyncDiffUtil.currentList[position]
-        holder.bind(ingredient)
+        holder.bind(ingredient, onToggleAddToCart = onToggleAddToCart)
     }
 
     fun reload(list: List<Ingredient>) {

@@ -94,7 +94,7 @@ internal class RealRecipeRepository @Inject constructor(
         db.recipeDAO().update(local.copy(isAddedToCollection = !local.isAddedToCollection))
     }
 
-    override suspend fun toggleShoppingIngredients(recipeId: Long) = withContext(dispatcher.io) {
+    override suspend fun toggleShoppingIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
         val shopping = db.shoppingDAO().getCart(recipeId)
         if (shopping.isEmpty()) {
 //            add to shopping

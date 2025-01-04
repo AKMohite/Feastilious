@@ -16,7 +16,7 @@ class IngredientViewHolder(
     private val binding: ComponentRecipeIngredientBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(ingredient: Ingredient) {
+    fun bind(ingredient: Ingredient, onToggleAddToCart: (String) -> Unit) {
 //        binding.imgIngredient.load(ingredient.image)
         val str = SpannableStringBuilder()
             .bold { append(ingredient.quantity) }
@@ -39,7 +39,7 @@ class IngredientViewHolder(
         }
         with(binding.toggleCartBtn) {
             icon = ContextCompat.getDrawable(this.context, cartIcon)
-            onClick {  }
+            onClick { onToggleAddToCart(ingredient.id) }
         }
     }
 }
