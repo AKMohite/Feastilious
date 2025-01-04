@@ -4,5 +4,7 @@ data class Ingredient(
         val id: String,
         val image: String,
         val localizedName: String,
-        val name: String
+        val name: String,
+        val isBought: Boolean = false,
+        val isInCart: Boolean = false
 )

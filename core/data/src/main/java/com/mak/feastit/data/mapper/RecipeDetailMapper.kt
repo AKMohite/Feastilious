@@ -10,6 +10,7 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.Shopping
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.RecipeDTO
 import com.mak.feastit.remote.dto.RecipeInformationDTO
@@ -193,5 +194,14 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             recipeId = entity.recipeId,
             isBought = false
         )
+    }
+
+    fun entityToShopping(entities: List<ShoppingEntity>): List<Shopping> {
+        return entities.map { entity ->
+            Shopping(
+                id = entity.id,
+                isBought = entity.isBought
+            )
+        }
     }
 }

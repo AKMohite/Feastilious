@@ -7,6 +7,7 @@ import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.repository.RecipeRepository
+import com.mak.feastit.domain.usecase.RecipeDetailIngredientsUsecase
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,7 @@ private const val ARGS_RECIPE_ID = "recipeId"
 @HiltViewModel
 internal class YumDetailViewModel @Inject constructor(
     private val repository: RecipeRepository,
+    private val ingredients: RecipeDetailIngredientsUsecase,
     dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel(
@@ -54,7 +56,7 @@ internal class YumDetailViewModel @Inject constructor(
         combine(
             repository.observerRecipe(id),
             repository.observerSimilarRecipes(id),
-            repository.observeIngredients(id),
+            ingredients(id),
             repository.observeInstructions(id)
         ) { recipe, similarRecipes, ingredients, instructions ->
             _state.update { currentState ->

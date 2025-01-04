@@ -11,11 +11,13 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.Shopping
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
@@ -136,10 +138,20 @@ internal class RealRecipeRepository @Inject constructor(
 
     override fun observeIngredients(id: Long): Flow<List<Ingredient>> {
         return db.ingredientDAO().getIngredientsFor(id)
+            .distinctUntilChanged()
             .flowOn(dispatcher.io)
             .map { entities ->
                 mapper.entitiesToIngredients(entities)
             }.flowOn(dispatcher.io)
+    }
+
+    override fun observeShoppingCartForRecipe(recipeId: Long): Flow<List<Shopping>> {
+        return db.shoppingDAO().observeCartForRecipe(recipeId)
+            .distinctUntilChanged()
+            .flowOn(dispatcher.io)
+            .map { entities ->
+                mapper.entityToShopping(entities)
+            }.flowOn(dispatcher.computation)
     }
 
     override fun observeInstructions(id: Long): Flow<List<Instruction>> {
@@ -147,7 +159,7 @@ internal class RealRecipeRepository @Inject constructor(
             .flowOn(dispatcher.io)
             .map { entities ->
                 mapper.entitiesToSteps(entities)
-            }
+            }.flowOn(dispatcher.computation)
     }
 
     private suspend fun saveRemoteSimilarRecipes(entities: List<RecipeEntity>, similarEntities: List<SimilarRecipeEntity>) {
