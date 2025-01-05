@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -23,9 +24,7 @@ internal class RealRecipesRepository @Inject constructor(
     private val db: FeastDB,
     private val dispatcher: DispatcherProvider
 ): BaseRecipeRepository(
-    api = api,
-    db = db,
-    dispatcher = dispatcher
+    db = db
 ) {
 
     override val recipesMapper = RecipesMapper()
@@ -42,12 +41,14 @@ internal class RealRecipesRepository @Inject constructor(
                 return@withContext
             }
         }
+        Timber.d("Refresh recipes for $request")
         val dtos = fetchRecipes(request, page) ?: return@withContext
         if (dtos.isEmpty()) return@withContext
         saveRemoteRecipes(dtos, page, request)
     }
 
     override fun getRecipes(request: SyncType, page: Int): Flow<List<Recipe>> {
+        Timber.d("Observe recipes for $request and page: $page")
         return when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().getRecipes(page)
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().getRecipes(page)

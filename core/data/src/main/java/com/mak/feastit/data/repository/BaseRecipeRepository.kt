@@ -6,16 +6,13 @@ import com.mak.feastit.database.entity.LastSyncEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipesRepository
-import com.mak.feastit.domain.util.DispatcherProvider
-import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
+import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
 
 internal abstract class BaseRecipeRepository(
-    private val api: FeastAPIService,
-    private val db: FeastDB,
-    private val dispatcher: DispatcherProvider
+    private val db: FeastDB
 ): RecipesRepository {
 
     protected abstract val recipesMapper: RecipesMapper
@@ -25,6 +22,7 @@ internal abstract class BaseRecipeRepository(
         page: Int,
         request: SyncType
     ) {
+        Timber.d("Save recipes for $request")
         val recipeEntities = recipesMapper.jsonToEntities(dtos)
         db.handleTransaction {
             if (page == 1) {
@@ -57,6 +55,7 @@ internal abstract class BaseRecipeRepository(
         page: Int,
         request: SyncType
     ) {
+        Timber.d("Insert recipes in DB for $request")
         when(request) {
             SyncType.POPULAR_RECIPES -> {
                 val popularRecipeEntities = recipesMapper.jsonToPopularEntities(dtos, page)
@@ -94,6 +93,7 @@ internal abstract class BaseRecipeRepository(
     }
 
     private suspend fun deletePage(page: Int, request: SyncType) {
+        Timber.d("Delete recipes for page $page and for request $request")
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deletePage(page)
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deletePage(page)
@@ -105,6 +105,7 @@ internal abstract class BaseRecipeRepository(
     }
 
     private suspend fun deleteRecipes(request: SyncType) {
+        Timber.d("Delete recipes for $request")
         when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().deleteRecipes()
             SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().deleteRecipes()
@@ -116,6 +117,7 @@ internal abstract class BaseRecipeRepository(
     }
 
     private suspend fun chunkUpdate(entities: List<RecipeEntity>) {
+        Timber.d("Chunk update recipes")
         for (chunk in entities.chunked(LIMIT_ITEMS)) {
             db.recipeDAO().upsert(chunk)
         }

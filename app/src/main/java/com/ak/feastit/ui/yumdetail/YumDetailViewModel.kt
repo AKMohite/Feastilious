@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val ARGS_RECIPE_ID = "recipeId"
@@ -45,6 +46,7 @@ internal class YumDetailViewModel @Inject constructor(
 
     private fun refreshRecipeInfo(recipeId: Long, forceRefresh: Boolean = false) {
         uiScope.launch {
+            Timber.d("Refresh recipe info for: $recipeId")
             repository.refreshRecipe(id = recipeId, forceRefresh = forceRefresh)
             repository.refreshAnalyzedInstruction(id = recipeId, forceRefresh = forceRefresh)
             repository.refreshSimilarRecipes(id = recipeId, forceRefresh = forceRefresh)
@@ -52,6 +54,7 @@ internal class YumDetailViewModel @Inject constructor(
     }
 
     private fun observeRecipe(id: Long) {
+        Timber.d("Observe recipe details: $id")
         combine(
             repository.observerRecipe(id),
             repository.observerSimilarRecipes(id),
@@ -72,12 +75,14 @@ internal class YumDetailViewModel @Inject constructor(
     fun toggleFavorite() {
         uiScope.launch {
             val id = state.value.overview?.recipeId ?: return@launch
+            Timber.d("Toggle favorite: $id")
             repository.toggleFavorite(id)
         }
     }
 
     fun toggleIngredientCart(id: String) {
         uiScope.launch {
+            Timber.d("Toggle ingredient for shopping: $id")
             repository.toggleShoppingIngredient(id)
         }
     }

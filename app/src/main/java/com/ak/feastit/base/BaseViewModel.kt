@@ -5,6 +5,7 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import timber.log.Timber
 import java.util.concurrent.CancellationException
 
 internal open class BaseViewModel(
@@ -32,7 +33,9 @@ internal open class BaseViewModel(
     val uiScope
         get() = CoroutineScope(dispatcher.main + superVisorJob + exceptionHandler)
 
-    protected open fun handleError(exception: Throwable) {}
+    protected open fun handleError(exception: Throwable) {
+        Timber.e(exception)
+    }
 
     /**
      * Cancel all coroutines when the ViewModel is cleared

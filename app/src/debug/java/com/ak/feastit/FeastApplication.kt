@@ -8,6 +8,7 @@ import android.os.StrictMode.VmPolicy
 import androidx.work.Configuration
 import androidx.work.WorkerFactory
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -26,6 +27,7 @@ internal class FeastApplication: Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         setupStrictMode()
+        Timber.plant(Timber.DebugTree())
     }
 
     private fun setupStrictMode() {

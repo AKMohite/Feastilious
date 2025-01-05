@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.recyclerview)
     implementation(libs.work.runtime.ktx)
+    implementation(libs.timber)
 
     ksp(libs.hilt.android.compiler)
 

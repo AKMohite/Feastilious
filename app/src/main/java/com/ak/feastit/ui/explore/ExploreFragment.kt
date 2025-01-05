@@ -19,6 +19,7 @@ import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
 import com.ak.feastit.utils.onClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -81,7 +82,7 @@ class ExploreFragment : BaseFragment() {
     }
 
     private fun navigateToSearch() {
-        Log.d("hello","navigateToSearch")
+        Timber.d("navigateToSearch")
     }
 
     private fun handleSectionEvents(action: ExploreItemAction) {

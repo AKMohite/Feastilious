@@ -1,7 +1,6 @@
 package com.ak.feastit.data.utils
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +34,7 @@ class FeastPrefManager @Inject constructor(
     val preferencesFlow = dataStore.data
         .catch { exception ->
             if (exception is IOException){
-                Log.e(TAG, "Error reading preferences: ", exception)
+                Timber.e(exception, "Error reading preferences: ")
                 emit(emptyPreferences()) // will use default preferences
             } else{
                 throw exception

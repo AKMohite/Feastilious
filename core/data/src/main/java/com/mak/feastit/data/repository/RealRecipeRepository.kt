@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -39,6 +40,7 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
+        Timber.d("Refreshing recipe: $id")
         val local = db.recipeDAO().getRecipe(id).firstOrNull()
         if (local != null && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAILS)) return@withContext
         val query = mapOf(
@@ -62,6 +64,7 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
+        Timber.d("Refresh recipe instructions: $id")
         val local = db.recipeStepDAO().getCountForRecipe(id)
         if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
         val query = mapOf(
@@ -78,6 +81,7 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
+        Timber.d("Refresh similar recipes: $id")
         val local = db.similarRecipeDao().getCountForRecipe(id)
         if (local > 0 && !needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
         val query = mapOf( "number" to "10" )
@@ -91,17 +95,21 @@ internal class RealRecipeRepository @Inject constructor(
 
     override suspend fun toggleFavorite(recipeId: Long) = withContext(dispatcher.io) {
         val local = db.recipeDAO().getRecipe(recipeId).firstOrNull() ?: return@withContext
-        db.recipeDAO().update(local.copy(isAddedToCollection = !local.isAddedToCollection))
+        val isAddedToCollection = !local.isAddedToCollection
+        Timber.d("Recipe is favorite: $isAddedToCollection")
+        db.recipeDAO().update(local.copy(isAddedToCollection = isAddedToCollection))
     }
 
     override suspend fun toggleShoppingIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
         val shopping = db.shoppingDAO().getCart(recipeId)
         if (shopping.isEmpty()) {
+            Timber.d("Adding ingredients to cart for recipe: $recipeId")
 //            add to shopping
             val ingredients = db.ingredientDAO().getIngredientsFor(recipeId).firstOrNull() ?: return@withContext
             val shoppingCart = mapper.ingredientsToShoppingCarts(ingredients)
             db.shoppingDAO().insert(shoppingCart)
         } else {
+            Timber.d("Remove ingredients from cart for recipe: $recipeId")
             db.shoppingDAO().deleteCart(recipeId)
         }
     }
@@ -110,11 +118,13 @@ internal class RealRecipeRepository @Inject constructor(
     override suspend fun toggleShoppingIngredient(ingredientId: String) = withContext(dispatcher.io) {
         val shopping = db.shoppingDAO().getIngredient(ingredientId)
         if (shopping == null) {
+            Timber.d("Add ingredient to shopping cart: $ingredientId")
 //            add to shopping
             val ingredient = db.ingredientDAO().getIngredient(ingredientId) ?: return@withContext
             val shoppingCart = mapper.ingredientToShoppingCart(ingredient)
             db.shoppingDAO().insert(shoppingCart)
         } else {
+            Timber.d("Remove ingredient from shopping cart: $ingredientId")
             db.shoppingDAO().delete(shopping)
         }
     }
@@ -164,6 +174,7 @@ internal class RealRecipeRepository @Inject constructor(
 
     private suspend fun saveRemoteSimilarRecipes(entities: List<RecipeEntity>, similarEntities: List<SimilarRecipeEntity>) {
         if (similarEntities.isEmpty()) return
+        Timber.d("Save similar recipes for recipe: ${entities.firstOrNull()?.id}")
         db.handleTransaction {
             val recipeId = similarEntities.first().parentRecipeId
             db.recipeDAO().upsert(entities)
@@ -180,6 +191,7 @@ internal class RealRecipeRepository @Inject constructor(
     }
 
     private suspend fun saveRemoteInstructions(stepEntities: List<RecipeStepEntity>, recipeId: Long) {
+        Timber.d("Save recipe instructions for: $recipeId")
         db.handleTransaction {
             db.recipeStepDAO().deleteRecipe(recipeId = recipeId)
             db.recipeStepDAO().insert(stepEntities)
@@ -197,6 +209,7 @@ internal class RealRecipeRepository @Inject constructor(
         entity: RecipeEntity,
         ingredientEntities: List<IngredientEntity>
     ) {
+        Timber.d("save network recipe in database for: ${entity.id}")
         db.handleTransaction {
             db.recipeDAO().upsert(entity)
 //            TODO get shopping ingredients as it will also be deleted

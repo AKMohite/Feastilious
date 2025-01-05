@@ -40,4 +40,5 @@ dependencies {
     implementation(project(":core:remote"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.timber)
 }

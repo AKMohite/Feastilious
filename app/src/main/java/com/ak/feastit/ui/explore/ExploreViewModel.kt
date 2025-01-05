@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -74,10 +75,12 @@ internal class ExploreViewModel @Inject constructor(
         uiScope.launch {
             _state.update { it.refreshSections(true) }
 //            TODO check exception handling
+            Timber.d("Refresh explore sections")
             ExploreCategory.getRefreshExploreEntries().map{ category ->
                 async { refreshCategory(category, forceRefresh) }
             }.awaitAll()
         }.invokeOnCompletion {
+            Timber.d("Explore sections refreshed")
             _state.update { it.refreshSections(false) }
         }
     }
@@ -87,6 +90,7 @@ internal class ExploreViewModel @Inject constructor(
     }
 
     private fun observeCategories() {
+        Timber.d("Observe sections for explore")
         combine(
             flows = ExploreCategory.entries.map(::observeCategory),
             transform = { it.toList() }
