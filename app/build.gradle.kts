@@ -95,7 +95,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.data.store)
     implementation(libs.hilt.android)
-    implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.material)
     implementation(libs.navigation.fragment.ktx)

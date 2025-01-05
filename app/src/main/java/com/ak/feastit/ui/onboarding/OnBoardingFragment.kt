@@ -1,6 +1,5 @@
 package com.ak.feastit.ui.onboarding
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,9 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.widget.ViewPager2
@@ -19,6 +21,8 @@ import com.ak.feastit.databinding.FragmentOnBoardingBinding
 import com.ak.feastit.ui.onboarding.OnBoardingViewModel.OnBoardingState.NavigateToHome
 import com.ak.feastit.utils.onClick
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -43,6 +47,11 @@ class OnBoardingFragment : BaseFragment() {
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        setupView()
+        observers()
+    }
+
+    private fun setupView() {
         binding.onboardingPager.adapter = adapter
         binding.onboardingPager.registerOnPageChangeCallback(pagerCallback)
         binding.navigateHome.onClick {
@@ -57,10 +66,17 @@ class OnBoardingFragment : BaseFragment() {
                 viewModel.finishOnBoarding()
             }
         }
-        viewModel.liveData.observe(viewLifecycleOwner) {
-            when (it) {
-                NavigateToHome -> {
-                    findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToRecipeDashboardFragment())
+    }
+
+    private fun observers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collectLatest { state ->
+                    when (state) {
+                        NavigateToHome -> {
+                            findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToRecipeDashboardFragment())
+                        }
+                    }
                 }
             }
         }
