@@ -199,6 +199,7 @@ internal class RealRecipeRepository @Inject constructor(
     ) {
         db.handleTransaction {
             db.recipeDAO().upsert(entity)
+//            TODO get shopping ingredients as it will also be deleted
             db.ingredientDAO().deleteRecipe(entity.id)
 //            TODO delete nutrition
             db.ingredientDAO().upsert(ingredientEntities)
