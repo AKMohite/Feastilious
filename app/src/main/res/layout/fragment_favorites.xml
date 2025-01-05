@@ -9,7 +9,7 @@
         android:id="@+id/favorite_recipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/component_recipe_items"
+        tools:listitem="@layout/component_recipe"
         app:layout_behavior="@string/searchbar_scrolling_view_behavior"/>
 
     <com.google.android.material.appbar.AppBarLayout

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FavoriteViewModel @Inject constructor(
-    private val dispatcher: DispatcherProvider,
+    dispatcher: DispatcherProvider,
     private val repository: RecipesRepository
 ): BaseViewModel(dispatcher) {
 
