@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.favorites
+package com.ak.feastit.ui.legacyfavorites
 
 import android.os.Bundle
 import android.view.View

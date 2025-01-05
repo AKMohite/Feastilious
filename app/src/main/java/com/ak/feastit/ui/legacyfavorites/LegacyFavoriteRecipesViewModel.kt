@@ -1,4 +1,4 @@
-package com.ak.feastit.ui.favorites
+package com.ak.feastit.ui.legacyfavorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
