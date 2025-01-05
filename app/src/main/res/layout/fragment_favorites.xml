@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:context=".ui.favorites.FavoritesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recipes"
@@ -20,7 +22,7 @@
         app:statusBarForeground="?attr/colorSurface">
 
         <com.google.android.material.search.SearchBar
-            android:id="@+id/cat_search_bar"
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_favorites">
@@ -28,11 +30,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.search.SearchView
-        android:id="@+id/cat_search_view"
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/search_favorites"
-        app:layout_anchor="@id/cat_search_bar">
+        app:layout_anchor="@id/search_bar">
 
         <!-- Content goes here (ScrollView, RecyclerView, etc.). -->
         <ScrollView
@@ -41,7 +43,7 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:id="@+id/cat_search_view_suggestion_container"
+                android:id="@+id/search_view_suggestion_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"/>
