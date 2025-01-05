@@ -78,9 +78,9 @@
 
     <fragment
         android:id="@+id/favoriteRecipesFragment"
-        android:name="com.ak.feastit.ui.legacyfavorites.LegacyFavoriteRecipesFragment"
+        android:name="com.ak.feastit.ui.favorites.FavoritesFragment"
         android:label="favorite_recipes_fragment"
-        tools:layout="@layout/legacy_favorite_recipes_fragment">
+        tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/favRecipes_to_recipeDetail"
             app:destination="@id/recipeDetailFragment" />

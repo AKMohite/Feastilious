@@ -61,6 +61,15 @@ internal class RealRecipesRepository @Inject constructor(
             .flowOn(dispatcher.computation)
     }
 
+    override fun observeFavoriteRecipes(): Flow<List<Recipe>> {
+        return db.recipeDAO().observeFavoriteRecipes()
+            .distinctUntilChanged()
+            .flowOn(dispatcher.io)
+            .map { entities ->
+                recipesMapper.entitiesToModels(entities)
+            }.flowOn(dispatcher.computation)
+    }
+
     private suspend fun fetchRecipes(request: SyncType, page: Int): List<RecipeDTO>? {
         val searchParams = mutableMapOf(
             "number" to LIMIT_ITEMS.toString(),

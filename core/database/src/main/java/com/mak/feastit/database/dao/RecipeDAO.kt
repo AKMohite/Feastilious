@@ -60,5 +60,8 @@ interface RecipeDAO: BaseDAO<RecipeEntity> {
     @Query("DELETE FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID NOT IN (:neededIds) AND is_fav = 0")
     suspend fun deleteRecipesNotIn(neededIds: Set<Long>)
 
+    @Query("SELECT * FROM recipes WHERE is_fav = 1")
+    fun observeFavoriteRecipes(): Flow<List<RecipeEntity>>
+
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

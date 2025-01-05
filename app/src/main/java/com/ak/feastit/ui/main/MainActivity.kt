@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         val navController= navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.onBoardingFragment, R.id.recipeDetailFragment -> binding.mainBottomNavigation.hide()
-                else -> binding.mainBottomNavigation.show()
+                R.id.exploreFragment, R.id.collectionFragment -> binding.mainBottomNavigation.show()
+                else -> binding.mainBottomNavigation.hide()
             }
         }
         viewModel.reload()
