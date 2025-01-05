@@ -45,6 +45,7 @@ android {
             signingConfig = signingConfigs["debug"]
             isMinifyEnabled = false
             isShrinkResources = false
+            applicationIdSuffix = ".debug"
             versionNameSuffix = ".debug"
             resValue("string", "app_version", "${defaultConfig.versionName}${versionNameSuffix}")
         }
@@ -61,6 +62,7 @@ android {
             initWith(getByName("release"))
             signingConfig = signingConfigs.findByName("debug")
             applicationIdSuffix = ".staging"
+            versionNameSuffix = ".staging"
         }
     }
 
