@@ -13,12 +13,13 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentFavoritesBinding
 import com.ak.feastit.ui.favorites.components.FavoritesAdapter
+import com.ak.feastit.ui.favorites.components.SearchSuggestionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-internal class FavoritesFragment: BaseFragment() {
+internal class FavoriteRecipesFragment: BaseFragment() {
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentFavoritesBinding.inflate(inflater)
@@ -34,6 +35,12 @@ internal class FavoritesFragment: BaseFragment() {
         )
     }
 
+    private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
+        SearchSuggestionAdapter(
+            onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
+        )
+    }
+
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
         observers()
@@ -42,20 +49,25 @@ internal class FavoritesFragment: BaseFragment() {
     private fun setupView() {
         binding.favoriteRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.favoriteRecipes.adapter = adapter
+        binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.suggestionItems.adapter = suggestionsAdapter
     }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewmodel.state.collectLatest { state ->
-                    adapter.reload(state.recipes)
+                launch {
+                    viewmodel.state.collectLatest { state ->
+                        adapter.reload(state.recipes)
+                        suggestionsAdapter.reload(state.suggestions)
+                    }
                 }
             }
         }
     }
 
     private fun navigateToDetails(recipeId: Long) {
-        findNavController().navigate(FavoritesFragmentDirections.favRecipesToRecipeDetail(recipeId))
+        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(recipeId))
     }
 
 }

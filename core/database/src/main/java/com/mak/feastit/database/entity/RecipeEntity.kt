@@ -3,50 +3,36 @@ package com.mak.feastit.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mak.feastit.database.util.Constants.DB_MY_RECIPE_BOOK
-import com.mak.feastit.database.util.Constants.DB_RECIPE_CUISINES
-import com.mak.feastit.database.util.Constants.DB_RECIPE_DIETS
-import com.mak.feastit.database.util.Constants.DB_RECIPE_DISH_TYPES
-import com.mak.feastit.database.util.Constants.DB_RECIPE_PRICE
-import com.mak.feastit.database.util.Constants.DB_RECIPE_READY_IN_MIN
-import com.mak.feastit.database.util.Constants.DB_RECIPE_SERVINGS
-import com.mak.feastit.database.util.Constants.DB_RECIPE_SOURCE_NAME
-import com.mak.feastit.database.util.Constants.DB_RECIPE_TABLE
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_NAME
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SOURCE
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
-import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Entity(
-    tableName = DB_RECIPE_TABLE
+    tableName = "recipes"
 )
 data class RecipeEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = DB_TABLE_ID)
+    @ColumnInfo(name = "id")
     val id: Long,
-    @ColumnInfo(name = DB_TABLE_COL_NAME)
+    @ColumnInfo(name = "name")
     val recipeName: String,
-    @ColumnInfo(name = DB_TABLE_COL_SUMMARY)
+    @ColumnInfo(name = "summary")
     val recipeSummary: String,
-    @ColumnInfo(name = DB_TABLE_COL_IMG)
+    @ColumnInfo(name = "img")
     val recipeImg: String,
-    @ColumnInfo(name = DB_TABLE_COL_SOURCE)
+    @ColumnInfo(name = "source")
     val recipeSource: String,
-    @ColumnInfo(name = DB_RECIPE_READY_IN_MIN)
+    @ColumnInfo(name = "ready_in_mins")
     val recipeReadyInMins: Int,
-    @ColumnInfo(name = DB_RECIPE_SERVINGS)
+    @ColumnInfo(name = "servings")
     val servings: Int,
-    @ColumnInfo(name = DB_RECIPE_PRICE)
+    @ColumnInfo(name = "price_per_serving")
     val pricePerServing: Double,
-    @ColumnInfo(name = DB_RECIPE_SOURCE_NAME)
+    @ColumnInfo(name = "source_name")
     val sourceName: String,
-    @ColumnInfo(name = DB_MY_RECIPE_BOOK)
+    @ColumnInfo(name = "is_fav")
     val isAddedToCollection: Boolean = false,
-    @ColumnInfo(name = DB_RECIPE_CUISINES)
+    @ColumnInfo(name = "cuisines")
     val cuisines: String,
-    @ColumnInfo(name = DB_RECIPE_DISH_TYPES)
+    @ColumnInfo(name = "dish_types")
     val dishTypes: String,
-    @ColumnInfo(name = DB_RECIPE_DIETS)
+    @ColumnInfo(name = "diets")
     val diets: String
 )

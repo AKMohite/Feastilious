@@ -1,20 +1,30 @@
 package com.ak.feastit.ui.favorites
 
+import androidx.lifecycle.SavedStateHandle
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseViewModel
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
+private const val STATE_SEARCH_SUGGESTIONS = "state-search-suggestions"
+
 @HiltViewModel
 internal class FavoriteViewModel @Inject constructor(
-    dispatcher: DispatcherProvider,
-    private val repository: RecipesRepository
+    private val dispatcher: DispatcherProvider,
+    private val repository: RecipesRepository,
+    private val savedState: SavedStateHandle
 ): BaseViewModel(dispatcher) {
 
     private val _state = MutableStateFlow(FavoriteState())
@@ -22,6 +32,38 @@ internal class FavoriteViewModel @Inject constructor(
 
     init {
         observeFavoriteRecipes()
+        observerSearchSuggestions()
+    }
+
+    private fun observerSearchSuggestions() {
+        savedState.getStateFlow(STATE_SEARCH_SUGGESTIONS, "")
+            .debounce(300L)
+            .distinctUntilChanged()
+            .flatMapMerge { query ->
+                repository.observeSearchSuggestions(query)
+            }.map { recipes ->
+                val suggestions = mutableListOf<Suggestion>()
+//                TODO get recents from data store
+                suggestions.add(Suggestion.Heading(R.string.search_recipe_recent_searches))
+                suggestions.add(Suggestion.Text("Chicken", SuggestionType.RECENT_SEARCH))
+                suggestions.add(Suggestion.Text("Ramen", SuggestionType.RECENT_SEARCH))
+                suggestions.add(Suggestion.Text("Soup", SuggestionType.RECENT_SEARCH))
+                suggestions.add(Suggestion.Text("Burger", SuggestionType.RECENT_SEARCH))
+//                this is search suggestion text
+                val recipeNames = recipes.take(10).map { Suggestion.Text(it.recipeName, SuggestionType.DB_TEXT) }
+                suggestions.addAll(recipeNames)
+//                this is search suggestion with recipes
+                suggestions.add(Suggestion.Heading(R.string.search_recipe_suggestions))
+                suggestions.addAll(recipes.map { Suggestion.Item(it) })
+                suggestions
+            }.flowOn(dispatcher.computation)
+            .onEach { recipes ->
+                _state.update { currentState -> currentState.copy(suggestions = recipes) }
+            }.launchIn(uiScope)
+//            .map { query ->
+//                repository.observeSearchSuggestions(query)
+//            }.flowOn(dispatcher.io)
+
     }
 
     private fun observeFavoriteRecipes() {

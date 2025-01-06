@@ -12,4 +12,11 @@
 
     <!-- This is to have floatable bottom navigation -->
     <dimen name="bottom_screen_padding">92dp</dimen>
+
+    <!-- region window size -->
+    <dimen name="explore_header_img">270dp</dimen>
+    <dimen name="explore_recipe_width">200dp</dimen>
+    <dimen name="explore_recipe_height">250dp</dimen>
+    <dimen name="blur_height">120dp</dimen>
+    <!-- endregion -->
 </resources>

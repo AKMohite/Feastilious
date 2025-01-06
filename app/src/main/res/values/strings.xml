@@ -60,4 +60,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="menu_settings">Settings</string>
     <string name="scheduled_and_made">Scheduled and made</string>
     <string name="search_favorites">Search favorites</string>
+    <string name="search_recipe_suggestions">Recipes</string>
+    <string name="search_recipe_recent_searches">Recent searches</string>
+    <string name="search_suggestion_icon">Search suggestion icon</string>
 </resources>

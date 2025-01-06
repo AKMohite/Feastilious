@@ -33,6 +33,7 @@ class ExploreFragment : BaseFragment() {
             sectionEvents = ::handleSectionEvents
 //            sectionEvents = null
         ).apply {
+//            TODO add to all adapters?
             stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
     }

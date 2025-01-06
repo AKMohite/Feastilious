@@ -60,8 +60,6 @@ internal class LegacyRecipeRepository @Inject constructor(
             val dtoRecipes: MutableList<RecipeEntity> = mutableListOf()
             val ingredients: MutableList<IngredientEntity> = mutableListOf()
             val instructions: MutableList<RecipeStepEntity> = mutableListOf()
-
-//            TODO handle favorite recipes while deleting from DB and null assertion
             val favRecipes = db.recipeDAO().getFavRecipeIds()
             recipeDetails.forEach { recipe ->
                 if (favRecipes.isNotEmpty() && recipe.recipe.id in favRecipes)

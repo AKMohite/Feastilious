@@ -5,36 +5,30 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mak.feastit.database.util.Constants.DB_INSTRUCTION_TABLE
-import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
-import com.mak.feastit.database.util.Constants.DB_STEP_DESC
-import com.mak.feastit.database.util.Constants.DB_STEP_ID
-import com.mak.feastit.database.util.Constants.DB_STEP_NAME
-import com.mak.feastit.database.util.Constants.DB_STEP_NUMBER
 
 @Entity(
-    tableName = DB_INSTRUCTION_TABLE,
-    indices = [Index(value = [DB_STEP_ID], unique = true)],
+    tableName = "recipe_instructions",
+    indices = [Index(value = ["step_id"], unique = true)],
     foreignKeys = [
         ForeignKey(
             entity = RecipeEntity::class,
             parentColumns = ["id"],
-            childColumns = [DB_RECIPE_ID],
+            childColumns = ["recipe_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class RecipeStepEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = DB_STEP_ID) // recipeId+stepNo
+    @ColumnInfo(name = "step_id") // recipeId+stepNo
     val stepId: String,
-    @ColumnInfo(name = DB_RECIPE_ID)
+    @ColumnInfo(name = "recipe_id")
     val recipeId: Long,
-    @ColumnInfo(name = DB_STEP_NUMBER)
+    @ColumnInfo(name = "step_no")
     val stepNo: Int,
-    @ColumnInfo(name = DB_STEP_DESC)
+    @ColumnInfo(name = "step_desc")
     val stepDescription: String,
-    @ColumnInfo(name = DB_STEP_NAME)
+    @ColumnInfo(name = "step_name")
     val stepName: String,
 //    @ColumnInfo(name = DB_STEP_INGREDIENTS)
 //    val stepIngredients: String,

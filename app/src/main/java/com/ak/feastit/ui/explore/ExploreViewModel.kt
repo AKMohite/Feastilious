@@ -74,7 +74,6 @@ internal class ExploreViewModel @Inject constructor(
     private fun refreshCategories(forceRefresh: Boolean = false) {
         uiScope.launch {
             _state.update { it.refreshSections(true) }
-//            TODO check exception handling
             Timber.d("Refresh explore sections")
             ExploreCategory.getRefreshExploreEntries().map{ category ->
                 async { refreshCategory(category, forceRefresh) }

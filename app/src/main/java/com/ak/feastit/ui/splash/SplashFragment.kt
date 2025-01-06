@@ -26,7 +26,6 @@ internal class SplashFragment : BaseFragment() {
     private val viewModel: SplashViewModel by viewModels()
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        //TODO(https://www.youtube.com/watch?v=bbvYidjZ_CE)
         setFlowObservers()
     }
 

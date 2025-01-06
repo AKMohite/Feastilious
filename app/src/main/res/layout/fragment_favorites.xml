@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.favorites.FavoritesFragment">
+    tools:context=".ui.favorites.FavoriteRecipesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recipes"
@@ -37,17 +37,11 @@
         app:layout_anchor="@id/search_bar">
 
         <!-- Content goes here (ScrollView, RecyclerView, etc.). -->
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/suggestion_items"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:id="@+id/search_view_suggestion_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </ScrollView>
+            tools:listitem="@layout/component_search_suggestion_text"/>
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

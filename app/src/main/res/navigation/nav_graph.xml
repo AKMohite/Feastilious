@@ -78,7 +78,7 @@
 
     <fragment
         android:id="@+id/favoriteRecipesFragment"
-        android:name="com.ak.feastit.ui.favorites.FavoritesFragment"
+        android:name="com.ak.feastit.ui.favorites.FavoriteRecipesFragment"
         android:label="favorite_recipes_fragment"
         tools:layout="@layout/fragment_favorites">
         <action

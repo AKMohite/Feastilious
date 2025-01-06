@@ -4,14 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_AMOUNT
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_ID
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_NAME
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_TABLE
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_UNIT
-import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
-import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Entity(
     tableName = "shopping_ingredients",
@@ -32,7 +24,7 @@ import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 )
 data class ShoppingEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = DB_TABLE_ID)
+    @ColumnInfo(name = "id")
     val id: String,
     @ColumnInfo("recipe_id")
     val recipeId: Long,

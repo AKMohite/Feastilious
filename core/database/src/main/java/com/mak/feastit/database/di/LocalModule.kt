@@ -2,7 +2,6 @@ package com.mak.feastit.database.di
 
 import android.app.Application
 import androidx.room.Room
-import com.mak.feastit.database.util.Constants.FEAST_DB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +16,7 @@ internal object LocalModule {
     @Provides
     fun provideDataBase(
         app: Application
-    ): com.mak.feastit.database.FeastDB = Room.databaseBuilder(app, com.mak.feastit.database.FeastDatabase::class.java, FEAST_DB)
+    ): com.mak.feastit.database.FeastDB = Room.databaseBuilder(app, com.mak.feastit.database.FeastDatabase::class.java, "feast_db")
         .fallbackToDestructiveMigration() // TODO room migration
         .build()
 

@@ -1,63 +1,60 @@
 package com.mak.feastit.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.mak.feastit.database.entity.IngredientEntity
-import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.relations.RecipeDetailEntity
-import com.mak.feastit.database.util.Constants.DB_MY_RECIPE_BOOK
-import com.mak.feastit.database.util.Constants.DB_RECIPE_CUISINES
-import com.mak.feastit.database.util.Constants.DB_RECIPE_DIETS
-import com.mak.feastit.database.util.Constants.DB_RECIPE_DISH_TYPES
-import com.mak.feastit.database.util.Constants.DB_RECIPE_TABLE
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_NAME
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_SUMMARY
-import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDAO: BaseDAO<RecipeEntity> {
 
-    @Query("SELECT $DB_TABLE_ID FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1")
+    @Query("SELECT id FROM recipes WHERE is_fav = 1")
     suspend fun getFavRecipeIds(): List<Long>
 
     @Transaction
-    @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID= :recipeId")
+    @Query("SELECT * FROM recipes WHERE id= :recipeId")
     suspend fun getRecipeDetail(recipeId: Long): RecipeDetailEntity
 
-    @Query("UPDATE $DB_RECIPE_TABLE SET $DB_MY_RECIPE_BOOK = :isFav WHERE $DB_TABLE_ID = :id")
+    @Query("UPDATE recipes SET is_fav = :isFav WHERE id = :id")
     suspend fun toggleFav(id: Long, isFav: Boolean): Int
 
-    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE 
-                    LOWER($DB_TABLE_COL_NAME) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_TABLE_COL_SUMMARY) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_CUISINES) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_DISH_TYPES) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_DIETS) LIKE '%' || :searchQuery || '%'""")
+    @Query("""SELECT * FROM recipes WHERE 
+                    LOWER(name) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(diets) LIKE '%' || :searchQuery || '%'""")
     suspend fun searchRecipes(searchQuery: String): List<RecipeEntity>
 
-    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE LOWER($DB_RECIPE_DISH_TYPES) LIKE '%'|| :mealType ||'%'""")
+    @Query("""SELECT * FROM recipes WHERE LOWER(dish_types) LIKE '%'|| :mealType ||'%'""")
     suspend fun getRecipesByMealType(mealType: String): List<RecipeEntity>
 
-    @Query("""SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_MY_RECIPE_BOOK = 1 AND
-                    (LOWER($DB_TABLE_COL_NAME) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_TABLE_COL_SUMMARY) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_CUISINES) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_DISH_TYPES) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER($DB_RECIPE_DIETS) LIKE '%' || :searchQuery || '%')""")
+    @Query("""SELECT * FROM recipes WHERE is_fav = 1 AND
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(diets) LIKE '%' || :searchQuery || '%')""")
     suspend fun getFavRecipes(searchQuery: String): List<RecipeEntity>
 
-    @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID = :id")
+
+    @Query("""SELECT * FROM recipes WHERE is_fav = 1 AND
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(diets) LIKE '%' || :searchQuery || '%') LIMIT 50""")
+    fun searchFavRecipes(searchQuery: String): Flow<List<RecipeEntity>>
+
+    @Query("SELECT * FROM recipes WHERE id = :id")
     fun getRecipe(id: Long): Flow<RecipeEntity?>
 
-    @Query("SELECT * FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID IN (:ids)")
+    @Query("SELECT * FROM recipes WHERE id IN (:ids)")
     suspend fun getRecipes(ids: List<Long>): List<RecipeEntity>
 
-    @Query("DELETE FROM $DB_RECIPE_TABLE WHERE $DB_TABLE_ID NOT IN (:neededIds) AND is_fav = 0")
+    @Query("DELETE FROM recipes WHERE id NOT IN (:neededIds) AND is_fav = 0")
     suspend fun deleteRecipesNotIn(neededIds: Set<Long>)
 
     @Query("SELECT * FROM recipes WHERE is_fav = 1")

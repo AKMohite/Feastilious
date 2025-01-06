@@ -59,9 +59,9 @@ class LegacyRecipeViewModel @Inject constructor(
 //        }
 
         queries[QUERY_NUMBER] = DEFAULT_PAGE_SIZE
-        queries[QUERY_OFFSET] = "0" // TODO pagination
-        queries[QUERY_TYPE] = selectedCategory.value // TODO implement meal type
-        queries[QUERY_DIET] = "" // TODO implement diet type
+        queries[QUERY_OFFSET] = "0"
+        queries[QUERY_TYPE] = selectedCategory.value
+        queries[QUERY_DIET] = ""
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILL_INGREDIENTS] = "true"
 
@@ -71,7 +71,7 @@ class LegacyRecipeViewModel @Inject constructor(
     private fun applySearchQuery(searchQuery: String): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
         queries[QUERY_SEARCH] = searchQuery
-        queries[QUERY_OFFSET] = "0" // TODO pagination
+        queries[QUERY_OFFSET] = "0"
         queries[QUERY_NUMBER] = DEFAULT_PAGE_SIZE
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILL_INGREDIENTS] = "true"

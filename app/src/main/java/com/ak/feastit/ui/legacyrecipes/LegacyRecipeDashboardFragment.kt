@@ -71,7 +71,7 @@ class LegacyRecipeDashboardFragment : Fragment(R.layout.legacy_fragment_recipe_d
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.dashboardRecipes.collect { recipes ->
-                recipeAdapter?.submitList(recipes) // TODO check callbacks
+                recipeAdapter?.submitList(recipes)
             }
         }
 

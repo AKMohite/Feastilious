@@ -4,39 +4,33 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_ID
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_NAME
-import com.mak.feastit.database.util.Constants.DB_INGREDIENT_TABLE
-import com.mak.feastit.database.util.Constants.DB_RECIPE_ID
-import com.mak.feastit.database.util.Constants.DB_TABLE_COL_IMG
-import com.mak.feastit.database.util.Constants.DB_TABLE_ID
 
 @Entity(
-    tableName = DB_INGREDIENT_TABLE,
+    tableName = "recipe_ingredients",
     foreignKeys = [
         ForeignKey(
             entity = RecipeEntity::class,
             parentColumns = ["id"],
-            childColumns = [DB_RECIPE_ID],
+            childColumns = ["recipe_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class IngredientEntity(
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = DB_TABLE_ID)
+    @ColumnInfo(name = "id")
     val id: String,
-    @ColumnInfo(name = DB_INGREDIENT_ID)
+    @ColumnInfo(name = "ingredient_id")
     val ingredientId: Long,
-    @ColumnInfo(name = DB_RECIPE_ID)
+    @ColumnInfo(name = "recipe_id")
     val recipeId: Long,
     @ColumnInfo(name = "aisle_category")
     val aisle: String? = null,
-    @ColumnInfo(name = DB_INGREDIENT_NAME)
+    @ColumnInfo(name = "ingredient_name")
     val ingredientName: String,
 //    @ColumnInfo(name = DB_INGREDIENT_CONSISTENCY)
 //    val ingredientConsistency: String,
-    @ColumnInfo(name = DB_TABLE_COL_IMG)
+    @ColumnInfo(name = "img")
     val ingredientImg: String,
     @ColumnInfo(name = "quantity")
     val quantity: Double,

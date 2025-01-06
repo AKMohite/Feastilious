@@ -49,7 +49,7 @@ class LegacyFavoriteRecipesFragment : Fragment(R.layout.legacy_favorite_recipes_
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.favRecipes.collect { recipes ->
-                recipeAdapter.submitList(recipes) // TODO check callbacks
+                recipeAdapter.submitList(recipes)
             }
         }
     }
