@@ -51,9 +51,9 @@ internal class RealRecipeRepository @Inject constructor(
         val recipeDTO = api.getRecipe(recipeId = id, recipeQuery = query)
         val nutrients = recipeDTO.nutrition?.nutrients
         val ingredients = recipeDTO.extendedIngredients
-        val calorieBreakdown = recipeDTO.nutrition?.caloricBreakdown
+        val calorieBreakdown = recipeDTO.nutrition?.caloricBreakdown ?: emptyMap()
 
-        val recipeEntity = mapper.jsonToEntity(recipeDTO)
+        val recipeEntity = mapper.jsonToEntity(recipeDTO, calorieBreakdown)
         val ingredientEntities = mapper.jsonToIngredientsEntity(recipeDTO.id, ingredients)
 //        TODO add nutrition table
 //        val nutritionEntities = mapper.jsonToNutritionEntity(recipeDTO.id, nutrients, calorieBreakdown)

@@ -1,7 +1,6 @@
 package com.ak.feastit.ui.explore
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels

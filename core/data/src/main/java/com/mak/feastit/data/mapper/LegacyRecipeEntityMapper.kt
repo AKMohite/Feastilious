@@ -24,7 +24,8 @@ internal class LegacyRecipeEntityMapper:
                 isAddedToCollection = false,
                 cuisines = model.cuisines?.joinToString(",") ?: "",
                 dishTypes = model.dishTypes?.joinToString(",") ?: "",
-                diets = model.diets?.joinToString(",") ?: ""
+                diets = model.diets?.joinToString(",") ?: "",
+                caloricBreakdown = emptyMap()
             ),
             instructions = toInstructionsEntity(model.id, model.analyzedInstructions),
             ingredients = toIngredientsEntity(model.id, model.extendedIngredients)

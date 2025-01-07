@@ -5,7 +5,9 @@ import com.mak.feastit.data.repository.LegacyRecipeRepository
 import com.mak.feastit.data.repository.RealRecipeRepository
 import com.mak.feastit.data.repository.RealRecipesRepository
 import com.mak.feastit.data.repository.LegacyRecipeDetailRepository
+import com.mak.feastit.data.repository.RealCartRepository
 import com.mak.feastit.data.repository.RealStaleRepository
+import com.mak.feastit.domain.repository.CartRepository
 import com.mak.feastit.domain.repository.ILegacyCategoryRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeDetailRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeRepository
@@ -24,20 +26,22 @@ internal abstract class RepositoryModule {
 
 
     @Binds
-    abstract fun provideRecipesRepository(repo: RealRecipesRepository): RecipesRepository
+    abstract fun bindRecipesRepository(repo: RealRecipesRepository): RecipesRepository
 
     @Binds
-    abstract fun provideRecipeRepository(repo: RealRecipeRepository): RecipeRepository
-
-
-    @Binds
-    abstract fun provideCategoryRepository(repo: LegacyCategoryRepository): ILegacyCategoryRepository
+    abstract fun bindRecipeRepository(repo: RealRecipeRepository): RecipeRepository
 
     @Binds
-    abstract fun provideLegacyRecipeRepository(repo: LegacyRecipeRepository): ILegacyRecipeRepository
+    abstract fun bindCartRepository(repo: RealCartRepository): CartRepository
 
     @Binds
-    abstract fun provideRecipeDetailRepository(repo: LegacyRecipeDetailRepository): ILegacyRecipeDetailRepository
+    abstract fun bindCategoryRepository(repo: LegacyCategoryRepository): ILegacyCategoryRepository
+
+    @Binds
+    abstract fun bindLegacyRecipeRepository(repo: LegacyRecipeRepository): ILegacyRecipeRepository
+
+    @Binds
+    abstract fun bindRecipeDetailRepository(repo: LegacyRecipeDetailRepository): ILegacyRecipeDetailRepository
 }
 
 @Module
@@ -45,6 +49,6 @@ internal abstract class RepositoryModule {
 internal abstract class SingletonRepositoryModule {
 
     @Binds
-    abstract fun provideStaleRepository(repo: RealStaleRepository): StaleRepository
+    abstract fun bindStaleRepository(repo: RealStaleRepository): StaleRepository
 
 }

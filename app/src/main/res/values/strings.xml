@@ -63,4 +63,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="search_recipe_suggestions">Recipes</string>
     <string name="search_recipe_recent_searches">Recent searches</string>
     <string name="search_suggestion_icon">Search suggestion icon</string>
+    <string name="group_by_recipe">Recipe</string>
+    <string name="group_by_aisle">Aisle</string>
+    <string name="servings">Servings: %d</string>
 </resources>

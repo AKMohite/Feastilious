@@ -34,5 +34,7 @@ data class RecipeEntity(
     @ColumnInfo(name = "dish_types")
     val dishTypes: String,
     @ColumnInfo(name = "diets")
-    val diets: String
+    val diets: String,
+    @ColumnInfo(name = "caloric_breakdown")
+    val caloricBreakdown: Map<String, String>
 )

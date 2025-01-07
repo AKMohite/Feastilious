@@ -144,7 +144,7 @@ data class USMeasureDTO(
 @JsonClass(generateAdapter = true)
 data class NutritionDTO(
     @Json(name = "caloricBreakdown")
-    val caloricBreakdown: CaloricBreakdownDTO? = null,
+    val caloricBreakdown: Map<String, Double>? = emptyMap(),
 //    @Json(name = "flavonoids")
 //    val flavonoids: List<FlavonoidDTO?>? = null,
 //    @Json(name = "ingredients")

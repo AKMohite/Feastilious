@@ -67,7 +67,7 @@ internal class ExploreSectionAdapter(
                 (holder as SectionRecipesViewHolder).bind(adapterItem)
             }
         }
-
+//TODO handle restore state in other adapters
         val state = states[position]
 //        if (state != null) {
 //            when(holder) {
@@ -125,9 +125,9 @@ internal class ExploreSectionAdapter(
     }
 
     companion object {
-        const val TOP_HORIZONTAL_BANNER = 0
-        const val HORIZONTAL_CHIPS = 1
-        const val HORIZONTAL_RECIPES = 2
+        private const val TOP_HORIZONTAL_BANNER = 0
+        private const val HORIZONTAL_CHIPS = 1
+        private const val HORIZONTAL_RECIPES = 2
     }
 }
 

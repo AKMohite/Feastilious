@@ -72,6 +72,7 @@ internal class RealRecipesRepository @Inject constructor(
     }
 
     override fun observeSearchSuggestions(query: String): Flow<List<Recipe>> {
+        Timber.d("Search for $query")
         return db.recipeDAO().searchFavRecipes(query)
             .distinctUntilChanged()
             .flowOn(dispatcher.io)

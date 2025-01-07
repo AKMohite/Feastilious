@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b61e44bec50235464ed7b581ee27e2e6",
+    "identityHash": "2e5f15f54b7af695f2aefc6578cef51d",
     "entities": [
       {
         "tableName": "popular_recipes",
@@ -281,7 +281,7 @@
       },
       {
         "tableName": "recipes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `summary` TEXT NOT NULL, `img` TEXT NOT NULL, `source` TEXT NOT NULL, `ready_in_mins` INTEGER NOT NULL, `servings` INTEGER NOT NULL, `price_per_serving` REAL NOT NULL, `source_name` TEXT NOT NULL, `is_fav` INTEGER NOT NULL, `cuisines` TEXT NOT NULL, `dish_types` TEXT NOT NULL, `diets` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `summary` TEXT NOT NULL, `img` TEXT NOT NULL, `source` TEXT NOT NULL, `ready_in_mins` INTEGER NOT NULL, `servings` INTEGER NOT NULL, `price_per_serving` REAL NOT NULL, `source_name` TEXT NOT NULL, `is_fav` INTEGER NOT NULL, `cuisines` TEXT NOT NULL, `dish_types` TEXT NOT NULL, `diets` TEXT NOT NULL, `caloric_breakdown` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -358,6 +358,12 @@
           {
             "fieldPath": "diets",
             "columnName": "diets",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "caloricBreakdown",
+            "columnName": "caloric_breakdown",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -619,7 +625,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b61e44bec50235464ed7b581ee27e2e6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e5f15f54b7af695f2aefc6578cef51d')"
     ]
   }
 }

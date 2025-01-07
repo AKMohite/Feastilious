@@ -63,7 +63,7 @@
 
         <action
             android:id="@+id/collection_to_shopping"
-            app:destination="@id/favoriteRecipesFragment"/>
+            app:destination="@id/shoppingCartFragment"/>
 
         <action
             android:id="@+id/collection_to_meal_planner"
@@ -86,9 +86,9 @@
             app:destination="@id/recipeDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/shoppingListFragment"
-        android:name="com.ak.feastit.ui.cart.ShoppingListFragment"
+        android:id="@+id/shoppingCartFragment"
+        android:name="com.ak.feastit.ui.cart.ShoppingCartFragment"
         android:label="shopping_list_fragment"
-        tools:layout="@layout/shopping_list_fragment"
+        tools:layout="@layout/fragment_shopping_cart"
         />
 </navigation>

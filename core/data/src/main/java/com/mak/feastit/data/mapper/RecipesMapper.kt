@@ -25,7 +25,8 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
                 isAddedToCollection = false,
                 cuisines = json.cuisines?.joinToString(",") ?: "",
                 dishTypes = json.dishTypes?.joinToString(",") ?: "",
-                diets = json.diets?.joinToString(",") ?: ""
+                diets = json.diets?.joinToString(",") ?: "",
+                caloricBreakdown = emptyMap()
             )
     }
 

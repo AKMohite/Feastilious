@@ -1,10 +1,12 @@
 package com.mak.feastit.data.mapper
 
+import com.mak.feastit.database.entity.CartEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.domain.model.CartIngredient
 import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
@@ -35,8 +37,16 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             isAddedToCollection = false,
             cuisines = get(json.cuisines),
             dishTypes = get(json.dishTypes),
-            diets = get(json.diets)
+            diets = get(json.diets),
+            caloricBreakdown = emptyMap()
         )
+    }
+
+    fun jsonToEntity(json: RecipeInformationDTO, calorieBreakdown: Map<String, Double>): RecipeEntity{
+        val breakdown = calorieBreakdown.map {
+            it.key.replace("percent", "") to it.value.toString()
+        }.toMap()
+        return jsonToEntity(json).copy(caloricBreakdown = breakdown)
     }
 
     override fun entityToModel(entity: RecipeEntity): RecipeDetail {
@@ -139,7 +149,8 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
                 isAddedToCollection = false,
                 cuisines = cuisines,
                 dishTypes = dishTypes,
-                diets = diets
+                diets = diets,
+                caloricBreakdown = emptyMap()
             )
         }
     }
@@ -204,6 +215,22 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             Shopping(
                 id = entity.id,
                 isBought = entity.isBought
+            )
+        }
+    }
+
+    fun entitiesToCart(entities: List<CartEntity>): List<CartIngredient> {
+        return entities.map { entity ->
+            CartIngredient(
+                id = entity.id,
+                recipeId = entity.recipeId,
+                recipeName = entity.recipeName,
+                recipeImg = entity.recipeImg,
+                isBought = entity.isBought,
+                quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}",
+                ingredientName = entity.ingredientName,
+                aisleCategory = entity.aisleCategory,
+                servings = entity.servings
             )
         }
     }

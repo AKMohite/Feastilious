@@ -16,6 +16,8 @@ import com.ak.feastit.databinding.ActivityMainBinding
 import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.show
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigationrail.NavigationRailView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +47,11 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.reload()
 
-        binding.mainBottomNavigation.setupWithNavController(navController)
+        // TODO need to provide view checks?
+        when(val navView = binding.mainBottomNavigation) {
+            is BottomNavigationView -> navView.setupWithNavController(navController)
+            is NavigationRailView -> navView.setupWithNavController(navController)
+        }
 
     }
 

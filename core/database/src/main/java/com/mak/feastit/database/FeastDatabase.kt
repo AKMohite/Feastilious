@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.withTransaction
 import com.mak.feastit.database.converters.InstantConverter
+import com.mak.feastit.database.converters.MapStringConverters
 import com.mak.feastit.database.dao.HealthyRecipeDAO
 import com.mak.feastit.database.dao.IngredientDAO
 import com.mak.feastit.database.dao.LastSyncDAO
@@ -44,7 +45,7 @@ import com.mak.feastit.database.entity.TopRecipeEntity
     ],
     version = 1
 )
-@TypeConverters(InstantConverter::class)
+@TypeConverters(InstantConverter::class, MapStringConverters::class)
 internal abstract class FeastDatabase: RoomDatabase(), FeastDB {
 
     override suspend fun handleTransaction(block: suspend () -> Unit) {
