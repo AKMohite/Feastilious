@@ -11,7 +11,6 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.model.Shopping
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -23,11 +22,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 
 internal class RealRecipeRepository @Inject constructor(
     private val api: FeastAPIService,
@@ -100,35 +103,6 @@ internal class RealRecipeRepository @Inject constructor(
         db.recipeDAO().update(local.copy(isAddedToCollection = isAddedToCollection))
     }
 
-    override suspend fun toggleShoppingIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
-        val shopping = db.shoppingDAO().getCart(recipeId)
-        if (shopping.isEmpty()) {
-            Timber.d("Adding ingredients to cart for recipe: $recipeId")
-//            add to shopping
-            val ingredients = db.ingredientDAO().getIngredientsFor(recipeId).firstOrNull() ?: return@withContext
-            val shoppingCart = mapper.ingredientsToShoppingCarts(ingredients)
-            db.shoppingDAO().insert(shoppingCart)
-        } else {
-            Timber.d("Remove ingredients from cart for recipe: $recipeId")
-            db.shoppingDAO().deleteCart(recipeId)
-        }
-    }
-
-
-    override suspend fun toggleShoppingIngredient(ingredientId: String) = withContext(dispatcher.io) {
-        val shopping = db.shoppingDAO().getIngredient(ingredientId)
-        if (shopping == null) {
-            Timber.d("Add ingredient to shopping cart: $ingredientId")
-//            add to shopping
-            val ingredient = db.ingredientDAO().getIngredient(ingredientId) ?: return@withContext
-            val shoppingCart = mapper.ingredientToShoppingCart(ingredient)
-            db.shoppingDAO().insert(shoppingCart)
-        } else {
-            Timber.d("Remove ingredient from shopping cart: $ingredientId")
-            db.shoppingDAO().delete(shopping)
-        }
-    }
-
     override fun observerRecipe(id: Long): Flow<RecipeDetail> {
         return db.recipeDAO().getRecipe(id)
             .filterNotNull()
@@ -155,15 +129,6 @@ internal class RealRecipeRepository @Inject constructor(
             }.flowOn(dispatcher.io)
     }
 
-    override fun observeShoppingCartForRecipe(recipeId: Long): Flow<List<Shopping>> {
-        return db.shoppingDAO().observeCartForRecipe(recipeId)
-            .distinctUntilChanged()
-            .flowOn(dispatcher.io)
-            .map { entities ->
-                mapper.entityToShopping(entities)
-            }.flowOn(dispatcher.computation)
-    }
-
     override fun observeInstructions(id: Long): Flow<List<Instruction>> {
         return db.recipeStepDAO().getStepsFor(id)
             .flowOn(dispatcher.io)
@@ -184,7 +149,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.SIMILAR_RECIPES.name,
                 entityId = recipeId,
-                lastSyncedAt = Instant.now()
+                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -199,7 +164,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
                 entityId = stepEntities.first().recipeId,
-                lastSyncedAt = Instant.now()
+                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -221,7 +186,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0,
                 entityType = SyncType.RECIPE_DETAILS.name,
                 entityId = entity.id,
-                lastSyncedAt = Instant.now()
+                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -231,12 +196,12 @@ internal class RealRecipeRepository @Inject constructor(
         forceRefresh: Boolean,
         id: Long,
         syncType: SyncType,
-        duration: Duration = Duration.of(60, ChronoUnit.DAYS)
+        duration: Duration = 60.days
     ): Boolean {
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(syncType.name, id)
 //        TODO validity duration can be less but for now kept 6hours
-            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
+            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt.toInstant(TimeZone.currentSystemDefault()), duration)) {
                 return false
             }
         }
@@ -244,6 +209,6 @@ internal class RealRecipeRepository @Inject constructor(
     }
 
     private fun isRequestValid(lastSyncedAt: Instant, duration: Duration): Boolean {
-        return lastSyncedAt > (Instant.now() - duration)
+        return lastSyncedAt > (Clock.System.now() - duration)
     }
 }

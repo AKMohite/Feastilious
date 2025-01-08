@@ -12,10 +12,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
-import java.time.Duration
-import java.time.temporal.ChronoUnit
+import java.sql.Time
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
 
 const val LIMIT_ITEMS = 20
 
@@ -29,15 +38,52 @@ internal class RealRecipesRepository @Inject constructor(
 
     override val recipesMapper = RecipesMapper()
 
+//    meal planner date range
+    private fun dateRange() {
+//        val today = Calendar.getInstance()
+//        val startOfWeek = today.apply {
+//            firstDayOfWeek = Calendar.SUNDAY
+//            set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+//        }.time
+//
+//        val endOfWeek = today.apply {
+//            firstDayOfWeek = Calendar.SUNDAY
+//            set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
+//        }.time
+//        Timber.d("Start of week: $startOfWeek")
+//        Timber.d("End of week: $endOfWeek")
+
+        val now = Clock.System.now()
+        val toLocalDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
+        val today = toLocalDateTime.date
+        val days = mutableListOf<LocalDate>()
+        val firstWeekDay = today.daysShift(-DayOfWeek.entries.indexOf(today.dayOfWeek))
+        for (i in 0 until java.time.DayOfWeek.entries.toTypedArray().count()) {
+            days.add(firstWeekDay.daysShift(i))
+        }
+        val dayStrings = days.map { "${it.dayOfWeek}, ${it.dayOfMonth}" }
+        Timber.d("$dayStrings")
+
+    }
+
+    fun LocalDate.daysShift(days: Int): LocalDate = when {
+        days < 0 -> {
+            minus(1, DateTimeUnit.DayBased(-days))
+        }
+        days > 0 -> {
+            plus(1, DateTimeUnit.DayBased(days))
+        }
+        else -> this
+    }
+
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
+        dateRange()
         if (page > 5) return@withContext // TODO Use pro just have limited API calls condition can be removed
         if (!forceRefresh) {
             val hasLocalData = isLocallyAvailable(page, request)
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
 //        TODO validity duration can be less but for now kept 6hours
-            val duration = Duration.of(60, ChronoUnit.DAYS)
-//            val duration = Period.ofWeeks(6)
-            if (hasLocalData && lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
+            if (hasLocalData && lastSynced != null && isRequestValid(lastSynced.lastSyncedAt.toInstant(TimeZone.currentSystemDefault()), 60.days)) {
                 return@withContext
             }
         }

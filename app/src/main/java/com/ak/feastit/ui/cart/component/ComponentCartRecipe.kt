@@ -16,7 +16,7 @@ internal class ComponentCartRecipe(
         binding.recipeName.text = recipe.name
         binding.recipeImg.load(recipe.img)
         binding.servings.apply {
-            context.getString(R.string.servings, recipe.servings)
+            text = context.getString(R.string.servings, recipe.servings)
         }
         binding.removeRecipeBtn.onClick {
             onCartEvent(CartEvent.RemoveRecipe(recipe.id))

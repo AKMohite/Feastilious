@@ -7,9 +7,12 @@ import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.remote.dto.RecipeDTO
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
-import java.time.Duration
-import java.time.Instant
+import kotlin.time.Duration
 
 internal abstract class BaseRecipeRepository(
     private val db: FeastDB
@@ -29,7 +32,7 @@ internal abstract class BaseRecipeRepository(
                 val currentSynced = LastSyncEntity(
                     id = 0,
                     entityType = request.name,
-                    lastSyncedAt = Instant.now()
+                    lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 )
                 db.lastSyncDao().insert(currentSynced)
                 deleteRecipes(request)
@@ -42,7 +45,7 @@ internal abstract class BaseRecipeRepository(
     }
 
     protected fun isRequestValid(lastSyncedAt: Instant, duration: Duration): Boolean {
-        return lastSyncedAt > (Instant.now() - duration)
+        return lastSyncedAt > (Clock.System.now() - duration)
     }
 
     protected fun getOffset(page: Int): String {

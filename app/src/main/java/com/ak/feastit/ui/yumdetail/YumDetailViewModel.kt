@@ -6,6 +6,7 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.repository.CartRepository
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.usecase.RecipeDetailIngredientsUsecase
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -23,7 +24,8 @@ private const val ARGS_RECIPE_ID = "recipeId"
 
 @HiltViewModel
 internal class YumDetailViewModel @Inject constructor(
-    private val repository: RecipeRepository,
+    private val recipeRepository: RecipeRepository,
+    private val cartRepository: CartRepository,
     private val ingredients: RecipeDetailIngredientsUsecase,
     dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
@@ -47,19 +49,19 @@ internal class YumDetailViewModel @Inject constructor(
     private fun refreshRecipeInfo(recipeId: Long, forceRefresh: Boolean = false) {
         uiScope.launch {
             Timber.d("Refresh recipe info for: $recipeId")
-            repository.refreshRecipe(id = recipeId, forceRefresh = forceRefresh)
-            repository.refreshAnalyzedInstruction(id = recipeId, forceRefresh = forceRefresh)
-            repository.refreshSimilarRecipes(id = recipeId, forceRefresh = forceRefresh)
+            recipeRepository.refreshRecipe(id = recipeId, forceRefresh = forceRefresh)
+            recipeRepository.refreshAnalyzedInstruction(id = recipeId, forceRefresh = forceRefresh)
+            recipeRepository.refreshSimilarRecipes(id = recipeId, forceRefresh = forceRefresh)
         }
     }
 
     private fun observeRecipe(id: Long) {
         Timber.d("Observe recipe details: $id")
         combine(
-            repository.observerRecipe(id),
-            repository.observerSimilarRecipes(id),
+            recipeRepository.observerRecipe(id),
+            recipeRepository.observerSimilarRecipes(id),
             ingredients(id),
-            repository.observeInstructions(id)
+            recipeRepository.observeInstructions(id)
         ) { recipe, similarRecipes, ingredients, instructions ->
             _state.update { currentState ->
                 currentState.copy(
@@ -76,14 +78,14 @@ internal class YumDetailViewModel @Inject constructor(
         uiScope.launch {
             val id = state.value.overview?.recipeId ?: return@launch
             Timber.d("Toggle favorite: $id")
-            repository.toggleFavorite(id)
+            recipeRepository.toggleFavorite(id)
         }
     }
 
     fun toggleIngredientCart(id: String) {
         uiScope.launch {
             Timber.d("Toggle ingredient for shopping: $id")
-            repository.toggleShoppingIngredient(id)
+            cartRepository.toggleShoppingIngredient(id)
         }
     }
 
