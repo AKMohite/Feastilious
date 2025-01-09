@@ -6,6 +6,7 @@ import android.text.style.StrikethroughSpan
 import androidx.core.text.bold
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentCartIngredientBinding
+import com.ak.feastit.utils.onClick
 import com.mak.feastit.domain.model.CartIngredient
 
 internal class ComponentCartIngredient(
@@ -29,9 +30,10 @@ internal class ComponentCartIngredient(
         }
         binding.ingredientName.text = str
         binding.cbBuy.isChecked = ingredient.isBought
-        binding.cbBuy.setOnCheckedChangeListener { _, _ ->
-            onCartEvent(CartEvent.ToggleIngredient(ingredient.id))
-        }
+        binding.root.onClick { onCartEvent(CartEvent.ToggleIngredient(ingredient.id)) }
+//        binding.cbBuy.setOnCheckedChangeListener { _, _ ->
+//            onCartEvent(CartEvent.ToggleIngredient(ingredient.id))
+//        }
     }
 
 }

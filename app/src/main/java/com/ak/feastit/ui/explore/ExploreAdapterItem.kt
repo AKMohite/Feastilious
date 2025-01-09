@@ -6,6 +6,9 @@ internal sealed interface ExploreAdapterItem {
     val category: ExploreCategory
     val items: List<Any>
     fun hasNestedChildren(): Boolean = items.isNotEmpty()
+    fun isSameAs(newItem: ExploreAdapterItem): Boolean {
+        return this.category.ordinal == newItem.category.ordinal && this.category == newItem.category
+    }
 
     data class TopBanner(
         override val category: ExploreCategory = ExploreCategory.BANNER_RECIPES,

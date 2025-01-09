@@ -49,7 +49,7 @@ internal class RealCartRepository @Inject constructor(
         db.shoppingDAO().delete(ingredient)
     }
 
-    override suspend fun toggleShoppingIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
+    override suspend fun toggleCartIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
         val shopping = db.shoppingDAO().getCart(recipeId)
         if (shopping.isEmpty()) {
             Timber.d("Adding ingredients to cart for recipe: $recipeId")
@@ -75,6 +75,20 @@ internal class RealCartRepository @Inject constructor(
         } else {
             Timber.d("Remove ingredient from shopping cart: $ingredientId")
             db.shoppingDAO().delete(shopping)
+        }
+    }
+
+    override suspend fun toggleShoppingAllIngredientsForRecipe(recipeId: Long) = withContext(dispatcher.io) {
+        val shopping = db.shoppingDAO().getCart(recipeId)
+        if (shopping.isEmpty()) {
+            Timber.d("Adding ingredients to cart for recipe: $recipeId")
+//            add to shopping
+            val ingredients = db.ingredientDAO().getIngredientsFor(recipeId).firstOrNull() ?: return@withContext
+            val shoppingCart = mapper.recipeToShoppingCart(ingredients, shopping)
+            db.shoppingDAO().insert(shoppingCart)
+        } else {
+            Timber.d("Remove ingredients from cart for recipe: $recipeId")
+            db.shoppingDAO().deleteCart(recipeId)
         }
     }
 

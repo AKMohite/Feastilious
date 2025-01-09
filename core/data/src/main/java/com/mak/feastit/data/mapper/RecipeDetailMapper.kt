@@ -234,6 +234,20 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             )
         }
     }
+
+    fun recipeToShoppingCart(
+        ingredients: List<IngredientEntity>,
+        shoppingItems: List<ShoppingEntity>
+    ): List<ShoppingEntity> {
+        val recipeIngredients = ingredients.map { entity ->
+            val shopping = shoppingItems.firstOrNull { shoppingEntity -> shoppingEntity.id == entity.id }
+            val newEntity = ingredientToShoppingCart(entity)
+            newEntity.copy(
+                isBought = shopping?.isBought ?: newEntity.isBought
+            )
+        }
+        return recipeIngredients
+    }
 }
 
 internal fun getDisplayableDouble(value: Double): String {

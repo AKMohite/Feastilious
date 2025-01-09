@@ -34,10 +34,15 @@ interface CartRepository {
     /**
      * Toggle shopping ingredients for recipe to add or remove all recipe ingredients from cart
      */
-    suspend fun toggleShoppingIngredientsForRecipe(recipeId: Long)
+    suspend fun toggleCartIngredientsForRecipe(recipeId: Long)
 
     /**
      * Toggle ingredient in recipe whether to add or remove from cart
      */
     suspend fun toggleShoppingIngredient(ingredientId: String)
+
+    /**
+     * Toggle shopping ingredients for recipe to add or remove all recipe ingredients from cart
+     */
+    suspend fun toggleShoppingAllIngredientsForRecipe(recipeId: Long)
 }

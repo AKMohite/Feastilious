@@ -20,14 +20,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/space_medium">
+            android:padding="@dimen/space_medium"
+            android:gravity="center_vertical">
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_gravity="center_vertical"
                 android:text="@string/shopping_cart"
-                android:textAppearance="?attr/textAppearanceTitleLarge"/>
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"/>
             <RadioGroup
                 android:id="@+id/cart_group_by"
                 android:layout_width="wrap_content"

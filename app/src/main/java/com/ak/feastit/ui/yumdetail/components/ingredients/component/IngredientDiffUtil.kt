@@ -1,17 +1,16 @@
 package com.ak.feastit.ui.yumdetail.components.ingredients.component
 
 import androidx.recyclerview.widget.DiffUtil
+import com.ak.feastit.ui.yumdetail.IngredientSection
 import com.mak.feastit.domain.model.Ingredient
 
-internal class IngredientDiffUtil: DiffUtil.ItemCallback<Ingredient>() {
-    override fun areItemsTheSame(oldItem: Ingredient, newItem: Ingredient): Boolean {
-        return oldItem == newItem
+internal class IngredientDiffUtil: DiffUtil.ItemCallback<IngredientSection>() {
+    override fun areItemsTheSame(oldItem: IngredientSection, newItem: IngredientSection): Boolean {
+        return oldItem.areItemsTheSame(newItem)
     }
 
-    override fun areContentsTheSame(oldItem: Ingredient, newItem: Ingredient): Boolean {
-        return oldItem.id == newItem.id &&
-                oldItem.isInCart == newItem.isInCart &&
-                oldItem.isBought == newItem.isBought
+    override fun areContentsTheSame(oldItem: IngredientSection, newItem: IngredientSection): Boolean {
+        return oldItem.areContentsTheSame(newItem)
     }
 
 }

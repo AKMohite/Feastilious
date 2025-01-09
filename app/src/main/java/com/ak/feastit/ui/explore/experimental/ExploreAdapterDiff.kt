@@ -14,7 +14,7 @@ internal class ExploreAdapterDiff: androidx.recyclerview.widget.DiffUtil.ItemCal
         oldItem: ExploreAdapterItem,
         newItem: ExploreAdapterItem
     ): Boolean {
-        return oldItem.category.ordinal == newItem.category.ordinal && oldItem.category == newItem.category
+        return oldItem.isSameAs(newItem)
     }
 
 }

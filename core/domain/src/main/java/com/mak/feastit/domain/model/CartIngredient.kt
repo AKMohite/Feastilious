@@ -10,4 +10,10 @@ data class CartIngredient(
     val recipeName: String,
     val recipeImg: String,
     val servings: Int
-)
+) {
+    fun isSameAs(ingredient: CartIngredient): Boolean {
+        return this.id == ingredient.id
+                && this.ingredientName == ingredient.ingredientName
+                && this.isBought == ingredient.isBought
+    }
+}

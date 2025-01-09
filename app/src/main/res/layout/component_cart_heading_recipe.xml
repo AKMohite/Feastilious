@@ -44,7 +44,7 @@
         android:id="@+id/servings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Servings"
+        tools:text="Servings: 4"
         android:textAppearance="?attr/textAppearanceBodySmall"
         android:padding="@dimen/space_tiny"
         android:textColor="?attr/colorOnPrimarySurface"

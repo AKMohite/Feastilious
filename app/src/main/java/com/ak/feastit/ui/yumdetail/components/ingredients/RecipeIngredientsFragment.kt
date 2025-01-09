@@ -30,8 +30,11 @@ internal class RecipeIngredientsFragment : BaseFragment() {
 
     private val adapter: RecipeIngredientsAdapter by lazy {
         RecipeIngredientsAdapter(
-            onToggleAddToCart = { id ->
+            onToggleIngredientToCart = { id ->
                 viewModel.toggleIngredientCart(id)
+            },
+            onToggleAddToCart = {
+                viewModel.toggleCart()
             }
         )
     }
@@ -43,7 +46,7 @@ internal class RecipeIngredientsFragment : BaseFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.state.collectLatest { state ->
-                        adapter.reload(state.ingredients)
+                        adapter.reload(state.ingredientSections)
                     }
                 }
             }

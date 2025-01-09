@@ -29,7 +29,9 @@ internal class RecipeInstructionsFragment : BaseFragment() {
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.recipeInstructions.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        val adapter = RecipeInstructionsAdapter()
+        val adapter = RecipeInstructionsAdapter {
+//            viewModel.toggleMealPlan()
+        }
         binding.recipeInstructions.adapter = adapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

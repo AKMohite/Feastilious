@@ -11,7 +11,12 @@ internal data class CartRecipe(
     val name: String,
     val img: String,
     val servings: Int
-)
+) {
+    fun isSameAs(recipe: CartRecipe): Boolean {
+        return this.id == recipe.id &&
+                recipe.name == this.name
+    }
+}
 
 internal sealed interface ShoppingCart {
 
@@ -35,8 +40,8 @@ internal sealed interface ShoppingCart {
         }
 
         override fun areContentsTheSame(other: ShoppingCart): Boolean {
-            val recipe = other as? RecipeHeading ?: return false
-            return recipe.recipe.id == this.recipe.id && recipe.recipe.name == this.recipe.name
+            val recipe = (other as? RecipeHeading)?.recipe ?: return false
+            return recipe.isSameAs(this.recipe)
         }
     }
 
@@ -46,10 +51,8 @@ internal sealed interface ShoppingCart {
         }
 
         override fun areContentsTheSame(other: ShoppingCart): Boolean {
-            val ingredient = other as? Ingredient ?: return false
-            return ingredient.ingredient.id == this.ingredient.id
-                    && ingredient.ingredient.ingredientName == this.ingredient.ingredientName
-                    && ingredient.ingredient.isBought == this.ingredient.isBought
+            val ingredient = (other as? Ingredient)?.ingredient ?: return false
+            return ingredient.isSameAs(ingredient)
         }
     }
 }

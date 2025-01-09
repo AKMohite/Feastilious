@@ -13,10 +13,11 @@ import com.mak.feastit.domain.model.Ingredient
 
 
 class IngredientViewHolder(
-    private val binding: ComponentRecipeIngredientBinding
+    private val binding: ComponentRecipeIngredientBinding,
+    private val onToggleIngredientToCart: (String) -> Unit
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(ingredient: Ingredient, onToggleAddToCart: (String) -> Unit) {
+    fun bind(ingredient: Ingredient) {
 //        binding.imgIngredient.load(ingredient.image)
         val str = SpannableStringBuilder()
             .bold { append(ingredient.quantity) }
@@ -39,7 +40,7 @@ class IngredientViewHolder(
         }
         with(binding.toggleCartBtn) {
             icon = ContextCompat.getDrawable(this.context, cartIcon)
-            onClick { onToggleAddToCart(ingredient.id) }
+            onClick { onToggleIngredientToCart(ingredient.id) }
         }
     }
 }

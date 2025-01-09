@@ -8,4 +8,10 @@ data class Ingredient(
         val quantity: String,
         val isBought: Boolean = false,
         val isInCart: Boolean = false
-)
+) {
+    fun isSameAs(item: Ingredient): Boolean {
+        return this.id == item.id &&
+                this.isInCart == item.isInCart &&
+                this.isBought == item.isBought
+    }
+}

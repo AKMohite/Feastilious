@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentRecipeStepBinding
 import com.mak.feastit.domain.model.Instruction
 
-internal class InstructionViewHolder(
+internal class ComponentInstructionStep(
     private val binding: ComponentRecipeStepBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
