@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 
 @Entity(
     tableName = "meal_planner",
@@ -21,5 +21,5 @@ data class MealPlanEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Long, // recipeId
     @ColumnInfo(name = "planned_for")
-    val plannedFor: LocalDateTime? // can be null and user can set this value later
+    val plannedFor: Instant? // can be null and user can set this value later
 )

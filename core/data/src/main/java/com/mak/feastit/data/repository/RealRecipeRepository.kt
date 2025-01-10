@@ -149,7 +149,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.SIMILAR_RECIPES.name,
                 entityId = recipeId,
-                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                lastSyncedAt = Clock.System.now()
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -164,7 +164,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
                 entityId = stepEntities.first().recipeId,
-                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                lastSyncedAt = Clock.System.now()
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -186,7 +186,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0,
                 entityType = SyncType.RECIPE_DETAILS.name,
                 entityId = entity.id,
-                lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                lastSyncedAt = Clock.System.now()
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -201,7 +201,7 @@ internal class RealRecipeRepository @Inject constructor(
         if (!forceRefresh) {
             val lastSynced = db.lastSyncDao().getLastSync(syncType.name, id)
 //        TODO validity duration can be less but for now kept 6hours
-            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt.toInstant(TimeZone.currentSystemDefault()), duration)) {
+            if (lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, duration)) {
                 return false
             }
         }

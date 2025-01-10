@@ -32,7 +32,7 @@ internal abstract class BaseRecipeRepository(
                 val currentSynced = LastSyncEntity(
                     id = 0,
                     entityType = request.name,
-                    lastSyncedAt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                    lastSyncedAt = Clock.System.now()
                 )
                 db.lastSyncDao().insert(currentSynced)
                 deleteRecipes(request)

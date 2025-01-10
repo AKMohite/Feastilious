@@ -85,13 +85,12 @@ internal class RealRecipesRepository @Inject constructor(
     }
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
-        dateRange()
         if (page > 5) return@withContext // TODO Use pro just have limited API calls condition can be removed
         if (!forceRefresh) {
             val hasLocalData = isLocallyAvailable(page, request)
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
 //        TODO validity duration can be less but for now kept 6hours
-            if (hasLocalData && lastSynced != null && isRequestValid(lastSynced.lastSyncedAt.toInstant(TimeZone.currentSystemDefault()), 60.days)) {
+            if (hasLocalData && lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, 60.days)) {
                 return@withContext
             }
         }

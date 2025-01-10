@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 
 @Entity(
     tableName = "last_syncs",
@@ -18,5 +18,5 @@ data class LastSyncEntity(
     @ColumnInfo(name = "entity_id")
     val entityId: Long = 0L,
     @ColumnInfo(name = "last_synced_at")
-    val lastSyncedAt: LocalDateTime
+    val lastSyncedAt: Instant
 )
