@@ -9,6 +9,7 @@ import com.mak.feastit.database.converters.MapStringConverters
 import com.mak.feastit.database.dao.HealthyRecipeDAO
 import com.mak.feastit.database.dao.IngredientDAO
 import com.mak.feastit.database.dao.LastSyncDAO
+import com.mak.feastit.database.dao.MealPlannerDAO
 import com.mak.feastit.database.dao.PocketFriendlyRecipeDAO
 import com.mak.feastit.database.dao.PopularRecipeDAO
 import com.mak.feastit.database.dao.QuickRecipeDAO
@@ -21,6 +22,7 @@ import com.mak.feastit.database.entity.HealthyRecipeEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.LastSyncEntity
+import com.mak.feastit.database.entity.MealPlanEntity
 import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
 import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.QuickRecipeEntity
@@ -41,9 +43,10 @@ import com.mak.feastit.database.entity.TopRecipeEntity
         IngredientEntity::class,
         RecipeStepEntity::class,
         LastSyncEntity::class,
-        ShoppingEntity::class
+        ShoppingEntity::class,
+        MealPlanEntity::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(InstantConverter::class, MapStringConverters::class)
 internal abstract class FeastDatabase: RoomDatabase(), FeastDB {
@@ -69,6 +72,7 @@ interface FeastDB {
     fun recipeStepDAO(): RecipeStepDAO
 
     fun shoppingDAO(): ShoppingDAO
+    fun mealPlanDAO(): MealPlannerDAO
 
     suspend fun handleTransaction(block: suspend () -> Unit)
 }

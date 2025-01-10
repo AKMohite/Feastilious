@@ -17,7 +17,10 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeComponents
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.minus
+import kotlinx.datetime.offsetAt
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -53,11 +56,17 @@ internal class RealRecipesRepository @Inject constructor(
 //        Timber.d("End of week: $endOfWeek")
 
         val now = Clock.System.now()
-        val toLocalDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())
-        val today = toLocalDateTime.date
+    val timeZone = TimeZone.currentSystemDefault()
+//    timeZone.offsetAt(now)
+    val toLocalDateTime = now.toLocalDateTime(timeZone)
+    Timber.d("Local date: $toLocalDateTime")
+//    DateTimeComponents.Formats.ISO_DATE_TIME_OFFSET
+    val europeTimeZone = TimeZone.of("Europe/Paris")
+    Timber.d("Europe date: ${now.toLocalDateTime(europeTimeZone)}")
+    val today = toLocalDateTime.date
         val days = mutableListOf<LocalDate>()
         val firstWeekDay = today.daysShift(-DayOfWeek.entries.indexOf(today.dayOfWeek))
-        for (i in 0 until java.time.DayOfWeek.entries.toTypedArray().count()) {
+        for (i in 0 until DayOfWeek.entries.toTypedArray().count()) {
             days.add(firstWeekDay.daysShift(i))
         }
         val dayStrings = days.map { "${it.dayOfWeek}, ${it.dayOfMonth}" }
