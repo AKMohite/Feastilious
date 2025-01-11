@@ -21,5 +21,7 @@ data class MealPlanEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Long, // recipeId
     @ColumnInfo(name = "planned_for")
-    val plannedFor: Instant? // can be null and user can set this value later
+    val plannedFor: Instant?, // can be null and user can set this value later
+    @ColumnInfo(name = "is_made")
+    val isMade: Boolean
 )

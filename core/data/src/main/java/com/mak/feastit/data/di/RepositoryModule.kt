@@ -6,11 +6,13 @@ import com.mak.feastit.data.repository.RealRecipeRepository
 import com.mak.feastit.data.repository.RealRecipesRepository
 import com.mak.feastit.data.repository.LegacyRecipeDetailRepository
 import com.mak.feastit.data.repository.RealCartRepository
+import com.mak.feastit.data.repository.RealMealPlanRepository
 import com.mak.feastit.data.repository.RealStaleRepository
 import com.mak.feastit.domain.repository.CartRepository
 import com.mak.feastit.domain.repository.ILegacyCategoryRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeDetailRepository
 import com.mak.feastit.domain.repository.ILegacyRecipeRepository
+import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.repository.StaleRepository
@@ -33,6 +35,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindCartRepository(repo: RealCartRepository): CartRepository
+
+    @Binds
+    abstract fun bindMealPlanRepository(repo: RealMealPlanRepository): MealPlanRepository
 
     @Binds
     abstract fun bindCategoryRepository(repo: LegacyCategoryRepository): ILegacyCategoryRepository

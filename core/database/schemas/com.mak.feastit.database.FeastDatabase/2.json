@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "f7e4fdba32a63f92bf36bd4fb3b49de1",
+    "identityHash": "5a0414c00ba2268a5cc9882e39834bef",
     "entities": [
       {
         "tableName": "popular_recipes",
@@ -623,7 +623,7 @@
       },
       {
         "tableName": "meal_planner",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `planned_for` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `planned_for` TEXT, `is_made` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -636,6 +636,12 @@
             "columnName": "planned_for",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "isMade",
+            "columnName": "is_made",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -663,7 +669,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7e4fdba32a63f92bf36bd4fb3b49de1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5a0414c00ba2268a5cc9882e39834bef')"
     ]
   }
 }

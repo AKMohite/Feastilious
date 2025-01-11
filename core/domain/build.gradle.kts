@@ -11,5 +11,6 @@ java {
 dependencies {
     implementation(libs.coroutines.core)
     implementation("javax.inject:javax.inject:1")
+    implementation(libs.kotlinx.datetime)
 
 }
