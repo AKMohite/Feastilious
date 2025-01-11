@@ -8,12 +8,20 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.daysShift
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
@@ -21,23 +29,31 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
 
 private const val SAVED_START_WEEK_DATE = "meal-plan-week-start-date"
 private const val SAVED_END_WEEK_DATE = "meal-plan-week-end-date"
+private const val SAVED_SELECTED_WEEK_DATE = "meal-plan-week-selected-date"
 
 @HiltViewModel
 internal class MealPlannerViewModel @Inject constructor(
     private val mealPlanRepository: MealPlanRepository,
-    dispatcher: DispatcherProvider,
+    private val dispatcher: DispatcherProvider,
     private val savedState: SavedStateHandle
 ): BaseViewModel(dispatcher) {
 
-    private val startWeekDate: StateFlow<String?> = savedState.getStateFlow(SAVED_START_WEEK_DATE, null)
-    private val endWeekDate: StateFlow<String?> = savedState.getStateFlow(SAVED_END_WEEK_DATE, null)
+    /**
+     * This is selected date that would be helpful to get week range
+     */
+    private val selectedWeekDate = savedState.getStateFlow<String?>(SAVED_SELECTED_WEEK_DATE, null)
+
+    private val _state = MutableStateFlow(MealPlannerState())
+    val state = _state.asStateFlow()
 
     init {
-        initWeekDate()
         observeMealPlans()
+        observeWeeklyMeals()
+        initWeekDate()
     }
 
     /**
@@ -45,12 +61,9 @@ internal class MealPlannerViewModel @Inject constructor(
      */
     fun onNextWeek() {
         uiScope.launch {
-            val selectedWeekEndDate = endWeekDate.value?.let { Instant.parse(it) } ?: return@launch
-            val startDate = selectedWeekEndDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.daysShift(1)
-            val endDate = startDate.daysShift(DayOfWeek.entries.count() - 1)
-
-            savedState[SAVED_START_WEEK_DATE] = startDate
-            savedState[SAVED_END_WEEK_DATE] = endDate
+            val selectedWeekStartDate = getEndWeekDate()?.let { Instant.parse(it) } ?: return@launch
+            val instant = selectedWeekStartDate.plus(1.days)
+            saveSelectedDate(instant)
         }
     }
 
@@ -59,12 +72,9 @@ internal class MealPlannerViewModel @Inject constructor(
      */
     fun onPreviousWeek() {
         uiScope.launch {
-            val selectedWeekStartDate = startWeekDate.value?.let { Instant.parse(it) } ?: return@launch
-            val endDate = selectedWeekStartDate.toLocalDateTime(TimeZone.currentSystemDefault()).date.daysShift(-1)
-            val startDate = endDate.daysShift(DayOfWeek.entries.count() - 1)
-
-            savedState[SAVED_START_WEEK_DATE] = startDate
-            savedState[SAVED_END_WEEK_DATE] = endDate
+            val selectedWeekStartDate = getStartWeekDate()?.let { Instant.parse(it) } ?: return@launch
+            val instant = selectedWeekStartDate.minus(1.days)
+            saveSelectedDate(instant)
         }
     }
 
@@ -75,44 +85,81 @@ internal class MealPlannerViewModel @Inject constructor(
 //        TODO handle the date range from savedState and handle multiple week change using date picker
         uiScope.launch {
 //            TODO the selected date need to be passed from UI
-            val selectedDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-            val firstWeekDate = selectedDate.daysShift(-DayOfWeek.entries.indexOf(selectedDate.dayOfWeek))
-            val endWeekDate = firstWeekDate.daysShift(DayOfWeek.entries.size - 1)
-
-            savedState[SAVED_START_WEEK_DATE] = firstWeekDate
-            savedState[SAVED_END_WEEK_DATE] = endWeekDate
+            val selectedDate = Clock.System.now()
+            saveSelectedDate(selectedDate)
         }
     }
 
     private fun initWeekDate() {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val firstWeekDate = today.daysShift(-DayOfWeek.entries.indexOf(today.dayOfWeek))
-        val endWeekDate = firstWeekDate.daysShift(DayOfWeek.entries.size - 1)
+        val now = Clock.System.now()
+        saveSelectedDate(now)
+    }
 
-        savedState[SAVED_START_WEEK_DATE] = firstWeekDate
-        savedState[SAVED_END_WEEK_DATE] = endWeekDate
+    private fun saveSelectedDate(instant: Instant) {
+        savedState[SAVED_SELECTED_WEEK_DATE] = instant.toString()
     }
 
     private fun observeMealPlans() {
         combine(
             mealPlanRepository.observeTodayMeals(),
-            getWeekMealPlan(),
             mealPlanRepository.observeUnscheduledMeals()
-        ) { todayMeals, weekMeals, unscheduledMeals ->
-
-        }.shareIn(uiScope, SharingStarted.Lazily, 5_000)
+        ) { todayMeals, unscheduledMeals ->
+            _state.update { currentState ->
+                currentState.copy(todayRecipes = todayMeals, unscheduledRecipes = unscheduledMeals)
+            }
+        }.shareIn(uiScope, SharingStarted.WhileSubscribed(5_000))
     }
 
-    private fun getWeekMealPlan(): Flow<List<MealPlanRecipe>> {
-        return combine(
-            startWeekDate,
-            endWeekDate
-        ) { start, end ->
-            if (start == null || end == null) return@combine null
-            Pair(Instant.parse(start), Instant.parse(end))
-        }.filterNotNull().flatMapMerge { (start, end) ->
-            mealPlanRepository.observeWeekMeals(start, end)
-        }
+//    TODO why combine is not working with flatmapMerge? and flatmapMerge does not work with .shareIn()
+    private fun observeWeeklyMeals() {
+        selectedWeekDate
+            .filterNotNull()
+            .map { selectedDate ->
+                getWeekRange(selectedDate)
+            }.flowOn(dispatcher.computation)
+            .flatMapMerge { (start, end) ->
+                mealPlanRepository.observeWeekMeals(start, end)
+            }.onEach { weeklyMeals ->
+                _state.update { currentState ->
+                    currentState.copy(weeklyRecipes = weeklyMeals)
+                }
+            }.launchIn(uiScope)
+//        return combine(
+//            startWeekDate,
+//            endWeekDate
+//        ) { start, end ->
+//                if (start == null || end == null) return@combine null
+//                Pair(Instant.parse(start), Instant.parse(end))
+//            }.filterNotNull()
+//            .flatMapMerge { (start, end) ->
+//                mealPlanRepository.observeWeekMeals(start, end)
+//            }.shareIn(uiScope, SharingStarted.WhileSubscribed(5_000))
+////        return combine(
+////            startWeekDate,
+////            endWeekDate
+////        ) { start, end ->
+////            if (start == null || end == null) return@combine null
+////            Pair(Instant.parse(start), Instant.parse(end))
+////        }.filterNotNull().flatMapMerge { (start, end) ->
+////            mealPlanRepository.observeWeekMeals(start, end)
+////        }
     }
+
+    /**
+     * @return selected date week, i.e, Starting Monday date and ending Sunday date
+     */
+    private fun getWeekRange(selectedDate: String): Pair<Instant, Instant> {
+        val instant = Instant.parse(selectedDate)
+        val nowDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val dayOfWeek = DayOfWeek.entries.indexOf(nowDateTime.dayOfWeek)
+        val startWeek = instant.minus(dayOfWeek.days)
+        val lastIndex = DayOfWeek.entries.count() - 1 - dayOfWeek
+        val lastWeek = instant.plus(lastIndex.days)
+        savedState[SAVED_START_WEEK_DATE] = startWeek.toString()
+        savedState[SAVED_END_WEEK_DATE] = lastWeek.toString()
+        return Pair(startWeek, lastWeek)
+    }
+
+    private fun getStartWeekDate(): String? = savedState[SAVED_START_WEEK_DATE]
+    private fun getEndWeekDate(): String? = savedState[SAVED_END_WEEK_DATE]
 }

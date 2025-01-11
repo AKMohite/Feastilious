@@ -67,8 +67,14 @@
 
         <action
             android:id="@+id/collection_to_meal_planner"
-            app:destination="@id/favoriteRecipesFragment"/>
+            app:destination="@id/mealPlannerFragment"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/mealPlannerFragment"
+        android:name="com.ak.feastit.ui.mealplanner.MealPlannerFragment"
+        android:label="meal_planner"
+        tools:layout="@layout/fragment_meal_planner"/>
 
     <fragment
         android:id="@+id/settingsFragment"
