@@ -1,6 +1,6 @@
 package com.mak.feastit.data.mapper
 
-import com.mak.feastit.database.entity.CartEntity
+import com.mak.feastit.database.entity.custom.CartEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity

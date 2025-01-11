@@ -1,4 +1,4 @@
-package com.mak.feastit.database.entity
+package com.mak.feastit.database.entity.custom
 
 data class CartEntity(
     val id: String,

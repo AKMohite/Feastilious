@@ -2,9 +2,8 @@ package com.mak.feastit.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mak.feastit.database.entity.CartEntity
+import com.mak.feastit.database.entity.custom.CartEntity
 import com.mak.feastit.database.entity.ShoppingEntity
-import com.mak.feastit.database.entity.relations.RecipeWithIngredient
 import kotlinx.coroutines.flow.Flow
 
 @Dao
