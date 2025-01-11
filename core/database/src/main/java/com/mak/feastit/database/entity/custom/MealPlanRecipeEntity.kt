@@ -1,0 +1,15 @@
+package com.mak.feastit.database.entity.custom
+
+import androidx.room.ColumnInfo
+import kotlinx.datetime.Instant
+
+data class MealPlanRecipeEntity(
+    val id: Long,
+    @ColumnInfo(name = "planned_for")
+    val scheduledFor: Instant?,
+    @ColumnInfo(name = "is_made")
+    val isMade: Boolean,
+    val name: String,
+    @ColumnInfo(name = "img")
+    val image: String
+)

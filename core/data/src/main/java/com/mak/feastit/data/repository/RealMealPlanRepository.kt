@@ -1,8 +1,8 @@
 package com.mak.feastit.data.repository
 
 import com.mak.feastit.database.FeastDB
-import com.mak.feastit.database.entity.MealPlanEntity
-import com.mak.feastit.domain.model.MealPlan
+import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
+import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +19,7 @@ internal class RealMealPlanRepository @Inject constructor(
     private val dispatcher: DispatcherProvider
 ): MealPlanRepository {
 
-    override fun observeTodayMeals(): Flow<List<MealPlan>> {
+    override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {
         return db.mealPlanDAO().observeTodayMeals(Clock.System.now())
             .flowOn(dispatcher.io)
             .map { entities ->
@@ -27,7 +27,7 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.computation)
     }
 
-    override fun observeUnscheduledMeals(): Flow<List<MealPlan>> {
+    override fun observeUnscheduledMeals(): Flow<List<MealPlanRecipe>> {
         return db.mealPlanDAO().observeUnscheduledMeals()
             .flowOn(dispatcher.io)
             .map { entities ->
@@ -35,7 +35,7 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.computation)
     }
 
-    override fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlan>> {
+    override fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipe>> {
         return db.mealPlanDAO().observeWeekMeals(startDate, endDate)
             .flowOn(dispatcher.io)
             .map { entities ->
@@ -44,14 +44,16 @@ internal class RealMealPlanRepository @Inject constructor(
     }
 }
 
-private fun List<MealPlanEntity>.mapEntitiesToModels(): List<MealPlan> {
+private fun List<MealPlanRecipeEntity>.mapEntitiesToModels(): List<MealPlanRecipe> {
     return this.map { entity -> entity.toModel() }
 }
 
-private fun MealPlanEntity.toModel(): MealPlan {
-    return MealPlan(
+private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe {
+    return MealPlanRecipe(
         recipeId = id,
-        scheduledFor = plannedFor?.toLocalDateTime(TimeZone.currentSystemDefault()),
-        isMade = isMade
+        scheduledFor = scheduledFor?.toLocalDateTime(TimeZone.currentSystemDefault()),
+        isMade = isMade,
+        name = name,
+        image = image
     )
 }
