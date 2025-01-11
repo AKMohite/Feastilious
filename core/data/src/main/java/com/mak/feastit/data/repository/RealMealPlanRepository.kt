@@ -12,6 +12,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class RealMealPlanRepository @Inject constructor(
@@ -20,6 +21,7 @@ internal class RealMealPlanRepository @Inject constructor(
 ): MealPlanRepository {
 
     override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {
+        Timber.d("Observe today's meals")
         return db.mealPlanDAO().observeTodayMeals(Clock.System.now())
             .flowOn(dispatcher.io)
             .map { entities ->
@@ -28,6 +30,7 @@ internal class RealMealPlanRepository @Inject constructor(
     }
 
     override fun observeUnscheduledMeals(): Flow<List<MealPlanRecipe>> {
+        Timber.d("Observe unscheduled meals")
         return db.mealPlanDAO().observeUnscheduledMeals()
             .flowOn(dispatcher.io)
             .map { entities ->
@@ -36,6 +39,7 @@ internal class RealMealPlanRepository @Inject constructor(
     }
 
     override fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipe>> {
+        Timber.d("Observe meals for week in between $startDate and $endDate")
         return db.mealPlanDAO().observeWeekMeals(startDate, endDate)
             .flowOn(dispatcher.io)
             .map { entities ->

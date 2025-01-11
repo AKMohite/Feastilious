@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.data.store)
     implementation(libs.hilt.android)
+    implementation(libs.kotlinx.datetime)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.material)
     implementation(libs.navigation.fragment.ktx)

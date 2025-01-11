@@ -5,6 +5,7 @@ import com.mak.feastit.database.FeastDB
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.util.DispatcherProvider
+import com.mak.feastit.domain.util.daysShift
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
 import kotlinx.coroutines.flow.Flow
@@ -72,16 +73,6 @@ internal class RealRecipesRepository @Inject constructor(
         val dayStrings = days.map { "${it.dayOfWeek}, ${it.dayOfMonth}" }
         Timber.d("$dayStrings")
 
-    }
-
-    fun LocalDate.daysShift(days: Int): LocalDate = when {
-        days < 0 -> {
-            minus(1, DateTimeUnit.DayBased(-days))
-        }
-        days > 0 -> {
-            plus(1, DateTimeUnit.DayBased(days))
-        }
-        else -> this
     }
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
