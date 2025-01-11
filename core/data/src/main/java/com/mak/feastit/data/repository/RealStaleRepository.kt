@@ -31,7 +31,10 @@ internal class RealStaleRepository @Inject constructor(
         val pocketIds = db.pocketFriendlyRecipeDAO().getAllIds()
         neededIds.addAll(pocketIds)
 
-        db.recipeDAO().deleteRecipesNotIn(neededIds)
+        db.handleTransaction {
+            db.lastSyncDao().deleteSinceDays(30)
+            db.recipeDAO().deleteRecipesNotIn(neededIds)
+        }
     }
 
 }

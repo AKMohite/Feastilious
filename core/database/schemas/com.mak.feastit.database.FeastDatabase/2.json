@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "219099be52e829bf54f895ab0e84ffc4",
+    "identityHash": "f7e4fdba32a63f92bf36bd4fb3b49de1",
     "entities": [
       {
         "tableName": "popular_recipes",
@@ -519,7 +519,7 @@
       },
       {
         "tableName": "last_syncs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `entity_type` TEXT NOT NULL, `entity_id` INTEGER NOT NULL, `last_synced_at` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `entity_type` TEXT NOT NULL, `entity_id` INTEGER NOT NULL, `last_synced_at` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -542,7 +542,7 @@
           {
             "fieldPath": "lastSyncedAt",
             "columnName": "last_synced_at",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -623,7 +623,7 @@
       },
       {
         "tableName": "meal_planner",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `planned_for` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `planned_for` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -634,7 +634,7 @@
           {
             "fieldPath": "plannedFor",
             "columnName": "planned_for",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -663,7 +663,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '219099be52e829bf54f895ab0e84ffc4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7e4fdba32a63f92bf36bd4fb3b49de1')"
     ]
   }
 }

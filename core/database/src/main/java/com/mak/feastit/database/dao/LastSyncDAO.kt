@@ -14,4 +14,8 @@ interface LastSyncDAO: BaseDAO<LastSyncEntity> {
 
     @Query("DELETE FROM last_syncs WHERE entity_type = :entityType AND entity_id = :entityId")
     suspend fun deleteEntity(entityType: String, entityId: String?)
+
+    @Query("DELETE FROM last_syncs WHERE last_synced_at <= datetime('now', '-' || :days || ' days')")
+    suspend fun deleteSinceDays(days: Int)
+
 }
