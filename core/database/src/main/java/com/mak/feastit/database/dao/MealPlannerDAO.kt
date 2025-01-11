@@ -18,4 +18,7 @@ interface MealPlannerDAO: BaseDAO<MealPlanEntity> {
 
     @Query("SELECT mp.id, mp.planned_for, mp.is_made, r.name, r.img FROM meal_planner mp INNER JOIN recipes r ON mp.id = r.id WHERE mp.planned_for BETWEEN date(:startDate) AND date(:endDate)")
     fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipeEntity>>
+
+    @Query("SELECT * FROM meal_planner WHERE id =:recipeId")
+    suspend fun getRecipe(recipeId: Long): MealPlanEntity?
 }

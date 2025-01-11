@@ -1,6 +1,7 @@
 package com.mak.feastit.data.repository
 
 import com.mak.feastit.database.FeastDB
+import com.mak.feastit.database.entity.MealPlanEntity
 import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
@@ -8,6 +9,7 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -19,6 +21,21 @@ internal class RealMealPlanRepository @Inject constructor(
     private val db: FeastDB,
     private val dispatcher: DispatcherProvider
 ): MealPlanRepository {
+
+//    TODO cancel notifications too
+    override suspend fun toggleMealPLanFor(recipeId: Long) = withContext(dispatcher.io) {
+        val mealPlan = db.mealPlanDAO().getRecipe(recipeId)
+        if (mealPlan == null) {
+            val new = MealPlanEntity(
+                id = recipeId,
+                isMade = false,
+                plannedFor = null
+            )
+            db.mealPlanDAO().insert(new)
+        } else {
+            db.mealPlanDAO().delete(mealPlan)
+        }
+    }
 
     override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {
         Timber.d("Observe today's meals")

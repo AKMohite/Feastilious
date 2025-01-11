@@ -9,6 +9,7 @@ import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.repository.CartRepository
+import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.usecase.RecipeDetailIngredientsUsecase
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -30,6 +31,7 @@ private const val ARGS_RECIPE_ID = "recipeId"
 internal class YumDetailViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository,
     private val cartRepository: CartRepository,
+    private val mealPlanRepository: MealPlanRepository,
     private val getIngredients: RecipeDetailIngredientsUsecase,
     private val dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
