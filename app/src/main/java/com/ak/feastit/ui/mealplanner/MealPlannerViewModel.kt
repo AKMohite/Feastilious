@@ -2,19 +2,14 @@ package com.ak.feastit.ui.mealplanner
 
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
-import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
-import com.mak.feastit.domain.util.daysShift
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -115,7 +110,12 @@ internal class MealPlannerViewModel @Inject constructor(
         selectedWeekDate
             .filterNotNull()
             .map { selectedDate ->
-                getWeekRange(selectedDate)
+                val range = getWeekRange(selectedDate)
+                val start = range.first.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                val end = range.second.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                val weekRange = "${start.dayOfMonth} ${start.month} - ${end.dayOfMonth} ${end.month}"
+                _state.update { it.copy(weekRange = weekRange) }
+                range
             }.flowOn(dispatcher.computation)
             .flatMapMerge { (start, end) ->
                 mealPlanRepository.observeWeekMeals(start, end)
