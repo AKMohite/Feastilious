@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
+import kotlinx.datetime.format
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
@@ -109,6 +111,7 @@ internal class MealPlannerViewModel @Inject constructor(
     private fun observeWeeklyMeals() {
         selectedWeekDate
             .filterNotNull()
+            .debounce(500)
             .map { selectedDate ->
                 val range = getWeekRange(selectedDate)
                 val start = range.first.defaultLocalDate()
@@ -124,25 +127,6 @@ internal class MealPlannerViewModel @Inject constructor(
                     currentState.copy(weeklyRecipes = weeklyMeals)
                 }
             }.launchIn(uiScope)
-//        return combine(
-//            startWeekDate,
-//            endWeekDate
-//        ) { start, end ->
-//                if (start == null || end == null) return@combine null
-//                Pair(Instant.parse(start), Instant.parse(end))
-//            }.filterNotNull()
-//            .flatMapMerge { (start, end) ->
-//                mealPlanRepository.observeWeekMeals(start, end)
-//            }.shareIn(uiScope, SharingStarted.WhileSubscribed(5_000))
-////        return combine(
-////            startWeekDate,
-////            endWeekDate
-////        ) { start, end ->
-////            if (start == null || end == null) return@combine null
-////            Pair(Instant.parse(start), Instant.parse(end))
-////        }.filterNotNull().flatMapMerge { (start, end) ->
-////            mealPlanRepository.observeWeekMeals(start, end)
-////        }
     }
 
     /**

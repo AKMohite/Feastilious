@@ -7,7 +7,7 @@ import kotlinx.datetime.Instant
 interface MealPlanRepository {
     fun observeTodayMeals(): Flow<List<MealPlanRecipe>>
     fun observeUnscheduledMeals(): Flow<List<MealPlanRecipe>>
-    fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipe>>
+    fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<Map<String, List<MealPlanRecipe>>>
     suspend fun toggleMealPLanFor(recipeId: Long)
     fun hasRecipe(recipeId: Long): Flow<Boolean>
 }

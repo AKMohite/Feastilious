@@ -6,6 +6,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
@@ -27,6 +29,12 @@ fun Instant.defaultLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefa
 fun Instant.defaultLocalDate(): LocalDate {
     return toLocalDateTime(TimeZone.currentSystemDefault()).date
 }
+
+//fun Instant.dayMonth(): String {
+//    val format = LocalDateTime.Format { byUnicodePattern("dd MMM") }
+//    val dateTime = defaultLocalDateTime()
+//    return dateTime.format(format)
+//}
 
 fun Instant.defaultLocalTime(): LocalTime {
     return toLocalDateTime(TimeZone.currentSystemDefault()).time

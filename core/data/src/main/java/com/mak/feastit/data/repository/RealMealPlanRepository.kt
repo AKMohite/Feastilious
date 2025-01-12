@@ -6,12 +6,15 @@ import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
+import com.mak.feastit.domain.util.daysShift
+import com.mak.feastit.domain.util.defaultLocalDate
 import com.mak.feastit.domain.util.defaultLocalDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import timber.log.Timber
 import javax.inject.Inject
@@ -61,12 +64,19 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.computation)
     }
 
-    override fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipe>> {
+    override fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<Map<String, List<MealPlanRecipe>>> {
         Timber.d("Observe meals for week in between $startDate and $endDate")
         return db.mealPlanDAO().observeWeekMeals(startDate, endDate)
             .flowOn(dispatcher.io)
             .map { entities ->
-                entities.mapEntitiesToModels()
+                val weeklyMealPlans = mutableMapOf<String, List<MealPlanRecipe>>()
+                val firstWeekDay = startDate.defaultLocalDate()
+                val recipes = entities.mapEntitiesToModels().groupBy { it.scheduledFor?.date }
+                for (i in 0 until DayOfWeek.entries.toTypedArray().count()) {
+                    val date = firstWeekDay.daysShift(i)
+                    weeklyMealPlans[date.dayOfWeek.name] = recipes[date] ?: emptyList()
+                }
+                weeklyMealPlans
             }.flowOn(dispatcher.computation)
     }
 }
