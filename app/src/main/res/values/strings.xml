@@ -70,4 +70,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="add_ingredients_to_shopping_list">Add ingredients to cart</string>
     <string name="recipe_add_to_meal_plan">Add to Meal plan</string>
     <string name="recipe_remove_from_meal_plan">Remove from meal plan</string>
+    <string name="today">Today</string>
+    <string name="week">Week</string>
+    <string name="unscheduled_recipes">Unscheduled recipes</string>
 </resources>
