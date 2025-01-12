@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
+import com.mak.feastit.domain.util.defaultLocalDate
+import com.mak.feastit.domain.util.defaultLocalDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,8 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
@@ -111,8 +111,8 @@ internal class MealPlannerViewModel @Inject constructor(
             .filterNotNull()
             .map { selectedDate ->
                 val range = getWeekRange(selectedDate)
-                val start = range.first.toLocalDateTime(TimeZone.currentSystemDefault()).date
-                val end = range.second.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                val start = range.first.defaultLocalDate()
+                val end = range.second.defaultLocalDate()
                 val weekRange = "${start.dayOfMonth} ${start.month} - ${end.dayOfMonth} ${end.month}"
                 _state.update { it.copy(weekRange = weekRange) }
                 range
@@ -150,7 +150,7 @@ internal class MealPlannerViewModel @Inject constructor(
      */
     private fun getWeekRange(selectedDate: String): Pair<Instant, Instant> {
         val instant = Instant.parse(selectedDate)
-        val nowDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val nowDateTime = instant.defaultLocalDateTime()
         val dayOfWeek = DayOfWeek.entries.indexOf(nowDateTime.dayOfWeek)
         val startWeek = instant.minus(dayOfWeek.days)
         val lastIndex = DayOfWeek.entries.count() - 1 - dayOfWeek

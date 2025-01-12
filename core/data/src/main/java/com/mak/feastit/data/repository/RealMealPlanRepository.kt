@@ -6,14 +6,13 @@ import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
+import com.mak.feastit.domain.util.defaultLocalDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -79,7 +78,7 @@ private fun List<MealPlanRecipeEntity>.mapEntitiesToModels(): List<MealPlanRecip
 private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe {
     return MealPlanRecipe(
         recipeId = id,
-        scheduledFor = scheduledFor?.toLocalDateTime(TimeZone.currentSystemDefault()),
+        scheduledFor = scheduledFor?.defaultLocalDateTime(),
         isMade = isMade,
         name = name,
         image = image
