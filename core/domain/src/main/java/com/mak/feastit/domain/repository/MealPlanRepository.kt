@@ -9,4 +9,5 @@ interface MealPlanRepository {
     fun observeUnscheduledMeals(): Flow<List<MealPlanRecipe>>
     fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<List<MealPlanRecipe>>
     suspend fun toggleMealPLanFor(recipeId: Long)
+    fun hasRecipe(recipeId: Long): Flow<Boolean>
 }

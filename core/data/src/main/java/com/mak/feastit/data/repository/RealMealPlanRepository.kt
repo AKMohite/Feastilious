@@ -22,7 +22,14 @@ internal class RealMealPlanRepository @Inject constructor(
     private val dispatcher: DispatcherProvider
 ): MealPlanRepository {
 
-//    TODO cancel notifications too
+    override fun hasRecipe(recipeId: Long): Flow<Boolean> {
+        return db.mealPlanDAO().hasRecipe(recipeId)
+            .map { id ->
+                id != null
+            }.flowOn(dispatcher.io)
+    }
+
+    //    TODO cancel notifications too
     override suspend fun toggleMealPLanFor(recipeId: Long) = withContext(dispatcher.io) {
         val mealPlan = db.mealPlanDAO().getRecipe(recipeId)
         if (mealPlan == null) {

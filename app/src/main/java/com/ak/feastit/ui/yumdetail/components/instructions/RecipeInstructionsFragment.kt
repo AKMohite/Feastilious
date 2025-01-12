@@ -30,7 +30,7 @@ internal class RecipeInstructionsFragment : BaseFragment() {
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.recipeInstructions.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val adapter = RecipeInstructionsAdapter {
-//            viewModel.toggleMealPlan()
+            viewModel.toggleMealPlan()
         }
         binding.recipeInstructions.adapter = adapter
         lifecycleScope.launch {

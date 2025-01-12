@@ -41,7 +41,7 @@ internal class YumDetailViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(YumDetailState())
     val state = _state.asStateFlow()
-    private var recipeId: Long? = null
+    private var recipeId: Long
 
     init {
         val id = savedStateHandle.get<Long>(ARGS_RECIPE_ID) ?: throw IllegalArgumentException("Recipe id is required")
@@ -52,6 +52,12 @@ internal class YumDetailViewModel @Inject constructor(
 
     override fun handleError(exception: Throwable) {
         super.handleError(exception)
+    }
+
+    fun toggleMealPlan() {
+        uiScope.launch {
+            mealPlanRepository.toggleMealPLanFor(recipeId)
+        }
     }
 
     private fun refreshRecipeInfo(recipeId: Long, forceRefresh: Boolean = false) {
@@ -69,14 +75,15 @@ internal class YumDetailViewModel @Inject constructor(
             recipeRepository.observerRecipe(id),
             recipeRepository.observerSimilarRecipes(id),
             getRecipeIngredients(id),
-            getRecipeSteps(id)
-        ) { recipe, similarRecipes, ingredients, instructions ->
+            getRecipeSteps(id),
+            mealPlanRepository.hasRecipe(id)
+        ) { recipe, similarRecipes, ingredients, instructions, isInMealPlan ->
             _state.update { currentState ->
                 currentState.copy(
                     overview = recipe,
                     similarRecipes = similarRecipes,
                     ingredientSections = ingredients,
-                    instructions = instructions
+                    instructions = getRecipeStepSections(instructions, isInMealPlan)
                 )
             }
         }.launchIn(uiScope)
@@ -86,10 +93,6 @@ internal class YumDetailViewModel @Inject constructor(
         .map { instructions ->
             if (instructions.isEmpty()) return@map emptyList()
             val stepSections = mutableListOf<StepSection>()
-//            TODO check if recipe is added to meal plan
-            val headerTitle = R.string.recipe_add_to_meal_plan
-            val headerSection = StepSection.Header(title = headerTitle)
-            stepSections.add(headerSection)
             val steps = instructions.map { instruction ->
                 StepSection.Item(instruction)
             }
@@ -131,8 +134,20 @@ internal class YumDetailViewModel @Inject constructor(
 
     fun toggleCart() {
         uiScope.launch {
-            cartRepository.toggleShoppingAllIngredientsForRecipe(recipeId ?: return@launch)
+            cartRepository.toggleShoppingAllIngredientsForRecipe(recipeId)
         }
+    }
+
+    private fun getRecipeStepSections(sections: List<StepSection>, isInMealPlan: Boolean): List<StepSection> {
+        val mutable = sections.toMutableList()
+        val headerTitle = if (isInMealPlan) {
+            R.string.recipe_remove_from_meal_plan
+        } else {
+            R.string.recipe_add_to_meal_plan
+        }
+        val headerSection = StepSection.Header(title = headerTitle)
+        mutable.add(0, headerSection)
+        return mutable.toList()
     }
 
 }
