@@ -24,4 +24,7 @@ interface MealPlannerDAO: BaseDAO<MealPlanEntity> {
 
     @Query("SELECT id FROM meal_planner WHERE id = :id")
     fun hasRecipe(id: Long): Flow<Long?>
+
+    @Query("SELECT id FROM meal_planner")
+    suspend fun getAllIds(): List<Long>
 }

@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
-import kotlinx.datetime.format
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
@@ -78,11 +77,11 @@ internal class MealPlannerViewModel @Inject constructor(
     /**
      * Handle selected date weeks date range
      */
-    fun onDateSelected() {
+    fun onDateSelected(epoch: Long) {
 //        TODO handle the date range from savedState and handle multiple week change using date picker
         uiScope.launch {
 //            TODO the selected date need to be passed from UI
-            val selectedDate = Clock.System.now()
+            val selectedDate = Instant.fromEpochMilliseconds(epoch)
             saveSelectedDate(selectedDate)
         }
     }
@@ -111,15 +110,15 @@ internal class MealPlannerViewModel @Inject constructor(
     private fun observeWeeklyMeals() {
         selectedWeekDate
             .filterNotNull()
-            .debounce(500)
             .map { selectedDate ->
                 val range = getWeekRange(selectedDate)
                 val start = range.first.defaultLocalDate()
                 val end = range.second.defaultLocalDate()
-                val weekRange = "${start.dayOfMonth} ${start.month} - ${end.dayOfMonth} ${end.month}"
+                val weekRange = "${start.dayOfMonth} ${start.month/*.toString().take(3)*/} - ${end.dayOfMonth} ${end.month}"
                 _state.update { it.copy(weekRange = weekRange) }
                 range
             }.flowOn(dispatcher.computation)
+            .debounce(500)
             .flatMapMerge { (start, end) ->
                 mealPlanRepository.observeWeekMeals(start, end)
             }.onEach { weeklyMeals ->
@@ -146,4 +145,7 @@ internal class MealPlannerViewModel @Inject constructor(
 
     private fun getStartWeekDate(): String? = savedState[SAVED_START_WEEK_DATE]
     private fun getEndWeekDate(): String? = savedState[SAVED_END_WEEK_DATE]
+    fun getSelectedDateEpoch(): Long? = savedState.get<String?>(SAVED_SELECTED_WEEK_DATE)?.let { selected ->
+        Instant.parse(selected).toEpochMilliseconds()
+    }
 }

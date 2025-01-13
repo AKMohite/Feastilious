@@ -6,4 +6,4 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:listitem="@layout/component_recipe_step"
-    tools:context=".ui.yumdetail.components.instructions.RecipeInstructionsFragment"/>
+    tools:context=".ui.yumdetail.tabs.instructions.RecipeInstructionsFragment"/>

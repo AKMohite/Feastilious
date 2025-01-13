@@ -73,4 +73,5 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="today">Today</string>
     <string name="week">Week</string>
     <string name="unscheduled_recipes">Unscheduled recipes</string>
+    <string name="schedule_meal_on">Schedule meal on</string>
 </resources>

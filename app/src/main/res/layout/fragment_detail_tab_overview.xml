@@ -7,4 +7,4 @@
     android:padding="@dimen/space_tiny"
     xmlns:tools="http://schemas.android.com/tools"
     tools:listitem="@layout/component_text_item"
-    tools:context=".ui.yumdetail.components.overview.RecipeOverviewFragment"/>
+    tools:context=".ui.yumdetail.tabs.overview.RecipeOverviewFragment"/>

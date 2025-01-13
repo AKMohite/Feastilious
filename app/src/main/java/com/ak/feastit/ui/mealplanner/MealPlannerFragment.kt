@@ -8,8 +8,8 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentMealPlannerBinding
-import com.ak.feastit.ui.mealplanner.components.MealPlanPagerAdapter
-import com.ak.feastit.ui.mealplanner.components.MealPlanTab
+import com.ak.feastit.ui.mealplanner.tabs.MealPlanPagerAdapter
+import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 

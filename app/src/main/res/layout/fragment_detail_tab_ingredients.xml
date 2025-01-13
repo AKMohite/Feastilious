@@ -7,4 +7,4 @@
     tools:listitem="@layout/component_recipe_ingredient"
     android:padding="@dimen/space_tiny"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.yumdetail.components.ingredients.RecipeIngredientsFragment"/>
+    tools:context=".ui.yumdetail.tabs.ingredients.RecipeIngredientsFragment"/>

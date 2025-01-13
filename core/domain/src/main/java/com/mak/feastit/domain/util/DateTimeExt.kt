@@ -30,11 +30,11 @@ fun Instant.defaultLocalDate(): LocalDate {
     return toLocalDateTime(TimeZone.currentSystemDefault()).date
 }
 
-//fun Instant.dayMonth(): String {
-//    val format = LocalDateTime.Format { byUnicodePattern("dd MMM") }
-//    val dateTime = defaultLocalDateTime()
-//    return dateTime.format(format)
-//}
+fun Instant.dayMonth(): String {
+    val format = LocalDateTime.Format { byUnicodePattern("dd MM") }
+    val dateTime = defaultLocalDateTime()
+    return dateTime.format(format)
+}
 
 fun Instant.defaultLocalTime(): LocalTime {
     return toLocalDateTime(TimeZone.currentSystemDefault()).time

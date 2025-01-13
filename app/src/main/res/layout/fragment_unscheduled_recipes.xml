@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.mealplanner.components.unscheduled.UnscheduledRecipeFragment">
+    tools:context=".ui.mealplanner.tabs.unscheduled.UnscheduledRecipeFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Unscheduled"
-        android:textSize="40sp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/unscheduled_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/component_meal_plan_recipe"/>
 
 </FrameLayout>

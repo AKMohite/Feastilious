@@ -13,8 +13,8 @@ import coil.load
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentYumDetailBinding
-import com.ak.feastit.ui.yumdetail.components.DetailPagerAdapter
-import com.ak.feastit.ui.yumdetail.components.RecipeDetailTab
+import com.ak.feastit.ui.yumdetail.tabs.DetailPagerAdapter
+import com.ak.feastit.ui.yumdetail.tabs.RecipeDetailTab
 import com.ak.feastit.utils.onClick
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator

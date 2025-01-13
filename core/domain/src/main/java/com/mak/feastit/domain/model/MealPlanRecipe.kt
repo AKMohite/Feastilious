@@ -9,4 +9,10 @@ data class MealPlanRecipe(
     val isMade: Boolean,
     val name: String,
     val image: String
-)
+) {
+    fun isSameAs(other: MealPlanRecipe): Boolean {
+        return recipeId == other.recipeId &&
+                scheduledFor == other.scheduledFor &&
+                isMade == other.isMade
+    }
+}

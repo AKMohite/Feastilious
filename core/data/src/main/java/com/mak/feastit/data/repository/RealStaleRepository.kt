@@ -31,6 +31,12 @@ internal class RealStaleRepository @Inject constructor(
         val pocketIds = db.pocketFriendlyRecipeDAO().getAllIds()
         neededIds.addAll(pocketIds)
 
+        val mealPlans = db.mealPlanDAO().getAllIds()
+        neededIds.addAll(mealPlans)
+
+        val shoppingCart = db.shoppingDAO().getAllIds()
+        neededIds.addAll(shoppingCart)
+
         db.handleTransaction {
             db.lastSyncDao().deleteSinceDays(30)
             db.recipeDAO().deleteRecipesNotIn(neededIds)

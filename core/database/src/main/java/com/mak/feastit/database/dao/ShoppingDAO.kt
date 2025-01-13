@@ -32,6 +32,9 @@ interface ShoppingDAO: BaseDAO<ShoppingEntity> {
     @Query("DELETE FROM shopping_ingredients WHERE recipe_id =:recipeId")
     suspend fun removeRecipeFromCart(recipeId: Long)
 
+    @Query("SELECT recipe_id FROM shopping_ingredients")
+    suspend fun getAllIds(): List<Long>
+
 //    TODO check
 //    @Query("SELECT * FROM shopping_ingredients")
 //    fun getEmbeddedCart(): Flow<RecipeWithIngredient>
