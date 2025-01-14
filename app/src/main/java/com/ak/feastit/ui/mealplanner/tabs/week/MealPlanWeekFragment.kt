@@ -52,7 +52,7 @@ internal class MealPlanWeekFragment : BaseFragment() {
 
     private fun openDatePicker() {
 
-//        val today = Clock.System.now().epochSeconds
+//        val today = now().epochSeconds
 //        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 //
 //        calendar.timeInMillis = today

@@ -56,7 +56,6 @@
                     android:layout_width="@dimen/space_huge"
                     android:layout_height="@dimen/space_huge"
                     android:src="@drawable/ic_cart_menu"
-                    app:tint="?attr/colorTertiary"
                     android:contentDescription="@string/shopping_cart"/>
                 <TextView
                     android:layout_width="match_parent"

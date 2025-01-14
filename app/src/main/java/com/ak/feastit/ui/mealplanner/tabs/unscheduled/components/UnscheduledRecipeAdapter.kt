@@ -8,7 +8,7 @@ import com.ak.feastit.databinding.ComponentMealPlanRecipeBinding
 import com.mak.feastit.domain.model.MealPlanRecipe
 
 internal class UnscheduledRecipeAdapter(
-    private val onMenuClick: (recipeId: Long) -> Unit
+    private val onMenuClick: (recipe: MealPlanRecipe) -> Unit
 ): RecyclerView.Adapter<ComponentMealPlanRecipe>() {
 
     private val asyncDiff = AsyncListDiffer(this, UnscheduledRecipeDiff())

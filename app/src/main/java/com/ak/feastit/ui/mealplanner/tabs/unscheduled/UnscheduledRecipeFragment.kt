@@ -12,7 +12,9 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentUnscheduledRecipesBinding
 import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
+import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.UnscheduledRecipeAdapter
+import com.mak.feastit.domain.model.MealPlanRecipe
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -29,8 +31,8 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
 
     private val adapter by lazy {
         UnscheduledRecipeAdapter(
-            onMenuClick = { recipeId ->
-//                todo show bottom menu options
+            onMenuClick = { recipe ->
+                openBottomSheetFor(recipe)
             }
         )
     }
@@ -53,6 +55,13 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private val recipeOptions = listOf("Download Recipe", "Remove from meal plan", "Schedule", "Edit Meal time")
+
+    private fun openBottomSheetFor(recipe: MealPlanRecipe) {
+        viewModel.openBottomSheet(recipe)
+//        (requireParentFragment() as? MealPlannerFragment)?.openBottomSheetFor(MealPlanTab.UnscheduledRecipes, recipeId)
     }
 
 }

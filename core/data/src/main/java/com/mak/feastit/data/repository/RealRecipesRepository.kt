@@ -6,6 +6,7 @@ import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.daysShift
+import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -49,7 +49,7 @@ internal class RealRecipesRepository @Inject constructor(
 //        Timber.d("Start of week: $startOfWeek")
 //        Timber.d("End of week: $endOfWeek")
 
-        val now = Clock.System.now()
+        val now = defaultNow()
     val timeZone = TimeZone.currentSystemDefault()
 //    timeZone.offsetAt(now)
     val toLocalDateTime = now.toLocalDateTime(timeZone)

@@ -34,12 +34,14 @@
                 android:textAppearance="?attr/textAppearanceBodySmall" />
 
             <TextView
+                android:id="@+id/preparation_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:drawableStartCompat="@drawable/ic_schduled_at"
                 android:textColor="?attr/colorOnSurfaceInverse"
                 tools:text="55 m"
-                android:padding="@dimen/space_tiny"
+                android:paddingVertical="@dimen/space_tiny"
+                android:paddingHorizontal="@dimen/space_small"
                 android:gravity="center"
                 android:background="@drawable/rounded_button"
                 android:textAppearance="?attr/textAppearanceLabelMedium"

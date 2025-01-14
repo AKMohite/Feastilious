@@ -1,5 +1,6 @@
 package com.mak.feastit.domain.util
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -21,6 +22,8 @@ fun LocalDate.daysShift(days: Int): LocalDate = when {
     }
     else -> this
 }
+
+fun defaultNow(): Instant = Clock.System.now()
 
 fun Instant.defaultLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime {
     return toLocalDateTime(timeZone)

@@ -9,11 +9,11 @@ import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.daysShift
 import com.mak.feastit.domain.util.defaultLocalDate
 import com.mak.feastit.domain.util.defaultLocalDateTime
+import com.mak.feastit.domain.util.defaultNow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import timber.log.Timber
@@ -48,7 +48,7 @@ internal class RealMealPlanRepository @Inject constructor(
 
     override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {
         Timber.d("Observe today's meals")
-        return db.mealPlanDAO().observeTodayMeals(Clock.System.now())
+        return db.mealPlanDAO().observeTodayMeals(defaultNow())
             .flowOn(dispatcher.io)
             .map { entities ->
                 entities.mapEntitiesToModels()
@@ -91,6 +91,7 @@ private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe {
         scheduledFor = scheduledFor?.defaultLocalDateTime(),
         isMade = isMade,
         name = name,
-        image = image
+        image = image,
+        preparationTime = preparationTime
     )
 }

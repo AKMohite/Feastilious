@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
@@ -12,6 +15,8 @@ import com.ak.feastit.ui.mealplanner.tabs.MealPlanPagerAdapter
 import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class MealPlannerFragment: BaseFragment() {
@@ -53,17 +58,25 @@ internal class MealPlannerFragment: BaseFragment() {
     }
 
     private fun observers() {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                viewModel.state.collectLatest { state ->
-//
-//                }
-//            }
-//        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.action.collectLatest { action -> handleActions(action)}
+            }
+        }
+    }
+
+    private fun handleActions(action: MealPlanAction) {
+        when(action) {
+            is MealPlanAction.OpenMealPlanBottomSheet -> {}
+        }
     }
 
     override fun onDestroyView() {
         tabLayoutMediator.detach()
         super.onDestroyView()
+    }
+
+    fun openBottomSheetFor(unscheduledRecipes: MealPlanTab, recipeId: Long) {
+
     }
 }

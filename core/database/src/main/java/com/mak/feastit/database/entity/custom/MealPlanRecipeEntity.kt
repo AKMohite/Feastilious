@@ -1,7 +1,10 @@
 package com.mak.feastit.database.entity.custom
 
 import androidx.room.ColumnInfo
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 data class MealPlanRecipeEntity(
     val id: Long,
@@ -11,5 +14,7 @@ data class MealPlanRecipeEntity(
     val isMade: Boolean,
     val name: String,
     @ColumnInfo(name = "img")
-    val image: String
+    val image: String,
+    @ColumnInfo("preparation_time")
+    val preparationTime: Int
 )

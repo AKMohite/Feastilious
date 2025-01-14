@@ -14,6 +14,7 @@ import com.mak.feastit.domain.model.RecipeDetail
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
+import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.remote.FeastAPIService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -24,9 +25,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration
@@ -149,7 +147,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.SIMILAR_RECIPES.name,
                 entityId = recipeId,
-                lastSyncedAt = Clock.System.now()
+                lastSyncedAt = defaultNow()
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -164,7 +162,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0L,
                 entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
                 entityId = stepEntities.first().recipeId,
-                lastSyncedAt = Clock.System.now()
+                lastSyncedAt = defaultNow()
             )
             db.lastSyncDao().insert(currentSynced)
         }
@@ -186,7 +184,7 @@ internal class RealRecipeRepository @Inject constructor(
                 id = 0,
                 entityType = SyncType.RECIPE_DETAILS.name,
                 entityId = entity.id,
-                lastSyncedAt = Clock.System.now()
+                lastSyncedAt = defaultNow()
             )
             db.lastSyncDao().insert(currentSynced)
         }

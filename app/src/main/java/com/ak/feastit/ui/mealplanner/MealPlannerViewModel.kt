@@ -1,14 +1,17 @@
 package com.ak.feastit.ui.mealplanner
 
 import androidx.lifecycle.SavedStateHandle
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseViewModel
+import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.defaultLocalDate
 import com.mak.feastit.domain.util.defaultLocalDateTime
+import com.mak.feastit.domain.util.defaultNow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -18,10 +21,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import javax.inject.Inject
@@ -46,6 +48,9 @@ internal class MealPlannerViewModel @Inject constructor(
     private val _state = MutableStateFlow(MealPlannerState())
     val state = _state.asStateFlow()
 
+    private val _action: Channel<MealPlanAction> = Channel()
+    val action = _action.receiveAsFlow()
+
     init {
         observeMealPlans()
         observeWeeklyMeals()
@@ -57,8 +62,8 @@ internal class MealPlannerViewModel @Inject constructor(
      */
     fun onNextWeek() {
         uiScope.launch {
-            val selectedWeekStartDate = getEndWeekDate()?.let { Instant.parse(it) } ?: return@launch
-            val instant = selectedWeekStartDate.plus(1.days)
+            val selectedWeekEndDate = getEndWeekDate()?.let { Instant.parse(it) } ?: return@launch
+            val instant = selectedWeekEndDate.plus(1.days)
             saveSelectedDate(instant)
         }
     }
@@ -78,16 +83,14 @@ internal class MealPlannerViewModel @Inject constructor(
      * Handle selected date weeks date range
      */
     fun onDateSelected(epoch: Long) {
-//        TODO handle the date range from savedState and handle multiple week change using date picker
         uiScope.launch {
-//            TODO the selected date need to be passed from UI
             val selectedDate = Instant.fromEpochMilliseconds(epoch)
             saveSelectedDate(selectedDate)
         }
     }
 
     private fun initWeekDate() {
-        val now = Clock.System.now()
+        val now = defaultNow()
         saveSelectedDate(now)
     }
 
@@ -103,7 +106,7 @@ internal class MealPlannerViewModel @Inject constructor(
             _state.update { currentState ->
                 currentState.copy(todayRecipes = todayMeals, unscheduledRecipes = unscheduledMeals)
             }
-        }.shareIn(uiScope, SharingStarted.WhileSubscribed(5_000))
+        }.launchIn(uiScope)
     }
 
 //    TODO why combine is not working with flatmapMerge? and flatmapMerge does not work with .shareIn()
@@ -148,4 +151,38 @@ internal class MealPlannerViewModel @Inject constructor(
     fun getSelectedDateEpoch(): Long? = savedState.get<String?>(SAVED_SELECTED_WEEK_DATE)?.let { selected ->
         Instant.parse(selected).toEpochMilliseconds()
     }
+
+    fun openBottomSheet(recipe: MealPlanRecipe) {
+        uiScope.launch {
+            val actions = defaultActions.toMutableList()
+            if (recipe.scheduledFor == null) {
+                actions.add(
+                    MealPlanRecipeSheetItem(
+                        icon = R.drawable.ic_edit,
+                        title = R.string.set_meal_schedule,
+                        action = MealPlanRecipeAction.EDIT_SCHEDULE
+                    )
+                )
+            } else {
+                actions.add(
+                    MealPlanRecipeSheetItem(
+                        icon = R.drawable.ic_edit,
+                        title = R.string.edit_schedule,
+                        action = MealPlanRecipeAction.EDIT_SCHEDULE
+                    )
+                )
+                actions.add(
+                    MealPlanRecipeSheetItem(
+                        icon = R.drawable.ic_edit,
+                        title = R.string.set_meal_time,
+                        action = MealPlanRecipeAction.SET_MEAL_TIME
+                    )
+                )
+            }
+            val sortedActions = actions.toList().sortedBy { it.action.ordinal }
+            _action.send(MealPlanAction.OpenMealPlanBottomSheet(sortedActions))
+        }
+    }
+
+
 }
