@@ -46,6 +46,11 @@ internal class RealMealPlanRepository @Inject constructor(
         }
     }
 
+    override suspend fun getMealPlanRecipe(recipeId: Long) = withContext(dispatcher.io) {
+        val recipe = db.mealPlanDAO().getRecipe(recipeId)
+        recipe?.toMealPlanRecipe()
+    }
+
     override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {
         Timber.d("Observe today's meals")
         return db.mealPlanDAO().observeTodayMeals(defaultNow())
@@ -78,6 +83,19 @@ internal class RealMealPlanRepository @Inject constructor(
                 }
                 weeklyMealPlans
             }.flowOn(dispatcher.computation)
+    }
+}
+
+private fun MealPlanEntity?.toMealPlanRecipe(): MealPlanRecipe? {
+    return this?.let {
+        MealPlanRecipe(
+            recipeId = it.id,
+            scheduledFor = plannedFor?.defaultLocalDateTime(),
+            isMade = false,
+            name = "",
+            image = "",
+            preparationTime = 0
+        )
     }
 }
 

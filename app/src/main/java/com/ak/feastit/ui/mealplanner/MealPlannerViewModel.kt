@@ -154,33 +154,7 @@ internal class MealPlannerViewModel @Inject constructor(
 
     fun openBottomSheet(recipe: MealPlanRecipe) {
         uiScope.launch {
-            val actions = defaultActions.toMutableList()
-            if (recipe.scheduledFor == null) {
-                actions.add(
-                    MealPlanRecipeSheetItem(
-                        icon = R.drawable.ic_edit,
-                        title = R.string.set_meal_schedule,
-                        action = MealPlanRecipeAction.EDIT_SCHEDULE
-                    )
-                )
-            } else {
-                actions.add(
-                    MealPlanRecipeSheetItem(
-                        icon = R.drawable.ic_edit,
-                        title = R.string.edit_schedule,
-                        action = MealPlanRecipeAction.EDIT_SCHEDULE
-                    )
-                )
-                actions.add(
-                    MealPlanRecipeSheetItem(
-                        icon = R.drawable.ic_edit,
-                        title = R.string.set_meal_time,
-                        action = MealPlanRecipeAction.SET_MEAL_TIME
-                    )
-                )
-            }
-            val sortedActions = actions.toList().sortedBy { it.action.ordinal }
-            _action.send(MealPlanAction.OpenMealPlanBottomSheet(sortedActions))
+            _action.send(MealPlanAction.OpenMealPlanBottomSheet(recipe.recipeId))
         }
     }
 

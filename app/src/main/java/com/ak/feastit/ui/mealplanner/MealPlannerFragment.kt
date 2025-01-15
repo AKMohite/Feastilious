@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
@@ -67,7 +68,9 @@ internal class MealPlannerFragment: BaseFragment() {
 
     private fun handleActions(action: MealPlanAction) {
         when(action) {
-            is MealPlanAction.OpenMealPlanBottomSheet -> {}
+            is MealPlanAction.OpenMealPlanBottomSheet -> {
+                findNavController().navigate(MealPlannerFragmentDirections.plannerToEditDialog(action.recipeId))
+            }
         }
     }
 
