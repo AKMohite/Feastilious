@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.feastit.databinding.FragmentMealPlanEditBinding
+import com.ak.feastit.ui.mealplanner.MealPlanRecipeSheetItem
+import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -20,7 +22,7 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
     private var _binding: FragmentMealPlanEditBinding? = null
     private val binding: FragmentMealPlanEditBinding
         get() = _binding!!
-    private val viewModel: MealPlannerSheetViewModel by viewModels()
+    private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
     private val adapter: MealPlanSheetMenuAdapter by lazy {
         MealPlanSheetMenuAdapter(
             onMenuClick = { item ->
@@ -52,23 +54,15 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { menuItems ->
-                    adapter.reload(menuItems)
+                viewModel.state.collect { state ->
+                    adapter.reload(state.menuItems)
                 }
             }
         }
     }
 
     private fun handleMenuClick(item: MealPlanRecipeSheetItem) {
-        when (item.action) {
-            MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
-            MealPlanSheetMenuAction.SHARE_RECIPE -> {}
-            MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
-            MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
-            MealPlanSheetMenuAction.SET_SCHEDULE -> {}
-            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
-            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
-        }
+        viewModel.onMealPlanMenuClick(item)
         dismiss()
     }
 

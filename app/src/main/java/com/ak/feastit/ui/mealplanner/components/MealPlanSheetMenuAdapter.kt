@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentMealPlanMenuBinding
+import com.ak.feastit.ui.mealplanner.MealPlanRecipeSheetItem
 import com.ak.feastit.utils.onClick
 
 internal class MealPlanSheetMenuAdapter(
