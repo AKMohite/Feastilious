@@ -77,7 +77,11 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="download_recipe">Download recipe</string>
     <string name="share_recipe">Share recipe</string>
     <string name="set_meal_schedule">Schedule Recipe</string>
-    <string name="set_meal_time">Set meal time</string>
     <string name="edit_schedule">Edit Schedule</string>
-    <string name="repeat_next_week">Repeat next week</string>
+    <string name="repeat_again">Repeat again</string>
+    <string name="set_time_subtitle">Set time for meal, and set reminder for when to begin preparation</string>
+    <string name="done">Done</string>
+    <string name="add_to_calendar">Add to calendar</string>
+    <string name="prepare_at">Prepare at</string>
+    <string name="serve_at">Serve at</string>
 </resources>

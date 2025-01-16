@@ -96,7 +96,7 @@ internal class ShoppingCartViewModel @Inject constructor(
 //                    TODO can have same ingredient in different recipe maybe quantity can be grouped together
                     val cartIngredients = group.value.sortedBy { ingredient ->
                         ingredient.id
-                    }.map { ShoppingCart.Ingredient(it) }
+                    }.sortedBy { ingredient -> ingredient.isBought }.map { ShoppingCart.Ingredient(it) }
                     cart.addAll(cartIngredients)
                 }
             }
@@ -112,7 +112,8 @@ internal class ShoppingCartViewModel @Inject constructor(
                         servings = cartIngredient.servings
                     )
                     cart.add(ShoppingCart.RecipeHeading(recipe))
-                    cart.addAll(group.value.map { ShoppingCart.Ingredient(it) })
+                    val allIngredients = group.value.sortedBy { ingredient -> ingredient.isBought }.map { ShoppingCart.Ingredient(it) }
+                    cart.addAll(allIngredients)
                 }
             }
         }

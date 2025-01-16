@@ -89,6 +89,12 @@ internal class MealPlannerViewModel @Inject constructor(
         }
     }
 
+    fun openBottomSheet(recipe: MealPlanRecipe) {
+        uiScope.launch {
+            _action.send(MealPlanAction.OpenMealPlanBottomSheet(recipe.recipeId))
+        }
+    }
+
     private fun initWeekDate() {
         val now = defaultNow()
         saveSelectedDate(now)
@@ -150,12 +156,6 @@ internal class MealPlannerViewModel @Inject constructor(
     private fun getEndWeekDate(): String? = savedState[SAVED_END_WEEK_DATE]
     fun getSelectedDateEpoch(): Long? = savedState.get<String?>(SAVED_SELECTED_WEEK_DATE)?.let { selected ->
         Instant.parse(selected).toEpochMilliseconds()
-    }
-
-    fun openBottomSheet(recipe: MealPlanRecipe) {
-        uiScope.launch {
-            _action.send(MealPlanAction.OpenMealPlanBottomSheet(recipe.recipeId))
-        }
     }
 
 

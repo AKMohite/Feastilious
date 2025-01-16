@@ -12,6 +12,7 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentMealPlannerBinding
+import com.ak.feastit.ui.mealplanner.components.MealPlanSheetMenuAction
 import com.ak.feastit.ui.mealplanner.tabs.MealPlanPagerAdapter
 import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
 import com.google.android.material.tabs.TabLayoutMediator
@@ -71,15 +72,24 @@ internal class MealPlannerFragment: BaseFragment() {
             is MealPlanAction.OpenMealPlanBottomSheet -> {
                 findNavController().navigate(MealPlannerFragmentDirections.plannerToEditDialog(action.recipeId))
             }
+            is MealPlanAction.OnMenuClick -> handleBottomSheetAction(action.item)
+        }
+    }
+
+    private fun handleBottomSheetAction(action: MealPlanSheetMenuAction) {
+        when(action) {
+            MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
+            MealPlanSheetMenuAction.SHARE_RECIPE -> {}
+            MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
+            MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
+            MealPlanSheetMenuAction.SET_SCHEDULE -> {}
+            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
+            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
         }
     }
 
     override fun onDestroyView() {
         tabLayoutMediator.detach()
         super.onDestroyView()
-    }
-
-    fun openBottomSheetFor(unscheduledRecipes: MealPlanTab, recipeId: Long) {
-
     }
 }

@@ -61,14 +61,13 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
 
     private fun handleMenuClick(item: MealPlanRecipeSheetItem) {
         when (item.action) {
-            MealPlanRecipeAction.DOWNLOAD_RECIPE -> {}
-            MealPlanRecipeAction.SHARE_RECIPE -> {}
-            MealPlanRecipeAction.ADD_TO_SHOPPING_LIST -> {}
-            MealPlanRecipeAction.REPEAT_NEXT_WEEK -> {}
-            MealPlanRecipeAction.SET_SCHEDULE -> {}
-            MealPlanRecipeAction.EDIT_SCHEDULE -> {}
-            MealPlanRecipeAction.SET_MEAL_TIME -> {}
-            MealPlanRecipeAction.REMOVE_FROM_MEAL_PLAN -> {}
+            MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
+            MealPlanSheetMenuAction.SHARE_RECIPE -> {}
+            MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
+            MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
+            MealPlanSheetMenuAction.SET_SCHEDULE -> {}
+            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
+            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
         }
         dismiss()
     }

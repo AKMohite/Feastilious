@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.mealplanner.tabs.week.MealPlanWeekFragment">
 
@@ -20,7 +21,7 @@
             app:layout_constraintTop_toTopOf="@id/recipe_name"
             app:layout_constraintBottom_toBottomOf="@id/recipe_name"
             app:layout_constraintEnd_toEndOf="parent"
-            style="?attr/materialIconButtonStyle"/>
+            style="?attr/materialIconButtonFilledTonalStyle"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/current_btn"
@@ -32,7 +33,7 @@
             app:layout_constraintTop_toTopOf="@id/recipe_name"
             app:layout_constraintBottom_toBottomOf="@id/recipe_name"
             app:layout_constraintEnd_toEndOf="parent"
-            style="?attr/materialIconButtonStyle"/>
+            style="?attr/materialButtonOutlinedStyle"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_btn"
@@ -42,7 +43,12 @@
             app:layout_constraintTop_toTopOf="@id/recipe_name"
             app:layout_constraintBottom_toBottomOf="@id/recipe_name"
             app:layout_constraintEnd_toEndOf="parent"
-            style="?attr/materialIconButtonStyle"/>
+            style="?attr/materialIconButtonFilledTonalStyle"/>
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/component_meal_plan_recipe"/>
 
 </LinearLayout>

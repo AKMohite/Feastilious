@@ -80,6 +80,12 @@
             app:destination="@id/mealPlanEditBottomSheetFragment"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/scheduleMealFragment"
+        android:name="com.ak.feastit.ui.mealplanner.schedule.ScheduleMealFragment"
+        android:label="schedule_meal"
+        tools:layout="@layout/fragment_schedule_meal" />
+
     <dialog
         android:id="@+id/mealPlanEditBottomSheetFragment"
         android:name="com.ak.feastit.ui.mealplanner.components.MealPlanEditBottomSheetFragment"

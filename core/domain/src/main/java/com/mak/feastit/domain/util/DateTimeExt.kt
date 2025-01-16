@@ -29,6 +29,11 @@ fun Instant.defaultLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefa
     return toLocalDateTime(timeZone)
 }
 
+
+fun LocalDateTime.isToday(): Boolean {
+    return this.date == defaultNow().defaultLocalDateTime().date
+}
+
 fun Instant.defaultLocalDate(): LocalDate {
     return toLocalDateTime(TimeZone.currentSystemDefault()).date
 }

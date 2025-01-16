@@ -1,8 +1,6 @@
 package com.ak.feastit.ui.mealplanner
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import com.ak.feastit.R
+import com.ak.feastit.ui.mealplanner.components.MealPlanSheetMenuAction
 import com.mak.feastit.domain.model.MealPlanRecipe
 
 data class MealPlannerState(
@@ -14,4 +12,5 @@ data class MealPlannerState(
 
 internal sealed interface MealPlanAction {
     data class OpenMealPlanBottomSheet(val recipeId: Long): MealPlanAction
+    data class OnMenuClick(val item: MealPlanSheetMenuAction): MealPlanAction
 }
