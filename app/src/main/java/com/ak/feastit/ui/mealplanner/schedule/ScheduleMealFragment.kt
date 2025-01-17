@@ -23,8 +23,8 @@ internal class ScheduleMealFragment: BaseFragment() {
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentScheduleMealBinding.inflate(inflater)
 
-    private val binding: FragmentScheduleMealBinding =
-        baseBinding as FragmentScheduleMealBinding
+    private val binding: FragmentScheduleMealBinding
+        get() = baseBinding as FragmentScheduleMealBinding
 
     private val viewModel: ScheduleMealViewmodel by viewModels()
 

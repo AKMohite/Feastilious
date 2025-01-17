@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -62,12 +63,18 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
     }
 
     private fun handleMenuClick(item: MealPlanRecipeSheetItem) {
-        viewModel.onMealPlanMenuClick(item)
         dismiss()
+        viewModel.onMealPlanMenuClick(item)
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        fun show(fragmentManager: FragmentManager) {
+            MealPlanEditBottomSheetFragment().show(fragmentManager, MealPlanEditBottomSheetFragment::class.java.name)
+        }
     }
 }

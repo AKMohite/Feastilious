@@ -98,6 +98,8 @@ internal class MealPlannerViewModel @Inject constructor(
 
     fun openBottomSheet(recipe: MealPlanRecipe) {
         uiScope.launch {
+            savedState[SAVED_EDIT_RECIPE_ID] = recipe.recipeId
+            getMealPlanRecipe()
             _action.send(MealPlanAction.OpenMealPlanBottomSheet(recipe.recipeId))
         }
     }
@@ -206,15 +208,20 @@ internal class MealPlannerViewModel @Inject constructor(
     }
 
     fun onMealPlanMenuClick(item: MealPlanRecipeSheetItem) {
+        val recipe = editRecipe ?: throw IllegalStateException("No recipe found for meal plan edit")
         when(item.action) {
-            MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
-            MealPlanSheetMenuAction.SHARE_RECIPE -> {}
             MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
-            MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
-            MealPlanSheetMenuAction.SET_SCHEDULE -> {}
-            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
             MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
+            else -> {
+                uiScope.launch {
+                    _action.send(MealPlanAction.OnMenuClick(item.action, recipe))
+                }
+            }
         }
+    }
+
+    fun getEditRecipe(): Long {
+        return editRecipe?.recipeId ?: throw IllegalStateException("No recipe found")
     }
 
 

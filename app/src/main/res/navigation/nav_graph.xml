@@ -78,13 +78,20 @@
         <action
             android:id="@+id/planner_to_edit_dialog"
             app:destination="@id/mealPlanEditBottomSheetFragment"/>
+        <action
+            android:id="@+id/planner_to_schedule_meal"
+            app:destination="@id/scheduleMealFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/scheduleMealFragment"
         android:name="com.ak.feastit.ui.mealplanner.schedule.ScheduleMealFragment"
         android:label="schedule_meal"
-        tools:layout="@layout/fragment_schedule_meal" />
+        tools:layout="@layout/fragment_schedule_meal">
+        <argument
+            android:name="mealId"
+            app:argType="long" />
+    </fragment>
 
     <dialog
         android:id="@+id/mealPlanEditBottomSheetFragment"

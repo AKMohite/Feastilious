@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalTime
 import javax.inject.Inject
 
-private const val SAVED_MEAL_PLAN_ID = "meal-id"
+private const val SAVED_MEAL_PLAN_ID = "mealId"
 
 @HiltViewModel
 internal class ScheduleMealViewmodel @Inject constructor(

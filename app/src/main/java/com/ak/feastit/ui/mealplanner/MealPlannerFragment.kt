@@ -12,10 +12,11 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentMealPlannerBinding
-import com.ak.feastit.ui.mealplanner.components.MealPlanSheetMenuAction
+import com.ak.feastit.ui.mealplanner.components.MealPlanEditBottomSheetFragment
 import com.ak.feastit.ui.mealplanner.tabs.MealPlanPagerAdapter
 import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mak.feastit.domain.model.MealPlanRecipe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,21 +71,24 @@ internal class MealPlannerFragment: BaseFragment() {
     private fun handleActions(action: MealPlanAction) {
         when(action) {
             is MealPlanAction.OpenMealPlanBottomSheet -> {
-                findNavController().navigate(MealPlannerFragmentDirections.plannerToEditDialog(action.recipeId))
+//                findNavController().navigate(MealPlannerFragmentDirections.plannerToEditDialog(action.recipeId))
+//                TODO cannot use nav controller to navigate to bottom sheet to have parent viewmodel?
+                MealPlanEditBottomSheetFragment.show(childFragmentManager)
             }
-            is MealPlanAction.OnMenuClick -> handleBottomSheetAction(action.item)
+            is MealPlanAction.OnMenuClick -> handleBottomSheetAction(action.item, action.mealPlan)
         }
     }
 
-    private fun handleBottomSheetAction(action: MealPlanSheetMenuAction) {
+    private fun handleBottomSheetAction(action: MealPlanSheetMenuAction, mealPlan: MealPlanRecipe) {
         when(action) {
             MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
             MealPlanSheetMenuAction.SHARE_RECIPE -> {}
-            MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
             MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
-            MealPlanSheetMenuAction.SET_SCHEDULE -> {}
+            MealPlanSheetMenuAction.SET_SCHEDULE -> {
+                findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(mealPlan.recipeId))
+            }
             MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
-            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
+            else -> throw IllegalStateException("This action is not supported in view: $action")
         }
     }
 
