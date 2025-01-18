@@ -47,8 +47,8 @@ internal class RealMealPlanRepository @Inject constructor(
     }
 
     override suspend fun getMealPlanRecipe(recipeId: Long) = withContext(dispatcher.io) {
-        val recipe = db.mealPlanDAO().getRecipe(recipeId)
-        recipe?.toMealPlanRecipe()
+        val recipe = db.mealPlanDAO().getMealPlanRecipe(recipeId)
+        recipe?.toModel()
     }
 
     override fun observeTodayMeals(): Flow<List<MealPlanRecipe>> {

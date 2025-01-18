@@ -20,7 +20,7 @@ data class MealPlanRecipe(
      */
     fun preparationOrSchedule(): Pair<Boolean, String> {
 //        TODO maybe move this logic to mapper?
-        val preparation = "$preparationTime mins"
+        val preparation = displayablePreparationTime()
         if (scheduledFor == null) return Pair(true, preparation)
         val now = defaultNow().defaultLocalDateTime()
         if (now > scheduledFor) {
@@ -28,6 +28,8 @@ data class MealPlanRecipe(
         }
         return Pair(true, preparation)
     }
+
+    fun displayablePreparationTime() = "$preparationTime mins"
 
     fun isSameAs(other: MealPlanRecipe): Boolean {
         return recipeId == other.recipeId &&

@@ -47,7 +47,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     layout="@layout/component_meal_plan_recipe"/>
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/schedule_date"
+                    android:id="@+id/schedule_date_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     tools:text="14 January 2025"
@@ -63,9 +63,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/prepare_at"
                     android:layout_marginTop="@dimen/space_tiny"
-                    app:layout_constraintStart_toStartOf="@id/preparation_time"
-                    app:layout_constraintEnd_toEndOf="@id/preparation_time"
-                    app:layout_constraintTop_toBottomOf="@id/schedule_date"
+                    app:layout_constraintStart_toStartOf="@id/preparation_time_btn"
+                    app:layout_constraintEnd_toEndOf="@id/preparation_time_btn"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_date_btn"
                     android:textAppearance="?attr/textAppearanceBodySmall"/>
 
                 <TextView
@@ -74,13 +74,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/serve_at"
                     android:layout_marginTop="@dimen/space_tiny"
-                    app:layout_constraintEnd_toEndOf="@id/serving_time"
-                    app:layout_constraintStart_toStartOf="@id/serving_time"
-                    app:layout_constraintTop_toBottomOf="@id/schedule_date"
+                    app:layout_constraintEnd_toEndOf="@id/serving_time_btn"
+                    app:layout_constraintStart_toStartOf="@id/serving_time_btn"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_date_btn"
                     android:textAppearance="?attr/textAppearanceBodySmall"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/preparation_time"
+                    android:id="@+id/preparation_time_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="12:00"
@@ -97,14 +97,14 @@
                     app:layout_constraintStart_toEndOf="@id/prepare_tv"
                     app:layout_constraintEnd_toStartOf="@id/serve_tv"
                     app:layout_constraintTop_toTopOf="@id/prepare_tv"
-                    app:layout_constraintBottom_toBottomOf="@id/preparation_time"
+                    app:layout_constraintBottom_toBottomOf="@id/preparation_time_btn"
                     android:contentDescription="@string/set_meal_schedule"
-                    android:layout_below="@id/schedule_date"
-                    android:layout_toEndOf="@id/preparation_time"
-                    android:layout_toStartOf="@id/serving_time"/>
+                    android:layout_below="@id/schedule_date_btn"
+                    android:layout_toEndOf="@id/preparation_time_btn"
+                    android:layout_toStartOf="@id/serving_time_btn"/>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/serving_time"
+                    android:id="@+id/serving_time_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="13:00"
@@ -129,7 +129,7 @@
             android:layout_weight="1"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/submit"
+            android:id="@+id/submit_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/done"/>

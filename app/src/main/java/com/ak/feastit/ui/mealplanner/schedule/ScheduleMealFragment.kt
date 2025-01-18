@@ -35,17 +35,17 @@ internal class ScheduleMealFragment: BaseFragment() {
 
     private fun setupView() {
         binding.mealPlan.moreMenu.hide()
-        binding.scheduleDate.onClick {
+        binding.scheduleDateBtn.onClick {
 //            openDatePicker
         }
-        binding.preparationTime.onClick {
+        binding.preparationTimeBtn.onClick {
 //            openTimePicker
         }
-        binding.servingTime.onClick {
+        binding.servingTimeBtn.onClick {
 //            openTimePicker
         }
-//        binding.addToCalendar.onClick {  }
-        binding.submit.onClick {
+        binding.addToCalendar.onClick {  }
+        binding.submitBtn.onClick {
             viewModel.submit(binding.addToCalendar.isChecked)
         }
     }
@@ -65,10 +65,10 @@ internal class ScheduleMealFragment: BaseFragment() {
         binding.mainContainer.show(state.mealPlan != null)
         val mealPlan = state.mealPlan ?: return
         binding.mealPlan.recipeName.text = mealPlan.name
-        binding.mealPlan.preparationTime.text = state.preparationTime
+        binding.mealPlan.preparationTime.text = mealPlan.displayablePreparationTime()
         binding.mealPlan.recipeImg.load(mealPlan.image)
-        binding.scheduleDate.text = state.scheduleDate
-        binding.preparationTime.text = state.preparationTime
-        binding.servingTime.text = state.serveTime
+        binding.scheduleDateBtn.text = state.scheduleDate
+        binding.preparationTimeBtn.text = state.preparationTime
+        binding.servingTimeBtn.text = state.serveTime
     }
 }
