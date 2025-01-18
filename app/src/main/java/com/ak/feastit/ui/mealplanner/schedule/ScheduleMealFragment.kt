@@ -9,11 +9,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import coil.load
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentScheduleMealBinding
 import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -36,7 +38,7 @@ internal class ScheduleMealFragment: BaseFragment() {
     private fun setupView() {
         binding.mealPlan.moreMenu.hide()
         binding.scheduleDateBtn.onClick {
-//            openDatePicker
+            openDatePicker()
         }
         binding.preparationTimeBtn.onClick {
 //            openTimePicker
@@ -70,5 +72,22 @@ internal class ScheduleMealFragment: BaseFragment() {
         binding.scheduleDateBtn.text = state.scheduleDate
         binding.preparationTimeBtn.text = state.preparationTime
         binding.servingTimeBtn.text = state.serveTime
+    }
+
+    private fun openDatePicker() {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(getString(R.string.schedule_meal_on))
+            .setSelection(viewModel.getSelectedDateEpoch())
+//            .setCalendarConstraints(constraints)
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener {
+            viewModel.onDateSelected(it)
+        }
+        datePicker.addOnNegativeButtonClickListener {
+            // Respond to negative button click.
+        }
+
+        datePicker.show(childFragmentManager, "MEAL_DATE_PICKER")
     }
 }

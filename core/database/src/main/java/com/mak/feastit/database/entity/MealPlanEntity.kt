@@ -24,4 +24,5 @@ data class MealPlanEntity(
     val plannedFor: Instant?, // can be null and user can set this value later
     @ColumnInfo(name = "is_made")
     val isMade: Boolean
+//    isAddedToCal
 )
