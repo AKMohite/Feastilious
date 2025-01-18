@@ -51,5 +51,5 @@ fun Instant.defaultLocalTime(): LocalTime {
 }
 
 fun LocalDateTime.toInstant(): Instant {
-    return this.toInstant(TimeZone.UTC)
+    return this.toInstant(TimeZone.currentSystemDefault())
 }

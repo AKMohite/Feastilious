@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import coil.load
 import com.ak.feastit.R
@@ -19,6 +20,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -58,11 +60,24 @@ internal class ScheduleMealFragment: BaseFragment() {
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    renderView(state)
+                launch {
+                    viewModel.state.collect { state ->
+                        renderView(state)
 
+                    }
+                }
+                launch {
+                    viewModel.action.collectLatest { action ->
+                        handleActions(action)
+                    }
                 }
             }
+        }
+    }
+
+    private fun handleActions(action: ScheduleMealAction) {
+        when(action) {
+            ScheduleMealAction.OnMealScheduled -> findNavController().popBackStack()
         }
     }
 

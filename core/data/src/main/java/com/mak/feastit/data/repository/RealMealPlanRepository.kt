@@ -10,12 +10,14 @@ import com.mak.feastit.domain.util.daysShift
 import com.mak.feastit.domain.util.defaultLocalDate
 import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
+import com.mak.feastit.domain.util.toInstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -83,6 +85,13 @@ internal class RealMealPlanRepository @Inject constructor(
                 }
                 weeklyMealPlans
             }.flowOn(dispatcher.computation)
+    }
+
+    override suspend fun updateSchedule(id: Long, localDateTime: LocalDateTime) = withContext(dispatcher.io) {
+        val mealPlan = db.mealPlanDAO().getRecipe(id) ?: throw NullPointerException("No meal found")
+        val instant = localDateTime.toInstant()
+        Timber.d("Update schedule instant: $instant")
+        db.mealPlanDAO().update(mealPlan.copy(plannedFor = instant))
     }
 }
 

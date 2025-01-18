@@ -87,7 +87,9 @@ internal class MealPlannerFragment: BaseFragment() {
             MealPlanSheetMenuAction.SET_SCHEDULE -> {
                 findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(mealPlan.recipeId))
             }
-            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {}
+            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {
+                findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(mealPlan.recipeId))
+            }
             else -> throw IllegalStateException("This action is not supported in view: $action")
         }
     }

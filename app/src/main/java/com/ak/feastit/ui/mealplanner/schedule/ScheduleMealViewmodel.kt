@@ -10,14 +10,17 @@ import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.domain.util.toInstant
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val SAVED_MEAL_PLAN_ID = "mealId"
@@ -34,13 +37,34 @@ internal class ScheduleMealViewmodel @Inject constructor(
     private val _state = MutableStateFlow(ScheduleMealState())
     val state = _state.asStateFlow()
 
+    private val _action: Channel<ScheduleMealAction> = Channel()
+    val action = _action.receiveAsFlow()
+
     init {
         initDate()
         initMealPlan()
     }
 
     fun submit(needToAddInCalendar: Boolean) {
-//        TODO add remove reminder from calendar
+        Timber.d("Need to add in calendar: $needToAddInCalendar")
+        uiScope.launch(dispatcher.computation) {
+            val id = state.value.mealPlan?.recipeId ?: throw IllegalStateException("How did you came to this state?")
+            val scheduleDate = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
+                Instant.parse(dateTime).defaultLocalDate()
+            } ?: throw IllegalStateException("No schedule date found")
+            val scheduleTime = savedState.get<String?>(SAVED_SCHEDULE_TIME)?.let { time ->
+                LocalTime.parse(time)
+            } ?: throw IllegalStateException("No schedule time found")
+            val localDateTime = LocalDateTime(
+                year = scheduleDate.year,
+                monthNumber = scheduleDate.monthNumber,
+                dayOfMonth = scheduleDate.dayOfMonth,
+                hour = scheduleTime.hour,
+                minute = scheduleTime.minute
+            )
+            mealPlanRepository.updateSchedule(id, localDateTime)
+            _action.send(ScheduleMealAction.OnMealScheduled)
+        }
     }
 
     fun onDateSelected(epoch: Long) {
@@ -48,6 +72,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
             val instant = Instant.fromEpochMilliseconds(epoch)
             saveScheduleDate(instant)
             val selectedDate = instant.defaultLocalDate()
+            Timber.d("Meal scheduled on date: $selectedDate")
             _state.update { it.copy(scheduleDate = selectedDate.toString()) }
         }
     }
@@ -58,6 +83,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
             val date = now.defaultLocalDateTime().date
             saveScheduleDate(now)
             val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime()
+            Timber.d("Initialised with schedule time: $scheduleTime and preparation time: $preparationTime")
             _state.update { currentState ->
                 currentState.copy(
                     scheduleDate = date.toString(),
@@ -76,7 +102,8 @@ internal class ScheduleMealViewmodel @Inject constructor(
                 val scheduleDateTime = mealPlan.scheduledFor ?: defaultNow().defaultLocalDateTime()
                 val scheduleDate = scheduleDateTime.date
                 saveScheduleDate(scheduleDateTime.toInstant())
-                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(mealPlan?.scheduledFor?.time, mealPlan.preparationTime)
+                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(mealPlan.scheduledFor?.time, mealPlan.preparationTime)
+                Timber.d("Meal plan with default schedule time: $scheduleTime and preparation time: $preparationTime")
                 _state.update { currentState ->
                     currentState.copy(
                         scheduleDate = scheduleDate.toString(),
@@ -126,9 +153,11 @@ internal class ScheduleMealViewmodel @Inject constructor(
 //                hour = hour,
 //                minute = minute
 //            )
+            Timber.d("On time set: $hour:$minute")
             val newScheduleTime = LocalTime(hour = hour, minute = minute)
             val mealPlan = state.value.mealPlan
             val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(newScheduleTime, mealPlan?.preparationTime)
+            Timber.d("On new time set schedule time: $scheduleTime and preparation time: $preparationTime")
             _state.update { currentState ->
                 currentState.copy(
                     preparationTime = preparationTime.toString(),
@@ -145,3 +174,7 @@ internal data class ScheduleMealState(
     val serveTime: String = "",
     val mealPlan: MealPlanRecipe? = null
 )
+
+internal sealed interface ScheduleMealAction {
+    data object OnMealScheduled: ScheduleMealAction
+}
