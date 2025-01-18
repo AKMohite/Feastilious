@@ -16,11 +16,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import javax.inject.Inject
 
 private const val SAVED_MEAL_PLAN_ID = "mealId"
 private const val SAVED_SCHEDULE_DATE = "meal-schedule-date"
+private const val SAVED_SCHEDULE_TIME = "meal-schedule-time"
 
 @HiltViewModel
 internal class ScheduleMealViewmodel @Inject constructor(
@@ -55,7 +57,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
             val now = defaultNow()
             val date = now.defaultLocalDateTime().date
             saveScheduleDate(now)
-            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTim()
+            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime()
             _state.update { currentState ->
                 currentState.copy(
                     scheduleDate = date.toString(),
@@ -74,7 +76,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
                 val scheduleDateTime = mealPlan.scheduledFor ?: defaultNow().defaultLocalDateTime()
                 val scheduleDate = scheduleDateTime.date
                 saveScheduleDate(scheduleDateTime.toInstant())
-                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTim(mealPlan)
+                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(mealPlan?.scheduledFor?.time, mealPlan.preparationTime)
                 _state.update { currentState ->
                     currentState.copy(
                         scheduleDate = scheduleDate.toString(),
@@ -87,12 +89,17 @@ internal class ScheduleMealViewmodel @Inject constructor(
         }
     }
 
-    private fun scheduleAndPreparationDateTim(mealPlan: MealPlanRecipe? = null): Pair<LocalTime, LocalTime> {
-        val scheduleTime = mealPlan?.scheduledFor?.time ?: LocalTime(13, 0)
-        val preparationDelay = ((mealPlan?.preparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
+    private fun scheduleAndPreparationDateTime(mealScheduleTime: LocalTime? = null, mealPreparationTime: Int? = null): Pair<LocalTime, LocalTime> {
+        val scheduleTime = mealScheduleTime ?: LocalTime(13, 0)
+        saveScheduleTime(scheduleTime)
+        val preparationDelay = ((mealPreparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
         val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
         val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
         return Pair(scheduleTime, preparationTime)
+    }
+
+    private fun saveScheduleTime(scheduleTime: LocalTime) {
+        savedState[SAVED_SCHEDULE_TIME] = scheduleTime.toString()
     }
 
     fun getSelectedDateEpoch() = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
@@ -101,6 +108,26 @@ internal class ScheduleMealViewmodel @Inject constructor(
 
     private fun saveScheduleDate(instant: Instant) {
         savedState[SAVED_SCHEDULE_DATE] = instant.toString()
+    }
+
+    fun getHourMinute(): Pair<Int, Int> {
+        val localTime = LocalTime.parse(savedState.get<String?>(SAVED_SCHEDULE_TIME)!!)
+        return Pair(localTime.hour, localTime.minute)
+    }
+
+    fun onTimeSet(hour: Int, minute: Int) {
+        uiScope.launch {
+            val localTime = LocalTime(hour, minute)
+            saveScheduleTime(localTime)
+            val newScheduleTime = LocalDateTime()
+            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(state.value.mealPlan)
+            _state.update { currentState ->
+                currentState.copy(
+                    preparationTime = preparationTime.toString(),
+                    serveTime = scheduleTime.toString(),
+                )
+            }
+        }
     }
 }
 

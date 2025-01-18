@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.mealplanner.schedule
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -16,8 +17,12 @@ import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat.CLOCK_12H
+import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 internal class ScheduleMealFragment: BaseFragment() {
@@ -41,10 +46,10 @@ internal class ScheduleMealFragment: BaseFragment() {
             openDatePicker()
         }
         binding.preparationTimeBtn.onClick {
-//            openTimePicker
+            openTimePicker()
         }
         binding.servingTimeBtn.onClick {
-//            openTimePicker
+            openTimePicker()
         }
         binding.addToCalendar.onClick {  }
         binding.submitBtn.onClick {
@@ -90,4 +95,28 @@ internal class ScheduleMealFragment: BaseFragment() {
 
         datePicker.show(childFragmentManager, "MEAL_DATE_PICKER")
     }
+
+    private fun openTimePicker() {
+//        val isSystem24Hour: Boolean = DateFormat.is24HourFormat(context)
+//        val clockFormat = if (isSystem24Hour) CLOCK_24H else CLOCK_12H
+        val (hour, minute) = viewModel.getHourMinute()
+        val materialTimePickerBuilder = MaterialTimePicker.Builder()
+            .setTimeFormat(CLOCK_24H)
+            .setHour(hour)
+            .setMinute(minute)
+
+//        if (timeInputMode != null) {
+//            materialTimePickerBuilder.setInputMode(timeInputMode)
+//        }
+
+        val materialTimePicker = materialTimePickerBuilder.build()
+        materialTimePicker.clearOnPositiveButtonClickListeners()
+        materialTimePicker.addOnPositiveButtonClickListener { dialog: View? ->
+            val newHour = materialTimePicker.hour
+            val newMinute = materialTimePicker.minute
+            viewModel.onTimeSet(newHour, newMinute)
+        }
+        materialTimePicker.showNow(childFragmentManager, "MEAL_TIME_PICKER");
+    }
+
 }
