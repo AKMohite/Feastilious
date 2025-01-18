@@ -1,7 +1,6 @@
 package com.ak.feastit.ui.mealplanner.schedule
 
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -18,7 +17,6 @@ import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat.CLOCK_12H
 import com.google.android.material.timepicker.TimeFormat.CLOCK_24H
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -45,9 +43,9 @@ internal class ScheduleMealFragment: BaseFragment() {
         binding.scheduleDateBtn.onClick {
             openDatePicker()
         }
-        binding.preparationTimeBtn.onClick {
-            openTimePicker()
-        }
+//        binding.preparationTimeBtn.onClick {
+//            openTimePicker()
+//        }
         binding.servingTimeBtn.onClick {
             openTimePicker()
         }
@@ -89,9 +87,7 @@ internal class ScheduleMealFragment: BaseFragment() {
         datePicker.addOnPositiveButtonClickListener {
             viewModel.onDateSelected(it)
         }
-        datePicker.addOnNegativeButtonClickListener {
-            // Respond to negative button click.
-        }
+        datePicker.addOnNegativeButtonClickListener {}
 
         datePicker.show(childFragmentManager, "MEAL_DATE_PICKER")
     }

@@ -172,7 +172,8 @@ internal class MealPlannerViewModel @Inject constructor(
                 val range = getWeekRange(selectedDate)
                 val start = range.first.defaultLocalDate()
                 val end = range.second.defaultLocalDate()
-                val weekRange = "${start.dayOfMonth} ${start.month/*.toString().take(3)*/} - ${end.dayOfMonth} ${end.month}"
+//                TODO handle 3 substring month properly
+                val weekRange = "${start.dayOfMonth} ${start.month.toString().take(3)} - ${end.dayOfMonth} ${end.month.toString().take(3)}"
                 _state.update { it.copy(weekRange = weekRange) }
                 range
             }.flowOn(dispatcher.computation)

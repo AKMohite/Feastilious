@@ -116,11 +116,19 @@ internal class ScheduleMealViewmodel @Inject constructor(
     }
 
     fun onTimeSet(hour: Int, minute: Int) {
-        uiScope.launch {
-            val localTime = LocalTime(hour, minute)
-            saveScheduleTime(localTime)
-            val newScheduleTime = LocalDateTime()
-            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(state.value.mealPlan)
+        uiScope.launch(dispatcher.computation) {
+//            val scheduleDate = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let {
+//                Instant.parse(it).defaultLocalDate() } ?: return@launch
+//            val newScheduleTime = LocalDateTime(
+//                year = scheduleDate.year,
+//                monthNumber = scheduleDate.monthNumber,
+//                dayOfMonth = scheduleDate.dayOfMonth,
+//                hour = hour,
+//                minute = minute
+//            )
+            val newScheduleTime = LocalTime(hour = hour, minute = minute)
+            val mealPlan = state.value.mealPlan
+            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(newScheduleTime, mealPlan?.preparationTime)
             _state.update { currentState ->
                 currentState.copy(
                     preparationTime = preparationTime.toString(),
