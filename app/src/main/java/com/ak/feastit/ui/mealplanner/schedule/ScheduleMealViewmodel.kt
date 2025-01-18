@@ -37,16 +37,25 @@ internal class ScheduleMealViewmodel @Inject constructor(
         initMealPlan()
     }
 
+    fun submit(needToAddInCalendar: Boolean) {
+//        TODO add remove reminder from calendar
+    }
+
+    fun onDateSelected(epoch: Long) {
+        uiScope.launch {
+            val instant = Instant.fromEpochMilliseconds(epoch)
+            saveScheduleDate(instant)
+            val selectedDate = instant.defaultLocalDate()
+            _state.update { it.copy(scheduleDate = selectedDate.toString()) }
+        }
+    }
+
     private fun initDate() {
         uiScope.launch(dispatcher.computation) {
             val now = defaultNow()
             val date = now.defaultLocalDateTime().date
             saveScheduleDate(now)
-            val scheduleTime = LocalTime(13, 0)
-//            15 min delay to arrange ingredients and utensils
-            val preparationDelay = 15 * 60 * 1_000
-            val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
-            val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
+            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTim()
             _state.update { currentState ->
                 currentState.copy(
                     scheduleDate = date.toString(),
@@ -65,10 +74,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
                 val scheduleDateTime = mealPlan.scheduledFor ?: defaultNow().defaultLocalDateTime()
                 val scheduleDate = scheduleDateTime.date
                 saveScheduleDate(scheduleDateTime.toInstant())
-                val scheduleTime = mealPlan.scheduledFor?.time ?: LocalTime(13, 0)
-                val preparationDelay = ((mealPlan.preparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
-                val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
-                val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
+                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTim(mealPlan)
                 _state.update { currentState ->
                     currentState.copy(
                         scheduleDate = scheduleDate.toString(),
@@ -81,22 +87,17 @@ internal class ScheduleMealViewmodel @Inject constructor(
         }
     }
 
-    fun submit(needToAddInCalendar: Boolean) {
-//        TODO add remove reminder from calendar
+    private fun scheduleAndPreparationDateTim(mealPlan: MealPlanRecipe? = null): Pair<LocalTime, LocalTime> {
+        val scheduleTime = mealPlan?.scheduledFor?.time ?: LocalTime(13, 0)
+        val preparationDelay = ((mealPlan?.preparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
+        val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
+        val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
+        return Pair(scheduleTime, preparationTime)
     }
 
     fun getSelectedDateEpoch() = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
         Instant.parse(dateTime).toEpochMilliseconds()
     } ?: throw IllegalStateException("No date initialised in init to schedule recipe")
-
-    fun onDateSelected(epoch: Long) {
-        uiScope.launch {
-            val instant = Instant.fromEpochMilliseconds(epoch)
-            saveScheduleDate(instant)
-            val selectedDate = instant.defaultLocalDate()
-            _state.update { it.copy(scheduleDate = selectedDate.toString()) }
-        }
-    }
 
     private fun saveScheduleDate(instant: Instant) {
         savedState[SAVED_SCHEDULE_DATE] = instant.toString()
