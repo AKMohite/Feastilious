@@ -8,9 +8,11 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 fun LocalDate.daysShift(days: Int): LocalDate = when {
@@ -46,4 +48,8 @@ fun Instant.dayMonth(): String {
 
 fun Instant.defaultLocalTime(): LocalTime {
     return toLocalDateTime(TimeZone.currentSystemDefault()).time
+}
+
+fun LocalDateTime.toInstant(): Instant {
+    return this.toInstant(TimeZone.UTC)
 }
