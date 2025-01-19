@@ -46,9 +46,7 @@ internal class MealPlannerFragment: BaseFragment() {
         }
     }
 
-    private val pagerAdapter: MealPlanPagerAdapter by lazy {
-        MealPlanPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-    }
+    private lateinit var pagerAdapter: MealPlanPagerAdapter
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -56,6 +54,7 @@ internal class MealPlannerFragment: BaseFragment() {
     }
 
     private fun setupView() {
+        pagerAdapter = MealPlanPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.mealPlanPager.adapter = pagerAdapter
         tabLayoutMediator.attach()
     }
