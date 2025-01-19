@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 
 
 data class MealPlanRecipe(
+    val id: Long,
     val recipeId: Long,
     val scheduledFor: LocalDateTime?,
     val preparationTime: Int?,

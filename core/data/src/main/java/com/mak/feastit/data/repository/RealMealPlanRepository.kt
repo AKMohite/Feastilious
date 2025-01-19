@@ -36,20 +36,20 @@ internal class RealMealPlanRepository @Inject constructor(
     //    TODO cancel notifications too
     override suspend fun toggleMealPLanFor(recipeId: Long) = withContext(dispatcher.io) {
         val mealPlan = db.mealPlanDAO().getRecipe(recipeId)
-        if (mealPlan == null) {
+        if (mealPlan.isEmpty()) {
             val new = MealPlanEntity(
-                id = recipeId,
+                recipeId = recipeId,
                 isMade = false,
                 plannedFor = null
             )
             db.mealPlanDAO().insert(new)
         } else {
-            db.mealPlanDAO().delete(mealPlan)
+            db.mealPlanDAO().deleteRecipe(recipeId)
         }
     }
 
-    override suspend fun getMealPlanRecipe(recipeId: Long) = withContext(dispatcher.io) {
-        val recipe = db.mealPlanDAO().getMealPlanRecipe(recipeId)
+    override suspend fun getMealPlanRecipe(id: Long) = withContext(dispatcher.io) {
+        val recipe = db.mealPlanDAO().getMealPlanRecipe(id)
         recipe?.toModel()
     }
 
@@ -88,7 +88,7 @@ internal class RealMealPlanRepository @Inject constructor(
     }
 
     override suspend fun updateSchedule(id: Long, localDateTime: LocalDateTime) = withContext(dispatcher.io) {
-        val mealPlan = db.mealPlanDAO().getRecipe(id) ?: throw NullPointerException("No meal found")
+        val mealPlan = db.mealPlanDAO().getMealPLan(id) ?: throw NullPointerException("No meal found")
         val instant = localDateTime.toInstant()
         Timber.d("Update schedule instant: $instant")
         db.mealPlanDAO().update(mealPlan.copy(plannedFor = instant))
@@ -98,7 +98,8 @@ internal class RealMealPlanRepository @Inject constructor(
 private fun MealPlanEntity?.toMealPlanRecipe(): MealPlanRecipe? {
     return this?.let {
         MealPlanRecipe(
-            recipeId = it.id,
+            id = it.id,
+            recipeId = it.recipeId,
             scheduledFor = plannedFor?.defaultLocalDateTime(),
             isMade = false,
             name = "",
@@ -114,7 +115,8 @@ private fun List<MealPlanRecipeEntity>.mapEntitiesToModels(): List<MealPlanRecip
 
 private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe {
     return MealPlanRecipe(
-        recipeId = id,
+        id = id,
+        recipeId = recipeId,
         scheduledFor = scheduledFor?.defaultLocalDateTime(),
         isMade = isMade,
         name = name,

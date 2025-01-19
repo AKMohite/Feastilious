@@ -12,14 +12,16 @@ import kotlinx.datetime.Instant
         ForeignKey(
             entity = RecipeEntity::class,
             parentColumns = ["id"],
-            childColumns = ["id"],
+            childColumns = ["recipe_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class MealPlanEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: Long, // recipeId
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    @ColumnInfo(name = "recipe_id")
+    val recipeId: Long,
     @ColumnInfo(name = "planned_for")
     val plannedFor: Instant?, // can be null and user can set this value later
     @ColumnInfo(name = "is_made")

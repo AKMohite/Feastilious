@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "5a0414c00ba2268a5cc9882e39834bef",
+    "identityHash": "cac9d0d9615a8636aa0fea7cdfe71d78",
     "entities": [
       {
         "tableName": "popular_recipes",
@@ -623,11 +623,17 @@
       },
       {
         "tableName": "meal_planner",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `planned_for` TEXT, `is_made` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `recipe_id` INTEGER NOT NULL, `planned_for` TEXT, `is_made` INTEGER NOT NULL, FOREIGN KEY(`recipe_id`) REFERENCES `recipes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recipeId",
+            "columnName": "recipe_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -645,7 +651,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": false,
+          "autoGenerate": true,
           "columnNames": [
             "id"
           ]
@@ -657,7 +663,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "id"
+              "recipe_id"
             ],
             "referencedColumns": [
               "id"
@@ -669,7 +675,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5a0414c00ba2268a5cc9882e39834bef')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cac9d0d9615a8636aa0fea7cdfe71d78')"
     ]
   }
 }

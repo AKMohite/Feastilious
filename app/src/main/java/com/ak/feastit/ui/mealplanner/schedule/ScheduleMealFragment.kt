@@ -77,7 +77,7 @@ internal class ScheduleMealFragment: BaseFragment() {
 
     private fun handleActions(action: ScheduleMealAction) {
         when(action) {
-            ScheduleMealAction.OnMealScheduled -> findNavController().popBackStack()
+            ScheduleMealAction.OnMealScheduled -> findNavController().navigateUp()
         }
     }
 

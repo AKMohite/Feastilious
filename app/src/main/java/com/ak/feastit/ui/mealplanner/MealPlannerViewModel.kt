@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.days
 private const val SAVED_START_WEEK_DATE = "meal-plan-week-start-date"
 private const val SAVED_END_WEEK_DATE = "meal-plan-week-end-date"
 private const val SAVED_SELECTED_WEEK_DATE = "meal-plan-week-selected-date"
-private const val SAVED_EDIT_RECIPE_ID = "editRecipeId"
+private const val SAVED_EDIT_MEAL_PLAN_ID = "meal-plan-id"
 
 @HiltViewModel
 internal class MealPlannerViewModel @Inject constructor(
@@ -56,7 +56,7 @@ internal class MealPlannerViewModel @Inject constructor(
     private val _action: Channel<MealPlanAction> = Channel()
     val action = _action.receiveAsFlow()
 
-    private var editRecipe: MealPlanRecipe? = null
+    private var editMealPlan: MealPlanRecipe? = null
 
     init {
         observeMealPlans()
@@ -96,11 +96,11 @@ internal class MealPlannerViewModel @Inject constructor(
         }
     }
 
-    fun openBottomSheet(recipe: MealPlanRecipe) {
+    fun openBottomSheet(mealPlan: MealPlanRecipe) {
         uiScope.launch {
-            savedState[SAVED_EDIT_RECIPE_ID] = recipe.recipeId
+            savedState[SAVED_EDIT_MEAL_PLAN_ID] = mealPlan.id
             getMealPlanRecipe()
-            _action.send(MealPlanAction.OpenMealPlanBottomSheet(recipe.recipeId))
+            _action.send(MealPlanAction.OpenMealPlanBottomSheet(mealPlan.id))
         }
     }
 
@@ -126,8 +126,8 @@ internal class MealPlannerViewModel @Inject constructor(
 
     private fun getMealPlanRecipe() {
         uiScope.launch {
-            val recipeId = savedState.get<Long>(SAVED_EDIT_RECIPE_ID) ?: throw IllegalArgumentException("No id found")
-            editRecipe = mealPlanRepository.getMealPlanRecipe(recipeId) ?: throw IllegalStateException("No meal plan found for $recipeId")
+            val mealPlanId = savedState.get<Long>(SAVED_EDIT_MEAL_PLAN_ID) ?: throw IllegalArgumentException("No id found")
+            editMealPlan = mealPlanRepository.getMealPlanRecipe(mealPlanId) ?: throw IllegalStateException("No meal plan found for $mealPlanId")
             val actions = getActions()
             _state.update { currentState -> currentState.copy(menuItems = actions) }
         }
@@ -135,7 +135,7 @@ internal class MealPlannerViewModel @Inject constructor(
 
     private suspend fun getActions() = withContext(dispatcher.computation) {
         val menuActions = defaultActions.toMutableList()
-        if (editRecipe?.scheduledFor == null) {
+        if (editMealPlan?.scheduledFor == null) {
             menuActions.add(
                 MealPlanRecipeSheetItem(
                     icon = R.drawable.ic_calendar,
@@ -144,7 +144,7 @@ internal class MealPlannerViewModel @Inject constructor(
                 )
             )
         } else {
-            if (editRecipe?.scheduledFor!!.isToday()) {
+            if (editMealPlan?.scheduledFor!!.isToday()) {
                 menuActions.add(
                     MealPlanRecipeSheetItem(
                         icon = R.drawable.ic_repeat,
@@ -209,20 +209,20 @@ internal class MealPlannerViewModel @Inject constructor(
     }
 
     fun onMealPlanMenuClick(item: MealPlanRecipeSheetItem) {
-        val recipe = editRecipe ?: throw IllegalStateException("No recipe found for meal plan edit")
+        val mealPlan = editMealPlan ?: throw IllegalStateException("No recipe found for meal plan edit")
         when(item.action) {
             MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
             MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
             else -> {
                 uiScope.launch {
-                    _action.send(MealPlanAction.OnMenuClick(item.action, recipe))
+                    _action.send(MealPlanAction.OnMenuClick(item.action, mealPlan))
                 }
             }
         }
     }
 
     fun getEditRecipe(): Long {
-        return editRecipe?.recipeId ?: throw IllegalStateException("No recipe found")
+        return editMealPlan?.recipeId ?: throw IllegalStateException("No recipe found")
     }
 
 

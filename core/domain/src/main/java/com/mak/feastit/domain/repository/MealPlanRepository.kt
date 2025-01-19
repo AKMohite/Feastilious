@@ -11,6 +11,6 @@ interface MealPlanRepository {
     fun observeWeekMeals(startDate: Instant, endDate: Instant): Flow<Map<String, List<MealPlanRecipe>>>
     suspend fun toggleMealPLanFor(recipeId: Long)
     fun hasRecipe(recipeId: Long): Flow<Boolean>
-    suspend fun getMealPlanRecipe(recipeId: Long): MealPlanRecipe?
+    suspend fun getMealPlanRecipe(id: Long): MealPlanRecipe?
     suspend fun updateSchedule(id: Long, localDateTime: LocalDateTime)
 }

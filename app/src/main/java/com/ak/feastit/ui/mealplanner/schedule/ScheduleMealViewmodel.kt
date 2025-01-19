@@ -48,7 +48,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
     fun submit(needToAddInCalendar: Boolean) {
         Timber.d("Need to add in calendar: $needToAddInCalendar")
         uiScope.launch(dispatcher.computation) {
-            val id = state.value.mealPlan?.recipeId ?: throw IllegalStateException("How did you came to this state?")
+            val id = state.value.mealPlan?.id ?: throw IllegalStateException("How did you came to this state?")
             val scheduleDate = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
                 Instant.parse(dateTime).defaultLocalDate()
             } ?: throw IllegalStateException("No schedule date found")
@@ -119,6 +119,7 @@ internal class ScheduleMealViewmodel @Inject constructor(
     private fun scheduleAndPreparationDateTime(mealScheduleTime: LocalTime? = null, mealPreparationTime: Int? = null): Pair<LocalTime, LocalTime> {
         val scheduleTime = mealScheduleTime ?: LocalTime(13, 0)
         saveScheduleTime(scheduleTime)
+//        TODO handle highest preparation time in minutes
         val preparationDelay = ((mealPreparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
         val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
         val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
