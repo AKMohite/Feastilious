@@ -8,13 +8,15 @@ import com.ak.feastit.databinding.ComponentDayOfWeekBinding
 import com.ak.feastit.databinding.ComponentMealPlanRecipeBinding
 import com.ak.feastit.ui.mealplanner.WeekMealPlanSection
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.ComponentMealPlanRecipe
+import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.ui.mealplanner.tabs.week.components.ComponentDayOfWeek
-import com.ak.feastit.utils.show
 
 private const val WEEK_HEADER = 0
 private const val WEEK_MEAL = 1
 
-internal class MealPlanWeekAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+internal class MealPlanWeekAdapter(
+    private val onMealPlanClick: (OnMealPlanClick) -> Unit
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val asyncDiff = AsyncListDiffer(this, MealPlanWeekDiff())
 
@@ -26,7 +28,7 @@ internal class MealPlanWeekAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             WEEK_MEAL ->{
                 val binding = ComponentMealPlanRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ComponentMealPlanRecipe(binding)
+                ComponentMealPlanRecipe(binding, onMealPlanClick)
             }
             else -> throw IllegalStateException("Invalid view type $viewType rendering")
         }
@@ -45,7 +47,6 @@ internal class MealPlanWeekAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder
                 val item = section as WeekMealPlanSection.MealRecipe
                 val componentMeal = holder as ComponentMealPlanRecipe
                 componentMeal.bind(item.meal)
-                componentMeal.itemView.show(item.isExpanded)
             }
         }
     }

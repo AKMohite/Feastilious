@@ -31,7 +31,7 @@ internal sealed interface WeekMealPlanSection {
         }
     }
 
-    data class MealRecipe(val meal: MealPlanRecipe, val isExpanded: Boolean = false): WeekMealPlanSection {
+    data class MealRecipe(val meal: MealPlanRecipe, val isExpanded: Boolean = true): WeekMealPlanSection {
         override fun areItemsTheSame(other: WeekMealPlanSection): Boolean {
             return this == other
         }

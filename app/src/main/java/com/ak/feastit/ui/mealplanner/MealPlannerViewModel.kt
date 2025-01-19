@@ -185,7 +185,7 @@ internal class MealPlannerViewModel @Inject constructor(
                 val sections = mutableListOf<WeekMealPlanSection>()
                 for (plan in mealPlans) {
                     val noOfMeal = plan.value.count()
-                    val mealCount = if (noOfMeal > 9) "9+" else "$noOfMeal"
+                    val mealCount = if (noOfMeal == 0) "" else if (noOfMeal > 9) "9+" else "$noOfMeal"
                     val dayMealPlan = DayMealPlan(day = plan.key, noOfMeal = mealCount)
                     val header = WeekMealPlanSection.DayHeader(dayMealPlan)
                     sections.add(header)

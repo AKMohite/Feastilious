@@ -8,14 +8,14 @@ import com.ak.feastit.databinding.ComponentMealPlanRecipeBinding
 import com.mak.feastit.domain.model.MealPlanRecipe
 
 internal class UnscheduledRecipeAdapter(
-    private val onMenuClick: (recipe: MealPlanRecipe) -> Unit
+    private val onMealPlanClick: (OnMealPlanClick) -> Unit
 ): RecyclerView.Adapter<ComponentMealPlanRecipe>() {
 
     private val asyncDiff = AsyncListDiffer(this, UnscheduledRecipeDiff())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentMealPlanRecipe {
         val binding = ComponentMealPlanRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ComponentMealPlanRecipe(binding, onMenuClick)
+        return ComponentMealPlanRecipe(binding, onMealPlanClick)
     }
 
     override fun getItemCount(): Int = asyncDiff.currentList.size

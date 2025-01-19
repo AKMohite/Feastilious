@@ -7,13 +7,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentMealPlanWeekBinding
+import com.ak.feastit.ui.mealplanner.MealPlannerFragment
+import com.ak.feastit.ui.mealplanner.MealPlannerFragmentDirections
 import com.ak.feastit.ui.mealplanner.MealPlannerState
 import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
+import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.utils.onClick
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +34,9 @@ internal class MealPlanWeekFragment : BaseFragment() {
 
     private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
     private val adapter: MealPlanWeekAdapter by lazy {
-        MealPlanWeekAdapter()
+        MealPlanWeekAdapter(
+            onMealPlanClick = ::handleMealPlanEvents
+        )
     }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +58,16 @@ internal class MealPlanWeekFragment : BaseFragment() {
                 viewModel.state.collectLatest { state ->
                     renderView(state)
                 }
+            }
+        }
+    }
+
+    private fun handleMealPlanEvents(event: OnMealPlanClick) {
+        when(event) {
+            is OnMealPlanClick.MoreMenu -> viewModel.openBottomSheet(event.recipe)
+            is OnMealPlanClick.RecipeDetail -> {
+                (requireParentFragment() as MealPlannerFragment)
+                    .findNavController().navigate(MealPlannerFragmentDirections.plannerToRecipeDetail(event.recipe.recipeId))
             }
         }
     }

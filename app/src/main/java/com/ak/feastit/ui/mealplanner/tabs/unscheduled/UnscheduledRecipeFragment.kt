@@ -7,14 +7,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentUnscheduledRecipesBinding
+import com.ak.feastit.ui.mealplanner.MealPlannerFragment
+import com.ak.feastit.ui.mealplanner.MealPlannerFragmentDirections
 import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
-import com.ak.feastit.ui.mealplanner.tabs.MealPlanTab
+import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.UnscheduledRecipeAdapter
-import com.mak.feastit.domain.model.MealPlanRecipe
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -31,8 +33,8 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
 
     private val adapter by lazy {
         UnscheduledRecipeAdapter(
-            onMenuClick = { recipe ->
-                openBottomSheetFor(recipe)
+            onMealPlanClick = { onMealPlanClick ->
+                onItemClick(onMealPlanClick)
             }
         )
     }
@@ -59,9 +61,17 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
 
     private val recipeOptions = listOf("Download Recipe", "Remove from meal plan", "Schedule", "Edit Meal time")
 
-    private fun openBottomSheetFor(recipe: MealPlanRecipe) {
-        viewModel.openBottomSheet(recipe)
+    private fun onItemClick(event: OnMealPlanClick) {
+        when(event) {
+            is OnMealPlanClick.MoreMenu -> {
+                viewModel.openBottomSheet(event.recipe)
 //        (requireParentFragment() as? MealPlannerFragment)?.openBottomSheetFor(MealPlanTab.UnscheduledRecipes, recipeId)
+            }
+            is OnMealPlanClick.RecipeDetail -> {
+                (requireParentFragment() as MealPlannerFragment)
+                    .findNavController().navigate(MealPlannerFragmentDirections.plannerToRecipeDetail(event.recipe.recipeId))
+            }
+        }
     }
 
 }

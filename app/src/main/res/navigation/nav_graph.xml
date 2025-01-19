@@ -81,6 +81,9 @@
         <action
             android:id="@+id/planner_to_schedule_meal"
             app:destination="@id/scheduleMealFragment" />
+        <action
+            android:id="@+id/planner_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
     </fragment>
 
     <fragment
