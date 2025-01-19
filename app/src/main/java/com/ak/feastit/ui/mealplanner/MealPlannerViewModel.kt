@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseViewModel
+import com.mak.feastit.domain.model.DayMealPlan
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -180,9 +181,22 @@ internal class MealPlannerViewModel @Inject constructor(
             .debounce(500)
             .flatMapMerge { (start, end) ->
                 mealPlanRepository.observeWeekMeals(start, end)
-            }.onEach { weeklyMeals ->
+            }.map { mealPlans ->
+                val sections = mutableListOf<WeekMealPlanSection>()
+                for (plan in mealPlans) {
+                    val noOfMeal = plan.value.count()
+                    val mealCount = if (noOfMeal > 9) "9+" else "$noOfMeal"
+                    val dayMealPlan = DayMealPlan(day = plan.key, noOfMeal = mealCount)
+                    val header = WeekMealPlanSection.DayHeader(dayMealPlan)
+                    sections.add(header)
+                    plan.value.map { meal ->
+                        sections.add(WeekMealPlanSection.MealRecipe(meal = meal))
+                    }
+                }
+                sections.toList()
+            }.flowOn(dispatcher.computation).onEach { weeklyMeals ->
                 _state.update { currentState ->
-                    currentState.copy(weeklyRecipes = weeklyMeals)
+                    currentState.copy(weeklySections = weeklyMeals)
                 }
             }.launchIn(uiScope)
     }

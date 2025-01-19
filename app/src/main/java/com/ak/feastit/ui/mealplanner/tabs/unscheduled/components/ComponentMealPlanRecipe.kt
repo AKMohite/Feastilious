@@ -9,13 +9,13 @@ import com.mak.feastit.domain.model.MealPlanRecipe
 
 class ComponentMealPlanRecipe(
     private val binding: ComponentMealPlanRecipeBinding,
-    private val onMenuClick: (recipe: MealPlanRecipe) -> Unit
+    private val onMenuClick: ((recipe: MealPlanRecipe) -> Unit)? = null
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(recipe: MealPlanRecipe) {
         binding.recipeImg.load(recipe.image)
         binding.recipeName.text = recipe.name
-        binding.moreMenu.onClick { onMenuClick(recipe) }
+        binding.moreMenu.onClick { onMenuClick?.invoke(recipe) }
         val (isPreparation, time) = recipe.preparationOrSchedule()
         val icon = if (isPreparation) {
             R.drawable.ic_time_required

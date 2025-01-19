@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
@@ -28,6 +29,9 @@ internal class MealPlanWeekFragment : BaseFragment() {
         get() = baseBinding as FragmentMealPlanWeekBinding
 
     private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
+    private val adapter: MealPlanWeekAdapter by lazy {
+        MealPlanWeekAdapter()
+    }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -35,6 +39,8 @@ internal class MealPlanWeekFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        binding.weeklyRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.weeklyRecipes.adapter = adapter
         binding.nextBtn.onClick { viewModel.onNextWeek() }
         binding.previousBtn.onClick { viewModel.onPreviousWeek() }
         binding.currentBtn.onClick { openDatePicker() }
@@ -86,6 +92,7 @@ internal class MealPlanWeekFragment : BaseFragment() {
 
     private fun renderView(state: MealPlannerState) {
         binding.currentBtn.text = state.weekRange
+        adapter.reload(state.weeklySections)
     }
 
 }
