@@ -33,11 +33,7 @@ internal class MealPlanWeekFragment : BaseFragment() {
         get() = baseBinding as FragmentMealPlanWeekBinding
 
     private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
-    private val adapter: MealPlanWeekAdapter by lazy {
-        MealPlanWeekAdapter(
-            onMealPlanClick = ::handleMealPlanEvents
-        )
-    }
+    private var adapter: MealPlanWeekAdapter? = null
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -46,6 +42,9 @@ internal class MealPlanWeekFragment : BaseFragment() {
 
     private fun setupView() {
         binding.weeklyRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter = MealPlanWeekAdapter(
+            onMealPlanClick = ::handleMealPlanEvents
+        )
         binding.weeklyRecipes.adapter = adapter
         binding.nextBtn.onClick { viewModel.onNextWeek() }
         binding.previousBtn.onClick { viewModel.onPreviousWeek() }
@@ -108,7 +107,12 @@ internal class MealPlanWeekFragment : BaseFragment() {
 
     private fun renderView(state: MealPlannerState) {
         binding.currentBtn.text = state.weekRange
-        adapter.reload(state.weeklySections)
+        adapter?.reload(state.weeklySections)
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
 }

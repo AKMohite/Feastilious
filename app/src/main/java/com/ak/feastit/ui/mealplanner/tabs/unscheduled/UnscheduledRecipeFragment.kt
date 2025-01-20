@@ -31,13 +31,7 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
 
     private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
 
-    private val adapter by lazy {
-        UnscheduledRecipeAdapter(
-            onMealPlanClick = { onMealPlanClick ->
-                onItemClick(onMealPlanClick)
-            }
-        )
-    }
+    private var adapter: UnscheduledRecipeAdapter? = null
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -46,6 +40,11 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
 
     private fun setupView() {
         binding.unscheduledRecipes.layoutManager = LinearLayoutManager(requireContext())
+        adapter = UnscheduledRecipeAdapter(
+            onMealPlanClick = { onMealPlanClick ->
+                onItemClick(onMealPlanClick)
+            }
+        )
         binding.unscheduledRecipes.adapter = adapter
     }
 
@@ -53,7 +52,7 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
-                    adapter.reload(state.unscheduledRecipes)
+                    adapter?.reload(state.unscheduledRecipes)
                 }
             }
         }
@@ -72,6 +71,11 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
                     .findNavController().navigate(MealPlannerFragmentDirections.plannerToRecipeDetail(event.recipe.recipeId))
             }
         }
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
 }

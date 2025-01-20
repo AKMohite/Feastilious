@@ -25,17 +25,7 @@ import timber.log.Timber
 class ExploreFragment : BaseFragment() {
 
     private val viewModel: ExploreViewModel by viewModels()
-    private val adapter: ExploreSectionAdapter by lazy {
-        ExploreSectionAdapter(
-            fragmentManager = this@ExploreFragment.childFragmentManager,
-            lifecycle = this.viewLifecycleOwner.lifecycle,
-            sectionEvents = ::handleSectionEvents
-//            sectionEvents = null
-        ).apply {
-//            TODO add to all adapters?
-            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-    }
+    private var adapter: ExploreSectionAdapter? = null
 
     override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
         FragmentExploreBinding.inflate(inflater)
@@ -70,12 +60,21 @@ class ExploreFragment : BaseFragment() {
         }
         binding.exploreItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 //        adapter.setEventListener(eventListener)
+        adapter = ExploreSectionAdapter(
+            fragmentManager = this@ExploreFragment.childFragmentManager,
+            lifecycle = this.viewLifecycleOwner.lifecycle,
+            sectionEvents = ::handleSectionEvents
+//            sectionEvents = null
+        ).apply {
+//            TODO add to all adapters?
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
         binding.exploreItems.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     val sections = state.displayableSections()
-                    adapter.submitList(sections)
+                    adapter?.submitList(sections)
                 }
             }
         }
@@ -103,6 +102,7 @@ class ExploreFragment : BaseFragment() {
 
     override fun onDestroyView() {
 //        adapter.setEventListener(null)
+        adapter = null
         super.onDestroyView()
     }
 }

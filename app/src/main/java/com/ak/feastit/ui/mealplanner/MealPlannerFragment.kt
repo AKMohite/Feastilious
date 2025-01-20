@@ -32,8 +32,17 @@ internal class MealPlannerFragment: BaseFragment() {
 
     private val viewModel: MealPlannerViewModel by viewModels()
 
-    private val tabLayoutMediator: TabLayoutMediator by lazy {
-        TabLayoutMediator(
+    private var tabLayoutMediator: TabLayoutMediator? = null
+
+    private var pagerAdapter: MealPlanPagerAdapter? = null
+
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        setupView()
+        observers()
+    }
+
+    private fun setupView() {
+        tabLayoutMediator = TabLayoutMediator(
             binding.mealPlanTabs,
             binding.mealPlanPager
         ) { tab, position ->
@@ -44,19 +53,9 @@ internal class MealPlannerFragment: BaseFragment() {
                 else -> throw IllegalArgumentException("Invalid tab position: $position")
             }
         }
-    }
-
-    private lateinit var pagerAdapter: MealPlanPagerAdapter
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        setupView()
-        observers()
-    }
-
-    private fun setupView() {
         pagerAdapter = MealPlanPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.mealPlanPager.adapter = pagerAdapter
-        tabLayoutMediator.attach()
+        tabLayoutMediator?.attach()
     }
 
     private fun observers() {
@@ -94,7 +93,9 @@ internal class MealPlannerFragment: BaseFragment() {
     }
 
     override fun onDestroyView() {
-        tabLayoutMediator.detach()
+        tabLayoutMediator?.detach()
+        pagerAdapter = null
+        tabLayoutMediator = null
         super.onDestroyView()
     }
 }
