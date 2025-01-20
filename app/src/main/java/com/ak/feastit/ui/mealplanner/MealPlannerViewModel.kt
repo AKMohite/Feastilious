@@ -167,6 +167,7 @@ internal class MealPlannerViewModel @Inject constructor(
 
 //    TODO why combine is not working with flatmapMerge? and flatmapMerge does not work with .shareIn()
     private fun observeWeeklyMeals() {
+        // FIXME: quick multiple clicks is not properly showing sections
         selectedWeekDate
             .filterNotNull()
             .map { selectedDate ->

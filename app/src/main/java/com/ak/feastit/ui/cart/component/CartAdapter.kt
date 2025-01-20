@@ -14,6 +14,7 @@ private const val COMPONENT_AISLE = 1
 private const val COMPONENT_INGREDIENT = 2
 
 sealed interface CartEvent {
+    data class RecipeDetail(val id: Long): CartEvent
     data class ToggleIngredient(val ingredientId: String) : CartEvent
     data class RemoveRecipe(val recipeId: Long): CartEvent
 }

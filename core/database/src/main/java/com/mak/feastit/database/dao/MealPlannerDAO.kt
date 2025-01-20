@@ -12,7 +12,7 @@ private const val MEAL_PLAN_QUERY = "SELECT mp.id, mp.recipe_id, mp.planned_for,
 @Dao
 interface MealPlannerDAO: BaseDAO<MealPlanEntity> {
 
-    @Query("$MEAL_PLAN_QUERY WHERE mp.planned_for = date(:today) ORDER BY mp.planned_for")
+    @Query("$MEAL_PLAN_QUERY WHERE date(mp.planned_for) = date(:today) ORDER BY mp.planned_for")
     fun observeTodayMeals(today: Instant): Flow<List<MealPlanRecipeEntity>>
 
     @Query("$MEAL_PLAN_QUERY WHERE mp.planned_for IS NULL")

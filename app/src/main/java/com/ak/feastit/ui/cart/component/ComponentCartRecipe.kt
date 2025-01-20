@@ -13,6 +13,9 @@ internal class ComponentCartRecipe(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(recipe: CartRecipe) {
+        binding.root.onClick {
+            onCartEvent(CartEvent.RecipeDetail(recipe.id))
+        }
         binding.recipeName.text = recipe.name
         binding.recipeImg.load(recipe.img)
         binding.servings.apply {

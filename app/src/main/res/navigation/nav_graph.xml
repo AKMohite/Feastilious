@@ -108,9 +108,9 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.ak.feastit.ui.collection.CollectionFragment"
-        android:label="collection_fragment"
-        tools:layout="@layout/fragment_collections"/>
+        android:name="com.ak.feastit.ui.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/fragment_settings"/>
 
     <fragment
         android:id="@+id/favoriteRecipesFragment"
@@ -126,5 +126,9 @@
         android:name="com.ak.feastit.ui.cart.ShoppingCartFragment"
         android:label="shopping_list_fragment"
         tools:layout="@layout/fragment_shopping_cart"
-        />
+        >
+        <action
+            android:id="@+id/cart_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
 </navigation>

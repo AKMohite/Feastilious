@@ -2,6 +2,7 @@ package com.mak.feastit.domain.model
 
 import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
+import com.mak.feastit.domain.util.isToday
 import kotlinx.datetime.LocalDateTime
 
 
@@ -24,7 +25,8 @@ data class MealPlanRecipe(
         val preparation = displayablePreparationTime()
         if (scheduledFor == null) return Pair(true, preparation)
         val now = defaultNow().defaultLocalDateTime()
-        if (now > scheduledFor) {
+        if (now < scheduledFor && now.date == scheduledFor.date) {
+            // FIXME: time shown is not formatted -> 13:5 != 13:05
             return Pair(false, "${scheduledFor.time.hour}:${scheduledFor.time.minute}")
         }
         return Pair(true, preparation)

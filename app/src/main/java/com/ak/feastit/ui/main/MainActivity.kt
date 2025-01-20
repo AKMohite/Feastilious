@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val navController= navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.exploreFragment, R.id.collectionFragment -> binding.mainBottomNavigation.show()
+                R.id.exploreFragment, R.id.collectionFragment, R.id.settingsFragment -> binding.mainBottomNavigation.show()
                 else -> binding.mainBottomNavigation.hide()
             }
         }

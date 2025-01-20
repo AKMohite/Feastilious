@@ -22,7 +22,7 @@ internal class RecipeNutritionFragment : BaseFragment() {
     private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-
+//        TODO show pie chart for caloric break down and show nutrition value in table
     }
 
 }

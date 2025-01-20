@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import androidx.viewbinding.ViewBinding
@@ -67,6 +68,7 @@ internal class ShoppingCartFragment : BaseFragment() {
         when(cartEvent) {
             is CartEvent.ToggleIngredient -> viewModel.toggleIngredient(cartEvent.ingredientId)
             is CartEvent.RemoveRecipe -> viewModel.removeRecipe(cartEvent.recipeId)
+            is CartEvent.RecipeDetail -> findNavController().navigate(ShoppingCartFragmentDirections.cartToRecipeDetail(cartEvent.id))
         }
     }
 

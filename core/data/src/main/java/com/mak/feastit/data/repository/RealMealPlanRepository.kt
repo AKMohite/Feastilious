@@ -33,7 +33,6 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.io)
     }
 
-    //    TODO cancel notifications too
     override suspend fun toggleMealPLanFor(recipeId: Long) = withContext(dispatcher.io) {
         val mealPlan = db.mealPlanDAO().getRecipe(recipeId)
         if (mealPlan.isEmpty()) {
@@ -45,6 +44,7 @@ internal class RealMealPlanRepository @Inject constructor(
             db.mealPlanDAO().insert(new)
         } else {
             db.mealPlanDAO().deleteRecipe(recipeId)
+            // TODO cancel notifications too
         }
     }
 
@@ -92,6 +92,7 @@ internal class RealMealPlanRepository @Inject constructor(
         val instant = localDateTime.toInstant()
         Timber.d("Update schedule instant: $instant")
         db.mealPlanDAO().update(mealPlan.copy(plannedFor = instant))
+        // TODO schedule notifications
     }
 }
 
