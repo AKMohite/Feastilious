@@ -12,5 +12,5 @@ interface MealPlanRepository {
     suspend fun toggleMealPLanFor(recipeId: Long)
     fun hasRecipe(recipeId: Long): Flow<Boolean>
     suspend fun getMealPlanRecipe(id: Long): MealPlanRecipe?
-    suspend fun updateSchedule(id: Long, localDateTime: LocalDateTime)
+    suspend fun updateSchedule(id: Long, mealDateTime: LocalDateTime)
 }

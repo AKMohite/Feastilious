@@ -2,11 +2,13 @@ package com.ak.feastit.ui.mealplanner.schedule
 
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
+import com.ak.feastit.worker.WorkerScheduler
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.defaultLocalDate
 import com.mak.feastit.domain.util.defaultLocalDateTime
+import com.mak.feastit.domain.util.defaultLocalTime
 import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.domain.util.toInstant
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,19 +20,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.minutes
 
-private const val SAVED_MEAL_PLAN_ID = "mealId"
-private const val SAVED_SCHEDULE_DATE = "meal-schedule-date"
-private const val SAVED_SCHEDULE_TIME = "meal-schedule-time"
+private const val SAVED_MEAL_PLAN_ID = "meal_id"
+private const val SAVED_SCHEDULE_DATE_TIME = "saved-meal-schedule-date-time"
+private const val SAVED_NOTIFICATION_DATE_TIME = "saved-meal-notification-date-time" // same as preparation time
 
 @HiltViewModel
 internal class ScheduleMealViewmodel @Inject constructor(
     private val dispatcher: DispatcherProvider,
     private val mealPlanRepository: MealPlanRepository,
+    private val scheduler: WorkerScheduler,
     private val savedState: SavedStateHandle
 ): BaseViewModel(dispatcher) {
 
@@ -45,43 +50,75 @@ internal class ScheduleMealViewmodel @Inject constructor(
         initMealPlan()
     }
 
-    fun submit(needToAddInCalendar: Boolean) {
-        Timber.d("Need to add in calendar: $needToAddInCalendar")
-        uiScope.launch(dispatcher.computation) {
-            val id = state.value.mealPlan?.id ?: throw IllegalStateException("How did you came to this state?")
-            val scheduleDate = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
-                Instant.parse(dateTime).defaultLocalDate()
-            } ?: throw IllegalStateException("No schedule date found")
-            val scheduleTime = savedState.get<String?>(SAVED_SCHEDULE_TIME)?.let { time ->
-                LocalTime.parse(time)
-            } ?: throw IllegalStateException("No schedule time found")
-            val localDateTime = LocalDateTime(
-                year = scheduleDate.year,
-                monthNumber = scheduleDate.monthNumber,
-                dayOfMonth = scheduleDate.dayOfMonth,
-                hour = scheduleTime.hour,
-                minute = scheduleTime.minute
-            )
-            mealPlanRepository.updateSchedule(id, localDateTime)
-            _action.send(ScheduleMealAction.OnMealScheduled)
-        }
-    }
-
     fun onDateSelected(epoch: Long) {
         uiScope.launch {
             val instant = Instant.fromEpochMilliseconds(epoch)
-            saveScheduleDate(instant)
             val selectedDate = instant.defaultLocalDate()
+            saveScheduleDate(selectedDate)
             Timber.d("Meal scheduled on date: $selectedDate")
             _state.update { it.copy(scheduleDate = selectedDate.toString()) }
         }
     }
 
+    fun onTimeSet(hour: Int, minute: Int) {
+        uiScope.launch(dispatcher.computation) {
+            val scheduleDate = getScheduleInstant().defaultLocalDateTime()
+            val newScheduleDateTime = LocalDateTime(
+                year = scheduleDate.year,
+                monthNumber = scheduleDate.monthNumber,
+                dayOfMonth = scheduleDate.dayOfMonth,
+                hour = hour,
+                minute = minute
+            )
+            Timber.d("On time set: $hour:$minute")
+            val mealPlan = state.value.mealPlan
+            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(newScheduleDateTime, mealPlan?.preparationTime)
+            Timber.d("On new time set schedule time: $scheduleTime and preparation time: $preparationTime")
+            _state.update { currentState ->
+                currentState.copy(
+                    preparationTime = preparationTime.toString(),
+                    serveTime = scheduleTime.toString(),
+                )
+            }
+        }
+    }
+
+    fun submit(needToAddInCalendar: Boolean) {
+        Timber.d("Need to add in calendar: $needToAddInCalendar")
+        uiScope.launch(dispatcher.computation) {
+            val id = state.value.mealPlan?.id ?: throw IllegalStateException("How did you came to this state?")
+            val scheduleDateTime = getScheduleInstant().defaultLocalDateTime()
+//            TODO create notification with alarm for below date time
+            val notificationDateTime = getNotificationInstant().defaultLocalDateTime()
+//            val scheduleDate = scheduleDateTime.date
+//            val scheduleTime = scheduleDateTime.time
+//            val localDateTime = LocalDateTime(
+//                year = scheduleDate.year,
+//                monthNumber = scheduleDate.monthNumber,
+//                dayOfMonth = scheduleDate.dayOfMonth,
+//                hour = scheduleTime.hour,
+//                minute = scheduleTime.minute
+//            )
+            mealPlanRepository.updateSchedule(id, scheduleDateTime)
+            scheduler.scheduleMealWorker(id, notificationDateTime)
+            _action.send(ScheduleMealAction.OnMealScheduled)
+//            TODO show snack bar meal scheduled
+        }
+    }
+
+    fun getHourMinute(): Pair<Int, Int> {
+        val localTime = getScheduleInstant().defaultLocalTime()
+        return Pair(localTime.hour, localTime.minute)
+    }
+
+    fun getSelectedDateEpoch() = getScheduleInstant().toEpochMilliseconds()
+
     private fun initDate() {
         uiScope.launch(dispatcher.computation) {
             val now = defaultNow()
-            val date = now.defaultLocalDateTime().date
-            saveScheduleDate(now)
+            val dateTime = now.defaultLocalDateTime()
+            val date = dateTime.date
+            saveScheduleDateTime(dateTime)
             val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime()
             Timber.d("Initialised with schedule time: $scheduleTime and preparation time: $preparationTime")
             _state.update { currentState ->
@@ -96,13 +133,13 @@ internal class ScheduleMealViewmodel @Inject constructor(
 
     private fun initMealPlan() {
         uiScope.launch {
-            val id = savedState.get<Long>(SAVED_MEAL_PLAN_ID) ?: throw IllegalArgumentException("No id found")
+            val id = savedState.get<Long>(SAVED_MEAL_PLAN_ID) ?: throw IllegalArgumentException("No meal to search")
             val mealPlan = mealPlanRepository.getMealPlanRecipe(id) ?: throw IllegalStateException("No recipe found")
             withContext(dispatcher.computation) {
                 val scheduleDateTime = mealPlan.scheduledFor ?: defaultNow().defaultLocalDateTime()
                 val scheduleDate = scheduleDateTime.date
-                saveScheduleDate(scheduleDateTime.toInstant())
-                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(mealPlan.scheduledFor?.time, mealPlan.preparationTime)
+                saveScheduleDateTime(scheduleDateTime)
+                val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(mealPlan.scheduledFor, mealPlan.preparationTime)
                 Timber.d("Meal plan with default schedule time: $scheduleTime and preparation time: $preparationTime")
                 _state.update { currentState ->
                     currentState.copy(
@@ -116,57 +153,73 @@ internal class ScheduleMealViewmodel @Inject constructor(
         }
     }
 
-    private fun scheduleAndPreparationDateTime(mealScheduleTime: LocalTime? = null, mealPreparationTime: Int? = null): Pair<LocalTime, LocalTime> {
-        val scheduleTime = mealScheduleTime ?: LocalTime(13, 0)
+    private suspend fun scheduleAndPreparationDateTime(
+        mealScheduleDateTime: LocalDateTime? = null,
+        mealPreparationTime: Int? = null
+    ): Pair<LocalTime, LocalTime> = withContext(dispatcher.computation) {
+        val scheduledDateTime = mealScheduleDateTime ?: getDefaultScheduleDateTime()
+        val scheduleTime = scheduledDateTime.time
         saveScheduleTime(scheduleTime)
-//        TODO handle highest preparation time in minutes
-        val preparationDelay = ((mealPreparationTime ?: 5) + 10) * 60 * 1_000 // 10 min delay to arrange ingredients and utensils ;P
-        val preparationTimeMillis = scheduleTime.toMillisecondOfDay().minus(preparationDelay)
-        val preparationTime = LocalTime.fromMillisecondOfDay(preparationTimeMillis)
-        return Pair(scheduleTime, preparationTime)
+        Timber.d("Meal schedule at: $scheduledDateTime")
+//        TODO: how to handle null or 0 preparation time? maybe show dialog before submitting that there is no preparation time so please be careful while scheduling
+        val preparationDelay = ((mealPreparationTime ?: 5) + 10) // additional 10 min delay to arrange ingredients and utensils ;P
+        val notificationInstant = scheduledDateTime.toInstant().minus(preparationDelay.minutes)
+        saveNotificationDateTime(notificationInstant)
+        val preparationDateTime = notificationInstant.defaultLocalDateTime()
+        Timber.d("Meal will be notified at: $preparationDateTime")
+        val preparationTime = preparationDateTime.time
+        Pair(scheduleTime, preparationTime)
+    }
+
+    private fun saveNotificationDateTime(instant: Instant) {
+        savedState[SAVED_NOTIFICATION_DATE_TIME] = instant.toString()
+    }
+
+    private fun getDefaultScheduleDateTime(): LocalDateTime {
+        val now = getScheduleInstant().defaultLocalDateTime()
+        return LocalDateTime(
+            year = now.year,
+            monthNumber = now.monthNumber,
+            dayOfMonth = now.dayOfMonth,
+            hour = 13,
+            minute = 0
+        )
     }
 
     private fun saveScheduleTime(scheduleTime: LocalTime) {
-        savedState[SAVED_SCHEDULE_TIME] = scheduleTime.toString()
+        val oldScheduleDateTime = getScheduleInstant().defaultLocalDate()
+        val newDateTime = LocalDateTime(
+            year = oldScheduleDateTime.year,
+            monthNumber = oldScheduleDateTime.monthNumber,
+            dayOfMonth = oldScheduleDateTime.dayOfMonth,
+            hour = scheduleTime.hour,
+            minute = scheduleTime.minute
+        )
+        saveScheduleDateTime(newDateTime)
     }
 
-    fun getSelectedDateEpoch() = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let { dateTime ->
-        Instant.parse(dateTime).toEpochMilliseconds()
-    } ?: throw IllegalStateException("No date initialised in init to schedule recipe")
-
-    private fun saveScheduleDate(instant: Instant) {
-        savedState[SAVED_SCHEDULE_DATE] = instant.toString()
+    private fun saveScheduleDate(date: LocalDate) {
+        val oldScheduleDateTime = getScheduleInstant().defaultLocalTime()
+        val newDateTime = LocalDateTime(
+            year = date.year,
+            monthNumber = date.monthNumber,
+            dayOfMonth = date.dayOfMonth,
+            hour = oldScheduleDateTime.hour,
+            minute = oldScheduleDateTime.minute
+        )
+        saveScheduleDateTime(newDateTime)
     }
 
-    fun getHourMinute(): Pair<Int, Int> {
-        val localTime = LocalTime.parse(savedState.get<String?>(SAVED_SCHEDULE_TIME)!!)
-        return Pair(localTime.hour, localTime.minute)
-    }
+    private fun saveScheduleDateTime(dateTime: LocalDateTime) =
+        savedState.set(SAVED_SCHEDULE_DATE_TIME, dateTime.toInstant().toString())
 
-    fun onTimeSet(hour: Int, minute: Int) {
-        uiScope.launch(dispatcher.computation) {
-//            val scheduleDate = savedState.get<String?>(SAVED_SCHEDULE_DATE)?.let {
-//                Instant.parse(it).defaultLocalDate() } ?: return@launch
-//            val newScheduleTime = LocalDateTime(
-//                year = scheduleDate.year,
-//                monthNumber = scheduleDate.monthNumber,
-//                dayOfMonth = scheduleDate.dayOfMonth,
-//                hour = hour,
-//                minute = minute
-//            )
-            Timber.d("On time set: $hour:$minute")
-            val newScheduleTime = LocalTime(hour = hour, minute = minute)
-            val mealPlan = state.value.mealPlan
-            val (scheduleTime, preparationTime) = scheduleAndPreparationDateTime(newScheduleTime, mealPlan?.preparationTime)
-            Timber.d("On new time set schedule time: $scheduleTime and preparation time: $preparationTime")
-            _state.update { currentState ->
-                currentState.copy(
-                    preparationTime = preparationTime.toString(),
-                    serveTime = scheduleTime.toString(),
-                )
-            }
-        }
-    }
+    private fun getScheduleInstant(): Instant = savedState.get<String?>(SAVED_SCHEDULE_DATE_TIME)?.let {
+        Instant.parse(it)
+    } ?: throw IllegalStateException("No date time found to schedule recipe")
+
+    private fun getNotificationInstant(): Instant = savedState.get<String?>(SAVED_NOTIFICATION_DATE_TIME)?.let {
+        Instant.parse(it)
+    } ?: throw IllegalStateException("No notification date time found to receive notification")
 }
 
 internal data class ScheduleMealState(

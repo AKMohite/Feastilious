@@ -2,14 +2,20 @@ package com.ak.feastit.worker
 
 import android.content.Context
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.mak.feastit.domain.util.defaultNow
+import com.mak.feastit.domain.util.toInstant
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.datetime.LocalDateTime
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.hours
 
 private const val STALE_DATA_WORK = "stale-data-worker"
 private const val MEAL_NOTIFY_WORK = "meal-notify-worker"
@@ -52,25 +58,33 @@ internal class BackgroundScheduler @Inject constructor(
     // endregion
 
     // region meal notify
-    override fun scheduleMealWorker() {
-//        val mealId = 0L
-//        val delaySeconds = 0L
-//        val constraints = Constraints.Builder()
-//            .setRequiresBatteryNotLow(true)
-//            .setRequiredNetworkType(NetworkType.UNMETERED)
-//            .build()
-//        val work = OneTimeWorkRequestBuilder<MealNotifyWorker>()
-//            .setConstraints(constraints)
-//            .setInitialDelay(delaySeconds, TimeUnit.SECONDS)
-//            .addTag(MEAL_NOTIFY_WORK)
-//            .build()
-//        WorkManager.getInstance(context)
-//            .enqueueUniqueWork("${MEAL_NOTIFY_WORK}-$mealId", ExistingWorkPolicy.KEEP, work)
-    }
-
-    override fun rescheduleMealWorker() {
-        cancelMealWorker()
-        scheduleMealWorker()
+    /**
+     * @param[mealId] - id of the meal to notify to make preparation of meal
+     * @param[notificationDateTime] - time to receive notification
+     */
+    override fun scheduleMealWorker(mealId: Long, notificationDateTime: LocalDateTime) {
+        val constraints = Constraints.Builder()
+            .build()
+        val now = defaultNow()
+        val workerTime = notificationDateTime.toInstant().minus(1.hours)
+        val diff = workerTime.minus(now)
+        if (diff.isNegative() && diff.inWholeHours > 1) {
+            Timber.d("The meal notification time is in the past")
+            return
+        }
+        val delaySeconds = if (diff.isNegative()) 5 else diff.inWholeSeconds
+        val data = Data.Builder().apply {
+            putLong(MealPlanNotifyWorker.WORK_MEAL_ID, mealId)
+            putString(MealPlanNotifyWorker.WORK_NOTIFICATION_TIME,notificationDateTime.toString())
+        }.build()
+        val work = OneTimeWorkRequestBuilder<MealPlanNotifyWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .setInitialDelay(delaySeconds, TimeUnit.SECONDS)
+            .addTag(MEAL_NOTIFY_WORK)
+            .build()
+        WorkManager.getInstance(context)
+            .enqueueUniqueWork("${MEAL_NOTIFY_WORK}-$mealId", ExistingWorkPolicy.REPLACE, work)
     }
 
     override fun cancelMealWorker() {
@@ -84,7 +98,6 @@ interface WorkerScheduler {
     fun rescheduleStale()
     fun cancelStaleWorker()
 
-    fun scheduleMealWorker()
-    fun rescheduleMealWorker()
+    fun scheduleMealWorker(mealId: Long, notificationDateTime: LocalDateTime)
     fun cancelMealWorker()
 }

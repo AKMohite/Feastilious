@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.favorites.FavoriteRecipesFragment">
 
+    <include
+        android:id="@+id/empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        layout="@layout/component_empty_state"
+        app:layout_behavior="@string/searchbar_scrolling_view_behavior"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recipes"
         android:layout_width="match_parent"

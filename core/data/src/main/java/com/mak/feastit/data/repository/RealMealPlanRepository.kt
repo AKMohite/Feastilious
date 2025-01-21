@@ -87,10 +87,10 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.computation)
     }
 
-    override suspend fun updateSchedule(id: Long, localDateTime: LocalDateTime) = withContext(dispatcher.io) {
+    override suspend fun updateSchedule(id: Long, mealDateTime: LocalDateTime) = withContext(dispatcher.io) {
         val mealPlan = db.mealPlanDAO().getMealPLan(id) ?: throw NullPointerException("No meal found")
-        val instant = localDateTime.toInstant()
-        Timber.d("Update schedule instant: $instant")
+        val instant = mealDateTime.toInstant()
+        Timber.d("Update meal schedule instant: $instant")
         db.mealPlanDAO().update(mealPlan.copy(plannedFor = instant))
         // TODO schedule notifications
     }

@@ -34,10 +34,10 @@ import kotlinx.datetime.Instant
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
-private const val SAVED_START_WEEK_DATE = "meal-plan-week-start-date"
-private const val SAVED_END_WEEK_DATE = "meal-plan-week-end-date"
-private const val SAVED_SELECTED_WEEK_DATE = "meal-plan-week-selected-date"
-private const val SAVED_EDIT_MEAL_PLAN_ID = "meal-plan-id"
+private const val SAVED_START_WEEK_DATE = "saved-meal-plan-week-start-date"
+private const val SAVED_END_WEEK_DATE = "saved-meal-plan-week-end-date"
+private const val SAVED_SELECTED_WEEK_DATE = "saved-meal-plan-week-selected-date"
+private const val SAVED_EDIT_MEAL_PLAN_ID = "saved-meal-plan-id"
 
 @HiltViewModel
 internal class MealPlannerViewModel @Inject constructor(

@@ -11,10 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import androidx.viewbinding.ViewBinding
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentShoppingCartBinding
 import com.ak.feastit.ui.cart.component.CartAdapter
 import com.ak.feastit.ui.cart.component.CartEvent
+import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -44,6 +46,9 @@ internal class ShoppingCartFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+        binding.emptyState.emptyHeader.text = getString(R.string.cart_empty_header)
+        binding.emptyState.emptyBody.text = getString(R.string.cart_empty_body)
         binding.cartItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.cartItems.adapter = adapter
         binding.cartGroupBy.setOnCheckedChangeListener { _, btnId ->
@@ -58,6 +63,8 @@ internal class ShoppingCartFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
+                    binding.emptyState.root.show(state.cart.isEmpty())
+                    binding.cartItems.show(state.cart.isNotEmpty())
                     adapter.reload(state.cart)
                 }
             }

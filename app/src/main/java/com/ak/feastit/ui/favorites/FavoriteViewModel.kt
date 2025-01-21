@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-private const val STATE_SEARCH_SUGGESTIONS = "state-search-suggestions"
+private const val STATE_SEARCH_SUGGESTIONS = "saved-search-suggestions"
 
 @HiltViewModel
 internal class FavoriteViewModel @Inject constructor(

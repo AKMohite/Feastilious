@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val SAVED_STATE_CART_ORDER_BY = "cart-order-by"
+private const val SAVED_STATE_CART_ORDER_BY = "saved-cart-order-by"
 
 @HiltViewModel
 internal class ShoppingCartViewModel @Inject constructor(

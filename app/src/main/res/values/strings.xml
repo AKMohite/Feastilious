@@ -84,4 +84,11 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="add_to_calendar">Add to calendar</string>
     <string name="prepare_at">Prepare at</string>
     <string name="serve_at">Serve at</string>
+    <string name="no_data_image">No data image</string>
+    <string name="today_empty_header">Are you fasting?</string>
+    <string name="today_empty_body">Schedule meal for today to have a quick meal</string>
+    <string name="unschedule_empty_header">No meals planned</string>
+    <string name="unscheduled_empty_body">Add recipes to meal plan to schedule them</string>
+    <string name="cart_empty_header">Nothing to shop</string>
+    <string name="cart_empty_body">Add recipe ingredients to buy</string>
 </resources>

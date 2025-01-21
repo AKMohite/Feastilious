@@ -10,10 +10,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentFavoritesBinding
 import com.ak.feastit.ui.favorites.components.FavoritesAdapter
 import com.ak.feastit.ui.favorites.components.SearchSuggestionAdapter
+import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,6 +49,9 @@ internal class FavoriteRecipesFragment: BaseFragment() {
     }
 
     private fun setupView() {
+        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+        binding.emptyState.emptyHeader.text = ""
+        binding.emptyState.emptyBody.text = ""
         binding.favoriteRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.favoriteRecipes.adapter = adapter
         binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -58,6 +63,8 @@ internal class FavoriteRecipesFragment: BaseFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewmodel.state.collectLatest { state ->
+                        binding.emptyState.root.show(state.recipes.isEmpty())
+                        binding.favoriteRecipes.show(state.recipes.isNotEmpty())
                         adapter.reload(state.recipes)
                         suggestionsAdapter.reload(state.suggestions)
                     }

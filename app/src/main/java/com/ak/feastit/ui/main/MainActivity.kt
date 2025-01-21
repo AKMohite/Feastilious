@@ -2,10 +2,12 @@ package com.ak.feastit.ui.main
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -18,6 +20,7 @@ import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.show
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigationrail.NavigationRailView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -84,6 +87,20 @@ class MainActivity : AppCompatActivity() {
                 bottomMargin = margins.bottom + inset
             }
         }
+    }
+
+    private fun showSnackBar(
+        @StringRes message: Int,
+        @StringRes actionText: Int? = null,
+        action: (() -> Unit)? = null
+    ) {
+        val snackBar = Snackbar.make(binding.root,
+            message, Snackbar.LENGTH_SHORT)
+        if (actionText != null && action != null) {
+            val actionListener: (View) -> Unit = { action() }
+            snackBar.setAction(getString(actionText), actionListener)
+        }
+        snackBar.show()
     }
 
     override fun onDestroy() {

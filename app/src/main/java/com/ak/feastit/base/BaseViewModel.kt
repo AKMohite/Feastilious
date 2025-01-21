@@ -35,6 +35,7 @@ internal open class BaseViewModel(
 
     protected open fun handleError(exception: Throwable) {
         Timber.e(exception)
+        throw exception
     }
 
     /**

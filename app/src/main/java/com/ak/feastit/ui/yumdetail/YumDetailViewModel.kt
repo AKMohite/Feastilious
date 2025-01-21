@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val ARGS_RECIPE_ID = "recipeId"
+private const val SAVED_RECIPE_ID = "recipe_id"
 
 @HiltViewModel
 internal class YumDetailViewModel @Inject constructor(
@@ -44,7 +44,7 @@ internal class YumDetailViewModel @Inject constructor(
     private var recipeId: Long
 
     init {
-        val id = savedStateHandle.get<Long>(ARGS_RECIPE_ID) ?: throw IllegalArgumentException("Recipe id is required")
+        val id = savedStateHandle.get<Long>(SAVED_RECIPE_ID) ?: throw IllegalArgumentException("Recipe id is required")
         recipeId = id
         refreshRecipeInfo(id)
         observeRecipe(id)
@@ -57,6 +57,7 @@ internal class YumDetailViewModel @Inject constructor(
     fun toggleMealPlan() {
         uiScope.launch {
             mealPlanRepository.toggleMealPLanFor(recipeId)
+//            TODO show snack bar meal plan added or removed
         }
     }
 
@@ -122,6 +123,7 @@ internal class YumDetailViewModel @Inject constructor(
             val id = state.value.overview?.recipeId ?: return@launch
             Timber.d("Toggle favorite: $id")
             recipeRepository.toggleFavorite(id)
+//            TODO show snack bar recipe is added or removed from favorite
         }
     }
 
@@ -129,12 +131,14 @@ internal class YumDetailViewModel @Inject constructor(
         uiScope.launch {
             Timber.d("Toggle ingredient for shopping: $id")
             cartRepository.toggleShoppingIngredient(id)
+//            TODO show snack bar ingredient is added or removed from cart
         }
     }
 
     fun toggleCart() {
         uiScope.launch {
             cartRepository.toggleShoppingAllIngredientsForRecipe(recipeId)
+//            TODO show snack bar whether ingredients are added or removed from cart
         }
     }
 

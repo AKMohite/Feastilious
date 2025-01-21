@@ -5,6 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.mealplanner.tabs.unscheduled.UnscheduledRecipeFragment">
 
+    <include
+        android:id="@+id/empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        layout="@layout/component_empty_state"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/unscheduled_recipes"
         android:layout_width="match_parent"

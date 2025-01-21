@@ -10,7 +10,7 @@ internal class RealStaleRepository @Inject constructor(
 ): StaleRepository {
 
     override suspend fun removeStaleData() {
-        Timber.d("removeStaleData:")
+        Timber.d("Remove stale data from app")
         val neededIds = mutableSetOf<Long>()
 
         val healthyIds = db.healthyRecipeDAO().getAllIds()
@@ -41,6 +41,7 @@ internal class RealStaleRepository @Inject constructor(
             db.lastSyncDao().deleteSinceDays(30)
             db.recipeDAO().deleteRecipesNotIn(neededIds)
         }
+        Timber.d("All stale data removed from app")
     }
 
 }

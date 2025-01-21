@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentUnscheduledRecipesBinding
 import com.ak.feastit.ui.mealplanner.MealPlannerFragment
@@ -17,6 +18,7 @@ import com.ak.feastit.ui.mealplanner.MealPlannerFragmentDirections
 import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.UnscheduledRecipeAdapter
+import com.ak.feastit.utils.show
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,6 +41,9 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+        binding.emptyState.emptyHeader.text = getString(R.string.unschedule_empty_header)
+        binding.emptyState.emptyBody.text = getString(R.string.unscheduled_empty_body)
         binding.unscheduledRecipes.layoutManager = LinearLayoutManager(requireContext())
         adapter = UnscheduledRecipeAdapter(
             onMealPlanClick = { onMealPlanClick ->
@@ -52,13 +57,13 @@ internal class UnscheduledRecipeFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
+                    binding.emptyState.root.show(state.unscheduledRecipes.isEmpty())
+                    binding.unscheduledRecipes.show(state.unscheduledRecipes.isNotEmpty())
                     adapter?.reload(state.unscheduledRecipes)
                 }
             }
         }
     }
-
-    private val recipeOptions = listOf("Download Recipe", "Remove from meal plan", "Schedule", "Edit Meal time")
 
     private fun onItemClick(event: OnMealPlanClick) {
         when(event) {

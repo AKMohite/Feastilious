@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
+import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentMealPlanTodayBinding
 import com.ak.feastit.ui.mealplanner.MealPlannerFragment
@@ -17,6 +18,7 @@ import com.ak.feastit.ui.mealplanner.MealPlannerFragmentDirections
 import com.ak.feastit.ui.mealplanner.MealPlannerViewModel
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.UnscheduledRecipeAdapter
+import com.ak.feastit.utils.show
 import kotlinx.coroutines.launch
 
 internal class MealPlanTodayFragment : BaseFragment() {
@@ -38,6 +40,9 @@ internal class MealPlanTodayFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+        binding.emptyState.emptyHeader.text = getString(R.string.today_empty_header)
+        binding.emptyState.emptyBody.text = getString(R.string.today_empty_body)
         adapter = UnscheduledRecipeAdapter(
             onMealPlanClick = ::handleMealPlanEvent
         )
@@ -49,6 +54,8 @@ internal class MealPlanTodayFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewmodel.state.collect { state ->
+                    binding.emptyState.root.show(state.todayRecipes.isEmpty())
+                    binding.todayMeals.show(state.todayRecipes.isNotEmpty())
                     adapter?.reload(state.todayRecipes)
                 }
             }
