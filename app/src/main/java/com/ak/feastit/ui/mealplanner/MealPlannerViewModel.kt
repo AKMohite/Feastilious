@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseViewModel
+import com.ak.feastit.core.notification.NotificationManager
+import com.ak.feastit.worker.WorkerScheduler
 import com.mak.feastit.domain.model.DayMealPlan
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.repository.MealPlanRepository
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 
@@ -42,6 +45,8 @@ private const val SAVED_EDIT_MEAL_PLAN_ID = "saved-meal-plan-id"
 @HiltViewModel
 internal class MealPlannerViewModel @Inject constructor(
     private val mealPlanRepository: MealPlanRepository,
+    private val scheduler: WorkerScheduler,
+    private val notification: NotificationManager,
     private val dispatcher: DispatcherProvider,
     private val savedState: SavedStateHandle
 ): BaseViewModel(dispatcher) {
@@ -227,12 +232,28 @@ internal class MealPlannerViewModel @Inject constructor(
         val mealPlan = editMealPlan ?: throw IllegalStateException("No recipe found for meal plan edit")
         when(item.action) {
             MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
-            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> {}
+            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> removeFromMealPlan(mealPlan)
+            MealPlanSheetMenuAction.REPEAT_AGAIN -> {
+                uiScope.launch {
+                    val plan = mealPlanRepository.getUnscheduledMealForRecipe(mealPlan.recipeId)
+                    plan?.let { Timber.d("Repeat again with rescheduled meal: $it") }
+                    val mealId = plan?.id ?: mealPlanRepository.repeatMeal(mealPlan)
+                    _action.send(MealPlanAction.OnMealRepeat(mealId))
+                }
+            }
             else -> {
                 uiScope.launch {
                     _action.send(MealPlanAction.OnMenuClick(item.action, mealPlan))
                 }
             }
+        }
+    }
+
+    private fun removeFromMealPlan(mealPlan: MealPlanRecipe) {
+        uiScope.launch {
+            mealPlanRepository.remove(mealPlan.id)
+            scheduler.cancelMealWorker(mealPlan.id)
+            notification.cancel(mealPlan.toNotification())
         }
     }
 

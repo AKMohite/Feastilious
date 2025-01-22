@@ -24,6 +24,9 @@ interface MealPlannerDAO: BaseDAO<MealPlanEntity> {
     @Query("SELECT * FROM meal_planner WHERE recipe_id =:recipeId")
     suspend fun getRecipe(recipeId: Long): List<MealPlanEntity>
 
+    @Query("SELECT * FROM meal_planner WHERE recipe_id =:recipeId AND planned_for IS NULL")
+    suspend fun getUnscheduledMeal(recipeId: Long): MealPlanEntity?
+
     @Query("$MEAL_PLAN_QUERY WHERE mp.id =:mealPlanId")
     suspend fun getMealPlanRecipe(mealPlanId: Long): MealPlanRecipeEntity?
 
@@ -38,4 +41,7 @@ interface MealPlannerDAO: BaseDAO<MealPlanEntity> {
 
     @Query("DELETE FROM meal_planner WHERE recipe_id =:recipeId")
     suspend fun deleteRecipe(recipeId: Long)
+
+    @Query("DELETE FROM meal_planner WHERE id =:id")
+    suspend fun deletePlan(id: Long)
 }

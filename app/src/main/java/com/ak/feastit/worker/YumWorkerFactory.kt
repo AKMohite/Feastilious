@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import com.ak.feastit.core.notification.NotificationManager
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.repository.StaleRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -12,6 +13,7 @@ import javax.inject.Inject
 internal class YumWorkerFactory @Inject constructor(
     private val staleRepository: StaleRepository,
     private val mealPlanRepository: MealPlanRepository,
+    private val notificationManager: NotificationManager,
     private val dispatcher: DispatcherProvider
 ): WorkerFactory() {
 
@@ -41,7 +43,8 @@ internal class YumWorkerFactory @Inject constructor(
             MealPlanNotifyWorker::class.java -> MealPlanNotifyWorker(
                 appContext = appContext,
                 workerParams = workerParameters,
-                mealPlanRepository = mealPlanRepository
+                mealPlanRepository = mealPlanRepository,
+                notificationManager = notificationManager
             )
 //            else -> throw IllegalArgumentException("Does not have instance for worker: $workerKlass")
             else -> null

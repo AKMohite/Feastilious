@@ -12,6 +12,8 @@ class ComponentDayOfWeek(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(day: DayMealPlan) {
+//        TODO handle add click event to search recipe to add for this day
+//        TODO handle toggle click to hide/show recipe items
         binding.dayTv.text = day.day
         val toggleIcon = if (day.isExpanded) {
             R.drawable.ic_down

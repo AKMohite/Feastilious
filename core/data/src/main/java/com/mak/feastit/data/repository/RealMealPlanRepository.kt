@@ -4,6 +4,8 @@ import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.MealPlanEntity
 import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
 import com.mak.feastit.domain.model.MealPlanRecipe
+import com.mak.feastit.domain.model.YumNotification
+import com.mak.feastit.domain.model.YumNotificationChannel
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.daysShift
@@ -33,7 +35,7 @@ internal class RealMealPlanRepository @Inject constructor(
             }.flowOn(dispatcher.io)
     }
 
-    override suspend fun toggleMealPLanFor(recipeId: Long) = withContext(dispatcher.io) {
+    override suspend fun toggleMealPLanFor(recipeId: Long): Boolean = withContext(dispatcher.io) {
         val mealPlan = db.mealPlanDAO().getRecipe(recipeId)
         if (mealPlan.isEmpty()) {
             val new = MealPlanEntity(
@@ -42,9 +44,10 @@ internal class RealMealPlanRepository @Inject constructor(
                 plannedFor = null
             )
             db.mealPlanDAO().insert(new)
+            true
         } else {
             db.mealPlanDAO().deleteRecipe(recipeId)
-            // TODO cancel notifications too
+            false
         }
     }
 
@@ -92,8 +95,45 @@ internal class RealMealPlanRepository @Inject constructor(
         val instant = mealDateTime.toInstant()
         Timber.d("Update meal schedule instant: $instant")
         db.mealPlanDAO().update(mealPlan.copy(plannedFor = instant))
-        // TODO schedule notifications
     }
+
+    override suspend fun getMealPlanNotification(mealId: Long): YumNotification? = withContext(dispatcher.io) {
+        val mealPlan = db.mealPlanDAO().getMealPLan(mealId) ?: throw NullPointerException("No meal found")
+        mealPlan.toNotification()
+    }
+
+    override suspend fun getMealPlansForRecipe(recipeId: Long): List<MealPlanRecipe> = withContext(dispatcher.io) {
+        val mealPlans = db.mealPlanDAO().getRecipe(recipeId)
+        return@withContext mealPlans.mapNotNull { it.toMealPlanRecipe() }
+    }
+
+    override suspend fun remove(id: Long) = withContext(dispatcher.io) {
+        Timber.d("Remove meal from plan $id")
+        db.mealPlanDAO().deletePlan(id)
+    }
+
+    override suspend fun repeatMeal(mealPlan: MealPlanRecipe): Long = withContext(dispatcher.io) {
+        Timber.d("Create repeat again recipe for other time")
+        val entity = MealPlanEntity(recipeId = mealPlan.recipeId, plannedFor = null, isMade = false)
+        db.mealPlanDAO().insert(entity)
+    }
+
+    override suspend fun getUnscheduledMealForRecipe(recipeId: Long): MealPlanRecipe? = withContext(dispatcher.io) {
+        val entity = db.mealPlanDAO().getUnscheduledMeal(recipeId)
+        entity?.toMealPlanRecipe()
+    }
+}
+
+private fun MealPlanEntity.toNotification(): YumNotification {
+    return YumNotification(
+        id = "meal-plan-$id-$recipeId",
+        title = "TODO",
+        message = "TODO",
+        channel = YumNotificationChannel.MEAL_PLANNING,
+        date = plannedFor!!,
+        deeplinkUrl = null,
+        image = null
+    )
 }
 
 private fun MealPlanEntity?.toMealPlanRecipe(): MealPlanRecipe? {

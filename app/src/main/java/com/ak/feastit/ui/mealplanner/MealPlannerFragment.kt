@@ -74,6 +74,7 @@ internal class MealPlannerFragment: BaseFragment() {
                 MealPlanEditBottomSheetFragment.show(childFragmentManager)
             }
             is MealPlanAction.OnMenuClick -> handleBottomSheetAction(action.item, action.mealPlan)
+            is MealPlanAction.OnMealRepeat -> gotoMealSchedule(action.mealId)
         }
     }
 
@@ -82,14 +83,14 @@ internal class MealPlannerFragment: BaseFragment() {
             MealPlanSheetMenuAction.DOWNLOAD_RECIPE -> {}
             MealPlanSheetMenuAction.SHARE_RECIPE -> {}
             MealPlanSheetMenuAction.REPEAT_AGAIN -> {}
-            MealPlanSheetMenuAction.SET_SCHEDULE -> {
-                findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(mealPlan.id))
-            }
-            MealPlanSheetMenuAction.EDIT_SCHEDULE -> {
-                findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(mealPlan.id))
-            }
+            MealPlanSheetMenuAction.SET_SCHEDULE -> gotoMealSchedule(mealPlan.id)
+            MealPlanSheetMenuAction.EDIT_SCHEDULE -> gotoMealSchedule(mealPlan.id)
             else -> throw IllegalStateException("This action is not supported in view: $action")
         }
+    }
+
+    private fun gotoMealSchedule(id: Long) {
+        findNavController().navigate(MealPlannerFragmentDirections.plannerToScheduleMeal(id))
     }
 
     override fun onDestroyView() {

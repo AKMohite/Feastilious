@@ -14,6 +14,7 @@ internal data class MealPlannerState(
 internal sealed interface MealPlanAction {
     data class OpenMealPlanBottomSheet(val recipeId: Long): MealPlanAction
     data class OnMenuClick(val item: MealPlanSheetMenuAction, val mealPlan: MealPlanRecipe): MealPlanAction
+    data class OnMealRepeat(val mealId: Long): MealPlanAction
 }
 
 internal sealed interface WeekMealPlanSection {

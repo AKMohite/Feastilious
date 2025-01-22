@@ -4,6 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseViewModel
+import com.ak.feastit.core.notification.NotificationManager
+import com.ak.feastit.worker.WorkerScheduler
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,6 +36,8 @@ internal class YumDetailViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val mealPlanRepository: MealPlanRepository,
     private val getIngredients: RecipeDetailIngredientsUsecase,
+    private val scheduler: WorkerScheduler,
+    private val notification: NotificationManager,
     private val dispatcher: DispatcherProvider,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel(
@@ -56,7 +61,20 @@ internal class YumDetailViewModel @Inject constructor(
 
     fun toggleMealPlan() {
         uiScope.launch {
-            mealPlanRepository.toggleMealPLanFor(recipeId)
+            val recipeMealPlans = mealPlanRepository.getMealPlansForRecipe(recipeId)
+            val isAdded = mealPlanRepository.toggleMealPLanFor(recipeId)
+            withContext(dispatcher.computation) {
+                if (!isAdded) {
+                    Timber.d("Get all meal plans for recipe to cancel schedule")
+                    val scheduledMeals = recipeMealPlans.filter { meal -> meal.scheduledFor != null }
+                    Timber.d("${scheduledMeals.count()} meals found")
+                    for (meal in scheduledMeals) {
+                        scheduler.cancelMealWorker(meal.id)
+                    }
+                    val notifications = scheduledMeals.map { it.toNotification() }
+                    notification.cancelAll(notifications)
+                }
+            }
 //            TODO show snack bar meal plan added or removed
         }
     }

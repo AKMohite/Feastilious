@@ -91,4 +91,8 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="unscheduled_empty_body">Add recipes to meal plan to schedule them</string>
     <string name="cart_empty_header">Nothing to shop</string>
     <string name="cart_empty_body">Add recipe ingredients to buy</string>
+    <string name="notification_channel_meal_plan_title">Meal plan</string>
+    <string name="notification_channel_meal_plan_summary">Notify when recipe for planned meals are scheduled</string>
+    <string name="notification_meal_plan_title">Meal planned: %1$s</string>
+    <string name="notification_meal_plan_message">Start preparation for %1$s, you can start preparing at %2$s</string>
 </resources>

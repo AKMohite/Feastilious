@@ -11,7 +11,7 @@ import androidx.room.Upsert
 interface BaseDAO<Entity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: Entity)
+    suspend fun insert(entity: Entity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entities: List<Entity>)

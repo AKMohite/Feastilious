@@ -66,13 +66,16 @@ internal class BackgroundScheduler @Inject constructor(
         val constraints = Constraints.Builder()
             .build()
         val now = defaultNow()
+//        1hour before notification
         val workerTime = notificationDateTime.toInstant().minus(1.hours)
         val diff = workerTime.minus(now)
         if (diff.isNegative() && diff.inWholeHours > 1) {
             Timber.d("The meal notification time is in the past")
             return
         }
+//        if diff is negative just schedule worker now else make delay
         val delaySeconds = if (diff.isNegative()) 5 else diff.inWholeSeconds
+        Timber.d("Notification delayed for $delaySeconds seconds")
         val data = Data.Builder().apply {
             putLong(MealPlanNotifyWorker.WORK_MEAL_ID, mealId)
             putString(MealPlanNotifyWorker.WORK_NOTIFICATION_TIME,notificationDateTime.toString())
@@ -87,8 +90,9 @@ internal class BackgroundScheduler @Inject constructor(
             .enqueueUniqueWork("${MEAL_NOTIFY_WORK}-$mealId", ExistingWorkPolicy.REPLACE, work)
     }
 
-    override fun cancelMealWorker() {
-        WorkManager.getInstance(context).cancelAllWorkByTag(MEAL_NOTIFY_WORK)
+    override fun cancelMealWorker(mealId: Long) {
+        WorkManager.getInstance(context)
+            .cancelUniqueWork("${MEAL_NOTIFY_WORK}-$mealId")
     }
     // endregion
 }
@@ -99,5 +103,5 @@ interface WorkerScheduler {
     fun cancelStaleWorker()
 
     fun scheduleMealWorker(mealId: Long, notificationDateTime: LocalDateTime)
-    fun cancelMealWorker()
+    fun cancelMealWorker(mealId: Long)
 }

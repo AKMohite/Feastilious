@@ -29,16 +29,17 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindCartRepository(repo: RealCartRepository): CartRepository
-
-    @Binds
-    abstract fun bindMealPlanRepository(repo: RealMealPlanRepository): MealPlanRepository
 }
 
+//FIXME: search for worker we need to have single object repositories
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class SingletonRepositoryModule {
 
     @Binds
     abstract fun bindStaleRepository(repo: RealStaleRepository): StaleRepository
+
+    @Binds
+    abstract fun bindMealPlanRepository(repo: RealMealPlanRepository): MealPlanRepository
 
 }
