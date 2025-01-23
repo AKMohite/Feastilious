@@ -41,9 +41,9 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        Timber.d("Refreshing recipe: $id")
         val local = db.recipeDAO().getRecipe(id).firstOrNull()
         if (local != null && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAILS)) return@withContext
+        Timber.d("Refreshing recipe: $id")
         val query = mapOf(
             "includeNutrition" to true.toString(),
             "addWinePairing" to false.toString(),
@@ -65,9 +65,9 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        Timber.d("Refresh recipe instructions: $id")
         val local = db.recipeStepDAO().getCountForRecipe(id)
         if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
+        Timber.d("Refresh recipe instructions: $id")
         val query = mapOf(
             "stepBreakdown" to true.toString()
         )
@@ -82,9 +82,9 @@ internal class RealRecipeRepository @Inject constructor(
         id: Long,
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
-        Timber.d("Refresh similar recipes: $id")
         val local = db.similarRecipeDao().getCountForRecipe(id)
         if (local > 0 && !needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
+        Timber.d("Refresh similar recipes: $id")
         val query = mapOf( "number" to "10" )
         val dto = api.getSimilarRecipes(recipeId = id, query = query)
         val ids = dto.map { it.id }

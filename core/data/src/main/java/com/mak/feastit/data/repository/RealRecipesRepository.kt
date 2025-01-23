@@ -34,40 +34,6 @@ internal class RealRecipesRepository @Inject constructor(
 
     override val recipesMapper = RecipesMapper()
 
-//    meal planner date range
-    private fun dateRange() {
-//        val today = Calendar.getInstance()
-//        val startOfWeek = today.apply {
-//            firstDayOfWeek = Calendar.SUNDAY
-//            set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-//        }.time
-//
-//        val endOfWeek = today.apply {
-//            firstDayOfWeek = Calendar.SUNDAY
-//            set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-//        }.time
-//        Timber.d("Start of week: $startOfWeek")
-//        Timber.d("End of week: $endOfWeek")
-
-        val now = defaultNow()
-    val timeZone = TimeZone.currentSystemDefault()
-//    timeZone.offsetAt(now)
-    val toLocalDateTime = now.toLocalDateTime(timeZone)
-    Timber.d("Local date: $toLocalDateTime")
-//    DateTimeComponents.Formats.ISO_DATE_TIME_OFFSET
-    val europeTimeZone = TimeZone.of("Europe/Paris")
-    Timber.d("Europe date: ${now.toLocalDateTime(europeTimeZone)}")
-    val today = toLocalDateTime.date
-        val days = mutableListOf<LocalDate>()
-        val firstWeekDay = today.daysShift(-DayOfWeek.entries.indexOf(today.dayOfWeek))
-        for (i in 0 until DayOfWeek.entries.toTypedArray().count()) {
-            days.add(firstWeekDay.daysShift(i))
-        }
-        val dayStrings = days.map { "${it.dayOfWeek}, ${it.dayOfMonth}" }
-        Timber.d("$dayStrings")
-
-    }
-
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
         if (page > 5) return@withContext // TODO Use pro just have limited API calls condition can be removed
         if (!forceRefresh) {

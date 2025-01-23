@@ -105,6 +105,8 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.work.runtime.ktx)
     implementation(libs.timber)
+    implementation(libs.slf4j.api)
+    implementation(libs.logback.android)
 
     ksp(libs.hilt.android.compiler)
 

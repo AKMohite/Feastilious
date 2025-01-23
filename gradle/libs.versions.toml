@@ -1,6 +1,8 @@
 [versions]
 compileSDK = "35"
+logbackAndroid = "3.0.0"
 minSDK = "27"
+slf4jApi = "2.0.7"
 targetSDK = "35"
 versionCode = "1"
 versionName = "0.0.1"
@@ -36,6 +38,7 @@ hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin"
 kotlin-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
+logback-android = { module = "com.github.tony19:logback-android", version.ref = "logbackAndroid" }
 navigation-safe-args-plugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 
 app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -61,6 +64,7 @@ retrofit-runtime = { group = "com.squareup.retrofit2", name = "retrofit", versio
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }

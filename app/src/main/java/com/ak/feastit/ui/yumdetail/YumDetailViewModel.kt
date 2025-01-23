@@ -55,10 +55,6 @@ internal class YumDetailViewModel @Inject constructor(
         observeRecipe(id)
     }
 
-    override fun handleError(exception: Throwable) {
-        super.handleError(exception)
-    }
-
     fun toggleMealPlan() {
         uiScope.launch {
             val recipeMealPlans = mealPlanRepository.getMealPlansForRecipe(recipeId)

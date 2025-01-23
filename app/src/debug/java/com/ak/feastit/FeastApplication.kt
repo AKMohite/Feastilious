@@ -7,6 +7,7 @@ import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import androidx.work.Configuration
 import androidx.work.WorkerFactory
+import com.ak.feastit.core.logging.FileLoggingTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,6 +19,8 @@ internal class FeastApplication: Application(), Configuration.Provider {
     @Inject
     lateinit var workerFactory: WorkerFactory
 
+    private var tree: FileLoggingTree? = null
+
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
@@ -28,6 +31,16 @@ internal class FeastApplication: Application(), Configuration.Provider {
         super.onCreate()
         setupStrictMode()
         Timber.plant(Timber.DebugTree())
+//        TODO handle file logging to share logs getting diskviolation strictmode
+         FileLoggingTree(this).apply {
+             tree = FileLoggingTree(this@FeastApplication)
+             Timber.plant(tree!!)
+         }
+    }
+
+    override fun onTerminate() {
+        tree?.onStop()
+        super.onTerminate()
     }
 
     private fun setupStrictMode() {

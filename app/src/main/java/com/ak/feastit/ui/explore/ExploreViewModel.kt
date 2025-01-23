@@ -67,10 +67,6 @@ internal class ExploreViewModel @Inject constructor(
         _state.update { newState }
     }
 
-    override fun handleError(exception: Throwable) {
-        super.handleError(exception)
-    }
-
     private fun refreshCategories(forceRefresh: Boolean = false) {
         uiScope.launch {
             _state.update { it.refreshSections(true) }
