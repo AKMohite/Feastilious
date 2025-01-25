@@ -33,26 +33,6 @@ class ExploreFragment : BaseFragment() {
     private val binding: FragmentExploreBinding
         get() = baseBinding as FragmentExploreBinding
 
-    private val eventListener by lazy {
-        object : SectionEventListener {
-            override fun viewAll(category: ExploreCategory) {
-                if (ExploreCategory.getRefreshExploreEntries().contains(category)) {
-//                navigate to pagination/search screen
-                } else {
-                    throw IllegalStateException("$category cannot have more items to load")
-                }
-            }
-
-            override fun onRecipeClick(recipeId: Long) {
-//            navigate to recipe details screen
-            }
-
-            override fun onChipClick(chip: ExploreChip) {
-//            navigate to pagination/search screen
-            }
-        }
-    }
-
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
 //        binding.searchView.setReadOnly(focusable = false, inputType = InputType.TYPE_NULL)
         binding.searchCard.onClick {
@@ -86,7 +66,9 @@ class ExploreFragment : BaseFragment() {
 
     private fun handleSectionEvents(action: ExploreItemAction) {
         when(action) {
-            is ExploreItemAction.ChipClick -> {}
+            is ExploreItemAction.ChipClick -> {
+                Timber.d("On chip click: ${action.chip}")
+            }
             ExploreItemAction.ListUpdate -> {
 //                binding.exploreItems.smoothScrollToPosition(0)
             }
@@ -96,7 +78,9 @@ class ExploreFragment : BaseFragment() {
                     recipeId = action.recipeId
                 ))
             }
-            is ExploreItemAction.ViewAll -> {}
+            is ExploreItemAction.ViewAll -> {
+                Timber.d("View all: ${action.category}")
+            }
         }
     }
 
