@@ -68,6 +68,7 @@ class ExploreFragment : BaseFragment() {
         when(action) {
             is ExploreItemAction.ChipClick -> {
                 Timber.d("On chip click: ${action.chip}")
+                findNavController().navigate(ExploreFragmentDirections.exploreToViewAll(category = action.chip.type.name, categorySubType = action.chip.title))
             }
             ExploreItemAction.ListUpdate -> {
 //                binding.exploreItems.smoothScrollToPosition(0)
@@ -80,6 +81,7 @@ class ExploreFragment : BaseFragment() {
             }
             is ExploreItemAction.ViewAll -> {
                 Timber.d("View all: ${action.category}")
+                findNavController().navigate(ExploreFragmentDirections.exploreToViewAll(category = action.category.name))
             }
         }
     }

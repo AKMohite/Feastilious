@@ -30,6 +30,28 @@
         <action
             android:id="@+id/explore_to_recipeDetail"
             app:destination="@id/recipeDetailFragment"/>
+        <action
+            android:id="@+id/explore_to_view_all"
+            app:destination="@id/viewAllFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewAllFragment"
+        android:name="com.ak.feastit.ui.viewall.ViewAllFragment"
+        android:label="view_all_fragment"
+        tools:layout="@layout/fragment_view_all">
+        <argument
+            android:name="category"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="category_sub_type"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/view_all_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
     </fragment>
 
     <fragment
