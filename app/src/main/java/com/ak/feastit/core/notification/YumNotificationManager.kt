@@ -42,10 +42,10 @@ internal class YumNotificationManager @Inject constructor(
 //        Create notification channel
         notificationManager.createChannel(notification.channel)
 
-        val windowStartTime = notification.date - ALARM_WINDOW_LENGTH
+        val windowStartTime = notification.dateTime - ALARM_WINDOW_LENGTH
         val now = defaultNow()
         if (windowStartTime <= now) {
-            Timber.d("Notification is old: ${notification.date} so schedule now: $now")
+            Timber.d("Notification is old: ${notification.dateTime} so schedule now: $now")
             val intent = PostNotificationBroadcastReceiver.buildIntent(application)
             intent.extraData(notification)
             application.sendBroadcast(intent)

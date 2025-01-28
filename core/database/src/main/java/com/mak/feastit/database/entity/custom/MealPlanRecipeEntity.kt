@@ -12,6 +12,8 @@ data class MealPlanRecipeEntity(
     val recipeId: Long,
     @ColumnInfo(name = "planned_for")
     val scheduledFor: Instant?,
+    @ColumnInfo(name = "notification_time")
+    val notificationTime: Instant?,
     @ColumnInfo(name = "is_made")
     val isMade: Boolean,
     val name: String,

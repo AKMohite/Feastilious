@@ -130,7 +130,7 @@ private fun MealPlanEntity.toNotification(): YumNotification {
         title = "TODO",
         message = "TODO",
         channel = YumNotificationChannel.MEAL_PLANNING,
-        date = plannedFor!!,
+        dateTime = plannedFor!!,
         deeplinkUrl = null,
         image = null
     )

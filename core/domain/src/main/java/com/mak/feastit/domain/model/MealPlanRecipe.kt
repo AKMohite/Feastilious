@@ -2,7 +2,6 @@ package com.mak.feastit.domain.model
 
 import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
-import com.mak.feastit.domain.util.isToday
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 
@@ -46,7 +45,7 @@ data class MealPlanRecipe(
             title = title,
             message = message,
             channel = YumNotificationChannel.MEAL_PLANNING,
-            date = notifyAt,
+            dateTime = notifyAt,
             deeplinkUrl = null,
             image = image
         )

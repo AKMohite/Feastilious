@@ -8,7 +8,7 @@ data class YumNotification(
     val message: String,
     val channel: YumNotificationChannel,
     val image: String?,
-    val date: Instant,
+    val dateTime: Instant,
     val deeplinkUrl: String? = null,
 )
 
