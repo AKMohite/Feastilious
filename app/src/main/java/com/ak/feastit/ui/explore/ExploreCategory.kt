@@ -24,16 +24,34 @@ internal enum class ExploreCategory {
         }
     }
 
+    fun isStaticCategory(): Boolean {
+        return staticCategoryElements().contains(this)
+    }
+
     companion object {
+
+        fun fromName(name: String): ExploreCategory? {
+            return ExploreCategory.entries.firstOrNull { it.name == name }
+        }
+
+        /**
+         * These categories have to synced
+         */
         fun getRefreshExploreEntries(): List<ExploreCategory> {
             return entries.filterNot { category ->
                 staticCategoryElements().contains(category)
             }
         }
 
+        /**
+         * These categories are static and do not need to be synced
+         */
         fun staticCategoryElements() =
             listOf(BANNER_RECIPES, MEAL_TYPE_CHIPS, CUISINE_TYPE_CHIPS, DIET_TYPE_CHIPS)
 
+        /**
+         * These categories are observed for changes from api sync
+         */
         fun observerExploreEntries(): List<ExploreCategory> {
             return listOf(
                 POPULAR_RECIPES,
