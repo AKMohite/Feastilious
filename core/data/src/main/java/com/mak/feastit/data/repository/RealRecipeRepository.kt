@@ -4,6 +4,7 @@ import com.mak.feastit.data.mapper.RecipeDetailMapper
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.LastSyncEntity
+import com.mak.feastit.database.entity.NutrientEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
@@ -50,15 +51,14 @@ internal class RealRecipeRepository @Inject constructor(
             "addTasteData" to false.toString()
         )
         val recipeDTO = api.getRecipe(recipeId = id, recipeQuery = query)
-        val nutrients = recipeDTO.nutrition?.nutrients
+        val nutrients = recipeDTO.nutrition?.nutrients ?: emptyList()
         val ingredients = recipeDTO.extendedIngredients
         val calorieBreakdown = recipeDTO.nutrition?.caloricBreakdown ?: emptyMap()
 
         val recipeEntity = mapper.jsonToEntity(recipeDTO, calorieBreakdown)
         val ingredientEntities = mapper.jsonToIngredientsEntity(recipeDTO.id, ingredients)
-//        TODO add nutrition table
-//        val nutritionEntities = mapper.jsonToNutritionEntity(recipeDTO.id, nutrients, calorieBreakdown)
-        saveRemoteRecipe(recipeEntity, ingredientEntities)
+        val nutritionEntities = mapper.jsonToNutritionEntity(recipeDTO.id, nutrients)
+        saveRemoteRecipe(recipeEntity, ingredientEntities, nutritionEntities)
     }
 
     override suspend fun refreshAnalyzedInstruction(
@@ -66,7 +66,7 @@ internal class RealRecipeRepository @Inject constructor(
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
         val local = db.recipeStepDAO().getCountForRecipe(id)
-        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS)) return@withContext
+        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_ANALYZED_INSTRUCTIONS)) return@withContext
         Timber.d("Refresh recipe instructions: $id")
         val query = mapOf(
             "stepBreakdown" to true.toString()
@@ -83,7 +83,7 @@ internal class RealRecipeRepository @Inject constructor(
         forceRefresh: Boolean
     ) = withContext(dispatcher.io) {
         val local = db.similarRecipeDao().getCountForRecipe(id)
-        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.SIMILAR_RECIPES)) return@withContext
+        if (local > 0 && !needRefresh(forceRefresh, id, SyncType.RECIPE_WITH_SIMILAR_RECIPES)) return@withContext
         Timber.d("Refresh similar recipes: $id")
         val query = mapOf( "number" to "10" )
         val dto = api.getSimilarRecipes(recipeId = id, query = query)
@@ -145,7 +145,7 @@ internal class RealRecipeRepository @Inject constructor(
             db.similarRecipeDao().insert(similarEntities)
             val currentSynced = LastSyncEntity(
                 id = 0L,
-                entityType = SyncType.SIMILAR_RECIPES.name,
+                entityType = SyncType.RECIPE_WITH_SIMILAR_RECIPES.name,
                 entityId = recipeId,
                 lastSyncedAt = defaultNow()
             )
@@ -160,7 +160,7 @@ internal class RealRecipeRepository @Inject constructor(
             db.recipeStepDAO().insert(stepEntities)
             val currentSynced = LastSyncEntity(
                 id = 0L,
-                entityType = SyncType.RECIPE_DETAIL_ANALYZED_INSTRUCTIONS.name,
+                entityType = SyncType.RECIPE_ANALYZED_INSTRUCTIONS.name,
                 entityId = stepEntities.first().recipeId,
                 lastSyncedAt = defaultNow()
             )
@@ -170,16 +170,18 @@ internal class RealRecipeRepository @Inject constructor(
 
     private suspend fun saveRemoteRecipe(
         entity: RecipeEntity,
-        ingredientEntities: List<IngredientEntity>
+        ingredientEntities: List<IngredientEntity>,
+        nutritionEntities: List<NutrientEntity>
     ) {
         Timber.d("save network recipe in database for: ${entity.id}")
         db.handleTransaction {
             db.recipeDAO().upsert(entity)
 //            TODO get shopping ingredients as it will also be deleted
             db.ingredientDAO().deleteRecipe(entity.id)
-//            TODO delete nutrition
             db.ingredientDAO().upsert(ingredientEntities)
-//            TODO save nutrition
+//            TODO maybe avoid delete nutrients to track calories
+            db.nutrientDAO().deleteRecipe(entity.id)
+            db.nutrientDAO().upsert(nutritionEntities)
             val currentSynced = LastSyncEntity(
                 id = 0,
                 entityType = SyncType.RECIPE_DETAILS.name,

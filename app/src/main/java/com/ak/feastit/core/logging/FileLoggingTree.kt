@@ -47,7 +47,7 @@ internal class FileLoggingTree(
     private val uiScope
         get() = CoroutineScope(Dispatchers.IO + superVisorJob + exceptionHandler)
     private var logDirectoryIsReady = AtomicBoolean(false)
-    private val mLogger = LoggerFactory.getLogger(FileLoggingTree::class.java)
+    private var mLogger: org.slf4j.Logger? = null
 
 //    TODO check for crashlytics
 //    override fun createStackElementTag(element: StackTraceElement): String? {
@@ -62,24 +62,28 @@ internal class FileLoggingTree(
             initialise()
             val logMessage = "$tag: $message"
             when(priority) {
-                Log.DEBUG -> mLogger.debug(logMessage)
-                Log.INFO -> mLogger.info(logMessage)
-                Log.WARN -> mLogger.warn(logMessage)
-                Log.ERROR -> mLogger.error(logMessage)
+                Log.DEBUG -> mLogger?.debug(logMessage)
+                Log.INFO -> mLogger?.info(logMessage)
+                Log.WARN -> mLogger?.warn(logMessage)
+                Log.ERROR -> mLogger?.error(logMessage)
             }
         }
     }
 
     fun onStop() {
+        mLogger = null
         superVisorJob.cancel(cause = CancellationException("App stopped"))
     }
 
     private fun initialise() {
-        if (logDirectoryIsReady.get()) return
-        createDirectory()
-        if (File(getLogsDirectory()).exists()) kotlin.run {
-            logDirectoryIsReady.set(true)
-            configureLogger(getLogsDirectory())
+        uiScope.launch {
+            if (logDirectoryIsReady.get()) return@launch
+            createDirectory()
+            if (File(getLogsDirectory()).exists()) kotlin.run {
+                logDirectoryIsReady.set(true)
+                mLogger = LoggerFactory.getLogger(FileLoggingTree::class.java)
+                configureLogger(getLogsDirectory())
+            }
         }
     }
 
@@ -132,8 +136,7 @@ internal class FileLoggingTree(
         }
     }
 
-    private fun createDirectory() {
-//        /data/user/0/com.sg.r27a.fast3.mock.debug/files/vega/logs
+    private suspend fun createDirectory() {
         listOf(getImagesDirectory(), getLogsDirectory()).forEach { path ->
             val directory = File(path)
             if (!directory.exists()) directory.mkdirs()
