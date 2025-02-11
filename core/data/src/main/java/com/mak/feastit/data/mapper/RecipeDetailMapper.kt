@@ -172,7 +172,8 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
             Recipe(
                 id = entity.id,
                 recipeName = entity.recipeName,
-                recipeImgUrl = entity.recipeImg
+                recipeImgUrl = entity.recipeImg,
+                page = 1 // TODO handle pages
             )
         }
     }

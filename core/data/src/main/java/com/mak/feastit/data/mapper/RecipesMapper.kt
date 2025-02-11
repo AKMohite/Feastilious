@@ -34,7 +34,8 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
         return Recipe(
             id = entity.id,
             recipeName = entity.recipeName,
-            recipeImgUrl = entity.recipeImg
+            recipeImgUrl = entity.recipeImg,
+            page = 1 // TODO handle page number
         )
     }
 

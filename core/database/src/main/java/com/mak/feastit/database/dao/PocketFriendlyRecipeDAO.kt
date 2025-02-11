@@ -1,5 +1,6 @@
 package com.mak.feastit.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.mak.feastit.database.entity.PocketFriendlyRecipeEntity
@@ -23,4 +24,7 @@ interface PocketFriendlyRecipeDAO: SectionRecipeDAO<PocketFriendlyRecipeEntity> 
 
     @Query("SELECT COUNT(*) FROM pocket_friendly_recipes WHERE page = :page LIMIT 1")
     suspend fun getCount(page: Int): Int
+
+    @Query("SELECT r.* FROM pocket_friendly_recipes p INNER JOIN recipes r ON p.recipe_id = r.id")
+    fun pagedRecipes(): PagingSource<Int, RecipeEntity>
 }

@@ -44,7 +44,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.room.ktx)
+    implementation(libs.room.paging)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.paging.runtime)
 }

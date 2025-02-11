@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.slf4j.api)
     implementation(libs.logback.android)
+    implementation(libs.paging.runtime)
 
     ksp(libs.hilt.android.compiler)
 

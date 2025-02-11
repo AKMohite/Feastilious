@@ -42,4 +42,5 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.timber)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.paging.runtime)
 }

@@ -1,12 +1,18 @@
 package com.mak.feastit.data.repository
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.mak.feastit.data.mapper.RecipesMapper
+import com.mak.feastit.data.paging.MappingPagingSource
 import com.mak.feastit.database.FeastDB
+import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
+import com.mak.feastit.domain.paging.PaginatedEntryRemoteMediator
 import com.mak.feastit.domain.util.DispatcherProvider
-import com.mak.feastit.domain.util.daysShift
-import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
 import kotlinx.coroutines.flow.Flow
@@ -14,10 +20,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
@@ -44,7 +46,7 @@ internal class RealRecipesRepository @Inject constructor(
                 return@withContext
             }
         }
-        Timber.d("Refresh recipes for $request")
+        Timber.d("Refresh recipes for $request with page: $page")
         val dtos = fetchRecipes(request, page) ?: return@withContext
         if (dtos.isEmpty()) return@withContext
         saveRemoteRecipes(dtos, page, request)
@@ -63,6 +65,38 @@ internal class RealRecipesRepository @Inject constructor(
             .flowOn(dispatcher.io)
             .map(recipesMapper::entitiesToModels)
             .flowOn(dispatcher.computation)
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    override fun observePaginatedRecipes(request: SyncType, pagingConfig: PagingConfig): Flow<PagingData<Recipe>> {
+        return Pager(
+            config = pagingConfig,
+            remoteMediator = PaginatedEntryRemoteMediator { internalPage ->
+                refreshRecipes(request, internalPage, false)
+            },
+            pagingSourceFactory = {
+                MappingPagingSource(
+                    originalSource = getPagedRecipes(request),
+                    mapper = { entity -> recipesMapper.entityToModel(entity) }
+                )
+            }
+        ).flow
+            .flowOn(dispatcher.io)
+    }
+
+    private fun getPagedRecipes(
+        request: SyncType,
+    ): PagingSource<Int, RecipeEntity> {
+//        TODO maybe request items using offset and limit instead of paging data?
+        val recipes = when(request) {
+            SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().pagedRecipes()
+            SyncType.TOP_RATED_RECIPES -> db.topRecipesDAO().pagedRecipes()
+            SyncType.HEALTHY_RECIPES -> db.healthyRecipeDAO().pagedRecipes()
+            SyncType.QUICK_RECIPES -> db.quickRecipeDAO().pagedRecipes()
+            SyncType.POCKET_FRIENDLY_RECIPES -> db.pocketFriendlyRecipeDAO().pagedRecipes()
+            else -> throw IllegalArgumentException("Paged entries are not available for $request")
+        }
+        return recipes
     }
 
     override fun observeFavoriteRecipes(): Flow<List<Recipe>> {
