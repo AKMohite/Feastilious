@@ -12,4 +12,8 @@ interface RecipesRepository {
     fun observePaginatedRecipes(request: SyncType, pagingConfig: PagingConfig): Flow<PagingData<Recipe>>
     fun observeFavoriteRecipes(): Flow<List<Recipe>>
     fun observeSearchSuggestions(query: String): Flow<List<Recipe>>
+    fun observeQueryPaginatedRecipes(
+        subType: String,
+        pagingConfig: PagingConfig
+    ): Flow<PagingData<Recipe>>
 }

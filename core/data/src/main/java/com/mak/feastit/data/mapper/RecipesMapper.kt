@@ -6,6 +6,7 @@ import com.mak.feastit.database.entity.PopularRecipeEntity
 import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
+import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.remote.dto.RecipeDTO
 
@@ -36,6 +37,15 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
             recipeName = entity.recipeName,
             recipeImgUrl = entity.recipeImg,
             page = 1 // TODO handle page number
+        )
+    }
+
+    fun paginatedEntityToModel(entity: PaginatedRecipeEntity): Recipe {
+        return Recipe(
+            id = entity.id,
+            recipeName = entity.recipeName,
+            recipeImgUrl = entity.recipeImg,
+            page = entity.page
         )
     }
 

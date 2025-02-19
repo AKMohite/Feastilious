@@ -5,10 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
+import androidx.paging.map
 import com.mak.feastit.data.mapper.RecipesMapper
+import com.mak.feastit.data.paging.DiscoverRemoteMediator
 import com.mak.feastit.data.paging.MappingPagingSource
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.RecipeEntity
+import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.paging.PaginatedEntryRemoteMediator
@@ -71,22 +74,41 @@ internal class RealRecipesRepository @Inject constructor(
     override fun observePaginatedRecipes(request: SyncType, pagingConfig: PagingConfig): Flow<PagingData<Recipe>> {
         return Pager(
             config = pagingConfig,
-            remoteMediator = PaginatedEntryRemoteMediator { internalPage ->
-                refreshRecipes(request, internalPage, false)
-            },
-            pagingSourceFactory = {
-                MappingPagingSource(
-                    originalSource = getPagedRecipes(request),
-                    mapper = { entity -> recipesMapper.entityToModel(entity) }
-                )
-            }
+            remoteMediator = DiscoverRemoteMediator(
+                fetch = { page ->
+                    refreshRecipes(request, page, false)
+                },
+                isCacheValid = {
+                    withContext(dispatcher.io) {
+//                        val hasLocalData = isLocallyAvailable(1, request)
+//                        val lastSynced = db.lastSyncDao().getLastSync(request.name)
+//                        if (hasLocalData && lastSynced != null && isRequestValid(lastSynced.lastSyncedAt, 60.days)) {
+//                            return@withContext
+//                        }
+                        val lastSynced = db.lastSyncDao().getLastSync(request.name) ?: return@withContext false
+                        Timber.d("Last synced at: ${lastSynced.lastSyncedAt}")
+                        isRequestValid(lastSynced.lastSyncedAt, 60.days)
+                    }
+                }
+            ),
+            pagingSourceFactory = { getPagedRecipes(request) }
         ).flow
             .flowOn(dispatcher.io)
+            .map { pagingData ->
+                pagingData.map(recipesMapper::paginatedEntityToModel)
+            }.flowOn(dispatcher.computation)
+    }
+
+    override fun observeQueryPaginatedRecipes(
+        subType: String,
+        pagingConfig: PagingConfig
+    ): Flow<PagingData<Recipe>> {
+        TODO("Not yet implemented")
     }
 
     private fun getPagedRecipes(
         request: SyncType,
-    ): PagingSource<Int, RecipeEntity> {
+    ): PagingSource<Int, PaginatedRecipeEntity> {
 //        TODO maybe request items using offset and limit instead of paging data?
         val recipes = when(request) {
             SyncType.POPULAR_RECIPES -> db.popularRecipeDAO().pagedRecipes()

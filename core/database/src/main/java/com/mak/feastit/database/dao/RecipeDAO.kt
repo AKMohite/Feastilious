@@ -1,5 +1,6 @@
 package com.mak.feastit.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
@@ -59,6 +60,14 @@ interface RecipeDAO: BaseDAO<RecipeEntity> {
 
     @Query("SELECT * FROM recipes WHERE is_fav = 1")
     fun observeFavoriteRecipes(): Flow<List<RecipeEntity>>
+
+    @Query("""SELECT * FROM recipes WHERE is_fav = 1 AND
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    LOWER(diets) LIKE '%' || :searchQuery || '%')""")
+    fun observeQueryRecipes(searchQuery: String): PagingSource<Int, RecipeEntity>
 
 //    Delete only if recipe is not added in book and delete all ingredients and instructions
 }

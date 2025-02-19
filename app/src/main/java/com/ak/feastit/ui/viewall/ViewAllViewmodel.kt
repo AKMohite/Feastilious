@@ -31,7 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ViewAllViewmodel @Inject constructor(
     private val repository: RecipesRepository,
-    private val dispatcher: DispatcherProvider,
+    dispatcher: DispatcherProvider,
     private val savedState: SavedStateHandle
 ): BaseViewModel(dispatcher) {
 
@@ -58,9 +58,10 @@ internal class ViewAllViewmodel @Inject constructor(
         return getExploreCategory()
             .flatMapLatest { category ->
                 if(!category.isStaticCategory()) {
-                    repository.observePaginatedRecipes(category.toSyncType(), PagingConfig(pageSize = 20, initialLoadSize = 60))
+                    repository.observePaginatedRecipes(category.toSyncType(), PagingConfig(pageSize = 20, initialLoadSize = 20))
                 } else {
-                    repository.observePaginatedRecipes(category.toSyncType(), PagingConfig(pageSize = 20, initialLoadSize = 60))
+                    val subType = savedState.get<String?>("category_sub_type") ?: throw IllegalArgumentException("No sub type found")
+                    repository.observeQueryPaginatedRecipes(subType, PagingConfig(pageSize = 20, initialLoadSize = 20))
                 }
             }.cachedIn(uiScope)
     }

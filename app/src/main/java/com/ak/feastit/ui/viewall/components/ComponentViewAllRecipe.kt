@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ak.feastit.databinding.ComponentViewAllRecipeBinding
 import com.ak.feastit.utils.onClick
+import com.ak.feastit.utils.show
 import com.mak.feastit.domain.model.Recipe
 
 class ComponentViewAllRecipe(
@@ -14,6 +15,7 @@ class ComponentViewAllRecipe(
     fun bind(recipe: Recipe) {
         binding.recipeImg.load(recipe.recipeImgUrl)
         binding.recipeName.text = recipe.recipeName
+        binding.recipeName.show()
         binding.root.onClick { onRecipeClick(recipe.id) }
     }
 
