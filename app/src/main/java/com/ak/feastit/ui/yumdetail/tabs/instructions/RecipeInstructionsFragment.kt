@@ -32,6 +32,7 @@ internal class RecipeInstructionsFragment : BaseFragment() {
         val adapter = RecipeInstructionsAdapter {
             viewModel.toggleMealPlan()
         }
+//        TODO maybe add decorations: MaterialDividerItemDecoration in catalog app: DividerItemDecorationDemoFragment
         binding.recipeInstructions.adapter = adapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
