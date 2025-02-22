@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
@@ -34,7 +35,7 @@ internal class ViewAllFragment: BaseFragment() {
         val category = viewModel.getPageTitle()
         binding.categoryTypeTxt.text = category
         adapter = ViewAllAdapter(onRecipeClick = { recipeId ->
-
+            gotoDetails(recipeId)
         })
 //        binding.viewAllItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val gridColumnCount = requireContext().resources.getInteger(R.integer.search_grid_column_count)
@@ -62,6 +63,10 @@ internal class ViewAllFragment: BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun gotoDetails(recipeId: Long) {
+        findNavController().navigate(ViewAllFragmentDirections.viewAllToRecipeDetail(recipeId))
     }
 
     /**
@@ -95,10 +100,10 @@ internal class ViewAllFragment: BaseFragment() {
             }
         } else {
             /**
-             * here 3 is [gridColumnCount] for mobile
+             * here 5 is [gridColumnCount] for mobile
              * With span size for mobile it will be as below:
-             * |      3      |
-             * |   2   | | 1 |
+             * |      5      |
+             * |   3   | | 2 |
              */
 //            TODO maybe some calculations to get the span size
 //            here 10 is number after which sequence will be repeated
@@ -106,8 +111,8 @@ internal class ViewAllFragment: BaseFragment() {
             val result = position % 10
             when(result) {
                 0, 5 -> gridColumnCount
-                1, 4, 7, 8 -> 2
-                else -> 1 // result = 2, 3, 6, 9
+                1, 4, 7, 8 -> 3
+                else -> 2 // result = 2, 3, 6, 9
             }
 
 //            This also works but we have different layout
