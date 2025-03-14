@@ -1,11 +1,13 @@
 package com.ak.feastit.data.utils
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesDataStore
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
@@ -25,13 +27,13 @@ private const val TAG = "FeastPrefManager"
 
 @Singleton
 class FeastPrefManager @Inject constructor(
-    @ApplicationContext context: Context,
+    @ApplicationContext private val context: Context,
     private val dispatcher: DispatcherProvider
 ) {
+    // At the top level of your kotlin file:
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "feat_prefs")
 
-    private val dataStore = context.createDataStore("feat_prefs")
-
-    val preferencesFlow = dataStore.data
+    val preferencesFlow = context.dataStore.data
         .catch { exception ->
             if (exception is IOException){
                 Timber.e(exception, "Error reading preferences: ")
@@ -48,7 +50,7 @@ class FeastPrefManager @Inject constructor(
         }.flowOn(dispatcher.computation)
 
     suspend fun updateFirstInstall(isFirstInstall: Boolean) = withContext(dispatcher.io){
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_FIRST_INSTALL] = isFirstInstall
         }
     }
