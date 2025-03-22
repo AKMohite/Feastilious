@@ -19,6 +19,7 @@ import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.show
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         when(val navView = binding.mainBottomNavigation) {
             is BottomNavigationView -> navView.setupWithNavController(navController)
             is NavigationRailView -> navView.setupWithNavController(navController)
+            is NavigationView -> navView.setupWithNavController(navController)
         }
 
     }

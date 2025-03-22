@@ -46,7 +46,6 @@ internal class ViewAllFragment: BaseFragment() {
             override fun getSpanSize(position: Int): Int {
                 return getGridSpanSize(position, isTablet, gridColumnCount)
             }
-
         }
         binding.viewAllItems.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
