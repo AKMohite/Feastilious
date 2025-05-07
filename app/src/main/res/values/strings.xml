@@ -38,6 +38,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="search_recipes">Search recipes</string>
     <string name="section_view_more">More</string>
     <string name="title_filter">Filter Search</string>
+    <string name="title_camera">Image Search</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="skip">Skip</string>
     <string name="onboarding_pager">Onboarding pager</string>

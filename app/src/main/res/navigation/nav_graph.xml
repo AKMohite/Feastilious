@@ -33,6 +33,19 @@
         <action
             android:id="@+id/explore_to_view_all"
             app:destination="@id/viewAllFragment"/>
+        <action
+            android:id="@+id/explore_to_search"
+            app:destination="@id/search_fragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_fragment"
+        android:name="com.ak.feastit.ui.search.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/search_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
     </fragment>
 
     <fragment

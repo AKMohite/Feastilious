@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 data class FilterPreferences(
     val isFirstInstall: Boolean,
-    val searchQuery: String
+    val recentSearches: List<String>
 )
 private const val TAG = "FeastPrefManager"
 
@@ -45,13 +45,25 @@ class FeastPrefManager @Inject constructor(
         .flowOn(dispatcher.io)
         .map { preferences->
             val firstInstall = preferences[PreferencesKeys.IS_FIRST_INSTALL] ?: true
-            val searchQuery = preferences[PreferencesKeys.SEARCH_QUERY] ?: ""
+            val searchQuery = (preferences[PreferencesKeys.SEARCH_QUERY] ?: "").split(',')
             FilterPreferences(firstInstall, searchQuery)
         }.flowOn(dispatcher.computation)
 
     suspend fun updateFirstInstall(isFirstInstall: Boolean) = withContext(dispatcher.io){
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.IS_FIRST_INSTALL] = isFirstInstall
+        }
+    }
+
+    suspend fun addRecentSearches(searchQuery: String) = withContext(dispatcher.io) {
+        if (searchQuery.isBlank()) return@withContext
+        context.dataStore.edit { preferences ->
+            var recentSearches = (preferences[PreferencesKeys.SEARCH_QUERY] ?: "").split(',').toSet().toMutableList()
+            if (recentSearches.size > 6) {
+                recentSearches = recentSearches.subList(0, 5)
+            }
+            recentSearches.add(0, searchQuery)
+            preferences[PreferencesKeys.SEARCH_QUERY] = recentSearches.toSet().joinToString(",")
         }
     }
 

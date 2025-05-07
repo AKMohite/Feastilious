@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    private val dispatcher: DispatcherProvider,
+    dispatcher: DispatcherProvider,
     private val workScheduler: WorkerScheduler
 ): BaseViewModel(dispatcher) {
 

@@ -62,6 +62,7 @@ class ExploreFragment : BaseFragment() {
 
     private fun navigateToSearch() {
         Timber.d("navigateToSearch")
+        findNavController().navigate(ExploreFragmentDirections.exploreToSearch())
     }
 
     private fun handleSectionEvents(action: ExploreItemAction) {

@@ -42,6 +42,7 @@ internal open class BaseViewModel(
      * Cancel all coroutines when the ViewModel is cleared
      */
     override fun onCleared() {
+        Timber.d("Viewmodel cleared: ${this.javaClass.simpleName}")
         superVisorJob.cancel(cause = CancellationException("viewModel cleared"))
         super.onCleared()
     }

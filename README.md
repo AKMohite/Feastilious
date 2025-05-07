@@ -8,3 +8,8 @@
 ```groovy
 SPOONACULAR_KEY=your-api-key
 ```
+
+## Screens
+|Explore|Detail|Recipe planner|
+
+|Shopping cart|View all|Nutrition detail|

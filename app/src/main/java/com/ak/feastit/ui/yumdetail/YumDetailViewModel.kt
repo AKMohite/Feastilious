@@ -57,6 +57,7 @@ internal class YumDetailViewModel @Inject constructor(
 
     fun toggleMealPlan() {
         uiScope.launch {
+//            TODO ask for notification permissions
             val recipeMealPlans = mealPlanRepository.getMealPlansForRecipe(recipeId)
             val isAdded = mealPlanRepository.toggleMealPLanFor(recipeId)
             withContext(dispatcher.computation) {

@@ -52,7 +52,7 @@ internal sealed interface ShoppingCart {
 
         override fun areContentsTheSame(other: ShoppingCart): Boolean {
             val ingredient = (other as? Ingredient)?.ingredient ?: return false
-            return ingredient.isSameAs(ingredient)
+            return this.ingredient.isSameAs(ingredient)
         }
     }
 }
