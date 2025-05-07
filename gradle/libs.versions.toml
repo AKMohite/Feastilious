@@ -7,7 +7,7 @@ targetSDK = "35"
 versionCode = "1"
 versionName = "0.0.1"
 
-android_gradle_plugin = "8.9.0"
+android_gradle_plugin = "8.9.2"
 appcompat = "1.7.0"
 coil = "2.7.0"
 constraint_layout = "2.2.1"
