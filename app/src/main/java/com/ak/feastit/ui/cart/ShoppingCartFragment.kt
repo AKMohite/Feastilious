@@ -32,17 +32,16 @@ internal class ShoppingCartFragment : BaseFragment() {
 
     private val viewModel: ShoppingCartViewModel by viewModels()
 
-    private val adapter: CartAdapter by lazy {
-        CartAdapter(
-            onCartEvent = ::handleCartEvents
-        ).apply {
-            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-    }
+    private var adapter: CartAdapter? = null
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
         observers()
+    }
+
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
     }
 
     private fun setupView() {
@@ -57,6 +56,11 @@ internal class ShoppingCartFragment : BaseFragment() {
                 binding.groupByAisle.id -> viewModel.setCartOrderBy(CartOrderBy.AISLE)
             }
         }
+        adapter = CartAdapter(
+            onCartEvent = ::handleCartEvents
+        ).apply {
+            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
     }
 
     private fun observers() {
@@ -65,7 +69,7 @@ internal class ShoppingCartFragment : BaseFragment() {
                 viewModel.state.collectLatest { state ->
                     binding.emptyState.root.show(state.cart.isEmpty())
                     binding.cartItems.show(state.cart.isNotEmpty())
-                    adapter.reload(state.cart)
+                    adapter?.reload(state.cart)
                 }
             }
         }

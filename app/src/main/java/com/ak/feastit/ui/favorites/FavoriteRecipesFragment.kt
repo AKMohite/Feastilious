@@ -31,11 +31,7 @@ internal class FavoriteRecipesFragment: BaseFragment() {
 
     private val viewmodel: FavoriteViewModel by viewModels()
 
-    private val adapter: FavoritesAdapter by lazy {
-        FavoritesAdapter(
-            onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
-        )
-    }
+    private var adapter: FavoritesAdapter? = null
 
     private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
         SearchSuggestionAdapter(
@@ -48,6 +44,11 @@ internal class FavoriteRecipesFragment: BaseFragment() {
         observers()
     }
 
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
+    }
+
     private fun setupView() {
         binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
         binding.emptyState.emptyHeader.text = ""
@@ -56,6 +57,9 @@ internal class FavoriteRecipesFragment: BaseFragment() {
         binding.favoriteRecipes.adapter = adapter
         binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.suggestionItems.adapter = suggestionsAdapter
+        adapter = FavoritesAdapter(
+            onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
+        )
     }
 
     private fun observers() {
@@ -65,7 +69,7 @@ internal class FavoriteRecipesFragment: BaseFragment() {
                     viewmodel.state.collectLatest { state ->
                         binding.emptyState.root.show(state.recipes.isEmpty())
                         binding.favoriteRecipes.show(state.recipes.isNotEmpty())
-                        adapter.reload(state.recipes)
+                        adapter?.reload(state.recipes)
                         suggestionsAdapter.reload(state.suggestions)
                     }
                 }
