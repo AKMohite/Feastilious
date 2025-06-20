@@ -16,4 +16,6 @@ interface RecipesRepository {
         subType: String,
         pagingConfig: PagingConfig
     ): Flow<PagingData<Recipe>>
+
+    suspend fun searchRecipe(query: String): List<Recipe>
 }

@@ -1,8 +1,9 @@
 package com.ak.feastit.ui.explore.experimental
 
+import androidx.recyclerview.widget.DiffUtil
 import com.ak.feastit.ui.explore.ExploreAdapterItem
 
-internal class ExploreAdapterDiff: androidx.recyclerview.widget.DiffUtil.ItemCallback<ExploreAdapterItem>() {
+internal class ExploreAdapterDiff : DiffUtil.ItemCallback<ExploreAdapterItem>() {
     override fun areItemsTheSame(
         oldItem: ExploreAdapterItem,
         newItem: ExploreAdapterItem

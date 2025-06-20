@@ -8,13 +8,10 @@ import androidx.paging.PagingSource
 import androidx.paging.map
 import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.data.paging.DiscoverRemoteMediator
-import com.mak.feastit.data.paging.MappingPagingSource
 import com.mak.feastit.database.FeastDB
-import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.SyncType
-import com.mak.feastit.domain.paging.PaginatedEntryRemoteMediator
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
@@ -41,7 +38,7 @@ internal class RealRecipesRepository @Inject constructor(
 
     override suspend fun refreshRecipes(request: SyncType, page: Int, forceRefresh: Boolean) = withContext(dispatcher.io) {
         if (page > 5) return@withContext // TODO Use pro just have limited API calls condition can be removed
-        if (!forceRefresh) { // TODO on force refresh delete all local data???
+        if (!forceRefresh) { // TODO on force refresh delete all local data??? need to handle favorites, meal planner and shopping kart
             val hasLocalData = isLocallyAvailable(page, request)
             val lastSynced = db.lastSyncDao().getLastSync(request.name)
 //        TODO validity duration can be less but for now kept 6hours
@@ -104,6 +101,12 @@ internal class RealRecipesRepository @Inject constructor(
         pagingConfig: PagingConfig
     ): Flow<PagingData<Recipe>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun searchRecipe(query: String): List<Recipe> = withContext(dispatcher.io) {
+        val entities = db.recipeDAO().searchRecipes(query)
+        Timber.d("Found ${entities.size} recipes")
+        recipesMapper.entitiesToModels(entities)
     }
 
     private fun getPagedRecipes(

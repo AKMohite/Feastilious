@@ -54,12 +54,12 @@ internal class FavoriteRecipesFragment: BaseFragment() {
         binding.emptyState.emptyHeader.text = ""
         binding.emptyState.emptyBody.text = ""
         binding.favoriteRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.favoriteRecipes.adapter = adapter
         binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.suggestionItems.adapter = suggestionsAdapter
         adapter = FavoritesAdapter(
             onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
         )
+        binding.favoriteRecipes.adapter = adapter
     }
 
     private fun observers() {

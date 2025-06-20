@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ComponentRecipeItemsBinding
 import com.ak.feastit.databinding.ComponentTextItemBinding
+import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.yumdetail.tabs.overview.component.OverviewTextViewHolder
 import com.ak.feastit.ui.yumdetail.tabs.overview.component.RecipeOverviewItem
 import com.ak.feastit.ui.yumdetail.tabs.overview.component.SimilarRecipesViewHolder
 
-internal class RecipeOverViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+internal class RecipeOverViewAdapter(
+    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     AsyncListDiffer.ListListener<RecipeOverviewItem> {
 
     private val asyncDiff = AsyncListDiffer(this, RecipeOverviewDiff())
@@ -31,7 +34,7 @@ internal class RecipeOverViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHold
             }
             RECIPES -> {
                 val binding = ComponentRecipeItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                SimilarRecipesViewHolder(binding)
+                SimilarRecipesViewHolder(binding, sectionEvents)
             }
             else -> {
                throw IllegalArgumentException("Invalid view type $viewType")

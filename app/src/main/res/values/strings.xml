@@ -98,4 +98,5 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="notification_meal_plan_message">Start preparation for %1$s, you can start preparing at %2$s</string>
     <string name="image_camera">Take photo</string>
     <string name="image_gallery">Browse gallery</string>
+    <string name="search_recipe_recommendations">Recommended recipes</string>
 </resources>

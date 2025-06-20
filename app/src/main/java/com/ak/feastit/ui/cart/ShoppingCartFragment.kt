@@ -49,7 +49,6 @@ internal class ShoppingCartFragment : BaseFragment() {
         binding.emptyState.emptyHeader.text = getString(R.string.cart_empty_header)
         binding.emptyState.emptyBody.text = getString(R.string.cart_empty_body)
         binding.cartItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.cartItems.adapter = adapter
         binding.cartGroupBy.setOnCheckedChangeListener { _, btnId ->
             when(btnId) {
                 binding.groupByRecipe.id -> viewModel.setCartOrderBy(CartOrderBy.RECIPE)
@@ -61,11 +60,12 @@ internal class ShoppingCartFragment : BaseFragment() {
         ).apply {
             stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+        binding.cartItems.adapter = adapter
     }
 
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
                     binding.emptyState.root.show(state.cart.isEmpty())
                     binding.cartItems.show(state.cart.isNotEmpty())

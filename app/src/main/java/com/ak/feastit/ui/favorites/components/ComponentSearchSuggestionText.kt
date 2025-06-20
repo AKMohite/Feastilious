@@ -10,14 +10,14 @@ internal class ComponentSearchSuggestionText(
     private val binding: ComponentSearchSuggestionTextBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(adapterItem: Suggestion.Text) {
-        binding.searchSuggestion.text = adapterItem.value
+        binding.root.text = adapterItem.value
         val icon = if (adapterItem.type == SuggestionType.RECENT_SEARCH) {
             R.drawable.ic_recent
         } else {
             R.drawable.img_search
         }
-        binding.searchSuggestion.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
-        binding.searchSuggestion.compoundDrawables[0].setTint(com.google.android.material.R.attr.colorSecondary)
+        binding.root.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
+        binding.root.compoundDrawables[0].setTint(com.google.android.material.R.attr.colorSecondary)
     }
 
 }

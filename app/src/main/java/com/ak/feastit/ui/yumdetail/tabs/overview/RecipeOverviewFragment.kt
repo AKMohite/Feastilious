@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentDetailTabOverviewBinding
+import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.yumdetail.YumDetailViewModel
 import com.ak.feastit.ui.yumdetail.tabs.overview.component.RecipeOverviewItem
 import kotlinx.coroutines.flow.collectLatest
@@ -26,11 +27,12 @@ internal class RecipeOverviewFragment : BaseFragment() {
 
     private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
-    private val adapter: RecipeOverViewAdapter by lazy { RecipeOverViewAdapter() }
+    private var adapter: RecipeOverViewAdapter? = null
 
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         binding.overviewList.layoutManager = LinearLayoutManager(requireContext())
+        adapter = RecipeOverViewAdapter(sectionEvents = ::handleSectionEvents)
         binding.overviewList.adapter = adapter
 
         lifecycleScope.launch {
@@ -43,10 +45,26 @@ internal class RecipeOverviewFragment : BaseFragment() {
                         RecipeOverviewItem.Heading("Similar Recipes"),
                         RecipeOverviewItem.Recipes(state.similarRecipes)
                     )
-                    adapter.reload(items)
+                    adapter?.reload(items)
                 }
             }
         }
+    }
+
+    private fun handleSectionEvents(action: ExploreItemAction) {
+        when (action) {
+            is ExploreItemAction.RecipeClick -> {
+//                TODO navigate to recipe detail is crashing
+//                (parentFragment as? YumDetailFragment)?.findNavController()?.navigate(YumDetailFragmentDirections.detailToOtherRecipe(recipeId = action.recipeId))
+            }
+
+            else -> throw IllegalArgumentException("Invalid action $action for similar recipes")
+        }
+    }
+
+    override fun onDestroy() {
+        adapter = null
+        super.onDestroy()
     }
 
 }

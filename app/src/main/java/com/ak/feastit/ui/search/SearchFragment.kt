@@ -14,10 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentSearchBinding
+import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,50 +30,188 @@ internal class SearchFragment : BaseFragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding? = FragmentSearchBinding.inflate(inflater)
+    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
+        FragmentSearchBinding.inflate(inflater)
 
     private val binding: FragmentSearchBinding
         get() = baseBinding as FragmentSearchBinding
+
+    private var suggestionAdapter: SearchSuggestionAdapter? = null
 
     private var pickGalleryImage: ActivityResultLauncher<PickVisualMediaRequest>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        pickGalleryImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                Timber.d("Gallery image uri: $uri")
-            } else {
-                Timber.d("No media selected")
+        setupView()
+        observers()
+//        show recent searches and trending recipes in search expanded view and if there is query filter recent searches and search in local db
+//        show results in collapsed view with grid same as view all
+    }
+
+    private fun observers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.action.collectLatest { action -> handleAction(action) }
+                }
+                launch {
+                    viewModel.state.collectLatest { state ->
+                        updateRecentAndRecommendations(state)
+                        updateSearchResults(state)
+                    }
+                }
             }
         }
-        cameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                Timber.d("Camera permission granted")
-                launchCamera()
-            } else {
-                Timber.d("Camera permission denied")
+    }
+
+    private fun updateSearchResults(state: SearchState) {
+        binding.searchResults.show(state.searchResults.isNotEmpty())
+    }
+
+    private fun updateRecentAndRecommendations(state: SearchState) {
+        binding.searchSuggestions.show(state.hasRecentSearches())
+        val suggestions = state.getSuggestions(
+            recentsHeader = getString(R.string.search_recipe_recent_searches),
+            recommendationsHeader = getString(R.string.search_recipe_recommendations)
+        )
+        suggestionAdapter?.submitList(suggestions)
+    }
+
+    private fun setupView() {
+        pickGalleryImage =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    Timber.d("Gallery image uri: $uri")
+                } else {
+                    Timber.d("No media selected")
+                }
             }
-        }
-        binding.openSearchBar.inflateMenu(R.menu.recipe_search)
+        cameraPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    Timber.d("Camera permission granted")
+                    launchCamera()
+                } else {
+                    Timber.d("Camera permission denied")
+                }
+            }
+        //        binding.openSearchBar.inflateMenu(R.menu.recipe_search)
         binding.searchView.inflateMenu(R.menu.recipe_search)
         // this is to launch search view
-        binding.openSearchBar.performClick()
+        /*binding.openSearchBar.performClick()
         binding.openSearchBar.setOnMenuItemClickListener { menuItem ->
             onMenuItemClick(menuItem)
             return@setOnMenuItemClickListener true
+        }*/
+        binding.searchView.editText.setOnEditorActionListener { view, _, _ ->
+            val query = view.text.toString()
+            Timber.d("On search editor action: $query")
+            viewModel.search(query)
+            return@setOnEditorActionListener true
         }
         binding.searchView.setOnMenuItemClickListener { menuItem ->
             onMenuItemClick(menuItem)
             return@setOnMenuItemClickListener true
         }
-        viewModel.reload()
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.action.collectLatest { action -> handleAction(action) }
+        suggestionAdapter = SearchSuggestionAdapter(
+            onRecipeClick = { recipeId ->
+                Timber.d("On recipe click: $recipeId")
+            },
+            onHistoryClick = { query ->
+                Timber.d("On history click: $query")
+                binding.searchView.setText(query)
+                viewModel.search(query)
+            }
+        )
+        val suggestionLayoutManager = GridLayoutManager(requireContext(), 2)
+        suggestionLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return getSuggestionGridSpanSize(position)
             }
         }
-//        show recent searches and trending recipes in search expanded view and if there is query filter recent searches and search in local db
-//        show results in collapsed view with grid same as view all
+//        binding.searchSuggestions.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.searchSuggestions.layoutManager = suggestionLayoutManager
+        binding.searchSuggestions.adapter = suggestionAdapter
+        val gridColumnCount =
+            requireContext().resources.getInteger(R.integer.search_grid_column_count)
+        val resultLayoutManager = GridLayoutManager(requireContext(), gridColumnCount)
+        binding.searchResults.layoutManager = resultLayoutManager
+        val isTablet = requireContext().resources.getBoolean(R.bool.is_tablet)
+        resultLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return getResultsGridSpanSize(position, isTablet, gridColumnCount)
+            }
+        }
+//        binding.searchResults.adapter = resultsAdapter
+    }
+
+    /**
+     * Trying to create bento box with grids expanding widths depending on [gridColumnCount]
+     * @param[position] index of item in list
+     * @param[isTablet] is device a tablet
+     * @param[gridColumnCount] number of columns in grid
+     */
+    private fun getResultsGridSpanSize(
+        position: Int,
+        isTablet: Boolean,
+        gridColumnCount: Int
+    ): Int {
+        return if (isTablet) {
+//            TODO maybe for tablet it can be staggered grid like this: https://stackoverflow.com/a/65511718
+            /**
+             * here 12 is [gridColumnCount] for tablet
+             * With span size for tablet it will be as below:
+             * |         7         | |    5     |
+             * |   3  | |  3  | |       6       |
+             * |    5     | |         7         |
+             * |       6       | |   3  | |  3  |
+             */
+//            TODO maybe some calculations to get the span size
+//            here 10 is number after which sequence will be repeated
+//            doing this easy way ;P
+            val result = position % 10
+            when (result) {
+                0, 6 -> 7
+                1, 5 -> 5
+                2, 3, 8, 9 -> 3
+                else -> 6 // position = 4, 7
+            }
+            /*when(result) {
+                0 ,1 , 4, 5, 6, 7 -> 2
+                else -> 1 // position = 2, 3, 8, 9
+            }*/
+        } else {
+            /**
+             * here 5 is [gridColumnCount] for mobile
+             * With span size for mobile it will be as below:
+             * |      5      |
+             * |   3   | | 2 |
+             */
+//            TODO maybe some calculations to get the span size
+//            here 10 is number after which sequence will be repeated
+//            doing this easy way ;P
+            val result = position % 10
+            when (result) {
+                0, 5 -> gridColumnCount
+                1, 4, 7, 8 -> 3
+                else -> 2 // result = 2, 3, 6, 9
+            }
+
+//            This also works but we have different layout
+            /*val result = position % 6
+            when {
+                (result == 0 || result == 3) -> gridColumnCount
+                (result == 1 || result == 5) -> 2
+                else -> 1
+            }*/
+        }
+    }
+
+    private fun getSuggestionGridSpanSize(position: Int): Int {
+        return when (suggestionAdapter?.getType(position)) {
+            is SearchSuggestionItem.Recommendation -> 1
+            else -> 2
+        }
     }
 
     private fun handleAction(action: SearchAction) {
@@ -115,6 +255,9 @@ internal class SearchFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        pickGalleryImage = null
+        cameraPermissionLauncher = null
+        suggestionAdapter = null
         binding.openSearchBar.menu.clear()
         binding.searchView.toolbar.menu.clear()
         super.onDestroyView()
