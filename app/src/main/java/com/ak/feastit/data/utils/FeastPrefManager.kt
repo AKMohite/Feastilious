@@ -62,7 +62,7 @@ class FeastPrefManager @Inject constructor(
             if (recentSearches.size > 6) {
                 recentSearches = recentSearches.subList(0, 5)
             }
-            recentSearches.add(0, searchQuery)
+            recentSearches.add(0, searchQuery.trim())
             preferences[PreferencesKeys.SEARCH_QUERY] = recentSearches.toSet().joinToString(",")
         }
     }

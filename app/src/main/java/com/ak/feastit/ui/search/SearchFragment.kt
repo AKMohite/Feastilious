@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentSearchBinding
+import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,6 +39,7 @@ internal class SearchFragment : BaseFragment() {
         get() = baseBinding as FragmentSearchBinding
 
     private var suggestionAdapter: SearchSuggestionAdapter? = null
+    private var resultAdapter: SearchResultAdapter? = null
 
     private var pickGalleryImage: ActivityResultLauncher<PickVisualMediaRequest>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
@@ -66,6 +69,7 @@ internal class SearchFragment : BaseFragment() {
 
     private fun updateSearchResults(state: SearchState) {
         binding.searchResults.show(state.searchResults.isNotEmpty())
+        resultAdapter?.reload(state.searchResults)
     }
 
     private fun updateRecentAndRecommendations(state: SearchState) {
@@ -103,11 +107,17 @@ internal class SearchFragment : BaseFragment() {
             onMenuItemClick(menuItem)
             return@setOnMenuItemClickListener true
         }*/
-        binding.searchView.editText.setOnEditorActionListener { view, _, _ ->
+        binding.searchView.editText.setOnEditorActionListener { view, _, keyEvent ->
             val query = view.text.toString()
             Timber.d("On search editor action: $query")
+            Timber.d("On search key: $keyEvent")
             viewModel.search(query)
             return@setOnEditorActionListener true
+        }
+        binding.searchView.findViewById<ImageView>(com.google.android.material.R.id.open_search_view_clear_button)?.onClick {
+            Timber.d("Clear search")
+            binding.searchView.editText.setText("")
+            viewModel.clearSearch()
         }
         binding.searchView.setOnMenuItemClickListener { menuItem ->
             onMenuItemClick(menuItem)
@@ -132,6 +142,11 @@ internal class SearchFragment : BaseFragment() {
 //        binding.searchSuggestions.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.searchSuggestions.layoutManager = suggestionLayoutManager
         binding.searchSuggestions.adapter = suggestionAdapter
+        resultAdapter = SearchResultAdapter(
+            onRecipeClick = { recipeId ->
+                Timber.d("On recipe click: $recipeId")
+            }
+        )
         val gridColumnCount =
             requireContext().resources.getInteger(R.integer.search_grid_column_count)
         val resultLayoutManager = GridLayoutManager(requireContext(), gridColumnCount)
@@ -142,7 +157,7 @@ internal class SearchFragment : BaseFragment() {
                 return getResultsGridSpanSize(position, isTablet, gridColumnCount)
             }
         }
-//        binding.searchResults.adapter = resultsAdapter
+        binding.searchResults.adapter = resultAdapter
     }
 
     /**
@@ -251,6 +266,9 @@ internal class SearchFragment : BaseFragment() {
                 Timber.d("On image clicked")
                 ImageSearchBottomSheetFragment.show(childFragmentManager)
             }
+            else -> {
+                Timber.d("Unknown Menu item clicked")
+            }
         }
     }
 
@@ -258,6 +276,7 @@ internal class SearchFragment : BaseFragment() {
         pickGalleryImage = null
         cameraPermissionLauncher = null
         suggestionAdapter = null
+        resultAdapter = null
         binding.openSearchBar.menu.clear()
         binding.searchView.toolbar.menu.clear()
         super.onDestroyView()

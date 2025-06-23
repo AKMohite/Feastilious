@@ -19,9 +19,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+private const val SAVED_SEARCH_QUERY = "saved-search-query"
+
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
-    prefManager: FeastPrefManager,
+    private val prefManager: FeastPrefManager,
     private val repository: RecipesRepository,
     private val savedStateHandle: SavedStateHandle,
     dispatcherProvider: DispatcherProvider
@@ -45,6 +47,15 @@ internal class SearchViewModel @Inject constructor(
                 )
             }
         }.launchIn(uiScope)
+        observeSearchedQuery()
+    }
+
+    private fun observeSearchedQuery() {
+//        savedStateHandle.getStateFlow(SAVED_SEARCH_QUERY, "")
+//            .filterNot { query -> query.isBlank() }
+//            .flatMapLatest {
+//                repository.observeSearchSuggestions(it)
+//            }.cach
     }
 
     fun onImageClick(type: ImageSearch) {
@@ -55,9 +66,17 @@ internal class SearchViewModel @Inject constructor(
 
     fun search(query: String) {
         uiScope.launch {
+            prefManager.addRecentSearches(query)
+            savedStateHandle[SAVED_SEARCH_QUERY] = query
 //            TODO make API call with filters or get from local DB?
             val results = repository.searchRecipe(query)
             _state.update { current -> current.copy(searchResults = results) }
+        }
+    }
+
+    fun clearSearch() {
+        uiScope.launch {
+            _state.update { currentState -> currentState.copy(searchResults = emptyList()) }
         }
     }
 
