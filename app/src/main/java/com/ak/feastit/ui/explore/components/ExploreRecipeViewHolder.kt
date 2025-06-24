@@ -16,11 +16,11 @@ internal class ExploreRecipeViewHolder(
     fun bind(recipe: Recipe) {
         binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipe.id)) }
         binding.apply {
-            recipeImg.load(recipe.recipeImgUrl) {
+            recipeImg.load(recipe.image) {
                 placeholder(R.drawable.ic_recipe_img_placeholder)
                 error(R.drawable.ic_recipe_img_placeholder)
             }
-            recipeName.text = recipe.recipeName
+            recipeName.text = recipe.name
         }
     }
 

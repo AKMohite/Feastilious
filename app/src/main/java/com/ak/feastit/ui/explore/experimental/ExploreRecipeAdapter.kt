@@ -21,7 +21,6 @@ internal class ExploreRecipeAdapter(
 
     override fun onBindViewHolder(holder: ExploreRecipeViewHolder, position: Int) {
         holder.bind(items[position])
-//        holder.itemView.onClick { sectionEvents(ExploreItemAction.RecipeClick(items[position].id)) }
     }
 
 }

@@ -8,7 +8,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-internal class FeastApplication: Application(), Configuration.Provider {
+internal class FeastApplication : Application(), Configuration.Provider, ImageLoaderFactory {
 
 //    TODO lazy initialization of workers
     @Inject
@@ -23,6 +23,26 @@ internal class FeastApplication: Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(CrashlyticsTree)
+    }
+
+    //    TODO lazy initialization of image loader
+    override fun newImageLoader(): ImageLoader {
+//        TODO clear cache from local
+//        this.imageLoader.diskCache?.clear()
+//        this.imageLoader.memoryCache?.clear()
+        return ImageLoader.Builder(this)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.2)
+                    .build()
+            }.diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(5 * 1024 * 1024)
+                    .build()
+            }
+            .respectCacheHeaders(false)
+            .build()
     }
 }
 

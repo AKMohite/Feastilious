@@ -1,12 +1,12 @@
 package com.mak.feastit.data.mapper
 
-import com.mak.feastit.database.entity.custom.CartEntity
 import com.mak.feastit.database.entity.IngredientEntity
 import com.mak.feastit.database.entity.NutrientEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
+import com.mak.feastit.database.entity.custom.CartEntity
 import com.mak.feastit.domain.model.CartIngredient
 import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
 import com.mak.feastit.domain.model.Ingredient
@@ -171,8 +171,8 @@ internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInform
         return entities.map { entity ->
             Recipe(
                 id = entity.id,
-                recipeName = entity.recipeName,
-                recipeImgUrl = entity.recipeImg,
+                name = entity.recipeName,
+                image = entity.recipeImg,
                 page = 1 // TODO handle pages
             )
         }

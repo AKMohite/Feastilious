@@ -155,14 +155,6 @@ internal class FileLoggingTree(
 
 //    Reference: https://github.com/mihonapp/mihon/blob/82fd89cee65f6663a6eddd09c73eaff23d3c2947/app/src/main/java/eu/kanade/tachiyomi/util/CrashLogUtil.kt#L39
     private fun getDebugInfo(): String {
-        /*return """
-            App version: ${BuildConfig.VERSION_NAME} (${BuildConfig.FLAVOR}, ${BuildConfig.COMMIT_SHA}, ${BuildConfig.VERSION_CODE}
-            Android version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}); build ${Build.DISPLAY}
-            Device brand: ${Build.BRAND}
-            Device manufacturer: ${Build.MANUFACTURER}
-            Device name: ${Build.DEVICE} (${Build.PRODUCT})
-            Device model: ${Build.MODEL}
-        """.trimIndent()*/
         return """
             App version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})
             Android version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}); build ${Build.DISPLAY}

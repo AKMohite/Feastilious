@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
@@ -43,6 +45,17 @@ internal class SearchFragment : BaseFragment() {
 
     private var pickGalleryImage: ActivityResultLauncher<PickVisualMediaRequest>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
+    private val onBackPressDispatcher = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            handleBackPress()
+        }
+
+        fun normalBack() {
+            this.isEnabled = false
+            requireActivity().onBackPressed()
+        }
+
+    }
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -81,7 +94,13 @@ internal class SearchFragment : BaseFragment() {
         suggestionAdapter?.submitList(suggestions)
     }
 
+    private fun handleBackPress() {
+        Timber.d("On back pressed")
+        viewModel.onBackPress()
+    }
+
     private fun setupView() {
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressDispatcher)
         pickGalleryImage =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
@@ -99,14 +118,7 @@ internal class SearchFragment : BaseFragment() {
                     Timber.d("Camera permission denied")
                 }
             }
-        //        binding.openSearchBar.inflateMenu(R.menu.recipe_search)
         binding.searchView.inflateMenu(R.menu.recipe_search)
-        // this is to launch search view
-        /*binding.openSearchBar.performClick()
-        binding.openSearchBar.setOnMenuItemClickListener { menuItem ->
-            onMenuItemClick(menuItem)
-            return@setOnMenuItemClickListener true
-        }*/
         binding.searchView.editText.setOnEditorActionListener { view, _, keyEvent ->
             val query = view.text.toString()
             Timber.d("On search editor action: $query")
@@ -125,7 +137,7 @@ internal class SearchFragment : BaseFragment() {
         }
         suggestionAdapter = SearchSuggestionAdapter(
             onRecipeClick = { recipeId ->
-                Timber.d("On recipe click: $recipeId")
+                gotoRecipeDetails(recipeId)
             },
             onHistoryClick = { query ->
                 Timber.d("On history click: $query")
@@ -144,7 +156,7 @@ internal class SearchFragment : BaseFragment() {
         binding.searchSuggestions.adapter = suggestionAdapter
         resultAdapter = SearchResultAdapter(
             onRecipeClick = { recipeId ->
-                Timber.d("On recipe click: $recipeId")
+                gotoRecipeDetails(recipeId)
             }
         )
         val gridColumnCount =
@@ -158,6 +170,12 @@ internal class SearchFragment : BaseFragment() {
             }
         }
         binding.searchResults.adapter = resultAdapter
+//        binding.searchView.show()
+    }
+
+    private fun gotoRecipeDetails(recipeId: Long) {
+        Timber.d("On recipe click: $recipeId")
+        findNavController().navigate(SearchFragmentDirections.searchToRecipeDetail(recipeId))
     }
 
     /**
@@ -211,14 +229,6 @@ internal class SearchFragment : BaseFragment() {
                 1, 4, 7, 8 -> 3
                 else -> 2 // result = 2, 3, 6, 9
             }
-
-//            This also works but we have different layout
-            /*val result = position % 6
-            when {
-                (result == 0 || result == 3) -> gridColumnCount
-                (result == 1 || result == 5) -> 2
-                else -> 1
-            }*/
         }
     }
 
@@ -248,6 +258,13 @@ internal class SearchFragment : BaseFragment() {
                     }
                 }
             }
+            is SearchAction.OnBackPress -> {
+                if (binding.searchView.isShowing) {
+                    binding.searchView.hide()
+                } else {
+                    onBackPressDispatcher.normalBack()
+                }
+            }
         }
     }
 
@@ -273,6 +290,7 @@ internal class SearchFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        onBackPressDispatcher.remove()
         pickGalleryImage = null
         cameraPermissionLauncher = null
         suggestionAdapter = null

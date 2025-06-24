@@ -13,8 +13,8 @@ class ComponentViewAllRecipe(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(recipe: Recipe) {
-        binding.recipeImg.load(recipe.recipeImgUrl)
-        binding.recipeName.text = recipe.recipeName
+        binding.recipeImg.load(recipe.image)
+        binding.recipeName.text = recipe.name
         binding.recipeName.show()
         binding.root.onClick { onRecipeClick(recipe.id) }
     }

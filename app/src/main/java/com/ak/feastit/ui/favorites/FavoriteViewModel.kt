@@ -98,7 +98,8 @@ internal class FavoriteViewModel @Inject constructor(
                 repository.observeSearchSuggestions(query)
             }.map { recipes ->
                 val suggestions = mutableListOf<Suggestion>()
-                val recipeNames = recipes.take(10).map { Suggestion.Text(it.recipeName, SuggestionType.DB_TEXT) }
+                val recipeNames =
+                    recipes.take(10).map { Suggestion.Text(it.name, SuggestionType.DB_TEXT) }
                 suggestions.addAll(recipeNames)
 //                this is search suggestion with recipes
                 suggestions.add(Suggestion.Heading(R.string.search_recipe_suggestions))

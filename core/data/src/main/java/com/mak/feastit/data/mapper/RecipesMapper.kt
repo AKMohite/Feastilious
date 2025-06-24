@@ -34,8 +34,8 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
     override fun entityToModel(entity: RecipeEntity): Recipe {
         return Recipe(
             id = entity.id,
-            recipeName = entity.recipeName,
-            recipeImgUrl = entity.recipeImg,
+            name = entity.recipeName,
+            image = entity.recipeImg,
             page = 1 // TODO handle page number
         )
     }
@@ -43,8 +43,8 @@ internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
     fun paginatedEntityToModel(entity: PaginatedRecipeEntity): Recipe {
         return Recipe(
             id = entity.id,
-            recipeName = entity.recipeName,
-            recipeImgUrl = entity.recipeImg,
+            name = entity.recipeName,
+            image = entity.recipeImg,
             page = entity.page
         )
     }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -77,6 +78,17 @@ internal class SearchViewModel @Inject constructor(
     fun clearSearch() {
         uiScope.launch {
             _state.update { currentState -> currentState.copy(searchResults = emptyList()) }
+        }
+    }
+
+    fun onBackPress() {
+        uiScope.launch {
+            val state = state.firstOrNull() ?: return@launch
+            if (state.searchResults.isNotEmpty()) {
+                clearSearch()
+            } else {
+                _action.send(SearchAction.OnBackPress)
+            }
         }
     }
 

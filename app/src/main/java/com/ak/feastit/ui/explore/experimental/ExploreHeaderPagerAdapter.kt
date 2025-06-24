@@ -19,8 +19,8 @@ internal class ExploreHeaderPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         val recipe = items[position]
         val args = Bundle()
-        args.putString(ExploreHeaderFragment.ARGS_IMG_URL, recipe.recipeImgUrl)
-        args.putString(ExploreHeaderFragment.ARGS_TITLE, recipe.recipeName)
+        args.putString(ExploreHeaderFragment.ARGS_IMG_URL, recipe.image)
+        args.putString(ExploreHeaderFragment.ARGS_TITLE, recipe.name)
         args.putLong(ExploreHeaderFragment.ARGS_RECIPE_ID, recipe.id)
         return ExploreHeaderFragment.newInstance(args, sectionEvents)
     }
