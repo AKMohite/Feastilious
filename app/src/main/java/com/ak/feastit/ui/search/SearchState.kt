@@ -87,13 +87,20 @@ internal enum class FilterType {
 }
 
 // Represents a single selectable item within a filter category group
-internal data class FilterGroupItem(
-    val id: String, // Unique identifier for this option
-    val displayName: String,
-    val type: FilterType,
-    val isAscending: Boolean? = null,
-    val isSelected: Boolean = false // For multi-select or to indicate current selection
-)
+internal sealed interface FilterGroupItem {
+    data class SortingGroup(
+        val id: String, // Unique identifier for this option
+        val type: FilterType,
+        val isAscending: Boolean? = null,
+    ) : FilterGroupItem
+
+    data class SingleSelectionGroup(
+        val id: String, // Unique identifier for this option
+        val name: String,
+        val type: FilterType,
+        val isSelected: Boolean = false
+    ) : FilterGroupItem
+}
 
 internal enum class SelectionMode {
     SINGLE, // Only one option can be selected (e.g., for Sort)
@@ -105,18 +112,15 @@ internal enum class SelectionMode {
 // For now, FilterGroup might be sufficient, but this is an option for more complex scenarios.
 internal sealed interface SearchFilter {
     val type: FilterType
-    val displayName: String // e.g., "Sort By", "Cuisines"
 
     data class SingleSelectFilter(
         override val type: FilterType,
-        override val displayName: String,
         val options: List<FilterGroupItem>,
-        val selectedOption: FilterGroupItem? = null // Store the currently selected one
+//        val selectedOption: FilterGroupItem? = null // Store the currently selected one
     ) : SearchFilter
 
     data class MultiSelectFilter(
         override val type: FilterType,
-        override val displayName: String,
         val options: List<FilterGroupItem> // isSelected within FilterOption will manage selections
     ) : SearchFilter
 }

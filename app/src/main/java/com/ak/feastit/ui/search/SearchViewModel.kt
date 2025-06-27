@@ -3,6 +3,10 @@ package com.ak.feastit.ui.search
 import androidx.lifecycle.SavedStateHandle
 import com.ak.feastit.base.BaseViewModel
 import com.ak.feastit.data.utils.FeastPrefManager
+import com.mak.feastit.domain.model.Cuisine
+import com.mak.feastit.domain.model.DietType
+import com.mak.feastit.domain.model.Intolerances
+import com.mak.feastit.domain.model.RecipeMealType
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipesRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -27,11 +31,13 @@ internal class SearchViewModel @Inject constructor(
     private val prefManager: FeastPrefManager,
     private val repository: RecipesRepository,
     private val savedStateHandle: SavedStateHandle,
-    dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel(dispatcherProvider) {
 
     private val _state: MutableStateFlow<SearchState> = MutableStateFlow(SearchState())
     val state: Flow<SearchState> = _state
+    private val _filters: MutableStateFlow<List<SearchFilter>> = MutableStateFlow(emptyList())
+    val filters: Flow<List<SearchFilter>> = _filters
 
     private val _action: Channel<SearchAction> = Channel()
     val action = _action.receiveAsFlow()
@@ -89,6 +95,35 @@ internal class SearchViewModel @Inject constructor(
             } else {
                 _action.send(SearchAction.OnBackPress)
             }
+        }
+    }
+
+    fun loadFilters() {
+        uiScope.launch(dispatcherProvider.computation) {
+            if (filters.firstOrNull()?.isNotEmpty() == true) return@launch
+            Timber.d("Load filters")
+            val searchFilters = mutableListOf<SearchFilter>()
+            val sortFilter = SortBy.entries.map {
+                FilterGroupItem.SortingGroup(it.name, FilterType.SORT)
+            }
+            searchFilters.add(SearchFilter.SingleSelectFilter(FilterType.SORT, sortFilter))
+            val cuisine = Cuisine.entries.map {
+                FilterGroupItem.SingleSelectionGroup(it.name, it.title, FilterType.CUISINE)
+            }
+            searchFilters.add(SearchFilter.MultiSelectFilter(FilterType.CUISINE, cuisine))
+            val meal = RecipeMealType.entries.map {
+                FilterGroupItem.SingleSelectionGroup(it.name, it.name, FilterType.MEAL)
+            }
+            searchFilters.add(SearchFilter.MultiSelectFilter(FilterType.MEAL, meal))
+            val diet = DietType.entries.map {
+                FilterGroupItem.SingleSelectionGroup(it.name, it.title, FilterType.DIET)
+            }
+            searchFilters.add(SearchFilter.MultiSelectFilter(FilterType.DIET, diet))
+            val intolerances = Intolerances.entries.map {
+                FilterGroupItem.SingleSelectionGroup(it.name, it.name, FilterType.INTOLERANCES)
+            }
+            searchFilters.add(SearchFilter.MultiSelectFilter(FilterType.INTOLERANCES, intolerances))
+            _filters.update { searchFilters }
         }
     }
 

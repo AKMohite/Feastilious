@@ -24,13 +24,7 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
     private val binding: FragmentMealPlanEditBinding
         get() = _binding!!
     private val viewModel: MealPlannerViewModel by viewModels({ requireParentFragment() })
-    private val adapter: MealPlanSheetMenuAdapter by lazy {
-        MealPlanSheetMenuAdapter(
-            onMenuClick = { item ->
-                handleMenuClick(item)
-            }
-        )
-    }
+    private var adapter: MealPlanSheetMenuAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +43,11 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
 
     private fun setupView() {
         binding.editMealPlanList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        adapter = MealPlanSheetMenuAdapter(
+            onMenuClick = { item ->
+                handleMenuClick(item)
+            }
+        )
         binding.editMealPlanList.adapter = adapter
     }
 
@@ -56,7 +55,7 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    adapter.reload(state.menuItems)
+                    adapter?.reload(state.menuItems)
                 }
             }
         }
@@ -68,6 +67,7 @@ internal class MealPlanEditBottomSheetFragment: BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
+        adapter = null
         _binding = null
         super.onDestroyView()
     }

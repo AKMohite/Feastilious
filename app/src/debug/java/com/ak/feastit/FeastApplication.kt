@@ -11,6 +11,7 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import coil.util.DebugLogger
 import com.ak.feastit.core.logging.FileLoggingTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -28,7 +29,7 @@ internal class FeastApplication : Application(), Configuration.Provider, ImageLo
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
+            .setMinimumLoggingLevel(android.util.Log.VERBOSE)
             .build()
 
     override fun onCreate() {
@@ -37,8 +38,8 @@ internal class FeastApplication : Application(), Configuration.Provider, ImageLo
         Timber.plant(Timber.DebugTree())
 //        TODO handle file logging to share logs getting diskviolation strictmode
          FileLoggingTree(this).apply {
-             tree = FileLoggingTree(this@FeastApplication)
-             Timber.plant(tree!!)
+             tree = this
+             Timber.plant(this)
          }
     }
 
@@ -63,6 +64,7 @@ internal class FeastApplication : Application(), Configuration.Provider, ImageLo
                     .maxSizeBytes(5 * 1024 * 1024)
                     .build()
             }
+            .logger(DebugLogger())
             .respectCacheHeaders(false)
             .build()
     }

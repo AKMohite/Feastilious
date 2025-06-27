@@ -159,7 +159,7 @@ private fun List<DietType>.toDietExploreChips(): List<ExploreChip> {
     return this.map { dietType ->
         ExploreChip(
             id = dietType.ordinal + 1, // just to not have 0 as chip id
-            title = dietType.type,
+            title = dietType.title,
             name = dietType.name,
             type = ExploreCategory.DIET_TYPE_CHIPS
         )

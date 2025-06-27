@@ -1,6 +1,6 @@
 package com.mak.feastit.domain.model
 
-enum class DietType(val type: String) {
+enum class DietType(val title: String) {
     GLUTEN_FREE("Gluten Free"),
     KETOGENIC("Ketogenic"),
     VEGETARIAN("Vegetarian"),

@@ -22,6 +22,7 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentSearchBinding
+import com.ak.feastit.ui.search.filter.FilterBottomSheetFragment
 import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -278,6 +279,7 @@ internal class SearchFragment : BaseFragment() {
             R.id.search_filter -> {
                 Timber.d("On filter clicked")
 //                open filters bottom sheet
+                FilterBottomSheetFragment.show(childFragmentManager)
             }
             R.id.search_image -> {
                 Timber.d("On image clicked")

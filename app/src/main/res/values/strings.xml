@@ -99,4 +99,14 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="image_camera">Take photo</string>
     <string name="image_gallery">Browse gallery</string>
     <string name="search_recipe_recommendations">Recommended recipes</string>
+    <string name="filter_sort">Sort</string>
+    <string name="filter_cuisine">Cuisine</string>
+    <string name="filter_meal">Meal</string>
+    <string name="filter_diet">Diet</string>
+    <string name="filter_intolerance">Intolerance</string>
+    <string name="filter_sort_popular">Popular</string>
+    <string name="filter_sort_top_rated">Top rated</string>
+    <string name="filter_sort_healthy">Healthy</string>
+    <string name="filter_sort_quick">Quick</string>
+    <string name="filter_sort_pocket_friendly">Pocket friendly</string>
 </resources>
