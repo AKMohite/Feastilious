@@ -16,7 +16,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FeastIt">
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/Theme.FeastIt"
+        tools:targetApi="33">
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">

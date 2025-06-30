@@ -38,7 +38,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+//        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(enabled = true) {
+//            override fun handleOnBackPressed() {
+//                onBackPressed()
+//            }
+//        })
 //        setupView()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
