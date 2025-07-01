@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.favorites.components
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +9,7 @@ import com.ak.feastit.databinding.ComponentRecipeBinding
 import com.mak.feastit.domain.model.Recipe
 
 internal class FavoritesAdapter(
-    private val onRecipeClick: (Long) -> Unit
+    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit
 ): RecyclerView.Adapter<ComponentRecipe>() {
 
     private val asyncDiff = AsyncListDiffer(this, RecipeDiff())

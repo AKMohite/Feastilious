@@ -29,10 +29,14 @@
         tools:layout="@layout/fragment_explore">
         <action
             android:id="@+id/explore_to_recipeDetail"
-            app:destination="@id/recipeDetailFragment"/>
+            app:destination="@id/recipeDetailFragment" />
         <action
             android:id="@+id/explore_to_view_all"
-            app:destination="@id/viewAllFragment"/>
+            app:destination="@id/viewAllFragment"
+            app:enterAnim="@anim/slide_in_from_left"
+            app:exitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_in_from_right"
+            app:popExitAnim="@anim/slide_out_to_left" />
         <action
             android:id="@+id/explore_to_search"
             app:destination="@id/search_fragment"

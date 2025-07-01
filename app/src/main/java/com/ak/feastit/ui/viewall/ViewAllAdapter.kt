@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.viewall
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +10,7 @@ import com.ak.feastit.ui.viewall.components.ComponentViewAllRecipe
 import com.mak.feastit.domain.model.Recipe
 
 internal class ViewAllAdapter(
-    private val onRecipeClick: (Long) -> Unit
+    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit
 ): PagingDataAdapter<Recipe, ComponentViewAllRecipe>(
     ViewAllDiff
 ) {

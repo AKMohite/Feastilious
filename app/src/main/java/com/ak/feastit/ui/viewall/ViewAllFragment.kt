@@ -3,20 +3,22 @@ package com.ak.feastit.ui.viewall
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentViewAllBinding
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 internal class ViewAllFragment: BaseFragment() {
@@ -32,10 +34,12 @@ internal class ViewAllFragment: BaseFragment() {
     private val viewModel: ViewAllViewmodel by viewModels()
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
         val category = viewModel.getPageTitle()
         binding.categoryTypeTxt.text = category
-        adapter = ViewAllAdapter(onRecipeClick = { recipeId ->
-            gotoDetails(recipeId)
+        adapter = ViewAllAdapter(onRecipeClick = { sharedElements, recipeId ->
+            gotoDetails(sharedElements, recipeId)
         })
 //        binding.viewAllItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         val gridColumnCount = requireContext().resources.getInteger(R.integer.search_grid_column_count)
@@ -64,8 +68,25 @@ internal class ViewAllFragment: BaseFragment() {
         }
     }
 
-    private fun gotoDetails(recipeId: Long) {
-        findNavController().navigate(ViewAllFragmentDirections.viewAllToRecipeDetail(recipeId))
+    private fun gotoDetails(sharedElements: Map<View, String>, recipeId: Long) {
+        exitTransition = MaterialElevationScale(false).apply {
+            duration =
+                resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
+                    .toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration =
+                resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
+                    .toLong()
+        }
+        val extras = FragmentNavigatorExtras(
+            *sharedElements.toList().toTypedArray()
+        )
+        findNavController().navigate(
+            directions = ViewAllFragmentDirections.viewAllToRecipeDetail(
+                recipeId
+            ), navigatorExtras = extras
+        )
     }
 
     /**

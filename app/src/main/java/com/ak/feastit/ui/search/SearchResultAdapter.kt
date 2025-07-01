@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +11,7 @@ import com.ak.feastit.ui.viewall.components.ComponentViewAllRecipe
 import com.mak.feastit.domain.model.Recipe
 
 internal class SearchResultAdapter(
-    private val onRecipeClick: (Long) -> Unit
+    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit
 ): RecyclerView.Adapter<ComponentViewAllRecipe>() {
 
     private val asyncDiff = AsyncListDiffer(this, SearchResultDiff)

@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val SAVED_RECIPE_ID = "recipe_id"
+internal const val SAVED_RECIPE_ID = "recipe_id"
 
 @HiltViewModel
 internal class YumDetailViewModel @Inject constructor(

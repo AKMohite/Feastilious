@@ -16,5 +16,6 @@
         android:id="@+id/view_all_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:transitionGroup="true"
         tools:listitem="@layout/recipe_item"/>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.ak.feastit.ui.search.components.ComponentSearchHeader
 import com.ak.feastit.ui.search.components.ComponentSearchRecentSuggestion
 
 internal class SearchSuggestionAdapter(
-    private val onRecipeClick: (Long) -> Unit,
+    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit,
     private val onHistoryClick: (String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

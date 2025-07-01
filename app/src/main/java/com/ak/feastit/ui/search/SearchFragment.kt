@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewbinding.ViewBinding
@@ -25,6 +26,7 @@ import com.ak.feastit.databinding.FragmentSearchBinding
 import com.ak.feastit.ui.search.filter.FilterBottomSheetFragment
 import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -137,8 +139,8 @@ internal class SearchFragment : BaseFragment() {
             return@setOnMenuItemClickListener true
         }
         suggestionAdapter = SearchSuggestionAdapter(
-            onRecipeClick = { recipeId ->
-                gotoRecipeDetails(recipeId)
+            onRecipeClick = { sharedElements, recipeId ->
+                gotoRecipeDetails(sharedElements, recipeId)
             },
             onHistoryClick = { query ->
                 Timber.d("On history click: $query")
@@ -156,8 +158,8 @@ internal class SearchFragment : BaseFragment() {
         binding.searchSuggestions.layoutManager = suggestionLayoutManager
         binding.searchSuggestions.adapter = suggestionAdapter
         resultAdapter = SearchResultAdapter(
-            onRecipeClick = { recipeId ->
-                gotoRecipeDetails(recipeId)
+            onRecipeClick = { sharedElements, recipeId ->
+                gotoRecipeDetails(sharedElements, recipeId)
             }
         )
         val gridColumnCount =
@@ -174,9 +176,26 @@ internal class SearchFragment : BaseFragment() {
 //        binding.searchView.show()
     }
 
-    private fun gotoRecipeDetails(recipeId: Long) {
+    private fun gotoRecipeDetails(sharedElements: Map<View, String>, recipeId: Long) {
         Timber.d("On recipe click: $recipeId")
-        findNavController().navigate(SearchFragmentDirections.searchToRecipeDetail(recipeId))
+        exitTransition = MaterialElevationScale(false).apply {
+            duration =
+                resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
+                    .toLong()
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration =
+                resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
+                    .toLong()
+        }
+        val extras = FragmentNavigatorExtras(
+            *sharedElements.toList().toTypedArray()
+        )
+        findNavController().navigate(
+            directions = SearchFragmentDirections.searchToRecipeDetail(
+                recipeId
+            ), navigatorExtras = extras
+        )
     }
 
     /**

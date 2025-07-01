@@ -2,6 +2,7 @@ package com.ak.feastit.ui.explore.experimental
 
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -133,7 +134,13 @@ internal class ExploreSectionAdapter(
 
 internal sealed interface ExploreItemAction {
     data class ViewAll(val category: ExploreCategory): ExploreItemAction
-    data class RecipeClick(val recipeId: Long): ExploreItemAction
+    data class RecipeClick(val sharedElements: Map<View, String>, val recipeId: Long) :
+        ExploreItemAction {
+        fun sharedElementsVarArgs(): Array<Pair<View, String>> {
+            return sharedElements.toList().toTypedArray()
+        }
+    }
+
     data class ChipClick(val chip: ExploreChip): ExploreItemAction
     data object ListUpdate: ExploreItemAction
 }

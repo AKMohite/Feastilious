@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import com.ak.feastit.ui.yumdetail.tabs.RecipeDetailTab
 import com.ak.feastit.utils.onClick
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.transition.MaterialContainerTransform
 import com.mak.feastit.domain.model.RecipeDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -64,6 +66,20 @@ internal class YumDetailFragment: BaseFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val transition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.nav_host_fragment
+            duration =
+                resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
+                    .toLong()
+//            scrimColor = Color.TRANSPARENT
+//            setAllContainerColors(requireContext().themeColor(R.attr.colorSurface))
+        }
+        sharedElementEnterTransition = transition
+        sharedElementReturnTransition = transition
+    }
+
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
         observers()
@@ -85,6 +101,11 @@ internal class YumDetailFragment: BaseFragment() {
     }
 
     private fun setupView() {
+        binding.recipeImg.transitionName =
+            getString(R.string.recipe_to_detail_image, arguments?.getLong(SAVED_RECIPE_ID))
+//        binding.recipeName.transitionName = getString(R.string.recipe_to_detail_name, arguments?.getLong(SAVED_RECIPE_ID))
+        postponeEnterTransition()
+        view?.doOnPreDraw { startPostponedEnterTransition() }
         binding.recipeDetailPager.isUserInputEnabled = false
         binding.recipeDetailPager.adapter = detailPagerAdapter
         binding.appBar.addOnOffsetChangedListener(offsetChangeListener)

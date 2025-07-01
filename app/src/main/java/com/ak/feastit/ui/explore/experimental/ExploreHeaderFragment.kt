@@ -24,12 +24,27 @@ internal class ExploreHeaderFragment: BaseFragment() {
         val image = args.getString(ARGS_IMG_URL)
         val recipeTitle = args.getString(ARGS_TITLE)
         val recipeId = args.getLong(ARGS_RECIPE_ID)
+        val imgTransition = getString(R.string.recipe_to_detail_image, recipeId)
+        val nameTransition = getString(R.string.recipe_to_detail_name, recipeId)
+        binding.recipeImg.transitionName = imgTransition
+        binding.recipeName.transitionName = nameTransition
+        val sharedElements: Map<View, String> = mapOf(
+            binding.recipeImg to imgTransition,
+            binding.recipeName to nameTransition
+        )
         binding.recipeImg.load(image) {
             placeholder(R.drawable.ic_recipe_img_placeholder)
             error(R.drawable.ic_recipe_img_placeholder)
         }
         binding.recipeName.text = recipeTitle
-        binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipeId)) }
+        binding.root.onClick {
+            sectionEvents?.invoke(
+                ExploreItemAction.RecipeClick(
+                    sharedElements,
+                    recipeId
+                )
+            )
+        }
     }
     
     companion object {

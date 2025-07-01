@@ -35,7 +35,7 @@ internal class FavoriteRecipesFragment: BaseFragment() {
 
     private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
         SearchSuggestionAdapter(
-            onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
+            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
         )
     }
 
@@ -57,7 +57,7 @@ internal class FavoriteRecipesFragment: BaseFragment() {
         binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.suggestionItems.adapter = suggestionsAdapter
         adapter = FavoritesAdapter(
-            onRecipeClick = { recipeId -> navigateToDetails(recipeId)}
+            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
         )
         binding.favoriteRecipes.adapter = adapter
     }

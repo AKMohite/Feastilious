@@ -1,5 +1,6 @@
 package com.ak.feastit.ui.explore.components
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ak.feastit.R
@@ -14,12 +15,27 @@ internal class ExploreRecipeViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(recipe: Recipe) {
-        binding.root.onClick { sectionEvents?.invoke(ExploreItemAction.RecipeClick(recipe.id)) }
+        val image = binding.root.context.getString(R.string.recipe_to_detail_image, recipe.id)
+        val name = binding.root.context.getString(R.string.recipe_to_detail_name, recipe.id)
+        val sharedElements: Map<View, String> = mapOf(
+            binding.recipeImg to image,
+            binding.recipeName to name
+        )
+        binding.root.onClick {
+            sectionEvents?.invoke(
+                ExploreItemAction.RecipeClick(
+                    sharedElements,
+                    recipe.id
+                )
+            )
+        }
         binding.apply {
             recipeImg.load(recipe.image) {
                 placeholder(R.drawable.ic_recipe_img_placeholder)
                 error(R.drawable.ic_recipe_img_placeholder)
             }
+            recipeImg.transitionName = image
+            recipeName.transitionName = name
             recipeName.text = recipe.name
         }
     }

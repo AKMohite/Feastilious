@@ -1,6 +1,7 @@
 package com.ak.feastit.ui.favorites.components
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ private const val SUGGESTION_TYPE_TEXT = 1
 private const val SUGGESTION_TYPE_ITEM = 2
 
 internal class SearchSuggestionAdapter(
-    private val onRecipeClick: (Long) -> Unit
+    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val asyncDiff = AsyncListDiffer(this, SuggestionDiff())
