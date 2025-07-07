@@ -46,7 +46,10 @@ internal class SearchFragment : BaseFragment() {
     private var suggestionAdapter: SearchSuggestionAdapter? = null
     private var resultAdapter: SearchResultAdapter? = null
 
-    private var pickGalleryImage: ActivityResultLauncher<PickVisualMediaRequest>? = null
+    private var galleryImageLauncher: ActivityResultLauncher<PickVisualMediaRequest>? = null
+    private val captureImageLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        }
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
     private val onBackPressDispatcher = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -55,7 +58,7 @@ internal class SearchFragment : BaseFragment() {
 
         fun normalBack() {
             this.isEnabled = false
-            requireActivity().onBackPressed()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
     }
@@ -104,7 +107,7 @@ internal class SearchFragment : BaseFragment() {
 
     private fun setupView() {
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressDispatcher)
-        pickGalleryImage =
+        galleryImageLauncher =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     Timber.d("Gallery image uri: $uri")
@@ -274,7 +277,7 @@ internal class SearchFragment : BaseFragment() {
                     }
                     ImageSearch.GALLERY -> {
 //                        check permissions and open gallery
-                        pickGalleryImage?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        galleryImageLauncher?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
                 }
             }
@@ -312,7 +315,7 @@ internal class SearchFragment : BaseFragment() {
 
     override fun onDestroyView() {
         onBackPressDispatcher.remove()
-        pickGalleryImage = null
+        galleryImageLauncher = null
         cameraPermissionLauncher = null
         suggestionAdapter = null
         resultAdapter = null

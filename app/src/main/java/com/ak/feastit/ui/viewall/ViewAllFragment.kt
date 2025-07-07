@@ -15,7 +15,6 @@ import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentViewAllBinding
-import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -69,7 +68,7 @@ internal class ViewAllFragment: BaseFragment() {
     }
 
     private fun gotoDetails(sharedElements: Map<View, String>, recipeId: Long) {
-        exitTransition = MaterialElevationScale(false).apply {
+        /*exitTransition = MaterialElevationScale(false).apply {
             duration =
                 resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
                     .toLong()
@@ -78,7 +77,7 @@ internal class ViewAllFragment: BaseFragment() {
             duration =
                 resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
                     .toLong()
-        }
+        }*/
         val extras = FragmentNavigatorExtras(
             *sharedElements.toList().toTypedArray()
         )

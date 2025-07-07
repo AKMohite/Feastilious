@@ -109,4 +109,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="filter_sort_healthy">Healthy</string>
     <string name="filter_sort_quick">Quick</string>
     <string name="filter_sort_pocket_friendly">Pocket friendly</string>
+    <string name="view_all">View all</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="apply">Apply</string>
 </resources>

@@ -13,13 +13,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import androidx.viewbinding.ViewBinding
-import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
 import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
 import com.ak.feastit.utils.onClick
-import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -82,7 +80,7 @@ class ExploreFragment : BaseFragment() {
             }
             is ExploreItemAction.RecipeClick -> {
                 Timber.d("Recipe click: ${action.recipeId}")
-                exitTransition = MaterialElevationScale(false).apply {
+                /*exitTransition = MaterialElevationScale(false).apply {
                     duration =
                         resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
                             .toLong()
@@ -91,7 +89,7 @@ class ExploreFragment : BaseFragment() {
                     duration =
                         resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
                             .toLong()
-                }
+                }*/
                 val extras = FragmentNavigatorExtras(
                     *action.sharedElementsVarArgs()
                 )
