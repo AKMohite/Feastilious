@@ -19,6 +19,15 @@ abstract class BaseFragment: Fragment() {
     @StyleRes
     protected open val themeId: Int = R.style.Theme_FeastIt
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        https://issuetracker.google.com/issues/362452854#comment2
+//        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+//        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+//        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+//        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

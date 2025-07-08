@@ -33,17 +33,17 @@
         <action
             android:id="@+id/explore_to_view_all"
             app:destination="@id/viewAllFragment"
-            app:enterAnim="@anim/slide_in_from_left"
-            app:exitAnim="@anim/slide_out_to_right"
-            app:popEnterAnim="@anim/slide_in_from_right"
-            app:popExitAnim="@anim/slide_out_to_left" />
+            app:enterAnim="@animator/slide_in_end"
+            app:exitAnim="@animator/slide_out_start"
+            app:popEnterAnim="@animator/slide_in_start"
+            app:popExitAnim="@animator/slide_out_end" />
         <action
             android:id="@+id/explore_to_search"
             app:destination="@id/search_fragment"
-            app:enterAnim="@anim/slide_in_from_left"
-            app:exitAnim="@anim/slide_out_to_right"
-            app:popEnterAnim="@anim/slide_in_from_right"
-            app:popExitAnim="@anim/slide_out_to_left" />
+            app:enterAnim="@animator/slide_in_end"
+            app:exitAnim="@animator/slide_out_start"
+            app:popEnterAnim="@animator/slide_in_start"
+            app:popExitAnim="@animator/slide_out_end" />
     </fragment>
 
     <fragment
