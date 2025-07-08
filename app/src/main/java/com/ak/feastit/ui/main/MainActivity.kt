@@ -38,12 +38,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(enabled = true) {
-//            override fun handleOnBackPressed() {
-//                onBackPressed()
-//            }
-//        })
-//        setupView()
+        setupView()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController= navHostFragment.navController
@@ -61,6 +56,19 @@ class MainActivity : AppCompatActivity() {
             is NavigationRailView -> navView.setupWithNavController(navController)
             is NavigationView -> navView.setupWithNavController(navController)
         }
+
+        /*onBackPressedDispatcher.addCallback(
+            owner = this,
+            onBackPressedCallback = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+//                if (getCurrentFragment().onBackPressed() == false) {
+                    if (!navController.popBackStack()) {
+                        finish()
+                    }
+//                }
+                }
+            }
+        )*/
 
     }
 
@@ -87,9 +95,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        binding.root.doOnApplyWindowInsets { _, insets, _, margins ->
+        binding.mainBottomNavigation.doOnApplyWindowInsets { insetView, insets, _, margins ->
             val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            binding.root.updateLayoutParams<MarginLayoutParams> {
+            insetView.updateLayoutParams<MarginLayoutParams> {
                 bottomMargin = margins.bottom + inset
             }
         }

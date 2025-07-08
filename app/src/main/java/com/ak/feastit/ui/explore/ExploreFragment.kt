@@ -3,7 +3,10 @@ package com.ak.feastit.ui.explore
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +20,7 @@ import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreBinding
 import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
+import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.onClick
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -39,6 +43,12 @@ class ExploreFragment : BaseFragment() {
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
 //        binding.searchView.setReadOnly(focusable = false, inputType = InputType.TYPE_NULL)
+        binding.exploreItems.doOnApplyWindowInsets { insetView, insets, _, margins ->
+            val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            insetView.updateLayoutParams<MarginLayoutParams> {
+                bottomMargin = margins.bottom + inset
+            }
+        }
         binding.searchCard.onClick {
             navigateToSearch()
         }
