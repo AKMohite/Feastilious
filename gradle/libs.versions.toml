@@ -14,6 +14,7 @@ constraint_layout = "2.2.1"
 core_ktx = "1.16.0"
 coroutines = "1.10.2"
 data_store = "1.1.7"
+fragmentKtx = "1.8.8"
 hilt = "2.56.2"
 junit = "4.13.2"
 kotlin = "2.1.0"
@@ -22,7 +23,7 @@ leakcanaryAndroid = "2.14"
 lifecycle = "2.9.1"
 material = "1.14.0-alpha02"
 moshi = "1.15.2"
-navigation = "2.9.0"
+navigation = "2.9.1"
 okhttp_logging_interceptor = "4.12.0"
 pagingRuntimeKtx = "3.3.6"
 recyclerview = "1.4.0"
@@ -35,6 +36,7 @@ hiltWork = "1.2.0"
 
 [libraries]
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android_gradle_plugin" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 kotlin-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }

@@ -67,7 +67,7 @@ internal class SearchViewModel @Inject constructor(
 
     fun onImageClick(type: ImageSearch) {
         uiScope.launch {
-            _action.send(SearchAction.OnImageClick(type))
+            _action.send(SearchAction.OnImageClick(type, "need to have file name here maybe"))
         }
     }
 
@@ -136,6 +136,9 @@ internal class SearchViewModel @Inject constructor(
         uiScope.launch {
             Timber.d("$option is $isChecked")
         }
+    }
+
+    fun imageCaptured() {
     }
 
 }

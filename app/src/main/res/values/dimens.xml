@@ -19,5 +19,8 @@
     <dimen name="explore_recipe_width">200dp</dimen>
     <dimen name="explore_recipe_height">250dp</dimen>
     <dimen name="blur_height">120dp</dimen>
+    <dimen name="bottom_navigation_height">68dp</dimen>
+    <dimen name="screen_anim_slide_distance_end">60dp</dimen>
+    <dimen name="screen_anim_slide_distance_start">-60dp</dimen>
     <!-- endregion -->
 </resources>

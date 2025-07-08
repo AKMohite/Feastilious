@@ -34,7 +34,7 @@ internal data class SearchState(
 }
 
 internal sealed interface SearchAction {
-    data class OnImageClick(val type: ImageSearch) : SearchAction
+    data class OnImageClick(val type: ImageSearch, val fileName: String) : SearchAction
     data object OnBackPress : SearchAction
 }
 

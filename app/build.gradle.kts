@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.hilt.work)
     debugImplementation(libs.leakcanary.android)
     implementation(libs.app.compat)
+    implementation(libs.fragment.ktx)
     implementation(libs.coil.runtime)
     implementation(libs.constraint.layout)
     implementation(libs.core.ktx)

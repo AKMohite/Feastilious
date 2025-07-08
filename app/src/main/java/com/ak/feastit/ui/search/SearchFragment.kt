@@ -2,7 +2,11 @@ package com.ak.feastit.ui.search
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -28,9 +33,12 @@ import com.ak.feastit.utils.onClick
 import com.ak.feastit.utils.show
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
 
 @AndroidEntryPoint
 internal class SearchFragment : BaseFragment() {
@@ -47,9 +55,7 @@ internal class SearchFragment : BaseFragment() {
     private var resultAdapter: SearchResultAdapter? = null
 
     private var galleryImageLauncher: ActivityResultLauncher<PickVisualMediaRequest>? = null
-    private val captureImageLauncher =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) {
-        }
+    private var captureImageLauncher: ActivityResultLauncher<Uri>? = null
     private var cameraPermissionLauncher: ActivityResultLauncher<String>? = null
     private val onBackPressDispatcher = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -62,6 +68,7 @@ internal class SearchFragment : BaseFragment() {
         }
 
     }
+    private var cameraImagePath: String? = null
 
     override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -106,24 +113,7 @@ internal class SearchFragment : BaseFragment() {
     }
 
     private fun setupView() {
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressDispatcher)
-        galleryImageLauncher =
-            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    Timber.d("Gallery image uri: $uri")
-                } else {
-                    Timber.d("No media selected")
-                }
-            }
-        cameraPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Timber.d("Camera permission granted")
-                    launchCamera()
-                } else {
-                    Timber.d("Camera permission denied")
-                }
-            }
+        registerContracts()
         binding.searchView.inflateMenu(R.menu.recipe_search)
         binding.searchView.editText.setOnEditorActionListener { view, _, keyEvent ->
             val query = view.text.toString()
@@ -177,6 +167,42 @@ internal class SearchFragment : BaseFragment() {
         }
         binding.searchResults.adapter = resultAdapter
 //        binding.searchView.show()
+    }
+
+    private fun registerContracts() {
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressDispatcher)
+        galleryImageLauncher =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    Timber.d("Gallery image uri: $uri")
+                } else {
+                    Timber.d("No media selected")
+                }
+            }
+        cameraPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    Timber.d("Camera permission granted")
+                    launchCamera()
+                } else {
+                    Timber.d("Camera permission denied")
+                }
+            }
+        captureImageLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { isImageCaptured ->
+                Timber.d("Image captured: $isImageCaptured")
+                if (isImageCaptured) {
+                    Timber.d("Image captured and stored at: $cameraImagePath")
+                    viewModel.imageCaptured()
+                }
+            }
+    }
+
+    private fun unRegisterContracts() {
+        onBackPressDispatcher.remove()
+        galleryImageLauncher = null
+        cameraPermissionLauncher = null
+        captureImageLauncher = null
     }
 
     private fun gotoRecipeDetails(sharedElements: Map<View, String>, recipeId: Long) {
@@ -291,8 +317,49 @@ internal class SearchFragment : BaseFragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Timber.d("On save instance state")
+        Timber.d("Camera image path: $cameraImagePath")
+        outState.putString("cameraImagePath", cameraImagePath)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Timber.d("On view state restored")
+        cameraImagePath = savedInstanceState?.getString("cameraImagePath")
+        Timber.d("Camera image path: $cameraImagePath")
+    }
+
     private fun launchCamera() {
-        Timber.d("Launch camera to capture image")
+        try {
+//            TODO instead of doing all this in fragment move this block to viewmodel
+            viewLifecycleOwner.lifecycleScope.launch {
+                Timber.d("Launch camera to capture image")
+                val file = createImageFile()
+                cameraImagePath = file.absolutePath
+                val photoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.provider",
+                    file
+                )
+                captureImageLauncher?.launch(photoUri)
+            }
+        } catch (e: Throwable) {
+            Timber.e(e, "Error when launching camera")
+        }
+    }
+
+    // Create a file to store the captured image
+//    TODO move file related functions to support class maybe
+    private suspend fun createImageFile(): File = withContext(Dispatchers.IO) {
+        val imageFileName = "JPEG_" + System.currentTimeMillis() + "_"
+        val storagePath = (if (VERSION.SDK_INT >= VERSION_CODES.Q) requireContext().filesDir.path
+        else Environment.getExternalStorageDirectory().path) + "/images"
+        val storageDir = File(storagePath)
+        if (!storageDir.exists()) storageDir.mkdirs()
+        val imageFile = File.createTempFile(imageFileName, ".jpg", storageDir)
+        imageFile
     }
 
     private fun onMenuItemClick(menuItem: MenuItem?) {
@@ -314,9 +381,7 @@ internal class SearchFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        onBackPressDispatcher.remove()
-        galleryImageLauncher = null
-        cameraPermissionLauncher = null
+        unRegisterContracts()
         suggestionAdapter = null
         resultAdapter = null
         binding.openSearchBar.menu.clear()
