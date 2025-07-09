@@ -111,8 +111,6 @@ dependencies {
     implementation(libs.paging.runtime)
 
     ksp(libs.hilt.android.compiler)
-
-    testImplementation(libs.junit)
 }
 
 fun <T : Any> propOrDef(propertyName: String, defaultValue: T): T {

@@ -16,7 +16,6 @@ coroutines = "1.10.2"
 data_store = "1.1.7"
 fragmentKtx = "1.8.8"
 hilt = "2.56.2"
-junit = "4.13.2"
 kotlin = "2.1.0"
 kotlinxDatetime = "0.6.2"
 leakcanaryAndroid = "2.14"
@@ -53,7 +52,6 @@ coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-
 data-store = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "data_store" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }

@@ -44,8 +44,25 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.paging.runtime)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation(platform("org.junit:junit-bom:5.13.3"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    // This is the actual test engine that discovers and runs tests written with JUnit Jupiter.
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    // This component is responsible for launching the test execution process. It discovers test
+    // engines (like junit-jupiter-engine) on the classpath and delegates test discovery and
+    // execution to them
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("io.mockk:mockk:1.14.4")
+    testImplementation("androidx.paging:paging-common-ktx:3.3.6")
+}
+
+tasks.withType(Test::class.java) {
+    useJUnitPlatform() // Essential for JUnit 5
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
