@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_favorite_menu"
+        android:shortcutId="shortcutFavorite"
+        android:shortcutLongLabel="@string/shortcut_favorite_long"
+        android:shortcutShortLabel="@string/shortcut_favorite_short">
+        <intent
+            android:action="com.ak.feastit.ACTION_SHOW_FAVORITES"
+            android:targetClass="com.ak.feastit.ui.main.MainActivity"
+            android:targetPackage="com.ak.feastit.debug">
+            <extra
+                android:name="extraShortcutFavorite"
+                android:value="extraShortcutFavorite" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_calendar"
+        android:shortcutId="shortcutMealPlan"
+        android:shortcutLongLabel="@string/shortcut_meal_plan_long"
+        android:shortcutShortLabel="@string/shortcut_meal_plan_short">
+        <intent
+            android:action="com.ak.feastit.ACTION_SHOW_MEAL_PLAN"
+            android:targetClass="com.ak.feastit.ui.main.MainActivity"
+            android:targetPackage="com.ak.feastit.debug">
+            <extra
+                android:name="extraShortcutMealPlan"
+                android:value="extraShortcutMealPlan" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_cart_menu"
+        android:shortcutId="shortcutShopping"
+        android:shortcutLongLabel="@string/shortcut_shopping_long"
+        android:shortcutShortLabel="@string/shortcut_shopping_short">
+        <intent
+            android:action="com.ak.feastit.ACTION_SHOW_SHOPPING"
+            android:targetClass="com.ak.feastit.ui.main.MainActivity"
+            android:targetPackage="com.ak.feastit.debug">
+            <extra
+                android:name="extraShortcutShopping"
+                android:value="extraShortcutShopping" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/img_search"
+        android:shortcutId="shortcutSearch"
+        android:shortcutLongLabel="@string/shortcut_search_recipe_long"
+        android:shortcutShortLabel="@string/shortcut_search_recipe_short">
+        <intent
+            android:action="com.ak.feastit.ACTION_SHOW_SEARCH"
+            android:targetClass="com.ak.feastit.ui.main.MainActivity"
+            android:targetPackage="com.ak.feastit.debug">
+            <extra
+                android:name="extraShortcutSearch"
+                android:value="extraShortcutSearch" />
+        </intent>
+    </shortcut>
+
+</shortcuts>

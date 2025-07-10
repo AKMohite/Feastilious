@@ -1,0 +1,5 @@
+<resources>
+    <string name="recipe_to_detail_image">transition_recipe_to_detail_image_%d</string>
+    <string name="recipe_to_detail_name">transition_recipe_to_detail_name_%d</string>
+
+</resources>

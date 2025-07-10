@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.FeastIt.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/zodiak_black</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/zodiak_black</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/zodiak_black</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/zodiak_extra_bold</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">32.sp</item>
+        <item name="lineHeight">40sp</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/zodiak_extra_bold</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/zodiak_extra_bold</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/quicksand_semi_bold</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/quicksand_semi_bold</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/quicksand_semi_bold</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/quicksand_medium</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/quicksand_medium</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/quicksand_medium</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/quicksand_regular</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/quicksand_regular</item>
+    </style>
+
+    <style name="TextAppearance.FeastIt.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/quicksand_regular</item>
+    </style>
+
+</resources>

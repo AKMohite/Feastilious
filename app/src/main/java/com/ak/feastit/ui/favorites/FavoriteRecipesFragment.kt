@@ -1,65 +1,84 @@
 package com.ak.feastit.ui.favorites
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
-import com.ak.feastit.databinding.FavoriteRecipesFragmentBinding
-import com.ak.feastit.domain.recipelist.Recipe
-import com.ak.feastit.ui.recipes.RecipeAdapter
+import com.ak.feastit.base.BaseFragment
+import com.ak.feastit.databinding.FragmentFavoritesBinding
+import com.ak.feastit.ui.favorites.components.FavoritesAdapter
+import com.ak.feastit.ui.favorites.components.SearchSuggestionAdapter
+import com.ak.feastit.utils.show
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FavoriteRecipesFragment : Fragment(R.layout.favorite_recipes_fragment) {
+internal class FavoriteRecipesFragment: BaseFragment() {
 
-    private val viewModel: FavoriteRecipesViewModel by viewModels()
-    private var recipeAdapter: RecipeAdapter = RecipeAdapter { recipe ->
-        navigateToDetails(recipe)
+    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
+        FragmentFavoritesBinding.inflate(inflater)
+
+    private val binding: FragmentFavoritesBinding
+        get() = baseBinding as FragmentFavoritesBinding
+
+    private val viewmodel: FavoriteViewModel by viewModels()
+
+    private var adapter: FavoritesAdapter? = null
+
+    private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
+        SearchSuggestionAdapter(
+            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
+        )
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setFlowObservers(view)
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+        setupView()
+        observers()
     }
 
-    private fun setFlowObservers(view: View) {
-        val binding =  FavoriteRecipesFragmentBinding.bind(view)
+    override fun onDestroyView() {
+        adapter = null
+        super.onDestroyView()
+    }
 
-        binding.apply {
-            favRecipeRv.apply {
-                adapter = recipeAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
-            }
+    private fun setupView() {
+        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+        binding.emptyState.emptyHeader.text = ""
+        binding.emptyState.emptyBody.text = ""
+        binding.favoriteRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.suggestionItems.adapter = suggestionsAdapter
+        adapter = FavoritesAdapter(
+            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
+        )
+        binding.favoriteRecipes.adapter = adapter
+    }
 
-            favRecipeSearch.feastSearchEt.setOnEditorActionListener { v, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!v.text.trim().isBlank())
-                        viewModel.favSearchRecipe(v.text.trim().toString())
-                    return@setOnEditorActionListener true
+    private fun observers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewmodel.state.collectLatest { state ->
+                        binding.emptyState.root.show(state.recipes.isEmpty())
+                        binding.favoriteRecipes.show(state.recipes.isNotEmpty())
+                        adapter?.reload(state.recipes)
+                        suggestionsAdapter.reload(state.suggestions)
+                    }
                 }
-                return@setOnEditorActionListener false
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.favRecipes.collect { recipes ->
-                recipeAdapter.submitList(recipes) // TODO check callbacks
             }
         }
     }
 
-    private fun navigateToDetails(recipe: Recipe) {
-        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(
-                recipeId = recipe.id
-        ))
+    private fun navigateToDetails(recipeId: Long) {
+        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(recipeId))
     }
 
 }

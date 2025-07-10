@@ -6,12 +6,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.onboarding.OnBoardingFragment">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/onboarding_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/navigate_next"
+        android:layout_marginBottom="@dimen/space_tiny"
+        />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/navigate_home"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/space_small"
+        android:layout_marginBottom="@dimen/space_small"
+        android:text="@string/skip"
+        style="?attr/borderlessButtonStyle"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/onboarding_progress_indicators"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/space_normal"
+        app:layout_constraintStart_toEndOf="@id/navigate_home"
+        app:layout_constraintEnd_toStartOf="@id/navigate_next"
+        app:layout_constraintBottom_toBottomOf="@id/navigate_next"
+        app:layout_constraintTop_toTopOf="@id/navigate_next"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/navigate_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_small"
+        android:layout_marginBottom="@dimen/space_small"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"/>
