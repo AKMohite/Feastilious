@@ -8,3 +8,10 @@
 .cxx
 local.properties
 .idea
+.kotlin/
+
+app-release.jks
+
+google-services.json
+
+core/remote/src/main/assets/mock-recipes-server/

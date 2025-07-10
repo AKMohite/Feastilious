@@ -1,0 +1,22 @@
+package com.mak.feastit.database.converters
+
+import androidx.room.TypeConverter
+import kotlinx.datetime.Instant
+
+internal object InstantConverter {
+
+//    UTC date time format
+    @TypeConverter
+    @JvmStatic
+    fun instantToString(value: Instant?): String? {
+        if (value == null) return null
+        return value.toString()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun stringToInstant(value: String?): Instant? = value?.let {
+        Instant.parse(it)
+    }
+
+}

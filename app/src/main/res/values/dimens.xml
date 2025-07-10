@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="space_none">0dp</dimen>
+    <dimen name="space_nano">1dp</dimen>
+    <dimen name="space_micro">2dp</dimen>
+    <dimen name="space_tiny">4dp</dimen>
+    <dimen name="space_small">8dp</dimen>
+    <dimen name="space_medium">12dp</dimen>
+    <dimen name="space_normal">16dp</dimen>
+    <dimen name="space_big">24dp</dimen>
+    <dimen name="space_huge">48dp</dimen>
+    <dimen name="space_infinity">90dp</dimen>
+
+    <!-- This is to have floatable bottom navigation -->
+    <dimen name="bottom_screen_padding">92dp</dimen>
+
+    <!-- region window size -->
+    <dimen name="explore_header_img">270dp</dimen>
+    <dimen name="explore_recipe_width">200dp</dimen>
+    <dimen name="explore_recipe_height">250dp</dimen>
+    <dimen name="blur_height">120dp</dimen>
+    <dimen name="bottom_navigation_height">68dp</dimen>
+    <dimen name="screen_anim_slide_distance_end">60dp</dimen>
+    <dimen name="screen_anim_slide_distance_start">-60dp</dimen>
+    <!-- endregion -->
+</resources>

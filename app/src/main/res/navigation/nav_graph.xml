@@ -17,19 +17,80 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_recipeDashboardFragment"
-            app:destination="@id/recipeDashboardFragment"
+            app:destination="@id/exploreFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/recipeDashboardFragment"
-        android:name="com.ak.feastit.ui.recipes.RecipeDashboardFragment"
-        android:label="fragment_recipe_dashboard"
-        tools:layout="@layout/fragment_recipe_dashboard" >
+
+        <!--<action
+            android:id="@+id/splash_to_favorites"
+            app:destination="@id/favoriteRecipesFragment"/>
+
         <action
-            android:id="@+id/recipe_to_recipeDetail"
-            app:destination="@id/recipeDetailFragment" />
+            android:id="@+id/splash_to_shopping"
+            app:destination="@id/shoppingCartFragment"/>
+
+        <action
+            android:id="@+id/splash_to_meal_planner"
+            app:destination="@id/mealPlannerFragment"/>
+
+        <action
+            android:id="@+id/splash_to_search"
+            app:destination="@id/search_fragment" />-->
     </fragment>
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.ak.feastit.ui.explore.ExploreFragment"
+        android:label="explore_fragment"
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/explore_to_recipeDetail"
+            app:destination="@id/recipeDetailFragment" />
+        <action
+            android:id="@+id/explore_to_view_all"
+            app:destination="@id/viewAllFragment"
+            app:enterAnim="@animator/scale_enter_anim"
+            app:exitAnim="@animator/scale_exit_anim"
+            app:popEnterAnim="@animator/scale_pop_enter_anim"
+            app:popExitAnim="@animator/scale_pop_exit_anim" />
+        <action
+            android:id="@+id/explore_to_search"
+            app:destination="@id/search_fragment"
+            app:enterAnim="@animator/scale_enter_anim"
+            app:exitAnim="@animator/scale_exit_anim"
+            app:popEnterAnim="@animator/scale_pop_enter_anim"
+            app:popExitAnim="@animator/scale_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_fragment"
+        android:name="com.ak.feastit.ui.search.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/search_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewAllFragment"
+        android:name="com.ak.feastit.ui.viewall.ViewAllFragment"
+        android:label="view_all_fragment"
+        tools:layout="@layout/fragment_view_all">
+        <argument
+            android:name="category"
+            app:argType="string"
+            app:nullable="false"/>
+        <argument
+            android:name="category_sub_type"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <action
+            android:id="@+id/view_all_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
+
     <fragment
         android:id="@+id/onBoardingFragment"
         android:name="com.ak.feastit.ui.onboarding.OnBoardingFragment"
@@ -37,32 +98,99 @@
         tools:layout="@layout/fragment_on_boarding" >
         <action
             android:id="@+id/action_onBoardingFragment_to_recipeDashboardFragment"
-            app:destination="@id/recipeDashboardFragment"
+            app:destination="@id/exploreFragment"
             app:popUpTo="@id/onBoardingFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/recipeDetailFragment"
-        android:name="com.ak.feastit.ui.recipedetail.RecipeDetailFragment"
+        android:name="com.ak.feastit.ui.yumdetail.YumDetailFragment"
         android:label="recipe_detail_fragment"
-        tools:layout="@layout/recipe_detail_fragment" >
+        tools:layout="@layout/fragment_yum_detail" >
         <argument
-            android:name="recipeId"
+            android:name="recipe_id"
+            app:argType="long" />
+        <action
+            android:id="@+id/detail_to_other_recipe"
+            app:destination="@id/recipeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionFragment"
+        android:name="com.ak.feastit.ui.collection.CollectionFragment"
+        android:label="collection_fragment"
+        tools:layout="@layout/fragment_collections">
+        <action
+            android:id="@+id/collection_to_favorites"
+            app:destination="@id/favoriteRecipesFragment"/>
+
+        <action
+            android:id="@+id/collection_to_shopping"
+            app:destination="@id/shoppingCartFragment"/>
+
+        <action
+            android:id="@+id/collection_to_meal_planner"
+            app:destination="@id/mealPlannerFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/mealPlannerFragment"
+        android:name="com.ak.feastit.ui.mealplanner.MealPlannerFragment"
+        android:label="meal_planner"
+        tools:layout="@layout/fragment_meal_planner">
+        <action
+            android:id="@+id/planner_to_edit_dialog"
+            app:destination="@id/mealPlanEditBottomSheetFragment"/>
+        <action
+            android:id="@+id/planner_to_schedule_meal"
+            app:destination="@id/scheduleMealFragment" />
+        <action
+            android:id="@+id/planner_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/scheduleMealFragment"
+        android:name="com.ak.feastit.ui.mealplanner.schedule.ScheduleMealFragment"
+        android:label="schedule_meal"
+        tools:layout="@layout/fragment_schedule_meal">
+        <argument
+            android:name="meal_id"
             app:argType="long" />
     </fragment>
+
+    <dialog
+        android:id="@+id/mealPlanEditBottomSheetFragment"
+        android:name="com.ak.feastit.ui.mealplanner.components.MealPlanEditBottomSheetFragment"
+        tools:layout="@layout/fragment_meal_plan_edit"
+        android:label="meal_plan_recipe_edit_dialog">
+        <argument
+            android:name="edit_recipe_id"
+            app:argType="long" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ak.feastit.ui.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/fragment_settings"/>
+
     <fragment
         android:id="@+id/favoriteRecipesFragment"
         android:name="com.ak.feastit.ui.favorites.FavoriteRecipesFragment"
         android:label="favorite_recipes_fragment"
-        tools:layout="@layout/favorite_recipes_fragment">
+        tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/favRecipes_to_recipeDetail"
             app:destination="@id/recipeDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/shoppingListFragment"
-        android:name="com.ak.feastit.ui.cart.ShoppingListFragment"
+        android:id="@+id/shoppingCartFragment"
+        android:name="com.ak.feastit.ui.cart.ShoppingCartFragment"
         android:label="shopping_list_fragment"
-        tools:layout="@layout/shopping_list_fragment"
-        />
+        tools:layout="@layout/fragment_shopping_cart"
+        >
+        <action
+            android:id="@+id/cart_to_recipe_detail"
+            app:destination="@id/recipeDetailFragment"/>
+    </fragment>
 </navigation>
