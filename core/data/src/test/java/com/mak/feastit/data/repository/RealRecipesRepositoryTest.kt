@@ -160,6 +160,8 @@ internal class RealRecipesRepositoryTest {
                 val requestType = SyncType.POPULAR_RECIPES
                 repository.refreshRecipes(requestType, 6, forceRefresh = false)
 
+//                val spySut = spyk(repository, recordPrivateCalls = true)
+//                coVerify { repository["saveRemoteRecipes"].wasNot(Called) }
                 coVerify(exactly = 0) { mockApi.searchRecipes(any()) }
                 coVerify(exactly = 0) { mockDb.lastSyncDao().getLastSync(any()) }
             }

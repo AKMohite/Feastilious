@@ -1,5 +1,6 @@
 package com.ak.feastit.ui.main
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -7,10 +8,12 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ak.feastit.R
@@ -23,9 +26,16 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+
+
+private const val EXTRA_SHORTCUT_FAVORITE = "extraShortcutFavorite"
+private const val EXTRA_SHORTCUT_MEAL_PLAN = "extraShortcutMealPlan"
+private const val EXTRA_SHORTCUT_SHOPPING = "extraShortcutShopping"
+private const val EXTRA_SHORTCUT_SEARCH = "extraShortcutSearch"
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+internal class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding: ActivityMainBinding
@@ -40,8 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupView()
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController= navHostFragment.navController
+        val navController = getNavigationController()
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.exploreFragment, R.id.collectionFragment, R.id.settingsFragment -> binding.mainBottomNavigation.show()
@@ -69,7 +78,77 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )*/
+        handleAppShortcut(intent)
+        loadDynamicShortcut()
 
+    }
+
+    private fun getNavigationController(): NavController {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        return navController
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Timber.d("Intent received: ${intent != null}")
+        handleAppShortcut(intent)
+        handleNotification(intent)
+    }
+
+    private fun handleNotification(intent: Intent?) {
+        if (intent == null) return
+    }
+
+    private fun handleAppShortcut(intent: Intent?) {
+        Timber.d("Intent received: ${intent != null}")
+        if (intent == null || intent.extras == null) return
+        Timber.d("On app's shortcut click: ${intent.extras} with action ${intent.action}")
+//        TODO app navigation is crashing as destinations are from different screens
+        when {
+            intent.extras?.containsKey(EXTRA_SHORTCUT_FAVORITE) == true -> {
+                selectBottomNavigationItem(R.id.collectionFragment)
+                getNavigationController().navigate(R.id.collection_to_favorites)
+            }
+
+            intent.extras?.containsKey(EXTRA_SHORTCUT_MEAL_PLAN) == true -> {
+                selectBottomNavigationItem(R.id.collectionFragment)
+                getNavigationController().navigate(R.id.collection_to_meal_planner)
+            }
+
+            intent.extras?.containsKey(EXTRA_SHORTCUT_SHOPPING) == true -> {
+                selectBottomNavigationItem(R.id.collectionFragment)
+                getNavigationController().navigate(R.id.collection_to_shopping)
+            }
+
+            intent.extras?.containsKey(EXTRA_SHORTCUT_SEARCH) == true -> {
+                selectBottomNavigationItem(R.id.exploreFragment)
+                getNavigationController().navigate(R.id.explore_to_search)
+            }
+        }
+    }
+
+    private fun selectBottomNavigationItem(@IdRes menuItem: Int) {
+        when (val navView = binding.mainBottomNavigation) {
+            is BottomNavigationView -> navView.selectedItemId = menuItem
+            is NavigationRailView -> navView.selectedItemId = menuItem
+            is NavigationView -> navView.setCheckedItem(menuItem)
+        }
+    }
+
+    private fun loadDynamicShortcut() {
+//        TODO load dynamic shortcut if today's meal is available
+        /*val intent= Intent().apply {
+            putExtra("mealId", "meal-recipe-id")
+        }
+        val shortcut = ShortcutInfoCompat.Builder(this, "today_plan_id")
+            .setShortLabel("Recipe name")
+            .setLongLabel("Recipe desc")
+            .setIcon(IconCompat.createWithResource(this, R.drawable.ic_repeat))
+            .setIntent(intent)
+            .build()
+        ShortcutManagerCompat.pushDynamicShortcut(this, shortcut)*/
     }
 
     private fun edgeToEdge() {
@@ -121,6 +200,5 @@ class MainActivity : AppCompatActivity() {
         _binding = null
         super.onDestroy()
     }
-
 
 }

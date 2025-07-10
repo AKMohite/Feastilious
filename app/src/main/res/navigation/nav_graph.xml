@@ -20,6 +20,22 @@
             app:destination="@id/exploreFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+
+        <!--<action
+            android:id="@+id/splash_to_favorites"
+            app:destination="@id/favoriteRecipesFragment"/>
+
+        <action
+            android:id="@+id/splash_to_shopping"
+            app:destination="@id/shoppingCartFragment"/>
+
+        <action
+            android:id="@+id/splash_to_meal_planner"
+            app:destination="@id/mealPlannerFragment"/>
+
+        <action
+            android:id="@+id/splash_to_search"
+            app:destination="@id/search_fragment" />-->
     </fragment>
 
     <fragment

@@ -112,4 +112,12 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="view_all">View all</string>
     <string name="clear_filter">Clear filter</string>
     <string name="apply">Apply</string>
+    <string name="shortcut_favorite_short">@string/favorite_recipes</string>
+    <string name="shortcut_favorite_long">Explore your favorite Recipes</string>
+    <string name="shortcut_meal_plan_short">@string/meal_planner</string>
+    <string name="shortcut_meal_plan_long">Plan your meals</string>
+    <string name="shortcut_shopping_short">@string/shopping_cart</string>
+    <string name="shortcut_shopping_long">Plan your meals</string>
+    <string name="shortcut_search_recipe_short">@string/search_recipes</string>
+    <string name="shortcut_search_recipe_long">Search recipes as per your taste</string>
 </resources>
