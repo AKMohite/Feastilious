@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.mealplanner
 
 import androidx.annotation.DrawableRes
@@ -16,6 +18,8 @@ import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
 import com.mak.feastit.domain.util.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,8 +38,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import timber.log.Timber
-import javax.inject.Inject
-import kotlin.time.Duration.Companion.days
 
 private const val SAVED_START_WEEK_DATE = "saved-meal-plan-week-start-date"
 private const val SAVED_END_WEEK_DATE = "saved-meal-plan-week-end-date"
@@ -44,273 +46,279 @@ private const val SAVED_EDIT_MEAL_PLAN_ID = "saved-meal-plan-id"
 
 @HiltViewModel
 internal class MealPlannerViewModel @Inject constructor(
-    private val mealPlanRepository: MealPlanRepository,
-    private val scheduler: WorkerScheduler,
-    private val notification: NotificationManager,
-    private val dispatcher: DispatcherProvider,
-    private val savedState: SavedStateHandle
-): BaseViewModel(dispatcher) {
+  private val mealPlanRepository: MealPlanRepository,
+  private val scheduler: WorkerScheduler,
+  private val notification: NotificationManager,
+  private val dispatcher: DispatcherProvider,
+  private val savedState: SavedStateHandle,
+) : BaseViewModel(dispatcher) {
 
-    /**
-     * This is selected date that would be helpful to get week range
-     */
-    private val selectedWeekDate = savedState.getStateFlow<String?>(SAVED_SELECTED_WEEK_DATE, null)
+  /**
+   * This is selected date that would be helpful to get week range
+   */
+  private val selectedWeekDate = savedState.getStateFlow<String?>(SAVED_SELECTED_WEEK_DATE, null)
 
-    private val _state = MutableStateFlow(MealPlannerState())
-    val state = _state.asStateFlow()
+  private val _state = MutableStateFlow(MealPlannerState())
+  val state = _state.asStateFlow()
 
-    private val _action: Channel<MealPlanAction> = Channel()
-    val action = _action.receiveAsFlow()
+  private val _action: Channel<MealPlanAction> = Channel()
+  val action = _action.receiveAsFlow()
 
-    private var editMealPlan: MealPlanRecipe? = null
+  private var editMealPlan: MealPlanRecipe? = null
 
-    init {
-        observeMealPlans()
-        observeWeeklyMeals()
-        initWeekDate()
+  init {
+    observeMealPlans()
+    observeWeeklyMeals()
+    initWeekDate()
+  }
+
+  /**
+   * Handle next weeks date range
+   */
+  fun onNextWeek() {
+    uiScope.launch {
+      val selectedWeekEndDate = getEndWeekDate()?.let { Instant.parse(it) } ?: return@launch
+      val instant = selectedWeekEndDate.plus(1.days)
+      saveSelectedDate(instant)
     }
+  }
 
-    /**
-     * Handle next weeks date range
-     */
-    fun onNextWeek() {
-        uiScope.launch {
-            val selectedWeekEndDate = getEndWeekDate()?.let { Instant.parse(it) } ?: return@launch
-            val instant = selectedWeekEndDate.plus(1.days)
-            saveSelectedDate(instant)
-        }
+  /**
+   * Handle previous weeks date range
+   */
+  fun onPreviousWeek() {
+    uiScope.launch {
+      val selectedWeekStartDate = getStartWeekDate()?.let { Instant.parse(it) } ?: return@launch
+      val instant = selectedWeekStartDate.minus(1.days)
+      saveSelectedDate(instant)
     }
+  }
 
-    /**
-     * Handle previous weeks date range
-     */
-    fun onPreviousWeek() {
-        uiScope.launch {
-            val selectedWeekStartDate = getStartWeekDate()?.let { Instant.parse(it) } ?: return@launch
-            val instant = selectedWeekStartDate.minus(1.days)
-            saveSelectedDate(instant)
-        }
+  /**
+   * Handle selected date weeks date range
+   */
+  fun onDateSelected(epoch: Long) {
+    uiScope.launch {
+      val selectedDate = Instant.fromEpochMilliseconds(epoch)
+      saveSelectedDate(selectedDate)
     }
+  }
 
-    /**
-     * Handle selected date weeks date range
-     */
-    fun onDateSelected(epoch: Long) {
-        uiScope.launch {
-            val selectedDate = Instant.fromEpochMilliseconds(epoch)
-            saveSelectedDate(selectedDate)
-        }
+  fun openBottomSheet(mealPlan: MealPlanRecipe) {
+    uiScope.launch {
+      savedState[SAVED_EDIT_MEAL_PLAN_ID] = mealPlan.id
+      getMealPlanRecipe()
+      _action.send(MealPlanAction.OpenMealPlanBottomSheet(mealPlan.id))
     }
+  }
 
-    fun openBottomSheet(mealPlan: MealPlanRecipe) {
-        uiScope.launch {
-            savedState[SAVED_EDIT_MEAL_PLAN_ID] = mealPlan.id
-            getMealPlanRecipe()
-            _action.send(MealPlanAction.OpenMealPlanBottomSheet(mealPlan.id))
-        }
-    }
+  private fun initWeekDate() {
+    val now = defaultNow()
+    saveSelectedDate(now)
+  }
 
-    private fun initWeekDate() {
-        val now = defaultNow()
-        saveSelectedDate(now)
-    }
+  private fun saveSelectedDate(instant: Instant) {
+    savedState[SAVED_SELECTED_WEEK_DATE] = instant.toString()
+  }
 
-    private fun saveSelectedDate(instant: Instant) {
-        savedState[SAVED_SELECTED_WEEK_DATE] = instant.toString()
-    }
+  private fun observeMealPlans() {
+    combine(
+      mealPlanRepository.observeTodayMeals(),
+      mealPlanRepository.observeUnscheduledMeals(),
+    ) { todayMeals, unscheduledMeals ->
+      _state.update { currentState ->
+        currentState.copy(todayRecipes = todayMeals, unscheduledRecipes = unscheduledMeals)
+      }
+    }.launchIn(uiScope)
+  }
 
-    private fun observeMealPlans() {
-        combine(
-            mealPlanRepository.observeTodayMeals(),
-            mealPlanRepository.observeUnscheduledMeals()
-        ) { todayMeals, unscheduledMeals ->
-            _state.update { currentState ->
-                currentState.copy(todayRecipes = todayMeals, unscheduledRecipes = unscheduledMeals)
-            }
-        }.launchIn(uiScope)
+  private fun getMealPlanRecipe() {
+    uiScope.launch {
+      val mealPlanId = savedState.get<Long>(SAVED_EDIT_MEAL_PLAN_ID)
+        ?: throw IllegalArgumentException("No id found")
+      editMealPlan = mealPlanRepository.getMealPlanRecipe(mealPlanId)
+        ?: throw IllegalStateException("No meal plan found for $mealPlanId")
+      val actions = getActions()
+      _state.update { currentState -> currentState.copy(menuItems = actions) }
     }
+  }
 
-    private fun getMealPlanRecipe() {
-        uiScope.launch {
-            val mealPlanId = savedState.get<Long>(SAVED_EDIT_MEAL_PLAN_ID) ?: throw IllegalArgumentException("No id found")
-            editMealPlan = mealPlanRepository.getMealPlanRecipe(mealPlanId) ?: throw IllegalStateException("No meal plan found for $mealPlanId")
-            val actions = getActions()
-            _state.update { currentState -> currentState.copy(menuItems = actions) }
-        }
+  private suspend fun getActions() = withContext(dispatcher.computation) {
+    val menuActions = defaultActions.toMutableList()
+    if (editMealPlan?.scheduledFor == null) {
+      menuActions.add(
+        MealPlanRecipeSheetItem(
+          icon = R.drawable.ic_calendar,
+          title = R.string.set_meal_schedule,
+          action = MealPlanSheetMenuAction.SET_SCHEDULE,
+        ),
+      )
+    } else {
+      if (editMealPlan?.scheduledFor!!.isToday()) {
+        menuActions.add(
+          MealPlanRecipeSheetItem(
+            icon = R.drawable.ic_repeat,
+            title = R.string.repeat_again,
+            action = MealPlanSheetMenuAction.REPEAT_AGAIN,
+          ),
+        )
+      }
+      menuActions.add(
+        MealPlanRecipeSheetItem(
+          icon = R.drawable.ic_calendar_edit,
+          title = R.string.edit_schedule,
+          action = MealPlanSheetMenuAction.EDIT_SCHEDULE,
+        ),
+      )
     }
-
-    private suspend fun getActions() = withContext(dispatcher.computation) {
-        val menuActions = defaultActions.toMutableList()
-        if (editMealPlan?.scheduledFor == null) {
-            menuActions.add(
-                MealPlanRecipeSheetItem(
-                    icon = R.drawable.ic_calendar,
-                    title = R.string.set_meal_schedule,
-                    action = MealPlanSheetMenuAction.SET_SCHEDULE
-                )
-            )
-        } else {
-            if (editMealPlan?.scheduledFor!!.isToday()) {
-                menuActions.add(
-                    MealPlanRecipeSheetItem(
-                        icon = R.drawable.ic_repeat,
-                        title = R.string.repeat_again,
-                        action = MealPlanSheetMenuAction.REPEAT_AGAIN
-                    )
-                )
-            }
-            menuActions.add(
-                MealPlanRecipeSheetItem(
-                    icon = R.drawable.ic_calendar_edit,
-                    title = R.string.edit_schedule,
-                    action = MealPlanSheetMenuAction.EDIT_SCHEDULE
-                )
-            )
-        }
-        menuActions.toList().sortedBy { it.action.ordinal }
-    }
+    menuActions.toList().sortedBy { it.action.ordinal }
+  }
 
 //    TODO why combine is not working with flatmapMerge? and flatmapMerge does not work with .shareIn()
-    private fun observeWeeklyMeals() {
-        // FIXME: quick multiple clicks is not properly showing sections
-        selectedWeekDate
-            .filterNotNull()
-            .map { selectedDate ->
-                val range = getWeekRange(selectedDate)
-                val start = range.first.defaultLocalDate()
-                val end = range.second.defaultLocalDate()
+  private fun observeWeeklyMeals() {
+    // FIXME: quick multiple clicks is not properly showing sections
+    selectedWeekDate
+      .filterNotNull()
+      .map { selectedDate ->
+        val range = getWeekRange(selectedDate)
+        val start = range.first.defaultLocalDate()
+        val end = range.second.defaultLocalDate()
 //                TODO handle 3 substring month properly
-                val weekRange = "${start.dayOfMonth} ${start.month.toString().take(3)} - ${end.dayOfMonth} ${end.month.toString().take(3)}"
-                _state.update { it.copy(weekRange = weekRange) }
-                range
-            }.flowOn(dispatcher.computation)
-            .debounce(500)
-            .flatMapMerge { (start, end) ->
-                mealPlanRepository.observeWeekMeals(start, end)
-            }.map { mealPlans ->
-                val sections = mutableListOf<WeekMealPlanSection>()
-                for (plan in mealPlans) {
-                    val noOfMeal = plan.value.count()
-                    val mealCount = if (noOfMeal == 0) "" else if (noOfMeal > 9) "9+" else "$noOfMeal"
-                    val dayMealPlan = DayMealPlan(day = plan.key, noOfMeal = mealCount)
-                    val header = WeekMealPlanSection.DayHeader(dayMealPlan)
-                    sections.add(header)
-                    plan.value.map { meal ->
-                        sections.add(WeekMealPlanSection.MealRecipe(meal = meal))
-                    }
-                }
-                sections.toList()
-            }.flowOn(dispatcher.computation).onEach { weeklyMeals ->
-                _state.update { currentState ->
-                    currentState.copy(weeklySections = weeklyMeals)
-                }
-            }.launchIn(uiScope)
-    }
-
-    /**
-     * @return selected date week, i.e, Starting Monday date and ending Sunday date
-     */
-    private fun getWeekRange(selectedDate: String): Pair<Instant, Instant> {
-        val instant = Instant.parse(selectedDate)
-        val nowDateTime = instant.defaultLocalDateTime()
-        val dayOfWeek = DayOfWeek.entries.indexOf(nowDateTime.dayOfWeek)
-        val startWeek = instant.minus(dayOfWeek.days)
-        val lastIndex = DayOfWeek.entries.count() - 1 - dayOfWeek
-        val lastWeek = instant.plus(lastIndex.days)
-        savedState[SAVED_START_WEEK_DATE] = startWeek.toString()
-        savedState[SAVED_END_WEEK_DATE] = lastWeek.toString()
-        return Pair(startWeek, lastWeek)
-    }
-
-    private fun getStartWeekDate(): String? = savedState[SAVED_START_WEEK_DATE]
-    private fun getEndWeekDate(): String? = savedState[SAVED_END_WEEK_DATE]
-    fun getSelectedDateEpoch(): Long? = savedState.get<String?>(SAVED_SELECTED_WEEK_DATE)?.let { selected ->
-        Instant.parse(selected).toEpochMilliseconds()
-    }
-
-    fun onMealPlanMenuClick(item: MealPlanRecipeSheetItem) {
-        val mealPlan = editMealPlan ?: throw IllegalStateException("No recipe found for meal plan edit")
-        when(item.action) {
-            MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
-            MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> removeFromMealPlan(mealPlan)
-            MealPlanSheetMenuAction.REPEAT_AGAIN -> {
-                uiScope.launch {
-                    val plan = mealPlanRepository.getUnscheduledMealForRecipe(mealPlan.recipeId)
-                    plan?.let { Timber.d("Repeat again with rescheduled meal: $it") }
-                    val mealId = plan?.id ?: mealPlanRepository.repeatMeal(mealPlan)
-                    _action.send(MealPlanAction.OnMealRepeat(mealId))
-                }
-            }
-            else -> {
-                uiScope.launch {
-                    _action.send(MealPlanAction.OnMenuClick(item.action, mealPlan))
-                }
-            }
+        val weekRange = "${start.dayOfMonth} ${
+          start.month.toString().take(3)
+        } - ${end.dayOfMonth} ${end.month.toString().take(3)}"
+        _state.update { it.copy(weekRange = weekRange) }
+        range
+      }.flowOn(dispatcher.computation)
+      .debounce(500)
+      .flatMapMerge { (start, end) ->
+        mealPlanRepository.observeWeekMeals(start, end)
+      }.map { mealPlans ->
+        val sections = mutableListOf<WeekMealPlanSection>()
+        for (plan in mealPlans) {
+          val noOfMeal = plan.value.count()
+          val mealCount = if (noOfMeal == 0) {
+            ""
+          } else if (noOfMeal > 9) {
+            "9+"
+          } else {
+            "$noOfMeal"
+          }
+          val dayMealPlan = DayMealPlan(day = plan.key, noOfMeal = mealCount)
+          val header = WeekMealPlanSection.DayHeader(dayMealPlan)
+          sections.add(header)
+          plan.value.map { meal ->
+            sections.add(WeekMealPlanSection.MealRecipe(meal = meal))
+          }
         }
-    }
+        sections.toList()
+      }.flowOn(dispatcher.computation).onEach { weeklyMeals ->
+        _state.update { currentState ->
+          currentState.copy(weeklySections = weeklyMeals)
+        }
+      }.launchIn(uiScope)
+  }
 
-    private fun removeFromMealPlan(mealPlan: MealPlanRecipe) {
+  /**
+   * @return selected date week, i.e, Starting Monday date and ending Sunday date
+   */
+  private fun getWeekRange(selectedDate: String): Pair<Instant, Instant> {
+    val instant = Instant.parse(selectedDate)
+    val nowDateTime = instant.defaultLocalDateTime()
+    val dayOfWeek = DayOfWeek.entries.indexOf(nowDateTime.dayOfWeek)
+    val startWeek = instant.minus(dayOfWeek.days)
+    val lastIndex = DayOfWeek.entries.count() - 1 - dayOfWeek
+    val lastWeek = instant.plus(lastIndex.days)
+    savedState[SAVED_START_WEEK_DATE] = startWeek.toString()
+    savedState[SAVED_END_WEEK_DATE] = lastWeek.toString()
+    return Pair(startWeek, lastWeek)
+  }
+
+  private fun getStartWeekDate(): String? = savedState[SAVED_START_WEEK_DATE]
+  private fun getEndWeekDate(): String? = savedState[SAVED_END_WEEK_DATE]
+  fun getSelectedDateEpoch(): Long? = savedState.get<String?>(SAVED_SELECTED_WEEK_DATE)?.let { selected ->
+    Instant.parse(selected).toEpochMilliseconds()
+  }
+
+  fun onMealPlanMenuClick(item: MealPlanRecipeSheetItem) {
+    val mealPlan = editMealPlan ?: throw IllegalStateException("No recipe found for meal plan edit")
+    when (item.action) {
+      MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
+      MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> removeFromMealPlan(mealPlan)
+      MealPlanSheetMenuAction.REPEAT_AGAIN -> {
         uiScope.launch {
-            mealPlanRepository.remove(mealPlan.id)
-            scheduler.cancelMealWorker(mealPlan.id)
-            notification.cancel(mealPlan.toNotification())
+          val plan = mealPlanRepository.getUnscheduledMealForRecipe(mealPlan.recipeId)
+          plan?.let { Timber.d("Repeat again with rescheduled meal: $it") }
+          val mealId = plan?.id ?: mealPlanRepository.repeatMeal(mealPlan)
+          _action.send(MealPlanAction.OnMealRepeat(mealId))
         }
+      }
+
+      else -> {
+        uiScope.launch {
+          _action.send(MealPlanAction.OnMenuClick(item.action, mealPlan))
+        }
+      }
     }
+  }
 
-    fun getEditRecipe(): Long {
-        return editMealPlan?.recipeId ?: throw IllegalStateException("No recipe found")
+  private fun removeFromMealPlan(mealPlan: MealPlanRecipe) {
+    uiScope.launch {
+      mealPlanRepository.remove(mealPlan.id)
+      scheduler.cancelMealWorker(mealPlan.id)
+      notification.cancel(mealPlan.toNotification())
     }
+  }
 
-
+  fun getEditRecipe(): Long {
+    return editMealPlan?.recipeId ?: throw IllegalStateException("No recipe found")
+  }
 }
 
-
-
 internal val defaultActions = listOf(
-    MealPlanRecipeSheetItem(
-        icon = R.drawable.ic_download,
-        title = R.string.download_recipe,
-        action = MealPlanSheetMenuAction.DOWNLOAD_RECIPE
-    ),
-    MealPlanRecipeSheetItem(
-        icon = R.drawable.ic_share,
-        title = R.string.share_recipe,
-        action = MealPlanSheetMenuAction.SHARE_RECIPE
-    ),
-    MealPlanRecipeSheetItem(
-        icon = R.drawable.ic_cart_menu,
-        title = R.string.add_ingredients_to_shopping_list,
-        action = MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST
-    ),
-    MealPlanRecipeSheetItem(
-        icon = R.drawable.ic_delete,
-        title = R.string.recipe_remove_from_meal_plan,
-        action = MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN
-    )
+  MealPlanRecipeSheetItem(
+    icon = R.drawable.ic_download,
+    title = R.string.download_recipe,
+    action = MealPlanSheetMenuAction.DOWNLOAD_RECIPE,
+  ),
+  MealPlanRecipeSheetItem(
+    icon = R.drawable.ic_share,
+    title = R.string.share_recipe,
+    action = MealPlanSheetMenuAction.SHARE_RECIPE,
+  ),
+  MealPlanRecipeSheetItem(
+    icon = R.drawable.ic_cart_menu,
+    title = R.string.add_ingredients_to_shopping_list,
+    action = MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST,
+  ),
+  MealPlanRecipeSheetItem(
+    icon = R.drawable.ic_delete,
+    title = R.string.recipe_remove_from_meal_plan,
+    action = MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN,
+  ),
 )
 
 internal data class MealPlanRecipeSheetItem(
-    @DrawableRes val icon: Int,
-    @StringRes val title: Int,
-    val action: MealPlanSheetMenuAction
+  @DrawableRes val icon: Int,
+  @StringRes val title: Int,
+  val action: MealPlanSheetMenuAction,
 ) {
-    fun isSameAs(other: MealPlanRecipeSheetItem): Boolean {
-        return action == other.action &&
-                title == other.title
-    }
+  fun isSameAs(other: MealPlanRecipeSheetItem): Boolean {
+    return action == other.action &&
+      title == other.title
+  }
 }
-
 
 /**
  * if schedule is not present show set schedule else edit schedule
  * if meal time is not present show set meal time else edit meal time
  */
 internal enum class MealPlanSheetMenuAction {
-    DOWNLOAD_RECIPE, // download recipe
-    SHARE_RECIPE, // share recipe with url?
-    ADD_TO_SHOPPING_LIST, // add recipe ingredients to cart
-    REPEAT_AGAIN, // repeat recipe for next week with today + 7.days
-    SET_SCHEDULE, // if we have don't have schedule date set it
-    EDIT_SCHEDULE, // if we have schedule date edit date
-    REMOVE_FROM_MEAL_PLAN, // remove from meal plan
+  DOWNLOAD_RECIPE, // download recipe
+  SHARE_RECIPE, // share recipe with url?
+  ADD_TO_SHOPPING_LIST, // add recipe ingredients to cart
+  REPEAT_AGAIN, // repeat recipe for next week with today + 7.days
+  SET_SCHEDULE, // if we have don't have schedule date set it
+  EDIT_SCHEDULE, // if we have schedule date edit date
+  REMOVE_FROM_MEAL_PLAN, // remove from meal plan
 }

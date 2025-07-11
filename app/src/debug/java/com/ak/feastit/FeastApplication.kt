@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit
 
 import android.app.Application
@@ -14,91 +16,98 @@ import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import com.ak.feastit.core.logging.FileLoggingTree
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 @HiltAndroidApp
-internal class FeastApplication : Application(), Configuration.Provider, ImageLoaderFactory {
+internal class FeastApplication :
+  Application(),
+  Configuration.Provider,
+  ImageLoaderFactory {
+  //    TODO lazy initialization of workers
+  @Inject
+  lateinit var workerFactory: WorkerFactory
 
-//    TODO lazy initialization of workers
-    @Inject
-    lateinit var workerFactory: WorkerFactory
+  private var tree: FileLoggingTree? = null
 
-    private var tree: FileLoggingTree? = null
+  override val workManagerConfiguration: Configuration
+    get() =
+      Configuration
+        .Builder()
+        .setWorkerFactory(workerFactory)
+        .setMinimumLoggingLevel(android.util.Log.VERBOSE)
+        .build()
 
-    override val workManagerConfiguration: Configuration
-        get() = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .setMinimumLoggingLevel(android.util.Log.VERBOSE)
-            .build()
-
-    override fun onCreate() {
-        super.onCreate()
-        setupStrictMode()
-        Timber.plant(Timber.DebugTree())
+  override fun onCreate() {
+    super.onCreate()
+    setupStrictMode()
+    Timber.plant(Timber.DebugTree())
 //        TODO handle file logging to share logs getting diskviolation strictmode
-         FileLoggingTree(this).apply {
-             tree = this
-             Timber.plant(this)
-         }
+    FileLoggingTree(this).apply {
+      tree = this
+      Timber.plant(this)
     }
+  }
 
-    override fun onTerminate() {
-        tree?.onStop()
-        super.onTerminate()
-    }
+  override fun onTerminate() {
+    tree?.onStop()
+    super.onTerminate()
+  }
 
-    //    TODO lazy initialization of image loader
-    override fun newImageLoader(): ImageLoader {
+  //    TODO lazy initialization of image loader
+  override fun newImageLoader(): ImageLoader {
 //        TODO clear cache from local
 //        this.imageLoader.diskCache?.clear()
 //        this.imageLoader.memoryCache?.clear()
-        return ImageLoader.Builder(this)
-            .memoryCache {
-                MemoryCache.Builder(this)
-                    .maxSizePercent(0.2)
-                    .build()
-            }.diskCache {
-                DiskCache.Builder()
-                    .directory(cacheDir.resolve("image_cache"))
-                    .maxSizeBytes(5 * 1024 * 1024)
-                    .build()
-            }
-            .logger(DebugLogger())
-            .respectCacheHeaders(false)
-            .build()
-    }
+    return ImageLoader
+      .Builder(this)
+      .memoryCache {
+        MemoryCache
+          .Builder(this)
+          .maxSizePercent(0.2)
+          .build()
+      }.diskCache {
+        DiskCache
+          .Builder()
+          .directory(cacheDir.resolve("image_cache"))
+          .maxSizeBytes(5 * 1024 * 1024)
+          .build()
+      }.logger(DebugLogger())
+      .respectCacheHeaders(false)
+      .build()
+  }
 
-    private fun setupStrictMode() {
-        StrictMode.setThreadPolicy(
-            ThreadPolicy.Builder()
-                .detectAll()
-                .penaltyFlashScreen()
-                .penaltyLog()
-                .build(),
-        )
-        StrictMode.setVmPolicy(
-            VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects()
-                .detectActivityLeaks()
-                .detectLeakedClosableObjects()
-                .detectLeakedRegistrationObjects()
-                .detectFileUriExposure()
-                .detectCleartextNetwork()
-                .apply {
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        detectContentUriWithoutPermission()
-                    }
-                    if (Build.VERSION.SDK_INT >= 29) {
-                        detectCredentialProtectedWhileLocked()
-                    }
-                    if (Build.VERSION.SDK_INT >= 31) {
-                        detectIncorrectContextUse()
-                        detectUnsafeIntentLaunch()
-                    }
-                }
-                .penaltyLog()
-                .build(),
-        )
-    }
+  private fun setupStrictMode() {
+    StrictMode.setThreadPolicy(
+      ThreadPolicy
+        .Builder()
+        .detectAll()
+        .penaltyFlashScreen()
+        .penaltyLog()
+        .build(),
+    )
+    StrictMode.setVmPolicy(
+      VmPolicy
+        .Builder()
+        .detectLeakedSqlLiteObjects()
+        .detectActivityLeaks()
+        .detectLeakedClosableObjects()
+        .detectLeakedRegistrationObjects()
+        .detectFileUriExposure()
+        .detectCleartextNetwork()
+        .apply {
+          if (Build.VERSION.SDK_INT >= 26) {
+            detectContentUriWithoutPermission()
+          }
+          if (Build.VERSION.SDK_INT >= 29) {
+            detectCredentialProtectedWhileLocked()
+          }
+          if (Build.VERSION.SDK_INT >= 31) {
+            detectIncorrectContextUse()
+            detectUnsafeIntentLaunch()
+          }
+        }.penaltyLog()
+        .build(),
+    )
+  }
 }

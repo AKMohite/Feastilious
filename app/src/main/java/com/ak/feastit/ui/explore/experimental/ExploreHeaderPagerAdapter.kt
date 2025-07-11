@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.explore.experimental
 
 import android.os.Bundle
@@ -8,22 +10,21 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mak.feastit.domain.model.Recipe
 
 internal class ExploreHeaderPagerAdapter(
-    fragmentManager: FragmentManager,
-    lifecycle: Lifecycle,
-    private val items: List<Recipe>,
-    private val sectionEvents: ((ExploreItemAction) -> Unit)? = null
-): FragmentStateAdapter(fragmentManager, lifecycle) {
+  fragmentManager: FragmentManager,
+  lifecycle: Lifecycle,
+  private val items: List<Recipe>,
+  private val sectionEvents: ((ExploreItemAction) -> Unit)? = null,
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
+  override fun getItemCount(): Int = items.size
 
-    override fun getItemCount(): Int = items.size
-
-    override fun createFragment(position: Int): Fragment {
-        val recipe = items[position]
-        val args = Bundle()
-        args.putString(ExploreHeaderFragment.ARGS_IMG_URL, recipe.image)
-        args.putString(ExploreHeaderFragment.ARGS_TITLE, recipe.name)
-        args.putLong(ExploreHeaderFragment.ARGS_RECIPE_ID, recipe.id)
-        return ExploreHeaderFragment.newInstance(args, sectionEvents)
-    }
+  override fun createFragment(position: Int): Fragment {
+    val recipe = items[position]
+    val args = Bundle()
+    args.putString(ExploreHeaderFragment.ARGS_IMG_URL, recipe.image)
+    args.putString(ExploreHeaderFragment.ARGS_TITLE, recipe.name)
+    args.putLong(ExploreHeaderFragment.ARGS_RECIPE_ID, recipe.id)
+    return ExploreHeaderFragment.newInstance(args, sectionEvents)
+  }
 
 //    override fun onBindViewHolder(
 //        holder: FragmentViewHolder,

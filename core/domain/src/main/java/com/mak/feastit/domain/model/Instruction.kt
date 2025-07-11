@@ -1,10 +1,10 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.domain.model
 
 data class Instruction(
-        val stepNo: String,
-        val stepDesc: String
+  val stepNo: String,
+  val stepDesc: String,
 ) {
-    fun isSameAs(item: Instruction): Boolean {
-        return this.stepNo == item.stepNo
-    }
+  fun isSameAs(item: Instruction): Boolean = this.stepNo == item.stepNo
 }

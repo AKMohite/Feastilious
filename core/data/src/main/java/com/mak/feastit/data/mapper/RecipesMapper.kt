@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.HealthyRecipeEntity
@@ -10,90 +12,85 @@ import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.remote.dto.RecipeDTO
 
-internal class RecipesMapper: BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
+internal class RecipesMapper : BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
+  override fun jsonToEntity(json: RecipeDTO): RecipeEntity = RecipeEntity(
+    id = json.id,
+    recipeName = json.title,
+    recipeSummary = json.summary ?: "",
+    recipeImg = json.image.orEmpty(),
+    recipeSource = json.sourceUrl ?: "",
+    recipeReadyInMins = json.readyInMinutes ?: 0,
+    servings = json.servings ?: 0,
+    pricePerServing = json.pricePerServing ?: 0.0,
+    sourceName = json.sourceName ?: "",
+    isAddedToCollection = false,
+    cuisines = json.cuisines?.joinToString(",") ?: "",
+    dishTypes = json.dishTypes?.joinToString(",") ?: "",
+    diets = json.diets?.joinToString(",") ?: "",
+    caloricBreakdown = emptyMap(),
+  )
 
-    override fun jsonToEntity(json: RecipeDTO): RecipeEntity {
-        return RecipeEntity(
-                id = json.id,
-                recipeName = json.title,
-                recipeSummary = json.summary ?: "",
-                recipeImg = json.image.orEmpty(),
-                recipeSource = json.sourceUrl ?: "",
-                recipeReadyInMins = json.readyInMinutes ?: 0,
-                servings = json.servings ?: 0,
-                pricePerServing = json.pricePerServing ?: 0.0,
-                sourceName = json.sourceName ?: "",
-                isAddedToCollection = false,
-                cuisines = json.cuisines?.joinToString(",") ?: "",
-                dishTypes = json.dishTypes?.joinToString(",") ?: "",
-                diets = json.diets?.joinToString(",") ?: "",
-                caloricBreakdown = emptyMap()
-            )
-    }
+  override fun entityToModel(entity: RecipeEntity): Recipe = Recipe(
+    id = entity.id,
+    name = entity.recipeName,
+    image = entity.recipeImg,
+    page = 1, // TODO handle page number
+  )
 
-    override fun entityToModel(entity: RecipeEntity): Recipe {
-        return Recipe(
-            id = entity.id,
-            name = entity.recipeName,
-            image = entity.recipeImg,
-            page = 1 // TODO handle page number
-        )
-    }
+  fun paginatedEntityToModel(entity: PaginatedRecipeEntity): Recipe = Recipe(
+    id = entity.id,
+    name = entity.recipeName,
+    image = entity.recipeImg,
+    page = entity.page,
+  )
 
-    fun paginatedEntityToModel(entity: PaginatedRecipeEntity): Recipe {
-        return Recipe(
-            id = entity.id,
-            name = entity.recipeName,
-            image = entity.recipeImg,
-            page = entity.page
-        )
-    }
+  fun jsonToPopularEntities(
+    dtos: List<RecipeDTO>,
+    page: Int,
+  ): List<PopularRecipeEntity> = dtos.map { dto ->
+    PopularRecipeEntity(
+      recipeId = dto.id,
+      page = page,
+    )
+  }
 
-    fun jsonToPopularEntities(dtos: List<RecipeDTO>, page: Int): List<PopularRecipeEntity> {
-        return dtos.map { dto ->
-            PopularRecipeEntity(
-                recipeId = dto.id,
-                page = page
-            )
-        }
-    }
+  fun jsonToTopEntities(
+    dtos: List<RecipeDTO>,
+    page: Int,
+  ): List<TopRecipeEntity> = dtos.map { dto ->
+    TopRecipeEntity(
+      recipeId = dto.id,
+      page = page,
+    )
+  }
 
-    fun jsonToTopEntities(dtos: List<RecipeDTO>, page: Int): List<TopRecipeEntity> {
-        return dtos.map { dto ->
-            TopRecipeEntity(
-                recipeId = dto.id,
-                page = page
-            )
-        }
-    }
+  fun jsonToHealthyEntities(
+    dtos: List<RecipeDTO>,
+    page: Int,
+  ): List<HealthyRecipeEntity> = dtos.map { dto ->
+    HealthyRecipeEntity(
+      recipeId = dto.id,
+      page = page,
+    )
+  }
 
-    fun jsonToHealthyEntities(dtos: List<RecipeDTO>, page: Int): List<HealthyRecipeEntity> {
-        return dtos.map { dto ->
-            HealthyRecipeEntity(
-                recipeId = dto.id,
-                page = page
-            )
-        }
-    }
+  fun jsonToQuickEntities(
+    dtos: List<RecipeDTO>,
+    page: Int,
+  ): List<QuickRecipeEntity> = dtos.map { dto ->
+    QuickRecipeEntity(
+      recipeId = dto.id,
+      page = page,
+    )
+  }
 
-    fun jsonToQuickEntities(dtos: List<RecipeDTO>, page: Int): List<QuickRecipeEntity> {
-        return dtos.map { dto ->
-            QuickRecipeEntity(
-                recipeId = dto.id,
-                page = page
-            )
-        }
-    }
-
-    fun jsonToPocketFriendlyEntities(
-        dtos: List<RecipeDTO>,
-        page: Int
-    ): List<PocketFriendlyRecipeEntity> {
-        return dtos.map { dto ->
-            PocketFriendlyRecipeEntity(
-                recipeId = dto.id,
-                page = page
-            )
-        }
-    }
+  fun jsonToPocketFriendlyEntities(
+    dtos: List<RecipeDTO>,
+    page: Int,
+  ): List<PocketFriendlyRecipeEntity> = dtos.map { dto ->
+    PocketFriendlyRecipeEntity(
+      recipeId = dto.id,
+      page = page,
+    )
+  }
 }

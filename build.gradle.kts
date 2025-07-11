@@ -13,9 +13,47 @@ buildscript {
         classpath(libs.navigation.safe.args.plugin)
         classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.1.0-1.0.29")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.42.0")
+        classpath("com.diffplug.spotless:spotless-plugin-gradle:7.1.0")
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+    }
+}
+
+tasks.register("copyGitHooks", Copy::class.java) {
+  description = "Copies the git hooks from /git-hooks to the .git folder."
+  group = "git hooks"
+  from("$rootDir/scripts/pre-commit")
+  into("$rootDir/.git/hooks/")
+}
+
+tasks.register("installGitHooks", Exec::class.java) {
+  description = "Installs the pre-commit git hooks from /git-hooks."
+  group = "git hooks"
+  workingDir = rootDir
+  commandLine = listOf("chmod")
+  args("-R", "+x", ".git/hooks/")
+  dependsOn("copyGitHooks")
+  doLast {
+    logger.info("Git hook installed successfully.")
+  }
+}
+
+subprojects {
+    apply(plugin = "com.diffplug.spotless")
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("$buildDir/**/*.kt")
+
+            ktlint()
+            licenseHeaderFile(rootProject.file("spotless/feast-copyright.txt"))
+        }
+
+        kotlinGradle {
+            target("*.gradle.kts")
+            ktlint()
+        }
     }
 }
 

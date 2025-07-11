@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.yumdetail.tabs.instructions
 
 import android.os.Bundle
@@ -18,31 +20,33 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class RecipeInstructionsFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = FragmentDetailTabInstructionsBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        FragmentDetailTabInstructionsBinding.inflate(inflater)
+  private val binding: FragmentDetailTabInstructionsBinding
+    get() = baseBinding as FragmentDetailTabInstructionsBinding
 
-    private val binding: FragmentDetailTabInstructionsBinding
-        get() = baseBinding as FragmentDetailTabInstructionsBinding
+  private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
-    private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        binding.recipeInstructions.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        val adapter = RecipeInstructionsAdapter {
-            viewModel.toggleMealPlan()
-        }
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    binding.recipeInstructions.layoutManager =
+      LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    val adapter =
+      RecipeInstructionsAdapter {
+        viewModel.toggleMealPlan()
+      }
 //        TODO maybe add decorations: MaterialDividerItemDecoration in catalog app: DividerItemDecorationDemoFragment
-        binding.recipeInstructions.adapter = adapter
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.state.collect { state ->
-                        adapter.reload(state.instructions)
-                    }
-                }
-            }
+    binding.recipeInstructions.adapter = adapter
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        launch {
+          viewModel.state.collect { state ->
+            adapter.reload(state.instructions)
+          }
         }
+      }
     }
-
+  }
 }

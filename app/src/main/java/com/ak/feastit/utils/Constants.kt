@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.utils
 
 const val APP_TAG = "FeastIt"
@@ -17,7 +19,6 @@ const val QUERY_FILL_INGREDIENTS = "fillIngredients"
 const val API_PATH_ID = "recipeId"
 const val API_COMPLEX_SEARCH_RECIPES = "recipes/complexSearch"
 const val API_GET_RECIPE_ANALYSED_INSTRUCTION = "recipes/{${API_PATH_ID}}/analyzedInstructions"
-
 
 const val FEAST_DB = "feast_db"
 const val DB_RECIPE_TABLE = "recipes"

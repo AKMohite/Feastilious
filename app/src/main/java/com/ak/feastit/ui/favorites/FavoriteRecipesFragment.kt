@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.favorites
 
 import android.os.Bundle
@@ -21,64 +23,67 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-internal class FavoriteRecipesFragment: BaseFragment() {
+internal class FavoriteRecipesFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = FragmentFavoritesBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        FragmentFavoritesBinding.inflate(inflater)
+  private val binding: FragmentFavoritesBinding
+    get() = baseBinding as FragmentFavoritesBinding
 
-    private val binding: FragmentFavoritesBinding
-        get() = baseBinding as FragmentFavoritesBinding
+  private val viewmodel: FavoriteViewModel by viewModels()
 
-    private val viewmodel: FavoriteViewModel by viewModels()
+  private var adapter: FavoritesAdapter? = null
 
-    private var adapter: FavoritesAdapter? = null
+  private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
+    SearchSuggestionAdapter(
+      onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) },
+    )
+  }
 
-    private val suggestionsAdapter: SearchSuggestionAdapter by lazy {
-        SearchSuggestionAdapter(
-            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
-        )
-    }
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    setupView()
+    observers()
+  }
 
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        setupView()
-        observers()
-    }
+  override fun onDestroyView() {
+    adapter = null
+    super.onDestroyView()
+  }
 
-    override fun onDestroyView() {
-        adapter = null
-        super.onDestroyView()
-    }
+  private fun setupView() {
+    binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+    binding.emptyState.emptyHeader.text = ""
+    binding.emptyState.emptyBody.text = ""
+    binding.favoriteRecipes.layoutManager =
+      LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    binding.suggestionItems.layoutManager =
+      LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    binding.suggestionItems.adapter = suggestionsAdapter
+    adapter =
+      FavoritesAdapter(
+        onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) },
+      )
+    binding.favoriteRecipes.adapter = adapter
+  }
 
-    private fun setupView() {
-        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
-        binding.emptyState.emptyHeader.text = ""
-        binding.emptyState.emptyBody.text = ""
-        binding.favoriteRecipes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.suggestionItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.suggestionItems.adapter = suggestionsAdapter
-        adapter = FavoritesAdapter(
-            onRecipeClick = { _, recipeId -> navigateToDetails(recipeId) }
-        )
-        binding.favoriteRecipes.adapter = adapter
-    }
-
-    private fun observers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewmodel.state.collectLatest { state ->
-                        binding.emptyState.root.show(state.recipes.isEmpty())
-                        binding.favoriteRecipes.show(state.recipes.isNotEmpty())
-                        adapter?.reload(state.recipes)
-                        suggestionsAdapter.reload(state.suggestions)
-                    }
-                }
-            }
+  private fun observers() {
+    viewLifecycleOwner.lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        launch {
+          viewmodel.state.collectLatest { state ->
+            binding.emptyState.root.show(state.recipes.isEmpty())
+            binding.favoriteRecipes.show(state.recipes.isNotEmpty())
+            adapter?.reload(state.recipes)
+            suggestionsAdapter.reload(state.suggestions)
+          }
         }
+      }
     }
+  }
 
-    private fun navigateToDetails(recipeId: Long) {
-        findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(recipeId))
-    }
-
+  private fun navigateToDetails(recipeId: Long) {
+    findNavController().navigate(FavoriteRecipesFragmentDirections.favRecipesToRecipeDetail(recipeId))
+  }
 }
