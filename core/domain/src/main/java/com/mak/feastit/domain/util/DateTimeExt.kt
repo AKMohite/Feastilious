@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.domain.util
 
 import kotlinx.datetime.Clock
@@ -15,40 +17,31 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 fun LocalDate.daysShift(days: Int): LocalDate = when {
-    days < 0 -> {
-        minus(1, DateTimeUnit.DayBased(-days))
-    }
-    days > 0 -> {
-        plus(1, DateTimeUnit.DayBased(days))
-    }
-    else -> this
+  days < 0 -> {
+    minus(1, DateTimeUnit.DayBased(-days))
+  }
+
+  days > 0 -> {
+    plus(1, DateTimeUnit.DayBased(days))
+  }
+
+  else -> this
 }
 
 fun defaultNow(): Instant = Clock.System.now()
 
-fun Instant.defaultLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime {
-    return toLocalDateTime(timeZone)
-}
+fun Instant.defaultLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime = toLocalDateTime(timeZone)
 
+fun LocalDateTime.isToday(): Boolean = this.date == defaultNow().defaultLocalDateTime().date
 
-fun LocalDateTime.isToday(): Boolean {
-    return this.date == defaultNow().defaultLocalDateTime().date
-}
-
-fun Instant.defaultLocalDate(): LocalDate {
-    return toLocalDateTime(TimeZone.currentSystemDefault()).date
-}
+fun Instant.defaultLocalDate(): LocalDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
 
 fun Instant.dayMonth(): String {
-    val format = LocalDateTime.Format { byUnicodePattern("dd MM") }
-    val dateTime = defaultLocalDateTime()
-    return dateTime.format(format)
+  val format = LocalDateTime.Format { byUnicodePattern("dd MM") }
+  val dateTime = defaultLocalDateTime()
+  return dateTime.format(format)
 }
 
-fun Instant.defaultLocalTime(): LocalTime {
-    return toLocalDateTime(TimeZone.currentSystemDefault()).time
-}
+fun Instant.defaultLocalTime(): LocalTime = toLocalDateTime(TimeZone.currentSystemDefault()).time
 
-fun LocalDateTime.toInstant(): Instant {
-    return this.toInstant(TimeZone.currentSystemDefault())
-}
+fun LocalDateTime.toInstant(): Instant = this.toInstant(TimeZone.currentSystemDefault())

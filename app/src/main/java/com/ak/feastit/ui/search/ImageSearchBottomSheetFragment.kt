@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.search
 
 import android.os.Bundle
@@ -11,40 +13,42 @@ import com.ak.feastit.utils.onClick
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import timber.log.Timber
 
+internal class ImageSearchBottomSheetFragment : BottomSheetDialogFragment() {
 
-internal class ImageSearchBottomSheetFragment: BottomSheetDialogFragment() {
+  private var baseBinding: FragmentImageSearchBottomSheetBinding? = null
+  private val binding: FragmentImageSearchBottomSheetBinding
+    get() = baseBinding!!
+  private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
 
-    private var _binding: FragmentImageSearchBottomSheetBinding? = null
-    private val binding: FragmentImageSearchBottomSheetBinding
-        get() = _binding!!
-    private val viewModel: SearchViewModel by viewModels({ requireParentFragment() })
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?,
+  ): View {
+    baseBinding = FragmentImageSearchBottomSheetBinding.inflate(inflater)
+    return binding.root
+  }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentImageSearchBottomSheetBinding.inflate(inflater)
-        return binding.root
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding.cameraLl.onClick {
+      Timber.d("On camera click")
+      dismiss()
+      viewModel.onImageClick(ImageSearch.CAMERA)
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.cameraLl.onClick {
-            Timber.d("On camera click")
-            dismiss()
-            viewModel.onImageClick(ImageSearch.CAMERA)
-        }
-        binding.galleryLl.onClick {
-            Timber.d("On gallery click")
-            dismiss()
-            viewModel.onImageClick(ImageSearch.GALLERY)
-        }
+    binding.galleryLl.onClick {
+      Timber.d("On gallery click")
+      dismiss()
+      viewModel.onImageClick(ImageSearch.GALLERY)
     }
+  }
 
-    companion object {
-        fun show(fragmentManager: FragmentManager) {
-            ImageSearchBottomSheetFragment().show(fragmentManager, ImageSearchBottomSheetFragment::class.java.name)
-        }
+  companion object {
+    fun show(fragmentManager: FragmentManager) {
+      ImageSearchBottomSheetFragment().show(
+        fragmentManager,
+        ImageSearchBottomSheetFragment::class.java.name,
+      )
     }
+  }
 }

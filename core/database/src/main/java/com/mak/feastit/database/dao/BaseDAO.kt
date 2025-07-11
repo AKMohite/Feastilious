@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.database.dao
 
 import androidx.room.Dao
@@ -9,26 +11,24 @@ import androidx.room.Upsert
 
 @Dao
 interface BaseDAO<Entity> {
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insert(entity: Entity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: Entity): Long
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insert(entities: List<Entity>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entities: List<Entity>)
+  @Upsert
+  suspend fun upsert(entity: Entity)
 
-    @Upsert
-    suspend fun upsert(entity: Entity)
+  @Upsert
+  suspend fun upsert(entities: List<Entity>)
 
-    @Upsert
-    suspend fun upsert(entities: List<Entity>)
+  @Update
+  suspend fun update(entity: Entity)
 
-    @Update
-    suspend fun update(entity: Entity)
+  @Update
+  suspend fun update(entities: List<Entity>)
 
-    @Update
-    suspend fun update(entities: List<Entity>)
-
-    @Delete
-    suspend fun delete(entity: Entity)
-
+  @Delete
+  suspend fun delete(entity: Entity)
 }

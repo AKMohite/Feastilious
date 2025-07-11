@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.explore
 
 import android.os.Bundle
@@ -26,70 +28,79 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
 @AndroidEntryPoint
 class ExploreFragment : BaseFragment() {
+  private val viewModel: ExploreViewModel by viewModels()
+  private var adapter: ExploreSectionAdapter? = null
 
-    private val viewModel: ExploreViewModel by viewModels()
-    private var adapter: ExploreSectionAdapter? = null
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = FragmentExploreBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        FragmentExploreBinding.inflate(inflater)
+  private val binding: FragmentExploreBinding
+    get() = baseBinding as FragmentExploreBinding
 
-    private val binding: FragmentExploreBinding
-        get() = baseBinding as FragmentExploreBinding
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    postponeEnterTransition()
+    view.doOnPreDraw { startPostponedEnterTransition() }
 //        binding.searchView.setReadOnly(focusable = false, inputType = InputType.TYPE_NULL)
-        binding.exploreItems.doOnApplyWindowInsets { insetView, insets, _, margins ->
-            val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            insetView.updateLayoutParams<MarginLayoutParams> {
-                bottomMargin = margins.bottom + inset
-            }
-        }
-        binding.searchCard.onClick {
-            navigateToSearch()
-        }
-        binding.exploreItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    binding.exploreItems.doOnApplyWindowInsets { insetView, insets, _, margins ->
+      val inset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+      insetView.updateLayoutParams<MarginLayoutParams> {
+        bottomMargin = margins.bottom + inset
+      }
+    }
+    binding.searchCard.onClick {
+      navigateToSearch()
+    }
+    binding.exploreItems.layoutManager =
+      LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 //        adapter.setEventListener(eventListener)
-        adapter = ExploreSectionAdapter(
-            fragmentManager = this@ExploreFragment.childFragmentManager,
-            lifecycle = this.viewLifecycleOwner.lifecycle,
-            sectionEvents = ::handleSectionEvents
+    adapter =
+      ExploreSectionAdapter(
+        fragmentManager = this@ExploreFragment.childFragmentManager,
+        lifecycle = this.viewLifecycleOwner.lifecycle,
+        sectionEvents = ::handleSectionEvents,
 //            sectionEvents = null
-        ).apply {
+      ).apply {
 //            TODO add to all adapters?
-            stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+      }
+    binding.exploreItems.adapter = adapter
+    viewLifecycleOwner.lifecycleScope.launch {
+      viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.state.collect { state ->
+          val sections = state.displayableSections()
+          adapter?.submitList(sections)
         }
-        binding.exploreItems.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    val sections = state.displayableSections()
-                    adapter?.submitList(sections)
-                }
-            }
-        }
+      }
     }
+  }
 
-    private fun navigateToSearch() {
-        Timber.d("navigateToSearch")
-        findNavController().navigate(ExploreFragmentDirections.exploreToSearch())
-    }
+  private fun navigateToSearch() {
+    Timber.d("navigateToSearch")
+    findNavController().navigate(ExploreFragmentDirections.exploreToSearch())
+  }
 
-    private fun handleSectionEvents(action: ExploreItemAction) {
-        when(action) {
-            is ExploreItemAction.ChipClick -> {
-                Timber.d("On chip click: ${action.chip}")
-                findNavController().navigate(ExploreFragmentDirections.exploreToViewAll(category = action.chip.type.name, categorySubType = action.chip.title))
-            }
-            ExploreItemAction.ListUpdate -> {
+  private fun handleSectionEvents(action: ExploreItemAction) {
+    when (action) {
+      is ExploreItemAction.ChipClick -> {
+        Timber.d("On chip click: ${action.chip}")
+        findNavController().navigate(
+          ExploreFragmentDirections.exploreToViewAll(
+            category = action.chip.type.name,
+            categorySubType = action.chip.title,
+          ),
+        )
+      }
+
+      ExploreItemAction.ListUpdate -> {
 //                binding.exploreItems.smoothScrollToPosition(0)
-            }
-            is ExploreItemAction.RecipeClick -> {
-                Timber.d("Recipe click: ${action.recipeId}")
+      }
+
+      is ExploreItemAction.RecipeClick -> {
+        Timber.d("Recipe click: ${action.recipeId}")
                 /*exitTransition = MaterialElevationScale(false).apply {
                     duration =
                         resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
@@ -100,26 +111,29 @@ class ExploreFragment : BaseFragment() {
                         resources.getInteger(com.google.android.material.R.integer.material_motion_duration_long_1)
                             .toLong()
                 }*/
-                val extras = FragmentNavigatorExtras(
-                    *action.sharedElementsVarArgs()
-                )
-                findNavController().navigate(
-                    directions = ExploreFragmentDirections.exploreToRecipeDetail(
-                        recipeId = action.recipeId
-                    ),
-                    navigatorExtras = extras
-                )
-            }
-            is ExploreItemAction.ViewAll -> {
-                Timber.d("View all: ${action.category}")
-                findNavController().navigate(ExploreFragmentDirections.exploreToViewAll(category = action.category.name))
-            }
-        }
-    }
+        val extras =
+          FragmentNavigatorExtras(
+            *action.sharedElementsVarArgs(),
+          )
+        findNavController().navigate(
+          directions =
+          ExploreFragmentDirections.exploreToRecipeDetail(
+            recipeId = action.recipeId,
+          ),
+          navigatorExtras = extras,
+        )
+      }
 
-    override fun onDestroyView() {
-//        adapter.setEventListener(null)
-        adapter = null
-        super.onDestroyView()
+      is ExploreItemAction.ViewAll -> {
+        Timber.d("View all: ${action.category}")
+        findNavController().navigate(ExploreFragmentDirections.exploreToViewAll(category = action.category.name))
+      }
     }
+  }
+
+  override fun onDestroyView() {
+//        adapter.setEventListener(null)
+    adapter = null
+    super.onDestroyView()
+  }
 }

@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.yumdetail.tabs.nutrition
 
 import android.os.Bundle
@@ -12,17 +14,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class RecipeNutritionFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = FragmentDetailTabNutritionBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        FragmentDetailTabNutritionBinding.inflate(inflater)
+  private val binding: FragmentDetailTabNutritionBinding
+    get() = baseBinding as FragmentDetailTabNutritionBinding
 
-    private val binding: FragmentDetailTabNutritionBinding
-        get() = baseBinding as FragmentDetailTabNutritionBinding
+  private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
-    private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
 //        TODO show pie chart for caloric break down and show nutrition value in table
-    }
-
+  }
 }

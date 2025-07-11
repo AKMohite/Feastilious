@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.di
 
 import com.ak.feastit.BuildConfig
@@ -13,14 +15,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object AppModule {
+  @Provides
+  @Singleton
+  @Named("FEAST_KEY")
+  fun provideApiKey(): String = BuildConfig.API_KEY
 
-    @Provides
-    @Singleton
-    @Named("FEAST_KEY")
-    fun provideApiKey(): String = BuildConfig.API_KEY
-
-    @Provides
-    @Singleton
-    fun provideDispatchers(): DispatcherProvider = AppDispatcher()
-
+  @Provides
+  @Singleton
+  fun provideDispatchers(): DispatcherProvider = AppDispatcher()
 }

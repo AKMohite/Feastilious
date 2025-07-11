@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.data.mapper
 
 import com.mak.feastit.database.entity.IngredientEntity
@@ -23,260 +25,263 @@ import javax.inject.Inject
 import kotlin.math.pow
 import kotlin.math.round
 
-internal class RecipeDetailMapper @Inject constructor(): BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
+internal class RecipeDetailMapper
+@Inject
+constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
+  override fun jsonToEntity(json: RecipeInformationDTO): RecipeEntity = RecipeEntity(
+    id = json.id,
+    recipeName = json.title.orEmpty(),
+    recipeSummary = json.summary.orEmpty(),
+    recipeImg = json.image.orEmpty(),
+    recipeReadyInMins = json.readyInMinutes ?: 0,
+    servings = json.servings ?: 1,
+    pricePerServing = json.pricePerServing ?: 0.0,
+    sourceName = json.sourceName.orEmpty(),
+    recipeSource = json.sourceUrl.orEmpty(),
+    isAddedToCollection = false,
+    cuisines = get(json.cuisines),
+    dishTypes = get(json.dishTypes),
+    diets = get(json.diets),
+    caloricBreakdown = emptyMap(),
+  )
 
-    override fun jsonToEntity(json: RecipeInformationDTO): RecipeEntity {
-        return RecipeEntity(
-            id = json.id,
-            recipeName = json.title.orEmpty(),
-            recipeSummary = json.summary.orEmpty(),
-            recipeImg = json.image.orEmpty(),
-            recipeReadyInMins = json.readyInMinutes ?: 0,
-            servings = json.servings ?: 1,
-            pricePerServing = json.pricePerServing ?: 0.0,
-            sourceName = json.sourceName.orEmpty(),
-            recipeSource = json.sourceUrl.orEmpty(),
-            isAddedToCollection = false,
-            cuisines = get(json.cuisines),
-            dishTypes = get(json.dishTypes),
-            diets = get(json.diets),
-            caloricBreakdown = emptyMap()
-        )
-    }
-
-    fun jsonToEntity(json: RecipeInformationDTO, calorieBreakdown: Map<String, Double>): RecipeEntity{
-        val breakdown = calorieBreakdown.map {
-            it.key.replace("percent", "") to it.value.toString()
+  fun jsonToEntity(
+    json: RecipeInformationDTO,
+    calorieBreakdown: Map<String, Double>,
+  ): RecipeEntity {
+    val breakdown =
+      calorieBreakdown
+        .map {
+          it.key.replace("percent", "") to it.value.toString()
         }.toMap()
-        return jsonToEntity(json).copy(caloricBreakdown = breakdown)
-    }
+    return jsonToEntity(json).copy(caloricBreakdown = breakdown)
+  }
 
-    override fun entityToModel(entity: RecipeEntity): RecipeDetail {
-        return RecipeDetail(
-            recipeId = entity.id,
-            recipeName = entity.recipeName,
-            recipeSummary = entity.recipeSummary,
-            recipeImg = entity.recipeImg,
-            recipeSource = entity.recipeSource,
-            recipeReadyInMins = entity.recipeReadyInMins,
-            servings = entity.servings,
-            pricePerServing = entity.pricePerServing,
-            sourceName = entity.sourceName,
-            isAddedToCollection = entity.isAddedToCollection,
+  override fun entityToModel(entity: RecipeEntity): RecipeDetail = RecipeDetail(
+    recipeId = entity.id,
+    recipeName = entity.recipeName,
+    recipeSummary = entity.recipeSummary,
+    recipeImg = entity.recipeImg,
+    recipeSource = entity.recipeSource,
+    recipeReadyInMins = entity.recipeReadyInMins,
+    servings = entity.servings,
+    pricePerServing = entity.pricePerServing,
+    sourceName = entity.sourceName,
+    isAddedToCollection = entity.isAddedToCollection,
 //            ingredients = toIngredientsDomain(detail.ingredients),
 //            instructions = toInstructionsDomain(detail.instructions)
-        )
-    }
+  )
 
-    private fun get(cuisines: List<String>?): String {
-        return cuisines?.joinToString(separator = ",") ?: ""
-    }
+  private fun get(cuisines: List<String>?): String = cuisines?.joinToString(separator = ",") ?: ""
 
-    fun jsonToIngredientsEntity(recipeId: Long, ingredients: List<RecipeIngredientDTO>?): List<IngredientEntity> {
-        return ingredients?.map { dto ->
-            IngredientEntity(
-                id = "${recipeId}_${dto.id}",
-                ingredientId = dto.id,
-                aisle = dto.aisle ?: "No category",
-                recipeId = recipeId,
-                ingredientName = dto.name.orEmpty(),
-                quantity = dto.amount ?: 0.0,
-                unit = dto.unit.orEmpty(),
-                ingredientImg = if (!dto.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${dto.image}" else "",
-            )
-        } ?: return emptyList()
-    }
+  fun jsonToIngredientsEntity(
+    recipeId: Long,
+    ingredients: List<RecipeIngredientDTO>?,
+  ): List<IngredientEntity> {
+    return ingredients?.map { dto ->
+      IngredientEntity(
+        id = "${recipeId}_${dto.id}",
+        ingredientId = dto.id,
+        aisle = dto.aisle ?: "No category",
+        recipeId = recipeId,
+        ingredientName = dto.name.orEmpty(),
+        quantity = dto.amount ?: 0.0,
+        unit = dto.unit.orEmpty(),
+        ingredientImg = if (!dto.image.isNullOrBlank()) "$IMG_INGREDIENT_BASE_URL${dto.image}" else "",
+      )
+    } ?: return emptyList()
+  }
 
-    fun jsonToAnalysedIngredientsEntity(
-        id: Long,
-        instructionsDTO: List<AnalyzedInstructionDTO>
-    ): List<IngredientEntity> {
-        val ingredientDTOs = instructionsDTO.flatMap { instruction ->
-            instruction.steps ?: emptyList()
+  fun jsonToAnalysedIngredientsEntity(
+    id: Long,
+    instructionsDTO: List<AnalyzedInstructionDTO>,
+  ): List<IngredientEntity> {
+    val ingredientDTOs =
+      instructionsDTO
+        .flatMap { instruction ->
+          instruction.steps ?: emptyList()
         }.flatMap { step ->
-            step.ingredients ?: emptyList()
+          step.ingredients ?: emptyList()
         }.distinctBy { ingredient -> ingredient.id }
-        return ingredientDTOs.map { dto ->
-            IngredientEntity(
-                id = "${id}_${dto.id}",
-                ingredientId = dto.id,
-                aisle = "No category",
-                recipeId = id,
-                ingredientName = dto.name.orEmpty(),
-                quantity = 0.0,
-                unit = "",
-                ingredientImg = dto.image.orEmpty()
-            )
-        }
+    return ingredientDTOs.map { dto ->
+      IngredientEntity(
+        id = "${id}_${dto.id}",
+        ingredientId = dto.id,
+        aisle = "No category",
+        recipeId = id,
+        ingredientName = dto.name.orEmpty(),
+        quantity = 0.0,
+        unit = "",
+        ingredientImg = dto.image.orEmpty(),
+      )
     }
+  }
 
-    fun jsonToStepEntities(id: Long, instructionsDTO: List<AnalyzedInstructionDTO>): List<RecipeStepEntity> {
-        val dtos = instructionsDTO.mapIndexed { index: Int, analyzedInstructionDTO: AnalyzedInstructionDTO ->
-            val stepName = analyzedInstructionDTO.name ?: "Analysed Steps $index"
-            Pair(stepName, analyzedInstructionDTO.steps)
+  fun jsonToStepEntities(
+    id: Long,
+    instructionsDTO: List<AnalyzedInstructionDTO>,
+  ): List<RecipeStepEntity> {
+    val dtos =
+      instructionsDTO
+        .mapIndexed { index: Int, analyzedInstructionDTO: AnalyzedInstructionDTO ->
+          val stepName = analyzedInstructionDTO.name ?: "Analysed Steps $index"
+          Pair(stepName, analyzedInstructionDTO.steps)
         }.mapNotNull { (key, value) ->
-            if (value.isNullOrEmpty()) return@mapNotNull null
-            Pair(key, value)
+          if (value.isNullOrEmpty()) return@mapNotNull null
+          Pair(key, value)
         }
-        val entities = dtos.flatMap { (name, steps) ->
-            steps.map { step ->
-                RecipeStepEntity(
-                    stepId = "${id}_${step.number}",
-                    recipeId = id,
-                    stepNo = step.number ?: 0,
-                    stepDescription = step.step.orEmpty(),
-                    stepName = name
-                )
-            }
+    val entities =
+      dtos.flatMap { (name, steps) ->
+        steps.map { step ->
+          RecipeStepEntity(
+            stepId = "${id}_${step.number}",
+            recipeId = id,
+            stepNo = step.number ?: 0,
+            stepDescription = step.step.orEmpty(),
+            stepName = name,
+          )
         }
-        return entities
-    }
+      }
+    return entities
+  }
 
-    fun jsonToRecipeEntities(dtos: List<RecipeDTO>, existingRecipes: Map<Long, RecipeEntity>): List<RecipeEntity> {
-        return dtos.map { dto ->
-            val existingRecipe = existingRecipes[dto.id]
-            val cuisines = existingRecipe?.cuisines ?: get(dto.cuisines)
-            val dishTypes = existingRecipe?.dishTypes ?: get(dto.dishTypes)
-            val diets = existingRecipe?.diets ?: get(dto.diets)
-            RecipeEntity(
-                id = dto.id,
-                recipeName = dto.title,
-                recipeSummary = dto.summary ?: existingRecipe?.recipeSummary.orEmpty(),
-                recipeImg = dto.image?.ifEmpty { existingRecipe?.recipeImg.orEmpty() } ?: existingRecipe?.recipeImg.orEmpty(),
-                recipeReadyInMins = dto.readyInMinutes ?: existingRecipe?.recipeReadyInMins ?: 0,
-                servings = dto.servings ?: existingRecipe?.servings ?:  0,
-                pricePerServing = dto.pricePerServing ?: existingRecipe?.pricePerServing ?: 0.0,
-                sourceName = dto.sourceName ?: existingRecipe?.sourceName.orEmpty(),
-                recipeSource = dto.sourceUrl ?: existingRecipe?.recipeSource.orEmpty(),
-                isAddedToCollection = false,
-                cuisines = cuisines,
-                dishTypes = dishTypes,
-                diets = diets,
-                caloricBreakdown = emptyMap()
-            )
-        }
-    }
+  fun jsonToRecipeEntities(
+    dtos: List<RecipeDTO>,
+    existingRecipes: Map<Long, RecipeEntity>,
+  ): List<RecipeEntity> = dtos.map { dto ->
+    val existingRecipe = existingRecipes[dto.id]
+    val cuisines = existingRecipe?.cuisines ?: get(dto.cuisines)
+    val dishTypes = existingRecipe?.dishTypes ?: get(dto.dishTypes)
+    val diets = existingRecipe?.diets ?: get(dto.diets)
+    RecipeEntity(
+      id = dto.id,
+      recipeName = dto.title,
+      recipeSummary = dto.summary ?: existingRecipe?.recipeSummary.orEmpty(),
+      recipeImg = dto.image?.ifEmpty { existingRecipe?.recipeImg.orEmpty() }
+        ?: existingRecipe?.recipeImg.orEmpty(),
+      recipeReadyInMins = dto.readyInMinutes ?: existingRecipe?.recipeReadyInMins ?: 0,
+      servings = dto.servings ?: existingRecipe?.servings ?: 0,
+      pricePerServing = dto.pricePerServing ?: existingRecipe?.pricePerServing ?: 0.0,
+      sourceName = dto.sourceName ?: existingRecipe?.sourceName.orEmpty(),
+      recipeSource = dto.sourceUrl ?: existingRecipe?.recipeSource.orEmpty(),
+      isAddedToCollection = false,
+      cuisines = cuisines,
+      dishTypes = dishTypes,
+      diets = diets,
+      caloricBreakdown = emptyMap(),
+    )
+  }
 
-    fun jsonToSimilarEntities(dtos: List<RecipeDTO>, id: Long): List<SimilarRecipeEntity> {
-        return dtos.map { dto ->
-            SimilarRecipeEntity(
-                id = "${id}_${dto.id}",
-                recipeId = dto.id,
-                parentRecipeId = id
-            )
-        }
-    }
+  fun jsonToSimilarEntities(
+    dtos: List<RecipeDTO>,
+    id: Long,
+  ): List<SimilarRecipeEntity> = dtos.map { dto ->
+    SimilarRecipeEntity(
+      id = "${id}_${dto.id}",
+      recipeId = dto.id,
+      parentRecipeId = id,
+    )
+  }
 
-    fun entityToRecipe(entities: List<RecipeEntity>): List<Recipe> {
-        return entities.map { entity ->
-            Recipe(
-                id = entity.id,
-                name = entity.recipeName,
-                image = entity.recipeImg,
-                page = 1 // TODO handle pages
-            )
-        }
-    }
+  fun entityToRecipe(entities: List<RecipeEntity>): List<Recipe> = entities.map { entity ->
+    Recipe(
+      id = entity.id,
+      name = entity.recipeName,
+      image = entity.recipeImg,
+      page = 1, // TODO handle pages
+    )
+  }
 
-    fun entitiesToIngredients(entities: List<IngredientEntity>): List<Ingredient> {
-        return entities.map { entity ->
-            Ingredient(
-                id = entity.id,
-                image = entity.ingredientImg,
-                localizedName = entity.ingredientName,
-                name = entity.ingredientName,
-                quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}"
-            )
-        }
-    }
+  fun entitiesToIngredients(entities: List<IngredientEntity>): List<Ingredient> = entities.map { entity ->
+    Ingredient(
+      id = entity.id,
+      image = entity.ingredientImg,
+      localizedName = entity.ingredientName,
+      name = entity.ingredientName,
+      quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}",
+    )
+  }
 
-    fun entitiesToSteps(entities: List<RecipeStepEntity>): List<Instruction> {
-        return entities.map { entity ->
-            Instruction(
-                stepNo = "Step ${entity.stepNo}",
-                stepDesc = entity.stepDescription
-            )
-        }
-    }
+  fun entitiesToSteps(entities: List<RecipeStepEntity>): List<Instruction> = entities.map { entity ->
+    Instruction(
+      stepNo = "Step ${entity.stepNo}",
+      stepDesc = entity.stepDescription,
+    )
+  }
 
-    fun ingredientsToShoppingCarts(ingredients: List<IngredientEntity>): List<ShoppingEntity> {
-        return ingredients.map { entity ->
-            ingredientToShoppingCart(entity)
-        }
-    }
+  fun ingredientsToShoppingCarts(ingredients: List<IngredientEntity>): List<ShoppingEntity> = ingredients.map { entity ->
+    ingredientToShoppingCart(entity)
+  }
 
-    fun ingredientToShoppingCart(entity: IngredientEntity): ShoppingEntity {
-        return ShoppingEntity(
-            id = entity.id,
-            recipeId = entity.recipeId,
-            isBought = false
+  fun ingredientToShoppingCart(entity: IngredientEntity): ShoppingEntity = ShoppingEntity(
+    id = entity.id,
+    recipeId = entity.recipeId,
+    isBought = false,
+  )
+
+  fun entityToShopping(entities: List<ShoppingEntity>): List<Shopping> = entities.map { entity ->
+    Shopping(
+      id = entity.id,
+      isBought = entity.isBought,
+    )
+  }
+
+  fun entitiesToCart(entities: List<CartEntity>): List<CartIngredient> = entities.map { entity ->
+    CartIngredient(
+      id = entity.id,
+      recipeId = entity.recipeId,
+      recipeName = entity.recipeName,
+      recipeImg = entity.recipeImg,
+      isBought = entity.isBought,
+      quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}",
+      ingredientName = entity.ingredientName,
+      aisleCategory = entity.aisleCategory,
+      servings = entity.servings,
+    )
+  }
+
+  fun recipeToShoppingCart(
+    ingredients: List<IngredientEntity>,
+    shoppingItems: List<ShoppingEntity>,
+  ): List<ShoppingEntity> {
+    val recipeIngredients =
+      ingredients.map { entity ->
+        val shopping =
+          shoppingItems.firstOrNull { shoppingEntity -> shoppingEntity.id == entity.id }
+        val newEntity = ingredientToShoppingCart(entity)
+        newEntity.copy(
+          isBought = shopping?.isBought ?: newEntity.isBought,
         )
-    }
+      }
+    return recipeIngredients
+  }
 
-    fun entityToShopping(entities: List<ShoppingEntity>): List<Shopping> {
-        return entities.map { entity ->
-            Shopping(
-                id = entity.id,
-                isBought = entity.isBought
-            )
-        }
-    }
-
-    fun entitiesToCart(entities: List<CartEntity>): List<CartIngredient> {
-        return entities.map { entity ->
-            CartIngredient(
-                id = entity.id,
-                recipeId = entity.recipeId,
-                recipeName = entity.recipeName,
-                recipeImg = entity.recipeImg,
-                isBought = entity.isBought,
-                quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}",
-                ingredientName = entity.ingredientName,
-                aisleCategory = entity.aisleCategory,
-                servings = entity.servings
-            )
-        }
-    }
-
-    fun recipeToShoppingCart(
-        ingredients: List<IngredientEntity>,
-        shoppingItems: List<ShoppingEntity>
-    ): List<ShoppingEntity> {
-        val recipeIngredients = ingredients.map { entity ->
-            val shopping = shoppingItems.firstOrNull { shoppingEntity -> shoppingEntity.id == entity.id }
-            val newEntity = ingredientToShoppingCart(entity)
-            newEntity.copy(
-                isBought = shopping?.isBought ?: newEntity.isBought
-            )
-        }
-        return recipeIngredients
-    }
-
-    fun jsonToNutritionEntity(recipeId: Long, dtos: List<NutrientDTO>): List<NutrientEntity> {
-        return dtos.map { dto ->
-            NutrientEntity(
-                recipeId = recipeId,
-                name = dto.name ?: "",
-                amount = dto.amount ?: 0.0,
-                unit = dto.unit ?: "",
-                percentOfDailyNeed = dto.percentOfDailyNeeds ?: 0.0
-            )
-        }
-    }
+  fun jsonToNutritionEntity(
+    recipeId: Long,
+    dtos: List<NutrientDTO>,
+  ): List<NutrientEntity> = dtos.map { dto ->
+    NutrientEntity(
+      recipeId = recipeId,
+      name = dto.name ?: "",
+      amount = dto.amount ?: 0.0,
+      unit = dto.unit ?: "",
+      percentOfDailyNeed = dto.percentOfDailyNeeds ?: 0.0,
+    )
+  }
 }
 
 internal fun getDisplayableDouble(value: Double): String {
-    val intValue = value.toInt()
+  val intValue = value.toInt()
 
-    val difference = value - intValue
-    return if (difference != 0.0) {
-        "${value.padding(2)}"
-    } else {
-        "$intValue"
-    }
+  val difference = value - intValue
+  return if (difference != 0.0) {
+    "${value.padding(2)}"
+  } else {
+    "$intValue"
+  }
 }
 
 internal fun Double.padding(decimalPrecision: Int): Double {
-    val scale = 10.0.pow(decimalPrecision)
-    return round(this * scale) / scale
+  val scale = 10.0.pow(decimalPrecision)
+  return round(this * scale) / scale
 }

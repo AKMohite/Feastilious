@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.mealplanner.tabs.today
 
 import android.os.Bundle
@@ -22,59 +24,62 @@ import com.ak.feastit.utils.show
 import kotlinx.coroutines.launch
 
 internal class MealPlanTodayFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding? = FragmentMealPlanTodayBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding? =
-        FragmentMealPlanTodayBinding.inflate(inflater)
+  private val binding: FragmentMealPlanTodayBinding
+    get() = baseBinding as FragmentMealPlanTodayBinding
 
-    private val binding: FragmentMealPlanTodayBinding
-        get() = baseBinding as FragmentMealPlanTodayBinding
+  private val viewmodel: MealPlannerViewModel by viewModels({ requireParentFragment() })
 
-    private val viewmodel: MealPlannerViewModel by viewModels({ requireParentFragment() })
+  // TODO: We can have same adapter for all tabs.
+  private var adapter: UnscheduledRecipeAdapter? = null
 
-    // TODO: We can have same adapter for all tabs.
-    private var adapter: UnscheduledRecipeAdapter? = null
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    setupView()
+    observers()
+  }
 
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        setupView()
-        observers()
-    }
+  private fun setupView() {
+    binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
+    binding.emptyState.emptyHeader.text = getString(R.string.today_empty_header)
+    binding.emptyState.emptyBody.text = getString(R.string.today_empty_body)
+    adapter =
+      UnscheduledRecipeAdapter(
+        onMealPlanClick = ::handleMealPlanEvent,
+      )
+    binding.todayMeals.layoutManager =
+      LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    binding.todayMeals.adapter = adapter
+  }
 
-    private fun setupView() {
-        binding.emptyState.emptyImg.setImageResource(R.drawable.ic_recipe_img_placeholder)
-        binding.emptyState.emptyHeader.text = getString(R.string.today_empty_header)
-        binding.emptyState.emptyBody.text = getString(R.string.today_empty_body)
-        adapter = UnscheduledRecipeAdapter(
-            onMealPlanClick = ::handleMealPlanEvent
-        )
-        binding.todayMeals.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.todayMeals.adapter = adapter
-    }
-
-    private fun observers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewmodel.state.collect { state ->
-                    binding.emptyState.root.show(state.todayRecipes.isEmpty())
-                    binding.todayMeals.show(state.todayRecipes.isNotEmpty())
-                    adapter?.reload(state.todayRecipes)
-                }
-            }
+  private fun observers() {
+    viewLifecycleOwner.lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewmodel.state.collect { state ->
+          binding.emptyState.root.show(state.todayRecipes.isEmpty())
+          binding.todayMeals.show(state.todayRecipes.isNotEmpty())
+          adapter?.reload(state.todayRecipes)
         }
+      }
     }
+  }
 
-    private fun handleMealPlanEvent(event: OnMealPlanClick) {
-        when(event) {
-            is OnMealPlanClick.MoreMenu -> viewmodel.openBottomSheet(event.recipe)
-            is OnMealPlanClick.RecipeDetail -> {
-                (requireParentFragment() as MealPlannerFragment)
-                    .findNavController().navigate(MealPlannerFragmentDirections.plannerToRecipeDetail(event.recipe.recipeId))
-            }
-        }
+  private fun handleMealPlanEvent(event: OnMealPlanClick) {
+    when (event) {
+      is OnMealPlanClick.MoreMenu -> viewmodel.openBottomSheet(event.recipe)
+      is OnMealPlanClick.RecipeDetail -> {
+        (requireParentFragment() as MealPlannerFragment)
+          .findNavController()
+          .navigate(MealPlannerFragmentDirections.plannerToRecipeDetail(event.recipe.recipeId))
+      }
     }
+  }
 
-    override fun onDestroyView() {
-        adapter = null
-        super.onDestroyView()
-    }
-
+  override fun onDestroyView() {
+    adapter = null
+    super.onDestroyView()
+  }
 }

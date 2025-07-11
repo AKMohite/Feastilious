@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.mealplanner.tabs.unscheduled.components
 
 import android.view.LayoutInflater
@@ -8,24 +10,30 @@ import com.ak.feastit.databinding.ComponentMealPlanRecipeBinding
 import com.mak.feastit.domain.model.MealPlanRecipe
 
 internal class UnscheduledRecipeAdapter(
-    private val onMealPlanClick: (OnMealPlanClick) -> Unit
-): RecyclerView.Adapter<ComponentMealPlanRecipe>() {
+  private val onMealPlanClick: (OnMealPlanClick) -> Unit,
+) : RecyclerView.Adapter<ComponentMealPlanRecipe>() {
+  private val asyncDiff = AsyncListDiffer(this, UnscheduledRecipeDiff())
 
-    private val asyncDiff = AsyncListDiffer(this, UnscheduledRecipeDiff())
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): ComponentMealPlanRecipe {
+    val binding =
+      ComponentMealPlanRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    return ComponentMealPlanRecipe(binding, onMealPlanClick)
+  }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentMealPlanRecipe {
-        val binding = ComponentMealPlanRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ComponentMealPlanRecipe(binding, onMealPlanClick)
-    }
+  override fun getItemCount(): Int = asyncDiff.currentList.size
 
-    override fun getItemCount(): Int = asyncDiff.currentList.size
+  override fun onBindViewHolder(
+    holder: ComponentMealPlanRecipe,
+    position: Int,
+  ) {
+    val recipe = asyncDiff.currentList[position]
+    holder.bind(recipe)
+  }
 
-    override fun onBindViewHolder(holder: ComponentMealPlanRecipe, position: Int) {
-        val recipe = asyncDiff.currentList[position]
-        holder.bind(recipe)
-    }
-
-    fun reload(items: List<MealPlanRecipe>) {
-        asyncDiff.submitList(items)
-    }
+  fun reload(items: List<MealPlanRecipe>) {
+    asyncDiff.submitList(items)
+  }
 }

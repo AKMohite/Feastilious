@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.yumdetail.tabs
 
 import androidx.fragment.app.Fragment
@@ -10,37 +12,38 @@ import com.ak.feastit.ui.yumdetail.tabs.nutrition.RecipeNutritionFragment
 import com.ak.feastit.ui.yumdetail.tabs.overview.RecipeOverviewFragment
 
 internal enum class RecipeDetailTab {
-    Overview,
-    Ingredients,
-    Instructions,
-    Nutrition
+  Overview,
+  Ingredients,
+  Instructions,
+  Nutrition,
 }
 
 internal class DetailPagerAdapter(
-    fragmentManager: FragmentManager,
-    lifecycle: Lifecycle
-): FragmentStateAdapter(
-    fragmentManager,
-    lifecycle
+  fragmentManager: FragmentManager,
+  lifecycle: Lifecycle,
+) : FragmentStateAdapter(
+  fragmentManager,
+  lifecycle,
 ) {
-    override fun getItemCount(): Int = RecipeDetailTab.entries.size
+  override fun getItemCount(): Int = RecipeDetailTab.entries.size
 
-    override fun createFragment(position: Int): Fragment {
-        return when(position) {
-            RecipeDetailTab.Overview.ordinal -> {
-                RecipeOverviewFragment()
-            }
-            RecipeDetailTab.Ingredients.ordinal -> {
-                RecipeIngredientsFragment()
-            }
-            RecipeDetailTab.Instructions.ordinal -> {
-                RecipeInstructionsFragment()
-            }
-            RecipeDetailTab.Nutrition.ordinal -> {
-                RecipeNutritionFragment()
-            }
-            else -> throw IllegalArgumentException("Invalid tab position: $position")
-        }
+  override fun createFragment(position: Int): Fragment = when (position) {
+    RecipeDetailTab.Overview.ordinal -> {
+      RecipeOverviewFragment()
     }
 
+    RecipeDetailTab.Ingredients.ordinal -> {
+      RecipeIngredientsFragment()
+    }
+
+    RecipeDetailTab.Instructions.ordinal -> {
+      RecipeInstructionsFragment()
+    }
+
+    RecipeDetailTab.Nutrition.ordinal -> {
+      RecipeNutritionFragment()
+    }
+
+    else -> throw IllegalArgumentException("Invalid tab position: $position")
+  }
 }
