@@ -12,12 +12,8 @@ import coil.request.SuccessResult
 import com.ak.feastit.R
 import com.mak.feastit.domain.model.FavoriteWidgetType
 import com.mak.feastit.domain.repository.WidgetRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 internal class FavoriteRecipesWidgetViewsFactory(
@@ -44,30 +40,24 @@ internal class FavoriteRecipesWidgetViewsFactory(
   private fun createItemRemoteView(type: FavoriteWidgetType.Item): RemoteViews {
     return RemoteViews(context.packageName, R.layout.widget_favorite_recipe).apply {
       setTextViewText(R.id.widget_fav_recipe_title, type.recipe.name)
-      job = CoroutineScope(Dispatchers.IO).launch {
-        try {
-          Timber.d("Loading image for ${type.recipe.image}")
-          val loader = ImageLoader(context)
-          val request =
-            ImageRequest
-              .Builder(context)
-              .data(type.recipe.image)
-              .size(context.resources.getDimensionPixelSize(R.dimen.icon_size), context.resources.getDimensionPixelSize(R.dimen.icon_size))
-              .allowHardware(false) // Disable hardware bitmaps.
-              .build()
-          //        TODO load images in list
-          val drawable = (loader.execute(request) as? SuccessResult)?.drawable
-          val bitmap = (drawable as? BitmapDrawable)?.bitmap
-          bitmap?.let {
-            Timber.d("Image loaded")
-            withContext(Dispatchers.Main) {
-              setImageViewBitmap(R.id.widget_fav_recipe_img, it)
-//                AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
-            }
-          }
-        } catch (t: Throwable) {
-          Timber.e(t, "Cannot load image ${type.recipe.image}")
+      try {
+        Timber.d("Loading image for ${type.recipe.image}")
+        val loader = ImageLoader(context)
+        val request =
+          ImageRequest
+            .Builder(context)
+            .data(type.recipe.image)
+            .size(context.resources.getDimensionPixelSize(R.dimen.icon_size), context.resources.getDimensionPixelSize(R.dimen.icon_size))
+            .allowHardware(false) // Disable hardware bitmaps.
+            .build()
+        val drawable = runBlocking { (loader.execute(request) as? SuccessResult)?.drawable }
+        val bitmap = (drawable as? BitmapDrawable)?.bitmap
+        bitmap?.let {
+          Timber.d("Image loaded")
+          setImageViewBitmap(R.id.widget_fav_recipe_img, it)
         }
+      } catch (t: Throwable) {
+        Timber.e(t, "Cannot load image ${type.recipe.image}")
       }
     }
   }
