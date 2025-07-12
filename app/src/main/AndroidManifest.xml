@@ -82,6 +82,9 @@
         <receiver android:name=".core.notification.PostNotificationBroadcastReceiver"
             android:exported="false"/>
 
+      <service android:name=".ui.widgets.favoriterecipes.FavoriteRecipesWidgetService"
+        android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
       <receiver android:name=".ui.widgets.favoriterecipes.FavoriteRecipesWidgetProvider"
         android:exported="false"
         android:label="@string/favorite_recipes">
