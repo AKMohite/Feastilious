@@ -3,24 +3,30 @@
 package com.ak.feastit.ui.widgets.favoriterecipes
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import androidx.annotation.StringRes
 import coil.ImageLoader
 import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.ak.feastit.R
-import com.mak.feastit.domain.model.Recipe
-import com.mak.feastit.domain.repository.RecipesRepository
-import kotlinx.coroutines.flow.firstOrNull
+import com.mak.feastit.domain.model.FavoriteWidgetType
+import com.mak.feastit.domain.repository.WidgetRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 internal class FavoriteRecipesWidgetViewsFactory(
   private val context: Context,
-  private val recipesRepository: RecipesRepository,
+  private val widgetRepository: WidgetRepository,
 ) : RemoteViewsService.RemoteViewsFactory {
 
   private val viewItems = mutableListOf<FavoriteWidgetType>()
+  private var job: Job? = null
 
   override fun getCount(): Int = viewItems.count()
 
@@ -38,23 +44,30 @@ internal class FavoriteRecipesWidgetViewsFactory(
   private fun createItemRemoteView(type: FavoriteWidgetType.Item): RemoteViews {
     return RemoteViews(context.packageName, R.layout.widget_favorite_recipe).apply {
       setTextViewText(R.id.widget_fav_recipe_title, type.recipe.name)
-      try {
-        val loader = ImageLoader(context)
-        val request =
-          ImageRequest
-            .Builder(context)
-            .data(type.recipe.image)
-            .allowHardware(false) // Disable hardware bitmaps.
-            .build()
-//        TODO load images in lis
-        /*val drawable = (loader.execute(request) as? SuccessResult)?.drawable
-        val bitmap = (drawable as? BitmapDrawable)?.bitmap
-        bitmap?.let {
-          setImageViewBitmap(R.id.widget_fav_recipe_img, it)
-          Timber.d("Image loaded")
-        }*/
-      } catch (t: Throwable) {
-        Timber.e(t, "Cannot load image ${type.recipe.image}")
+      job = CoroutineScope(Dispatchers.IO).launch {
+        try {
+          Timber.d("Loading image for ${type.recipe.image}")
+          val loader = ImageLoader(context)
+          val request =
+            ImageRequest
+              .Builder(context)
+              .data(type.recipe.image)
+              .size(context.resources.getDimensionPixelSize(R.dimen.icon_size), context.resources.getDimensionPixelSize(R.dimen.icon_size))
+              .allowHardware(false) // Disable hardware bitmaps.
+              .build()
+          //        TODO load images in list
+          val drawable = (loader.execute(request) as? SuccessResult)?.drawable
+          val bitmap = (drawable as? BitmapDrawable)?.bitmap
+          bitmap?.let {
+            Timber.d("Image loaded")
+            withContext(Dispatchers.Main) {
+              setImageViewBitmap(R.id.widget_fav_recipe_img, it)
+//                AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views)
+            }
+          }
+        } catch (t: Throwable) {
+          Timber.e(t, "Cannot load image ${type.recipe.image}")
+        }
       }
     }
   }
@@ -73,7 +86,7 @@ internal class FavoriteRecipesWidgetViewsFactory(
 
   override fun onDataSetChanged() {
     runBlocking {
-      val favorites = recipesRepository.observeFavoriteRecipes().firstOrNull() ?: return@runBlocking
+      val favorites = widgetRepository.getFavoriteRecipes()
       viewItems.clear()
       if (favorites.isNotEmpty()) {
         viewItems.add(FavoriteWidgetType.Header(R.string.favorites))
@@ -84,17 +97,7 @@ internal class FavoriteRecipesWidgetViewsFactory(
     }
   }
 
-  override fun onDestroy() = Unit
-}
-
-private sealed interface FavoriteWidgetType {
-  val id: Long
-  data class Item(
-    val recipe: Recipe,
-    override val id: Long = recipe.id,
-  ) : FavoriteWidgetType
-  data class Header(
-    @StringRes val title: Int,
-    override val id: Long = 1L,
-  ) : FavoriteWidgetType
+  override fun onDestroy() {
+    job?.cancel()
+  }
 }

@@ -26,11 +26,11 @@ interface RecipeDAO : BaseDAO<RecipeEntity> {
   ): Int
 
   @Query(
-    """SELECT * FROM recipes WHERE 
-                    LOWER(name) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+    """SELECT * FROM recipes WHERE
+                    LOWER(name) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR
                     LOWER(diets) LIKE '%' || :searchQuery || '%'""",
   )
   suspend fun searchRecipes(searchQuery: String): List<RecipeEntity>
@@ -40,20 +40,20 @@ interface RecipeDAO : BaseDAO<RecipeEntity> {
 
   @Query(
     """SELECT * FROM recipes WHERE is_fav = 1 AND
-                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR
                     LOWER(diets) LIKE '%' || :searchQuery || '%')""",
   )
   suspend fun getFavRecipes(searchQuery: String): List<RecipeEntity>
 
   @Query(
     """SELECT * FROM recipes WHERE is_fav = 1 AND
-                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR
                     LOWER(diets) LIKE '%' || :searchQuery || '%') LIMIT 50""",
   )
   fun searchFavRecipes(searchQuery: String): Flow<List<RecipeEntity>>
@@ -70,12 +70,15 @@ interface RecipeDAO : BaseDAO<RecipeEntity> {
   @Query("SELECT * FROM recipes WHERE is_fav = 1")
   fun observeFavoriteRecipes(): Flow<List<RecipeEntity>>
 
+  @Query("SELECT * FROM recipes WHERE is_fav = 1 LIMIT 20")
+  fun getFavoriteRecipesForWidget(): Flow<List<RecipeEntity>>
+
   @Query(
     """SELECT * FROM recipes WHERE is_fav = 1 AND
-                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR 
-                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR 
+                    (LOWER(name) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(summary) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(cuisines) LIKE '%' || :searchQuery || '%' OR
+                    LOWER(dish_types) LIKE '%' || :searchQuery || '%' OR
                     LOWER(diets) LIKE '%' || :searchQuery || '%')""",
   )
   fun observeQueryRecipes(searchQuery: String): PagingSource<Int, RecipeEntity>

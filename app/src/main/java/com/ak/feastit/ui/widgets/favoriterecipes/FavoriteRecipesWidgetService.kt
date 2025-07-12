@@ -4,19 +4,19 @@ package com.ak.feastit.ui.widgets.favoriterecipes
 
 import android.content.Intent
 import android.widget.RemoteViewsService
-import com.mak.feastit.domain.repository.RecipesRepository
+import com.mak.feastit.domain.repository.WidgetRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class FavoriteRecipesWidgetService : RemoteViewsService() {
 
-  @Inject lateinit var recipesRepository: RecipesRepository
+  @Inject lateinit var widgetRepository: WidgetRepository
 
   override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory? {
     return FavoriteRecipesWidgetViewsFactory(
       context = applicationContext,
-      recipesRepository = recipesRepository,
+      widgetRepository = widgetRepository,
     )
   }
 }

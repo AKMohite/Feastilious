@@ -122,4 +122,6 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="shortcut_search_recipe_long">Search recipes as per your taste</string>
     <string name="favorite_recipes_widget_desc">View your favorite recipes</string>
   <string name="content_desc_recipe_image">Recipe image</string>
+    <string name="no_favorite_recipes">There are no favorite recipes added.</string>
+  <string name="explore">Explore</string>
 </resources>

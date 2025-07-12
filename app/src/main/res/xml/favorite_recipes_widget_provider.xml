@@ -8,7 +8,7 @@
   android:minResizeWidth="100dp"
   android:minResizeHeight="100dp"
   android:maxResizeWidth="300dp"
-  android:maxResizeHeight="300dp"
+  android:maxResizeHeight="200dp"
   android:updatePeriodMillis="43200000"
   android:description="@string/favorite_recipes_widget_desc"
   android:previewLayout="@layout/component_recipe"
