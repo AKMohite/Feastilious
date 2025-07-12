@@ -82,6 +82,16 @@
         <receiver android:name=".core.notification.PostNotificationBroadcastReceiver"
             android:exported="false"/>
 
+      <receiver android:name=".ui.widgets.favoriterecipes.FavoriteRecipesWidgetProvider"
+        android:exported="false"
+        android:label="@string/favorite_recipes">
+        <intent-filter>
+          <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+        </intent-filter>
+        <meta-data android:name="android.appwidget.provider"
+          android:resource="@xml/favorite_recipes_widget_provider"/>
+      </receiver>
+
     </application>
 
 </manifest>

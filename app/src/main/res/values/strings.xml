@@ -120,4 +120,5 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
     <string name="shortcut_shopping_long">Plan your meals</string>
     <string name="shortcut_search_recipe_short">@string/search_recipes</string>
     <string name="shortcut_search_recipe_long">Search recipes as per your taste</string>
+    <string name="favorite_recipes_widget_desc">View your favorite recipes</string>
 </resources>
