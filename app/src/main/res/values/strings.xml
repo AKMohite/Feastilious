@@ -128,4 +128,17 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
   <string name="no_week_plan">There are no recipes planned for week.</string>
   <string name="explore">Explore</string>
   <string name="plan">Plan</string>
+  <string name="feast_theme_default">Default</string>
+  <string name="feast_theme_black">Black</string>
+  <string name="feast_theme_radioactive">Radioactive</string>
+  <string name="feast_theme_cyberpunk">Cyberpunk</string>
+  <string name="feast_theme_premium">Premium</string>
+  <string name="feast_theme_blue">Blue</string>
+  <string name="feast_theme_violet">Violet</string>
+  <string name="feast_theme_devil_red">Devil Red</string>
+  <string name="feast_theme_brown">Brown</string>
+  <string name="feast_theme_teal">Teal</string>
+  <string name="feast_theme_pink">Pink</string>
+  <string name="feast_theme_classic_red">Classic Red</string>
+  <string name="feast_theme_gold">Gold</string>
 </resources>
