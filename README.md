@@ -25,3 +25,7 @@ SPOONACULAR_KEY=your-api-key
 | Today plan                                 | Week plan                                 | Unschedule recipes                                      | Schedule recipe                            |
 |--------------------------------------------|-------------------------------------------|---------------------------------------------------------|--------------------------------------------|
 | ![](project-resources/meal_plan_today.png) | ![](project-resources/meal_plan_week.png) | ![](project-resources/meal_plan_unschedule_recipes.png) | ![](project-resources/schedule_recipe.png) |
+
+| No plan widget                                      | Week plan widget                                 | Favorite recipes widget                            |
+|-----------------------------------------------------|--------------------------------------------------|----------------------------------------------------|
+| ![](project-resources/no_week_meal_plan_widget.png) | ![](project-resources/week_meal_plan_widget.png) | ![](project-resources/favorite_recipes_widget.png) |||

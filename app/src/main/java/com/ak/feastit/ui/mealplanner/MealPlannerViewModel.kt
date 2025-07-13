@@ -11,6 +11,7 @@ import com.ak.feastit.core.notification.NotificationManager
 import com.ak.feastit.worker.WorkerScheduler
 import com.mak.feastit.domain.model.DayMealPlan
 import com.mak.feastit.domain.model.MealPlanRecipe
+import com.mak.feastit.domain.model.WeekMealPlanSection
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.domain.util.defaultLocalDate

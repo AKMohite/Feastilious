@@ -22,5 +22,8 @@
     <dimen name="bottom_navigation_height">68dp</dimen>
     <dimen name="screen_anim_slide_distance_end">60dp</dimen>
     <dimen name="screen_anim_slide_distance_start">-60dp</dimen>
-    <!-- endregion -->
+  <dimen name="widget_img_width">40dp</dimen>
+  <dimen name="widget_img_height">60dp</dimen>
+  <dimen name="icon_size">48dp</dimen>
+  <!-- endregion -->
 </resources>
