@@ -1,7 +1,32 @@
 <resources>
 
+  <style name="Theme.ParentTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- region type -->
+    <item name="textAppearanceDisplayLarge">@style/TextAppearance.FeastIt.DisplayLarge</item>
+    <item name="textAppearanceDisplayMedium">@style/TextAppearance.FeastIt.DisplayMedium</item>
+    <item name="textAppearanceDisplaySmall">@style/TextAppearance.FeastIt.DisplaySmall</item>
+    <item name="textAppearanceHeadlineLarge">@style/TextAppearance.FeastIt.HeadlineLarge</item>
+    <item name="textAppearanceHeadlineMedium">@style/TextAppearance.FeastIt.HeadlineMedium</item>
+    <item name="textAppearanceHeadlineSmall">@style/TextAppearance.FeastIt.HeadlineSmall</item>
+    <item name="textAppearanceTitleLarge">@style/TextAppearance.FeastIt.TitleLarge</item>
+    <item name="textAppearanceTitleMedium">@style/TextAppearance.FeastIt.TitleMedium</item>
+    <item name="textAppearanceTitleSmall">@style/TextAppearance.FeastIt.TitleSmall</item>
+    <item name="textAppearanceBodyLarge">@style/TextAppearance.FeastIt.BodyLarge</item>
+    <item name="textAppearanceBodyMedium">@style/TextAppearance.FeastIt.BodyMedium</item>
+    <item name="textAppearanceBodySmall">@style/TextAppearance.FeastIt.BodySmall</item>
+    <item name="textAppearanceLabelLarge">@style/TextAppearance.FeastIt.LabelLarge</item>
+    <item name="textAppearanceLabelMedium">@style/TextAppearance.FeastIt.LabelMedium</item>
+    <item name="textAppearanceLabelSmall">@style/TextAppearance.FeastIt.LabelSmall</item>
+    <!-- endregion -->
+
+    <!-- region shapes -->
+    <item name="shapeAppearance">@style/ThemeOverlay.ShapeCornerSize.ExtraSmall</item>
+    <item name="shapeCornerFamily">rounded</item>
+    <!-- endregion -->
+  </style>
+
   <!-- region BaseTheme -->
-  <style name="Theme.FeastIt.BaseTheme" parent="Theme.Material3.DayNight.NoActionBar">
+  <style name="Theme.FeastIt.BaseTheme" parent="Theme.ParentTheme">
     <!-- region colors -->
     <item name="colorPrimary">@color/md_theme_primary</item>
     <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -51,28 +76,6 @@
     <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
     <!-- endregion -->
 
-    <!-- region type -->
-    <item name="textAppearanceDisplayLarge">@style/TextAppearance.FeastIt.DisplayLarge</item>
-    <item name="textAppearanceDisplayMedium">@style/TextAppearance.FeastIt.DisplayMedium</item>
-    <item name="textAppearanceDisplaySmall">@style/TextAppearance.FeastIt.DisplaySmall</item>
-    <item name="textAppearanceHeadlineLarge">@style/TextAppearance.FeastIt.HeadlineLarge</item>
-    <item name="textAppearanceHeadlineMedium">@style/TextAppearance.FeastIt.HeadlineMedium</item>
-    <item name="textAppearanceHeadlineSmall">@style/TextAppearance.FeastIt.HeadlineSmall</item>
-    <item name="textAppearanceTitleLarge">@style/TextAppearance.FeastIt.TitleLarge</item>
-    <item name="textAppearanceTitleMedium">@style/TextAppearance.FeastIt.TitleMedium</item>
-    <item name="textAppearanceTitleSmall">@style/TextAppearance.FeastIt.TitleSmall</item>
-    <item name="textAppearanceBodyLarge">@style/TextAppearance.FeastIt.BodyLarge</item>
-    <item name="textAppearanceBodyMedium">@style/TextAppearance.FeastIt.BodyMedium</item>
-    <item name="textAppearanceBodySmall">@style/TextAppearance.FeastIt.BodySmall</item>
-    <item name="textAppearanceLabelLarge">@style/TextAppearance.FeastIt.LabelLarge</item>
-    <item name="textAppearanceLabelMedium">@style/TextAppearance.FeastIt.LabelMedium</item>
-    <item name="textAppearanceLabelSmall">@style/TextAppearance.FeastIt.LabelSmall</item>
-    <!-- endregion -->
-
-    <!-- region shapes -->
-    <item name="shapeAppearance">@style/ThemeOverlay.ShapeCornerSize.ExtraSmall</item>
-    <item name="shapeCornerFamily">rounded</item>
-    <!-- endregion -->
   </style>
   <!-- endregion -->
 
@@ -84,7 +87,7 @@
   </style>
 
   <!-- region radioactive theme -->
-  <style name="Theme.RadioactiveTheme" parent="Theme.Material3.DayNight.NoActionBar">
+  <style name="Theme.RadioactiveTheme" parent="Theme.ParentTheme">
     <item name="colorPrimary">@color/md_radioactive_theme_primary</item>
     <item name="colorOnPrimary">@color/md_radioactive_theme_onPrimary</item>
     <item name="colorPrimaryContainer">@color/md_radioactive_theme_primaryContainer</item>
