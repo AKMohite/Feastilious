@@ -163,7 +163,7 @@ private fun MealPlanEntity?.toMealPlanRecipe(): MealPlanRecipe? = this?.let {
   )
 }
 
-private fun List<MealPlanRecipeEntity>.mapEntitiesToModels(): List<MealPlanRecipe> = this.map { entity -> entity.toModel() }
+internal fun List<MealPlanRecipeEntity>.mapEntitiesToModels(): List<MealPlanRecipe> = this.map { entity -> entity.toModel() }
 
 private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe = MealPlanRecipe(
   id = id,

@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.feastit.databinding.ComponentDayOfWeekBinding
 import com.ak.feastit.databinding.ComponentMealPlanRecipeBinding
-import com.ak.feastit.ui.mealplanner.WeekMealPlanSection
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.ComponentMealPlanRecipe
 import com.ak.feastit.ui.mealplanner.tabs.unscheduled.components.OnMealPlanClick
 import com.ak.feastit.ui.mealplanner.tabs.week.components.ComponentDayOfWeek
+import com.mak.feastit.domain.model.WeekMealPlanSection
 
 private const val WEEK_HEADER = 0
 private const val WEEK_MEAL = 1

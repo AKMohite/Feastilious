@@ -3,7 +3,7 @@
 package com.ak.feastit.ui.mealplanner.tabs.week
 
 import androidx.recyclerview.widget.DiffUtil
-import com.ak.feastit.ui.mealplanner.WeekMealPlanSection
+import com.mak.feastit.domain.model.WeekMealPlanSection
 
 internal class MealPlanWeekDiff : DiffUtil.ItemCallback<WeekMealPlanSection>() {
   override fun areItemsTheSame(

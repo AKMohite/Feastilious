@@ -95,6 +95,19 @@
           android:resource="@xml/favorite_recipes_widget_provider"/>
       </receiver>
 
+      <service android:name=".ui.widgets.mealplan.week.WeekMealPlanWidgetService"
+        android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+      <receiver android:name=".ui.widgets.mealplan.week.WeekMealPlanWidgetProvider"
+        android:exported="false"
+        android:label="@string/meal_planner">
+        <intent-filter>
+          <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+        </intent-filter>
+        <meta-data android:name="android.appwidget.provider"
+          android:resource="@xml/week_meal_plan_widget_provider"/>
+      </receiver>
+
     </application>
 
 </manifest>
