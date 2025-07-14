@@ -10,6 +10,7 @@
     <dimen name="space_big">24dp</dimen>
     <dimen name="space_huge">48dp</dimen>
     <dimen name="space_infinity">90dp</dimen>
+  <dimen name="theme_card_width">150dp</dimen>
 
     <!-- This is to have floatable bottom navigation -->
     <dimen name="bottom_screen_padding">92dp</dimen>

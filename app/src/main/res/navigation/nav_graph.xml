@@ -172,7 +172,17 @@
         android:id="@+id/settingsFragment"
         android:name="com.ak.feastit.ui.settings.SettingsFragment"
         android:label="settings_fragment"
-        tools:layout="@layout/fragment_settings"/>
+      tools:layout="@layout/fragment_settings">
+      <action
+        android:id="@+id/settings_to_appearance"
+        app:destination="@id/settingsAppearanceFragment"/>
+    </fragment>
+
+  <fragment
+    android:id="@+id/settingsAppearanceFragment"
+    android:name="com.ak.feastit.ui.settings.appearance.SettingsAppearanceFragment"
+    android:label="settings_appearance_fragment"
+    tools:layout="@layout/fragment_settings_appearance"/>
 
     <fragment
         android:id="@+id/favoriteRecipesFragment"

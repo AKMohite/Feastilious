@@ -141,4 +141,5 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
   <string name="feast_theme_pink">Pink</string>
   <string name="feast_theme_classic_red">Classic Red</string>
   <string name="feast_theme_gold">Gold</string>
+    <string name="settings_appearance">Appearance</string>
 </resources>

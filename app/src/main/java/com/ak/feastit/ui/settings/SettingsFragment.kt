@@ -5,10 +5,14 @@ package com.ak.feastit.ui.settings
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentSettingsBinding
+import com.ak.feastit.utils.onClick
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 internal class SettingsFragment : BaseFragment() {
   override fun getViewBinding(inflater: LayoutInflater): ViewBinding? = FragmentSettingsBinding.inflate(inflater)
 
@@ -19,5 +23,8 @@ internal class SettingsFragment : BaseFragment() {
     view: View,
     savedInstanceState: Bundle?,
   ) {
+    binding.appearance.onClick {
+      findNavController().navigate(SettingsFragmentDirections.settingsToAppearance())
+    }
   }
 }
