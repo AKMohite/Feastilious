@@ -15,19 +15,25 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ActivityMainBinding
+import com.ak.feastit.ui.settings.appearance.allAppThemes
 import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.show
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 private const val EXTRA_SHORTCUT_FAVORITE = "extraShortcutFavorite"
@@ -45,6 +51,7 @@ internal class MainActivity : AppCompatActivity() {
   private val viewModel: MainViewModel by viewModels()
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    setPreferenceUIConfiguration()
     edgeToEdge()
     super.onCreate(savedInstanceState)
     baseBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -81,6 +88,24 @@ internal class MainActivity : AppCompatActivity() {
         )*/
     handleAppShortcut(intent)
     loadDynamicShortcut()
+  }
+
+  private fun setPreferenceUIConfiguration() {
+    lifecycleScope.launch(Dispatchers.IO) {
+      val sharedPrefs = getSharedPreferences(getString(R.string.preference_file_name), MODE_PRIVATE)
+//      val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
+      val isDynamic = sharedPrefs.getBoolean(getString(R.string.preference_key_dynamic_theme), false)
+      if (isDynamic && DynamicColors.isDynamicColorAvailable()) {
+        Timber.d("Dynamic theme set")
+        withContext(Dispatchers.Main) { DynamicColors.applyToActivityIfAvailable(this@MainActivity) }
+      } else {
+        val appThemes = allAppThemes
+        val themeName = sharedPrefs.getString(getString(R.string.preference_key_theme), null)
+        val theme = appThemes.firstOrNull { it.dataClassName == themeName } ?: appThemes.first()
+        Timber.d("Set app theme: ${theme.dataClassName}")
+        withContext(Dispatchers.Main) { setTheme(theme.style) }
+      }
+    }
   }
 
   private fun getNavigationController(): NavController {

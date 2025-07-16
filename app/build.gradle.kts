@@ -121,6 +121,7 @@ dependencies {
   implementation(libs.slf4j.api)
   implementation(libs.logback.android)
   implementation(libs.paging.runtime)
+  implementation(libs.preference.ktx)
 
   ksp(libs.hilt.android.compiler)
 }

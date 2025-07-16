@@ -12,11 +12,11 @@ internal class ComponentAppearanceTheme(
   private val onThemeClick: (FeastTheme) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-  fun bind(theme: FeastTheme) {
+  fun bind(theme: FeastTheme, selectedTheme: FeastTheme) {
     binding.root.removeAllViews()
     val contextTheme = ContextThemeWrapper(binding.root.context, theme.style)
     val themeComponent = ComponentThemeCard(context = contextTheme, defaultStyleRes = theme.style).apply {
-      bind(theme)
+      bind(theme, selectedTheme)
     }
     binding.root.addView(themeComponent)
     binding.root.onClick { onThemeClick(theme) }

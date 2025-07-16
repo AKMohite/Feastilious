@@ -20,9 +20,9 @@ internal class ComponentThemeCard @JvmOverloads constructor(
 
   private val binding: ComponentThemeCardBinding = ComponentThemeCardBinding.inflate(LayoutInflater.from(context), this, true)
 
-  fun bind(theme: FeastTheme) {
+  fun bind(theme: FeastTheme, selectedTheme: FeastTheme) {
     binding.name.text = context.getString(theme.title)
-    binding.themeCardSelected.show(theme is FeastTheme.DevilRed)
+    binding.themeCardSelected.show(theme.dataClassName == selectedTheme.dataClassName)
 //    binding.root.theme = theme.theme
   }
 }

@@ -7,7 +7,8 @@ import androidx.annotation.StyleRes
 import com.ak.feastit.R
 
 internal sealed interface FeastTheme {
-  val name: String
+  val dataClassName: String
+    get() = this::class.java.simpleName
   val title: Int
 
 //  val primaryColor: Int
@@ -18,7 +19,6 @@ internal sealed interface FeastTheme {
   val style: Int
 
   data class Default(
-    override val name: String = Default::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_default,
 //    @ColorRes override val primaryColor: Int = R.color.md_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_theme_secondary,
@@ -29,7 +29,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Black(
-    override val name: String = Black::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_black,
 //    @ColorRes override val primaryColor: Int = R.color.md_black_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_black_theme_secondary,
@@ -40,7 +39,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Radioactive(
-    override val name: String = Radioactive::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_radioactive,
 //    @ColorRes override val primaryColor: Int = R.color.md_radioactive_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_radioactive_theme_secondary,
@@ -51,7 +49,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Cyberpunk(
-    override val name: String = Cyberpunk::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_cyberpunk,
 //    @ColorRes override val primaryColor: Int = R.color.md_cyberpunk_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_cyberpunk_theme_secondary,
@@ -62,7 +59,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Premium(
-    override val name: String = Premium::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_premium,
 //    @ColorRes override val primaryColor: Int = R.color.md_premium_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_premium_theme_secondary,
@@ -73,7 +69,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Blue(
-    override val name: String = Blue::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_blue,
 //    @ColorRes override val primaryColor: Int = R.color.md_blue_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_blue_theme_secondary,
@@ -84,7 +79,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Violet(
-    override val name: String = Violet::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_violet,
 //    @ColorRes override val primaryColor: Int = R.color.md_violet_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_violet_theme_secondary,
@@ -95,7 +89,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class DevilRed(
-    override val name: String = DevilRed::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_devil_red,
 //    @ColorRes override val primaryColor: Int = R.color.md_devil_red_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_devil_red_theme_secondary,
@@ -106,7 +99,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Brown(
-    override val name: String = Brown::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_brown,
 //    @ColorRes override val primaryColor: Int = R.color.md_brown_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_brown_theme_secondary,
@@ -117,7 +109,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Teal(
-    override val name: String = Teal::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_teal,
 //    @ColorRes override val primaryColor: Int = R.color.md_teal_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_teal_theme_secondary,
@@ -128,7 +119,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Pink(
-    override val name: String = Pink::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_pink,
 //    @ColorRes override val primaryColor: Int = R.color.md_pink_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_pink_theme_secondary,
@@ -139,7 +129,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class ClassicRed(
-    override val name: String = ClassicRed::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_classic_red,
 //    @ColorRes override val primaryColor: Int = R.color.md_red_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_red_theme_secondary,
@@ -150,7 +139,6 @@ internal sealed interface FeastTheme {
   ) : FeastTheme
 
   data class Gold(
-    override val name: String = Gold::class.java.name,
     @StringRes override val title: Int = R.string.feast_theme_gold,
 //    @ColorRes override val primaryColor: Int = R.color.md_gold_theme_primary,
 //    @ColorRes override val secondaryColor: Int = R.color.md_gold_theme_secondary,

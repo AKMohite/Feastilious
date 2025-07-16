@@ -23,6 +23,8 @@
     <item name="shapeAppearance">@style/ThemeOverlay.ShapeCornerSize.ExtraSmall</item>
     <item name="shapeCornerFamily">rounded</item>
     <!-- endregion -->
+
+    <item name="preferenceTheme">@style/Theme.FeastIt.PreferenceThemeOverlay</item>
   </style>
 
   <!-- region BaseTheme -->
@@ -84,6 +86,15 @@
   <style name="Widget.FeastIt.SearchView" parent="@style/Widget.AppCompat.SearchView">
     <item name="iconifiedByDefault">false</item>
     <item name="queryBackground">@android:color/transparent</item>
+  </style>
+
+  <style name="Preference.SwitchPreferenceCompat.Material3" parent="@style/Preference.SwitchPreferenceCompat.Material">
+    <item name="widgetLayout">@layout/custom_preference_switch</item>
+  </style>
+
+  <style name="Theme.FeastIt.PreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+    <!-- use Material 3 switch -->
+    <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat.Material3</item>
   </style>
 
   <!-- region radioactive theme -->

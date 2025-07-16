@@ -24,7 +24,7 @@ internal class SettingsFragment : BaseFragment() {
     savedInstanceState: Bundle?,
   ) {
     binding.appearance.onClick {
-      findNavController().navigate(SettingsFragmentDirections.settingsToAppearance())
+      findNavController().navigate(SettingsPreferenceFragmentDirections.settingsToAppearance())
     }
   }
 }

@@ -168,7 +168,7 @@
             app:argType="long" />
     </dialog>
 
-    <fragment
+    <!--<fragment
         android:id="@+id/settingsFragment"
         android:name="com.ak.feastit.ui.settings.SettingsFragment"
         android:label="settings_fragment"
@@ -176,7 +176,16 @@
       <action
         android:id="@+id/settings_to_appearance"
         app:destination="@id/settingsAppearanceFragment"/>
-    </fragment>
+    </fragment>-->
+
+  <fragment
+    android:id="@+id/settingsFragment"
+    android:name="com.ak.feastit.ui.settings.SettingsPreferenceFragment"
+    android:label="settings_preference_fragment">
+    <action
+      android:id="@+id/settings_to_appearance"
+      app:destination="@id/settingsAppearanceFragment"/>
+  </fragment>
 
   <fragment
     android:id="@+id/settingsAppearanceFragment"
