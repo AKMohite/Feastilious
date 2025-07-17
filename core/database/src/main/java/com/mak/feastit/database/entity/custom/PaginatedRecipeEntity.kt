@@ -10,7 +10,7 @@ data class PaginatedRecipeEntity(
   val recipeName: String,
   @ColumnInfo(name = "summary")
   val recipeSummary: String,
-  @ColumnInfo(name = "img")
-  val recipeImg: String,
+  @ColumnInfo(name = "image_extension")
+  val extension: String,
   val page: Int,
 )

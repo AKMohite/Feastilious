@@ -11,10 +11,13 @@ import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.database.entity.custom.CartEntity
 import com.mak.feastit.domain.model.CartIngredient
 import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
+import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.RecipeImage
+import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.domain.model.Shopping
 import com.mak.feastit.remote.dto.AnalyzedInstructionDTO
 import com.mak.feastit.remote.dto.NutrientDTO
@@ -32,7 +35,6 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
     id = json.id,
     recipeName = json.title.orEmpty(),
     recipeSummary = json.summary.orEmpty(),
-    recipeImg = json.image.orEmpty(),
     recipeReadyInMins = json.readyInMinutes ?: 0,
     servings = json.servings ?: 1,
     pricePerServing = json.pricePerServing ?: 0.0,
@@ -61,7 +63,7 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
     recipeId = entity.id,
     recipeName = entity.recipeName,
     recipeSummary = entity.recipeSummary,
-    recipeImg = entity.recipeImg,
+    recipeImg = RecipeImage(entity.id, entity.extension, RecipeImageSize.LARGE, type = ImageType.BANNER),
     recipeSource = entity.recipeSource,
     recipeReadyInMins = entity.recipeReadyInMins,
     servings = entity.servings,
@@ -157,8 +159,7 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
       id = dto.id,
       recipeName = dto.title,
       recipeSummary = dto.summary ?: existingRecipe?.recipeSummary.orEmpty(),
-      recipeImg = dto.image?.ifEmpty { existingRecipe?.recipeImg.orEmpty() }
-        ?: existingRecipe?.recipeImg.orEmpty(),
+      extension = (dto.imageType ?: "").ifBlank { "jpg" },
       recipeReadyInMins = dto.readyInMinutes ?: existingRecipe?.recipeReadyInMins ?: 0,
       servings = dto.servings ?: existingRecipe?.servings ?: 0,
       pricePerServing = dto.pricePerServing ?: existingRecipe?.pricePerServing ?: 0.0,
@@ -187,7 +188,7 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
     Recipe(
       id = entity.id,
       name = entity.recipeName,
-      image = entity.recipeImg,
+      image = RecipeImage(entity.id, entity.extension, RecipeImageSize.MEDIUM, ImageType.CELL),
       page = 1, // TODO handle pages
     )
   }
@@ -231,7 +232,7 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
       id = entity.id,
       recipeId = entity.recipeId,
       recipeName = entity.recipeName,
-      recipeImg = entity.recipeImg,
+      recipeImg = RecipeImage(entity.recipeId, entity.extension, RecipeImageSize.MEDIUM, ImageType.CELL),
       isBought = entity.isBought,
       quantity = "${getDisplayableDouble(entity.quantity)} ${entity.unit}",
       ingredientName = entity.ingredientName,

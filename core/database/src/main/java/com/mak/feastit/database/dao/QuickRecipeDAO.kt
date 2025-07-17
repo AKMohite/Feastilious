@@ -28,7 +28,7 @@ interface QuickRecipeDAO : SectionRecipeDAO<QuickRecipeEntity> {
   suspend fun getCount(page: Int): Int
 
   @Query(
-    "SELECT r.id, r.name, r.summary, r.img, p.page FROM quick_recipes p INNER JOIN recipes r ON p.recipe_id = r.id  ORDER BY p.page ASC",
+    "SELECT r.id, r.name, r.summary, r.image_extension, r.image_extension, p.page FROM quick_recipes p INNER JOIN recipes r ON p.recipe_id = r.id  ORDER BY p.page ASC",
   )
   fun pagedRecipes(): PagingSource<Int, PaginatedRecipeEntity>
 }

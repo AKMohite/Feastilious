@@ -2,9 +2,12 @@
 // License Name: <Actual name>
 package com.ak.feastit.di
 
+import coil3.intercept.Interceptor
 import com.ak.feastit.BuildConfig
+import com.ak.feastit.core.common.RecipeImageInterceptor
 import com.ak.feastit.utils.AppDispatcher
 import com.mak.feastit.domain.util.DispatcherProvider
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +26,12 @@ internal object AppModule {
   @Provides
   @Singleton
   fun provideDispatchers(): DispatcherProvider = AppDispatcher()
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class AppModuleBindings {
+
+  @Binds
+  abstract fun bindImageInterceptor(interceptor: RecipeImageInterceptor): Interceptor
 }

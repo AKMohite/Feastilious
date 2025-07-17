@@ -6,13 +6,13 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.ak.feastit.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -66,7 +66,6 @@ internal class PostNotificationBroadcastReceiver : BroadcastReceiver() {
 
       if (image.isNotBlank()) {
         try {
-          val loader = ImageLoader(context)
           val request =
             ImageRequest
               .Builder(context)
@@ -74,8 +73,9 @@ internal class PostNotificationBroadcastReceiver : BroadcastReceiver() {
               .allowHardware(false) // Disable hardware bitmaps.
               .build()
 
-          val drawable = (loader.execute(request) as? SuccessResult)?.drawable
-          val bitmap = (drawable as? BitmapDrawable)?.bitmap
+          val drawable = context.imageLoader.execute(request).image?.toBitmap()
+          val bitmap = drawable
+//          val bitmap = (drawable as? BitmapDrawable)?.bitmap
           bitmap?.let {
             notification.setLargeIcon(it)
             Timber.d("Image loaded")

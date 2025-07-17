@@ -16,8 +16,8 @@ data class MealPlanRecipeEntity(
   @ColumnInfo(name = "is_made")
   val isMade: Boolean,
   val name: String,
-  @ColumnInfo(name = "img")
-  val image: String,
+//  @ColumnInfo(name = "image_extension")
+//  val extension,
   @ColumnInfo("preparation_time")
   val preparationTime: Int,
 )

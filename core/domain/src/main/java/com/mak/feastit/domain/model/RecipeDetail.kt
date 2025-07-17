@@ -6,7 +6,7 @@ data class RecipeDetail(
   val recipeId: Long,
   val recipeName: String,
   val recipeSummary: String,
-  val recipeImg: String,
+  val recipeImg: RecipeImage,
   val recipeSource: String,
   val recipeReadyInMins: Int,
   val servings: Int,

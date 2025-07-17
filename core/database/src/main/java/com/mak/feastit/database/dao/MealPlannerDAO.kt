@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 
 // TODO add limit and offset to observe and get queries
-private const val MEAL_PLAN_QUERY = "SELECT mp.id, mp.recipe_id, mp.planned_for, datetime(mp.planned_for, '-' || r.ready_in_mins || ' minute') as notification_time, mp.is_made, r.name, r.img, r.ready_in_mins AS preparation_time FROM meal_planner mp INNER JOIN recipes r ON mp.recipe_id = r.id"
+private const val MEAL_PLAN_QUERY = "SELECT mp.id, mp.recipe_id, mp.planned_for, datetime(mp.planned_for, '-' || r.ready_in_mins || ' minute') as notification_time, mp.is_made, r.name, r.ready_in_mins AS preparation_time FROM meal_planner mp INNER JOIN recipes r ON mp.recipe_id = r.id"
 
 @Dao
 interface MealPlannerDAO : BaseDAO<MealPlanEntity> {

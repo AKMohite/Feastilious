@@ -5,7 +5,9 @@ package com.mak.feastit.data.repository
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.MealPlanEntity
 import com.mak.feastit.database.entity.custom.MealPlanRecipeEntity
+import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.MealPlanRecipe
+import com.mak.feastit.domain.model.RecipeImage
 import com.mak.feastit.domain.model.YumNotification
 import com.mak.feastit.domain.model.YumNotificationChannel
 import com.mak.feastit.domain.repository.MealPlanRepository
@@ -158,7 +160,7 @@ private fun MealPlanEntity?.toMealPlanRecipe(): MealPlanRecipe? = this?.let {
     scheduledFor = plannedFor?.defaultLocalDateTime(),
     isMade = false,
     name = "",
-    image = "",
+    image = null,
     preparationTime = 0,
   )
 }
@@ -171,6 +173,6 @@ private fun MealPlanRecipeEntity.toModel(): MealPlanRecipe = MealPlanRecipe(
   scheduledFor = scheduledFor?.defaultLocalDateTime(),
   isMade = isMade,
   name = name,
-  image = image,
+  image = RecipeImage(recipeId, "jpg", com.mak.feastit.domain.model.RecipeImageSize.MEDIUM, ImageType.CELL),
   preparationTime = preparationTime,
 )

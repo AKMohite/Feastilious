@@ -3,7 +3,7 @@
 package com.ak.feastit.ui.cart.component
 
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ComponentCartHeadingRecipeBinding
 import com.ak.feastit.ui.cart.CartRecipe
