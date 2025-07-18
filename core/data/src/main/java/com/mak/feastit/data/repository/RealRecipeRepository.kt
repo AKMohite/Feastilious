@@ -33,9 +33,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import timber.log.Timber
 
-internal class RealRecipeRepository
-@Inject
-constructor(
+internal class RealRecipeRepository @Inject constructor(
   private val api: FeastAPIService,
   private val db: FeastDB,
   private val dispatcher: DispatcherProvider,

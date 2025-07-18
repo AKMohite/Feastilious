@@ -23,6 +23,7 @@ import com.ak.feastit.R
 import com.ak.feastit.databinding.ActivityMainBinding
 import com.ak.feastit.ui.settings.appearance.allAppThemes
 import com.ak.feastit.utils.doOnApplyWindowInsets
+import com.ak.feastit.utils.getAppPreferences
 import com.ak.feastit.utils.hide
 import com.ak.feastit.utils.show
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -92,7 +93,7 @@ internal class MainActivity : AppCompatActivity() {
 
   private fun setPreferenceUIConfiguration() {
     lifecycleScope.launch(Dispatchers.IO) {
-      val sharedPrefs = getSharedPreferences(getString(R.string.preference_file_name), MODE_PRIVATE)
+      val sharedPrefs = getAppPreferences()
 //      val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
       val isDynamic = sharedPrefs.getBoolean(getString(R.string.preference_key_dynamic_theme), false)
       if (isDynamic && DynamicColors.isDynamicColorAvailable()) {

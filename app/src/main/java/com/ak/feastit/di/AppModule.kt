@@ -5,6 +5,8 @@ package com.ak.feastit.di
 import coil3.intercept.Interceptor
 import com.ak.feastit.BuildConfig
 import com.ak.feastit.core.common.RecipeImageInterceptor
+import com.ak.feastit.core.support.PowerController
+import com.ak.feastit.core.support.RealPowerController
 import com.ak.feastit.utils.AppDispatcher
 import com.mak.feastit.domain.util.DispatcherProvider
 import dagger.Binds
@@ -34,4 +36,7 @@ internal abstract class AppModuleBindings {
 
   @Binds
   abstract fun bindImageInterceptor(interceptor: RecipeImageInterceptor): Interceptor
+
+  @Binds
+  abstract fun bindPowerController(controller: RealPowerController): PowerController
 }

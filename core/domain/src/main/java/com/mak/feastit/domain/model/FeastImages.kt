@@ -9,14 +9,14 @@ data class RecipeImage(
   val type: ImageType,
 ) {
 
-  fun setImageSize(size: RecipeImageSize) {
+  private fun setImageSize(size: RecipeImageSize) {
     this.size = size
   }
 
   fun setSaver() {
     when (type) {
-      ImageType.BANNER -> this.size = RecipeImageSize.SMALL
-      ImageType.CELL -> this.size = RecipeImageSize.EXTRA_SMALL
+      ImageType.BANNER -> setImageSize(RecipeImageSize.SMALL)
+      ImageType.CELL -> setImageSize(RecipeImageSize.EXTRA_SMALL)
     }
   }
 

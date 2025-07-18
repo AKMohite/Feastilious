@@ -4,29 +4,26 @@ package com.ak.feastit.core.common
 
 import coil3.intercept.Interceptor
 import coil3.request.ImageResult
+import com.ak.feastit.core.support.PowerController
 import com.mak.feastit.domain.model.RecipeImage
-import com.mak.feastit.domain.util.DispatcherProvider
 import javax.inject.Inject
 
 internal class RecipeImageInterceptor @Inject constructor(
-  private val dispatcherProvider: DispatcherProvider,
+  private val powerController: PowerController,
 ) : Interceptor {
-
-  // TODO get from settings preference
-  private val isDataSaverEnabled: Boolean = true
 
   override suspend fun intercept(chain: Interceptor.Chain): ImageResult {
     return when (val data = chain.request.data) {
-      is RecipeImage -> createNewRequest(chain, data).proceed()
+      is RecipeImage -> createNewChain(chain, data).proceed()
       else -> chain.proceed()
     }
   }
 
-  private fun createNewRequest(
+  private suspend fun createNewChain(
     chain: Interceptor.Chain,
     image: RecipeImage,
   ): Interceptor.Chain {
-    if (isDataSaverEnabled) {
+    if (powerController.needToSaveData()) {
       image.setSaver()
     }
     val newRequest = chain.request.newBuilder()
