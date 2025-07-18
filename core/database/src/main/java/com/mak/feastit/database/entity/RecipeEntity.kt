@@ -17,8 +17,8 @@ data class RecipeEntity(
   val recipeName: String,
   @ColumnInfo(name = "summary")
   val recipeSummary: String,
-  @ColumnInfo(name = "img")
-  val recipeImg: String,
+  @ColumnInfo(name = "image_extension", defaultValue = "jpg")
+  val extension: String = "jpg",
   @ColumnInfo(name = "source")
   val recipeSource: String,
   @ColumnInfo(name = "ready_in_mins")

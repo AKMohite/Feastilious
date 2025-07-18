@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import coil.load
+import coil3.load
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentScheduleMealBinding

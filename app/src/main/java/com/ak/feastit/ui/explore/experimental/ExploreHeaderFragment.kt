@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import coil.load
+import coil3.load
+import coil3.request.error
+import coil3.request.placeholder
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentExploreHeaderBinding

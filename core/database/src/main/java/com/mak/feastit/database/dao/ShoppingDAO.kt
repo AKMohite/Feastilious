@@ -25,7 +25,7 @@ interface ShoppingDAO : BaseDAO<ShoppingEntity> {
   @Query(
     "SELECT cart.id, cart.is_bought AS isBought, ing.aisle_category AS aisleCategory, " +
       "ing.ingredient_name AS ingredientName, ing.recipe_id AS recipeId, ing.quantity, " +
-      "ing.unit, r.name AS recipeName, r.servings, r.img AS recipeImg FROM " +
+      "ing.unit, r.name AS recipeName, r.servings, r.image_extension FROM " +
       "shopping_ingredients cart INNER JOIN recipe_ingredients ing ON cart.id = ing.id " +
       "INNER JOIN recipes r ON ing.recipe_id = r.id",
   )

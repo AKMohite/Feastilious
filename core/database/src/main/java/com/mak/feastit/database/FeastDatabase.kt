@@ -2,6 +2,7 @@
 // License Name: <Actual name>
 package com.mak.feastit.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -34,6 +35,7 @@ import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.ShoppingEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
+import com.mak.feastit.database.migrations.DatabaseMigrationSpec2To3
 
 @Database(
   entities = [
@@ -51,7 +53,10 @@ import com.mak.feastit.database.entity.TopRecipeEntity
     ShoppingEntity::class,
     MealPlanEntity::class,
   ],
-  version = 2,
+  autoMigrations = [
+    AutoMigration(from = 2, to = 3, spec = DatabaseMigrationSpec2To3::class),
+  ],
+  version = 3,
 )
 @TypeConverters(InstantConverter::class, MapStringConverters::class)
 internal abstract class FeastDatabase :

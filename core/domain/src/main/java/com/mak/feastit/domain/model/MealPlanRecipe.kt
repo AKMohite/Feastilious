@@ -14,7 +14,7 @@ data class MealPlanRecipe(
   val preparationTime: Int?,
   val isMade: Boolean,
   val name: String,
-  val image: String,
+  val image: RecipeImage?,
 ) {
   /**
    * @return preparation and true if @param[scheduledFor] is null or current datetime is before @param[scheduledFor]
@@ -48,6 +48,6 @@ data class MealPlanRecipe(
     channel = YumNotificationChannel.MEAL_PLANNING,
     dateTime = notifyAt,
     deeplinkUrl = null,
-    image = image,
+    image = image?.getResource(),
   )
 }

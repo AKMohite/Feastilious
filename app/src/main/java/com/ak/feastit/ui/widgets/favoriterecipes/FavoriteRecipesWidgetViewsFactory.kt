@@ -3,12 +3,12 @@
 package com.ak.feastit.ui.widgets.favoriterecipes
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import coil.ImageLoader
-import coil.request.ImageRequest
-import coil.request.SuccessResult
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.ak.feastit.R
 import com.mak.feastit.domain.model.FavoriteWidgetType
 import com.mak.feastit.domain.repository.WidgetRepository
@@ -42,7 +42,7 @@ internal class FavoriteRecipesWidgetViewsFactory(
       setTextViewText(R.id.widget_fav_recipe_title, type.recipe.name)
       try {
         Timber.d("Loading image for ${type.recipe.image}")
-        val loader = ImageLoader(context)
+        val loader = context.imageLoader
         val request =
           ImageRequest
             .Builder(context)
@@ -50,9 +50,9 @@ internal class FavoriteRecipesWidgetViewsFactory(
             .size(context.resources.getDimensionPixelSize(R.dimen.icon_size), context.resources.getDimensionPixelSize(R.dimen.icon_size))
             .allowHardware(false) // Disable hardware bitmaps.
             .build()
-        val drawable = runBlocking { (loader.execute(request) as? SuccessResult)?.drawable }
-        val bitmap = (drawable as? BitmapDrawable)?.bitmap
-        bitmap?.let {
+        val drawable = runBlocking { loader.execute(request).image?.toBitmap() }
+//        val bitmap = drawable?.toBitmap()
+        drawable?.let {
           Timber.d("Image loaded")
           setImageViewBitmap(R.id.widget_fav_recipe_img, it)
         }

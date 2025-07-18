@@ -3,6 +3,7 @@
 package com.ak.feastit.ui.cart
 
 import com.mak.feastit.domain.model.CartIngredient
+import com.mak.feastit.domain.model.RecipeImage
 
 internal data class CartState(
   val cart: List<ShoppingCart> = emptyList(),
@@ -11,7 +12,7 @@ internal data class CartState(
 internal data class CartRecipe(
   val id: Long,
   val name: String,
-  val img: String,
+  val img: RecipeImage,
   val servings: Int,
 ) {
   fun isSameAs(recipe: CartRecipe): Boolean = this.id == recipe.id &&

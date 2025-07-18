@@ -4,7 +4,7 @@ package com.ak.feastit.ui.viewall.components
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ComponentViewAllRecipeBinding
 import com.ak.feastit.utils.onClick

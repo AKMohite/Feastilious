@@ -10,7 +10,7 @@ data class CartIngredient(
   val recipeId: Long,
   val quantity: String,
   val recipeName: String,
-  val recipeImg: String,
+  val recipeImg: RecipeImage,
   val servings: Int,
 ) {
   fun isSameAs(ingredient: CartIngredient): Boolean = this.id == ingredient.id &&

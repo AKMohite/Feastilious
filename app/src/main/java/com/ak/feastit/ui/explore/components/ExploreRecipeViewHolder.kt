@@ -4,7 +4,9 @@ package com.ak.feastit.ui.explore.components
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
+import coil3.request.error
+import coil3.request.placeholder
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ExploreRecipeItemBinding
 import com.ak.feastit.ui.explore.experimental.ExploreItemAction

@@ -2,6 +2,8 @@
 // License Name: <Actual name>
 package com.mak.feastit.database.entity.custom
 
+import androidx.room.ColumnInfo
+
 data class CartEntity(
   val id: String,
   val isBought: Boolean,
@@ -11,6 +13,7 @@ data class CartEntity(
   val quantity: Double,
   val unit: String,
   val recipeName: String,
-  val recipeImg: String,
+  @ColumnInfo(name = "image_extension")
+  val extension: String,
   val servings: Int,
 )

@@ -9,7 +9,10 @@ import com.mak.feastit.database.entity.QuickRecipeEntity
 import com.mak.feastit.database.entity.RecipeEntity
 import com.mak.feastit.database.entity.TopRecipeEntity
 import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
+import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.Recipe
+import com.mak.feastit.domain.model.RecipeImage
+import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.remote.dto.RecipeDTO
 
 internal class RecipesMapper : BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
@@ -17,13 +20,13 @@ internal class RecipesMapper : BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
     id = json.id,
     recipeName = json.title,
     recipeSummary = json.summary ?: "",
-    recipeImg = json.image.orEmpty(),
     recipeSource = json.sourceUrl ?: "",
     recipeReadyInMins = json.readyInMinutes ?: 0,
     servings = json.servings ?: 0,
     pricePerServing = json.pricePerServing ?: 0.0,
     sourceName = json.sourceName ?: "",
     isAddedToCollection = false,
+    extension = (json.imageType ?: "").ifBlank { "jpg" },
     cuisines = json.cuisines?.joinToString(",") ?: "",
     dishTypes = json.dishTypes?.joinToString(",") ?: "",
     diets = json.diets?.joinToString(",") ?: "",
@@ -33,14 +36,14 @@ internal class RecipesMapper : BaseMapper<RecipeDTO, RecipeEntity, Recipe>() {
   override fun entityToModel(entity: RecipeEntity): Recipe = Recipe(
     id = entity.id,
     name = entity.recipeName,
-    image = entity.recipeImg,
+    image = RecipeImage(entity.id, entity.extension, RecipeImageSize.MEDIUM, ImageType.CELL),
     page = 1, // TODO handle page number
   )
 
   fun paginatedEntityToModel(entity: PaginatedRecipeEntity): Recipe = Recipe(
     id = entity.id,
     name = entity.recipeName,
-    image = entity.recipeImg,
+    image = RecipeImage(entity.id, entity.extension, RecipeImageSize.MEDIUM, ImageType.CELL),
     page = entity.page,
   )
 

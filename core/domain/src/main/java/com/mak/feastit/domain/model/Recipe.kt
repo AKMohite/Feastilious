@@ -5,7 +5,7 @@ package com.mak.feastit.domain.model
 data class Recipe(
   val id: Long,
   val name: String,
-  val image: String,
+  val image: RecipeImage,
   override val page: Int,
 ) : PaginatedEntry {
   fun isSameAs(newItem: Recipe): Boolean = this.id == newItem.id &&
