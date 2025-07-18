@@ -496,7 +496,6 @@ internal class RealRecipesRepositoryTest {
     id = id,
     recipeName = "Recipe $id",
     recipeSummary = "Summary $id",
-    recipeImg = "img$id",
     recipeSource = "source$id",
     recipeReadyInMins = id.toInt(),
     servings = 4,
