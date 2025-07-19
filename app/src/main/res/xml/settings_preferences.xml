@@ -45,7 +45,11 @@
     <Preference
       android:key="@string/preference_key_privacy_policy"
       android:title="@string/settings_privacy_policy"
-      app:iconSpaceReserved="false"/>
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/privacy_policy_url" />
+    </Preference>
     <SwitchPreferenceCompat
       android:key="@string/preference_key_analytics"
       android:title="@string/settings_analytics"
@@ -75,7 +79,11 @@
       android:title="@string/settings_data_credits"
       android:icon="@drawable/spoonacular_logo"
       android:summary="@string/settings_credits_summaru"
-      app:iconSpaceReserved="false"/>
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/spoonacular_url" />
+    </Preference>
     <Preference
       android:key="@string/preference_key_app_version"
       android:title="@string/settings_app_version"
@@ -85,7 +93,11 @@
       android:key="@string/preference_key_repository"
       android:title="@string/settings_repository"
       android:summary="@string/settings_repository_summary"
-      app:iconSpaceReserved="false"/>
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/github_repo_url" />
+    </Preference>
   </PreferenceCategory>
 
 </PreferenceScreen>

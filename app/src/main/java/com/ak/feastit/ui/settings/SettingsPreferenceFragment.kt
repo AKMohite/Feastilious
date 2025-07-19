@@ -11,8 +11,10 @@ import androidx.core.view.updatePadding
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.ak.feastit.BuildConfig
 import com.ak.feastit.R
 import com.ak.feastit.utils.doOnApplyWindowInsets
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,5 +55,20 @@ internal class SettingsPreferenceFragment : PreferenceFragmentCompat() {
       true
     }
     // endregion
+
+    // region app version
+    val appVersion = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+    findPreference<Preference>(getString(R.string.preference_key_app_version))?.apply {
+      summary = appVersion + System.lineSeparator() + getString(R.string.settings_app_version_summary)
+      setOnPreferenceClickListener {
+        checkForNewVersion()
+        true
+      }
+    }
+    // endregion
+  }
+
+  private fun checkForNewVersion() {
+    Snackbar.make(requireView(), "To implement: New version api call", Snackbar.LENGTH_SHORT).show()
   }
 }

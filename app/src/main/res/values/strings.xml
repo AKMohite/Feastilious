@@ -201,4 +201,7 @@ Ut eu maximus massa. Duis eget volutpat tellus. Sed egestas tempus efficitur. Et
   <string name="settings_data_saver_summary">Refresh data less and load low quality images</string>
   <string name="preference_key_theme">preference_key_theme</string>
   <string name="settings_theme">Theme</string>
+    <string name="github_repo_url">https://github.com/AKMohite/Feastilious</string>
+  <string name="spoonacular_url">https://spoonacular.com/food-api/docs</string>
+  <string name="privacy_policy_url">https://github.com/AKMohite/Feastilious</string>
 </resources>
