@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
@@ -16,7 +17,6 @@ import com.ak.feastit.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import androidx.core.net.toUri
 
 internal class PostNotificationBroadcastReceiver : BroadcastReceiver() {
   override fun onReceive(
