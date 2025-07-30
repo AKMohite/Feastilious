@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import coil3.imageLoader
@@ -17,6 +16,7 @@ import com.ak.feastit.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import androidx.core.net.toUri
 
 internal class PostNotificationBroadcastReceiver : BroadcastReceiver() {
   override fun onReceive(
@@ -55,7 +55,7 @@ internal class PostNotificationBroadcastReceiver : BroadcastReceiver() {
                 PendingIntent.getActivity(
                   context,
                   0,
-                  Intent(Intent.ACTION_VIEW, Uri.parse(deepLink)).apply {
+                  Intent(Intent.ACTION_VIEW, deepLink.toUri()).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                   },
                   PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,

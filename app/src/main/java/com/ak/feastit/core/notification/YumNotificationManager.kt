@@ -32,9 +32,7 @@ import timber.log.Timber
 /**
  * Reference: [Tivi](https://github.com/chrisbanes/tivi/blob/main/core/notifications/core/src/androidMain/kotlin/app/tivi/core/notifications/AndroidNotificationManager.kt)
  */
-internal class YumNotificationManager
-@Inject
-constructor(
+internal class YumNotificationManager @Inject constructor(
   private val application: Application,
 ) : NotificationManager {
   private val notificationManager by lazy { NotificationManagerCompat.from(application) }
