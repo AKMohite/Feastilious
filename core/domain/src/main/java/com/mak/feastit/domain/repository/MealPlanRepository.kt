@@ -4,8 +4,8 @@ package com.mak.feastit.domain.repository
 
 import com.mak.feastit.domain.model.MealPlanRecipe
 import com.mak.feastit.domain.model.YumNotification
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.Flow
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 
 interface MealPlanRepository {

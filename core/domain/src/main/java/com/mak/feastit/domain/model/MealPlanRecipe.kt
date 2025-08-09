@@ -4,7 +4,7 @@ package com.mak.feastit.domain.model
 
 import com.mak.feastit.domain.util.defaultLocalDateTime
 import com.mak.feastit.domain.util.defaultNow
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDateTime
 
 data class MealPlanRecipe(

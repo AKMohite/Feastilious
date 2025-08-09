@@ -2,9 +2,9 @@
 // License Name: <Actual name>
 package com.mak.feastit.domain.util
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime

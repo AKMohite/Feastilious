@@ -3,7 +3,7 @@
 package com.mak.feastit.database.converters
 
 import androidx.room.TypeConverter
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 internal object InstantConverter {
   //    UTC date time format
