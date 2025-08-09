@@ -16,14 +16,14 @@ import com.mak.feastit.domain.util.defaultLocalDateTime
 import javax.inject.Inject
 import kotlin.collections.iterator
 import kotlin.collections.map
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Instant
 
 internal class RealWidgetRepository @Inject constructor(
   private val db: FeastDB,

@@ -2,7 +2,7 @@
 // License Name: <Actual name>
 package com.mak.feastit.domain.model
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class YumNotification(
   val id: String,
