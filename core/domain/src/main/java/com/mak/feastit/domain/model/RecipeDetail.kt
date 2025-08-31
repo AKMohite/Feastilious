@@ -15,4 +15,13 @@ data class RecipeDetail(
   val isAddedToCollection: Boolean = false,
   val instructions: List<Instruction> = emptyList(),
   val ingredients: List<Ingredient> = emptyList(),
+  val caloricBreakdown: Map<String, Double> = emptyMap(),
+  val nutrients: List<Nutrient> = emptyList(),
+)
+
+data class Nutrient(
+  val name: String,
+  val amount: Double,
+  val unit: String,
+  val dailyPercent: Double,
 )

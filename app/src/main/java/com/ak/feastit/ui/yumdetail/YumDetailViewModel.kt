@@ -12,6 +12,7 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.repository.CartRepository
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.repository.RecipeRepository
@@ -94,19 +95,25 @@ constructor(
 
   private fun observeRecipe(id: Long) {
     Timber.d("Observe recipe details: $id")
-    combine(
-      recipeRepository.observerRecipe(id),
-      recipeRepository.observerSimilarRecipes(id),
-      getRecipeIngredients(id),
-      getRecipeSteps(id),
-      mealPlanRepository.hasRecipe(id),
-    ) { recipe, similarRecipes, ingredients, instructions, isInMealPlan ->
+    val base =
+      combine(
+        recipeRepository.observerRecipe(id),
+        recipeRepository.observerSimilarRecipes(id),
+        getRecipeIngredients(id),
+        getRecipeSteps(id),
+        recipeRepository.observeNutrients(id),
+      ) { recipe, similarRecipes, ingredients, instructions, nutrients ->
+        DetailAggregate(recipe, similarRecipes, ingredients, instructions, nutrients)
+      }
+
+    combine(base, mealPlanRepository.hasRecipe(id)) { aggregate, isInMealPlan ->
       _state.update { currentState ->
         currentState.copy(
-          overview = recipe,
-          similarRecipes = similarRecipes,
-          ingredientSections = ingredients,
-          instructions = getRecipeStepSections(instructions, isInMealPlan),
+          overview = aggregate.recipe,
+          similarRecipes = aggregate.similarRecipes,
+          ingredientSections = aggregate.ingredientSections,
+          instructions = getRecipeStepSections(aggregate.instructions, isInMealPlan),
+          nutrients = aggregate.nutrients,
         )
       }
     }.launchIn(uiScope)
@@ -184,11 +191,20 @@ constructor(
   }
 }
 
+private data class DetailAggregate(
+  val recipe: RecipeDetail,
+  val similarRecipes: List<Recipe>,
+  val ingredientSections: List<IngredientSection>,
+  val instructions: List<StepSection>,
+  val nutrients: List<Nutrient>,
+)
+
 internal data class YumDetailState(
   val overview: RecipeDetail? = null,
   val similarRecipes: List<Recipe> = emptyList(),
   val instructions: List<StepSection> = emptyList(),
   val ingredientSections: List<IngredientSection> = emptyList(),
+  val nutrients: List<Nutrient> = emptyList(),
 ) {
   val areIngredientsInCart =
     ingredientSections

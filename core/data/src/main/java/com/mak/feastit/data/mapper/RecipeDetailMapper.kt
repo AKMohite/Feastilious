@@ -16,6 +16,7 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.RecipeImage
 import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.domain.model.Shopping
@@ -70,6 +71,7 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
     pricePerServing = entity.pricePerServing,
     sourceName = entity.sourceName,
     isAddedToCollection = entity.isAddedToCollection,
+    caloricBreakdown = entity.caloricBreakdown.mapValues { (_, v) -> v.toDoubleOrNull() ?: 0.0 },
 //            ingredients = toIngredientsDomain(detail.ingredients),
 //            instructions = toInstructionsDomain(detail.instructions)
   )
@@ -267,6 +269,15 @@ constructor() : BaseMapper<RecipeInformationDTO, RecipeEntity, RecipeDetail>() {
       amount = dto.amount ?: 0.0,
       unit = dto.unit ?: "",
       percentOfDailyNeed = dto.percentOfDailyNeeds ?: 0.0,
+    )
+  }
+
+  fun entitiesToNutrients(entities: List<NutrientEntity>): List<Nutrient> = entities.map { entity ->
+    Nutrient(
+      name = entity.name,
+      amount = entity.amount,
+      unit = entity.unit,
+      dailyPercent = entity.percentOfDailyNeed,
     )
   }
 }
