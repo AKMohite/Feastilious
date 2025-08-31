@@ -14,6 +14,7 @@ import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider
@@ -151,6 +152,14 @@ internal class RealRecipeRepository @Inject constructor(
     .flowOn(dispatcher.io)
     .map { entities ->
       mapper.entitiesToSteps(entities)
+    }.flowOn(dispatcher.computation)
+
+  override fun observeNutrients(id: Long): Flow<List<Nutrient>> = db
+    .nutrientDAO()
+    .getForRecipe(id)
+    .flowOn(dispatcher.io)
+    .map { entities ->
+      mapper.entitiesToNutrients(entities)
     }.flowOn(dispatcher.computation)
 
   private suspend fun saveRemoteSimilarRecipes(
