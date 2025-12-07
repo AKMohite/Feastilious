@@ -11,7 +11,7 @@ buildscript {
         classpath(libs.kotlin.plugin)
         classpath(libs.hilt.plugin)
         classpath(libs.navigation.safe.args.plugin)
-        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.1.0-1.0.29")
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.3")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.42.0")
         classpath("com.diffplug.spotless:spotless-plugin-gradle:7.1.0")
 
