@@ -65,10 +65,13 @@ internal class RecipeNutritionFragment : BaseFragment() {
     }
     val view = CaloriePieChartView(requireContext())
     view.setData(breakdown)
-    container.addView(view, FrameLayout.LayoutParams(
-      FrameLayout.LayoutParams.MATCH_PARENT,
-      FrameLayout.LayoutParams.MATCH_PARENT,
-    ))
+    container.addView(
+      view,
+      FrameLayout.LayoutParams(
+        FrameLayout.LayoutParams.MATCH_PARENT,
+        FrameLayout.LayoutParams.MATCH_PARENT,
+      ),
+    )
 
     // Legend rows - generate as many distinct colors as needed
     val total = breakdown.values.sum().takeIf { it > 0.0 } ?: 1.0

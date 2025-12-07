@@ -4,9 +4,9 @@ package com.mak.feastit.domain.repository
 
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.model.Nutrient
 import kotlinx.coroutines.flow.Flow
 
 interface RecipeRepository {

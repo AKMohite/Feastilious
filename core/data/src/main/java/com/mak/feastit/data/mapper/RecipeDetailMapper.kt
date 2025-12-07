@@ -14,9 +14,9 @@ import com.mak.feastit.domain.model.IMG_INGREDIENT_BASE_URL
 import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.RecipeImage
 import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.domain.model.Shopping
