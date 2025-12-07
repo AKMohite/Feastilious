@@ -34,5 +34,3 @@ internal class NutrientViewHolder(
     binding.nutrientDailyPercent.text = "${item.dailyPercent}%"
   }
 }
-
-
