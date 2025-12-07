@@ -12,9 +12,9 @@ import com.mak.feastit.database.entity.RecipeStepEntity
 import com.mak.feastit.database.entity.SimilarRecipeEntity
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.repository.RecipeRepository
 import com.mak.feastit.domain.util.DispatcherProvider

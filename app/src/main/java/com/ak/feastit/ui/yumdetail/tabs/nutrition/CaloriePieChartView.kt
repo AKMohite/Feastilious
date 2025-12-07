@@ -1,14 +1,14 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.yumdetail.tabs.nutrition
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
-import com.ak.feastit.R
 
 internal class CaloriePieChartView @JvmOverloads constructor(
   context: Context,
@@ -19,7 +19,10 @@ internal class CaloriePieChartView @JvmOverloads constructor(
   // Pair<ColorInt, fraction>
   private var segments: List<Pair<Int, Float>> = emptyList()
 
-  private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeWidth = 48f }
+  private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.STROKE
+    strokeWidth = 48f
+  }
   private val rect = RectF()
 
   fun setData(breakdown: Map<String, Double>) {
@@ -61,5 +64,3 @@ internal class CaloriePieChartView @JvmOverloads constructor(
     }
   }
 }
-
-

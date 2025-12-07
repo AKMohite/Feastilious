@@ -10,9 +10,9 @@ import com.ak.feastit.core.notification.NotificationManager
 import com.ak.feastit.worker.WorkerScheduler
 import com.mak.feastit.domain.model.Ingredient
 import com.mak.feastit.domain.model.Instruction
+import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.model.Recipe
 import com.mak.feastit.domain.model.RecipeDetail
-import com.mak.feastit.domain.model.Nutrient
 import com.mak.feastit.domain.repository.CartRepository
 import com.mak.feastit.domain.repository.MealPlanRepository
 import com.mak.feastit.domain.repository.RecipeRepository
