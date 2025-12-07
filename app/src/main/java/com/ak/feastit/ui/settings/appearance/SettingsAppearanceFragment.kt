@@ -5,6 +5,7 @@ package com.ak.feastit.ui.settings.appearance
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -105,7 +106,7 @@ internal class SettingsAppearanceFragment : PreferenceFragmentCompat() {
   }
 
   private fun recreateActivity() {
-    requireActivity().recreate()
+    ActivityCompat.recreate(requireActivity())
   }
 
   override fun onDisplayPreferenceDialog(preference: Preference) {
