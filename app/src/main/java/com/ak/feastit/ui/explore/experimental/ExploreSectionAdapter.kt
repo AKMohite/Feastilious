@@ -99,12 +99,8 @@ internal class ExploreSectionAdapter(
 //                is SectionRecipesViewHolder -> holder.itemView.restoreHierarchyState(state)
 //            }
 //        }
-    if (state != null) {
-      when (holder) {
-        is TopBannerViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
-        is SectionChipsViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
-        is SectionRecipesViewHolder -> holder.layoutManager?.onRestoreInstanceState(state)
-      }
+    if (state != null && holder is NestedRecyclerViewViewHolder) {
+      holder.layoutManager?.onRestoreInstanceState(state)
     }
   }
 
@@ -116,13 +112,9 @@ internal class ExploreSectionAdapter(
             is SectionRecipesViewHolder -> holder.itemView.layoutManager?.onSaveInstanceState()
             else -> null
         }*/
-    states[holder.layoutPosition] =
-      when (holder) {
-        is TopBannerViewHolder -> holder.layoutManager?.onSaveInstanceState()
-        is SectionChipsViewHolder -> holder.layoutManager?.onSaveInstanceState()
-        is SectionRecipesViewHolder -> holder.layoutManager?.onSaveInstanceState()
-        else -> null
-      }
+    if (holder is NestedRecyclerViewViewHolder) {
+      states[holder.layoutPosition] = holder.layoutManager?.onSaveInstanceState()
+    }
   }
 
   override fun getItemViewType(position: Int): Int = when (asyncDiff.currentList[position]) {
