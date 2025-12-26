@@ -16,14 +16,21 @@ internal class TopBannerViewHolder(
   private val sectionEvents: ((ExploreItemAction) -> Unit)? = null,
 ) : RecyclerView.ViewHolder(binding.root),
   NestedRecyclerViewViewHolder {
-  override val layoutManager: RecyclerView.LayoutManager?
+  /*override val layoutManager: RecyclerView.LayoutManager?
     get() =
       binding.headerPager.javaClass
         .getDeclaredField("mRecyclerView")
         .let {
           it.isAccessible = true
           (it.get(binding.headerPager) as? RecyclerView)?.layoutManager
-        }
+        }*/
+
+  override val layoutManager: RecyclerView.LayoutManager?
+    get() {
+      val viewPager = binding.headerPager
+      val recyclerView = viewPager.getChildAt(0) as? RecyclerView
+      return recyclerView?.layoutManager
+    }
 
   fun bind(
     adapterItem: ExploreAdapterItem.TopBanner,
