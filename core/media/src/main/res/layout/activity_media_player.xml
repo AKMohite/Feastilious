@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MediaPlayerActivity">
+
+  <androidx.media3.ui.PlayerView
+    android:id="@+id/player_view"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    app:scrubber_color="@color/white"
+    app:unplayed_color="@color/material_dynamic_neutral70"
+    app:played_color="@color/material_dynamic_primary70"
+    app:buffered_color="@color/material_dynamic_neutral95"
+    app:animation_enabled="false"
+    app:controller_layout_id="@layout/custom_controls"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ProgressBar
+    android:id="@+id/progress_bar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:indeterminateDrawable="@drawable/progress_style"
+    android:indeterminateDuration="@android:integer/config_longAnimTime"
+    style="?android:attr/progressBarStyle"
+    app:layout_constraintStart_toStartOf="@id/player_view"
+    app:layout_constraintEnd_toEndOf="@id/player_view"
+    app:layout_constraintTop_toTopOf="@id/player_view"
+    app:layout_constraintBottom_toBottomOf="@id/player_view"
+    />
+
+  <TextView
+    android:id="@+id/resize_txt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/app_name"
+    android:textColor="@color/white"
+    android:padding="8dp"
+    android:textSize="14sp"
+    android:visibility="gone"
+    tools:visibility="visible"
+    android:background="@drawable/txt_background"
+    app:layout_constraintBottom_toTopOf="@id/progress_bar"
+    app:layout_constraintEnd_toEndOf="@id/progress_bar"
+    app:layout_constraintStart_toStartOf="@id/progress_bar"
+    app:layout_constraintTop_toTopOf="@id/player_view"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
