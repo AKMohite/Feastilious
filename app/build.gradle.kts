@@ -103,6 +103,7 @@ dependencies {
   implementation(project(":core:remote"))
   implementation(project(":core:data"))
   implementation(project(":core:domain"))
+  implementation(project(":core:media"))
   implementation(libs.hilt.common)
   implementation(libs.hilt.work)
   debugImplementation(libs.leakcanary.android)
