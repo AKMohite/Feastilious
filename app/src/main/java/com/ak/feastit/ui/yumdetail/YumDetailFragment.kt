@@ -16,6 +16,7 @@ import coil3.load
 import com.ak.feastit.R
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentYumDetailBinding
+import com.ak.feastit.ui.main.MainActivity
 import com.ak.feastit.ui.yumdetail.tabs.DetailPagerAdapter
 import com.ak.feastit.ui.yumdetail.tabs.RecipeDetailTab
 import com.ak.feastit.utils.onClick
@@ -120,6 +121,14 @@ internal class YumDetailFragment : BaseFragment() {
     binding.addToFavBtn.onClick {
       viewModel.toggleFavorite()
     }
+    binding.playMedia.onClick {
+      openMediaPlayer()
+    }
+  }
+
+  private fun openMediaPlayer() {
+    // WARN: not so ideal but did for testing purpose
+    (requireActivity() as? MainActivity)?.openMedia("")
   }
 
   private fun renderView(recipe: RecipeDetail) {

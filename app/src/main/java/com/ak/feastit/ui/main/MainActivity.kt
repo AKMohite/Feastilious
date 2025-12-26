@@ -31,6 +31,7 @@ import com.google.android.material.color.DynamicColors
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import com.google.android.material.snackbar.Snackbar
+import com.mak.feastit.media.MediaPlayerActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -89,6 +90,12 @@ internal class MainActivity : AppCompatActivity() {
         )*/
     handleAppShortcut(intent)
     loadDynamicShortcut()
+  }
+
+  fun openMedia(url: String) {
+    val intent = Intent(this@MainActivity, MediaPlayerActivity::class.java)
+    intent.putExtra("url", url)
+    startActivity(intent)
   }
 
   private fun setPreferenceUIConfiguration() {

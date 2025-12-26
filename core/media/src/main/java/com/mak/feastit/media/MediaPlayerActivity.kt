@@ -268,6 +268,7 @@ class MediaPlayerActivity : AppCompatActivity() {
         isFullScreen = !isFullScreen
       }
 
+      // WARN: we are performing click programmatically to launch in full screen directly
       customBinding.fullBtn.performClick()
 
       customBinding.backBtn.setOnClickListener {
