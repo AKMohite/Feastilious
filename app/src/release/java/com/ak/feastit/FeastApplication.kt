@@ -8,15 +8,26 @@ import androidx.work.WorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 import timber.log.Timber
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
+import coil3.disk.directory
+import coil3.intercept.Interceptor
+import coil3.memory.MemoryCache
+import coil3.util.DebugLogger
 
 @HiltAndroidApp
 internal class FeastApplication :
   Application(),
   Configuration.Provider,
-  ImageLoaderFactory {
+  SingletonImageLoader.Factory {
   //    TODO lazy initialization of workers
   @Inject
   lateinit var workerFactory: WorkerFactory
+
+  @Inject
+  lateinit var imageInterceptor: Interceptor
 
   override val workManagerConfiguration: Configuration
     get() =
@@ -31,17 +42,20 @@ internal class FeastApplication :
     Timber.plant(CrashlyticsTree)
   }
 
-  //    TODO lazy initialization of image loader
-  override fun newImageLoader(): ImageLoader {
-//        TODO clear cache from local
+  // TODO lazy initialization of image loader
+  override fun newImageLoader(context: PlatformContext): ImageLoader {
+    //        TODO clear cache from local
 //        this.imageLoader.diskCache?.clear()
 //        this.imageLoader.memoryCache?.clear()
     return ImageLoader
       .Builder(this)
+      .components {
+        add(imageInterceptor)
+      }
       .memoryCache {
         MemoryCache
-          .Builder(this)
-          .maxSizePercent(0.2)
+          .Builder()
+          .maxSizePercent(this, 0.2)
           .build()
       }.diskCache {
         DiskCache
@@ -49,7 +63,8 @@ internal class FeastApplication :
           .directory(cacheDir.resolve("image_cache"))
           .maxSizeBytes(5 * 1024 * 1024)
           .build()
-      }.respectCacheHeaders(false)
+      }
+//      .respectCacheHeaders(false)
       .build()
   }
 }
