@@ -18,9 +18,28 @@ android {
         .get()
         .toInt()
 
+    ndk {
+      abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+      debugSymbolLevel = "NONE" // STRIP SYMBOLS
+    }
+
+    externalNativeBuild {
+      cmake {
+        cppFlags += "-fvisibility=hidden"
+      }
+    }
+
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles("consumer-rules.pro")
   }
+
+  externalNativeBuild {
+    cmake {
+      path = file("src/main/cpp/CMakeLists.txt")
+    }
+  }
+
+  ndkVersion = ""
 
   buildTypes {
     release {

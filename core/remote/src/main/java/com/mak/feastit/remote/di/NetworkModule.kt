@@ -60,10 +60,16 @@ internal object NetworkModule {
     .Builder()
     .addInterceptor { chain ->
       val original = chain.request()
+      println("__________Hellllloooo_________________")
+      val cap = CapillaryModule()
+      val apiKeyBytes = android.util.Base64.decode(cap.getApiKey(), android.util.Base64.DEFAULT)
+      val apiKey = String(apiKeyBytes, Charsets.UTF_8)
+      println("hell $apiKey")
+      println("__________Hellllloooo_________________")
       val url =
         original.url
           .newBuilder()
-          .addQueryParameter("apiKey", key)
+          .addQueryParameter("apiKey", apiKey)
           .build()
       val request = original.newBuilder().url(url)
       chain.proceed(request.build())
