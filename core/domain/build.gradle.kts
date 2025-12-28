@@ -31,6 +31,10 @@ android {
     create("staging") {
       initWith(getByName("release"))
     }
+
+    create("benchmark") {
+      initWith(getByName("debug"))
+    }
   }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
