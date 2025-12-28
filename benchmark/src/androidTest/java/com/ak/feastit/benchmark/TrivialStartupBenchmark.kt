@@ -2,9 +2,11 @@ package com.ak.feastit.benchmark
 
 import android.content.ComponentName
 import android.content.Intent
+import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
+import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -18,12 +20,21 @@ class TrivialStartupBenchmark {
   val rule = MacrobenchmarkRule()
 
   @Test
-  fun trivialStartup() {
+  fun trivialStartupNoProfile() {
+    trackStartup(CompilationMode.None())
+  }
+
+  @Test
+  fun trivialStartupWithProfile() {
+    trackStartup(CompilationMode.Partial(baselineProfileMode = BaselineProfileMode.Require))
+  }
+
+  private fun trackStartup(mode: CompilationMode) {
     rule.measureRepeated(
       packageName = APP_TO_BENCHMARK,
       metrics = listOf(StartupTimingMetric()),
       startupMode = StartupMode.COLD,
-      compilationMode = CompilationMode.DEFAULT, // don't care yet
+      compilationMode = mode, // don't care yet
       iterations = 1,
       setupBlock = {
 //        killProcess()
@@ -41,7 +52,7 @@ class TrivialStartupBenchmark {
   }
 
   companion object {
-    const val APP_TO_BENCHMARK = "com.ak.feastit.debug"
+    const val APP_TO_BENCHMARK = "com.ak.feastit"
   }
 
 }
