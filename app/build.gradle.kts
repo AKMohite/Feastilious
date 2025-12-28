@@ -138,6 +138,8 @@ dependencies {
   implementation(libs.paging.runtime)
   implementation(libs.preference.ktx)
 
+  implementation(libs.androidx.profileinstaller)
+
   ksp(libs.hilt.android.compiler)
 }
 
