@@ -76,6 +76,14 @@ android {
       applicationIdSuffix = ".staging"
       versionNameSuffix = ".staging"
     }
+
+    create("benchmark") {
+      initWith(getByName("debug"))
+      isDebuggable = false
+      isMinifyEnabled = true
+      isShrinkResources = true
+      proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "dontobfuscate.pro")
+    }
   }
 
   buildFeatures {
