@@ -4,48 +4,48 @@ plugins {
 }
 
 android {
-    namespace = "com.mak.feastit.media"
+  namespace = "com.mak.feastit.media"
   compileSdk =
     libs.versions.compileSDK
       .get()
       .toInt()
 
-    defaultConfig {
-      minSdk =
-        libs.versions.minSDK
-          .get()
-          .toInt()
+  defaultConfig {
+    minSdk =
+      libs.versions.minSDK
+        .get()
+        .toInt()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles("consumer-rules.pro")
+  }
 
   buildFeatures {
     viewBinding = true
   }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+  buildTypes {
+    release {
+      isMinifyEnabled = false
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro",
+      )
     }
+  }
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
   }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
+  kotlinOptions {
+    jvmTarget = "21"
+  }
 }
 
 dependencies {
-    implementation(libs.core.ktx)
-    implementation(libs.app.compat)
-    implementation(libs.material)
+  implementation(libs.core.ktx)
+  implementation(libs.app.compat)
+  implementation(libs.material)
 //  implementation(libs.activity)
   implementation(libs.constraint.layout)
   implementation(libs.media3.exoplayer)
