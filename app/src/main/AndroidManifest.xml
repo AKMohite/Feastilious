@@ -20,6 +20,10 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.FeastIt"
     tools:targetApi="33">
+
+    <!--  OS specific configuration to let it know app need to be profileable  -->
+    <profileable android:shell="true"/>
+
     <activity
       android:name=".ui.main.MainActivity"
       android:exported="true">
