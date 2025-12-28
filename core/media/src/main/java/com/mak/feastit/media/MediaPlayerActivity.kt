@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.media
 
 import android.app.Dialog
@@ -53,18 +55,18 @@ import java.util.Objects
 @UnstableApi
 class MediaPlayerActivity : AppCompatActivity() {
 
-  private var _binding: ActivityMediaPlayerBinding? = null
-  private val binding
-    get() = _binding!!
+  private var baseBinding: ActivityMediaPlayerBinding? = null
+  private val binding: ActivityMediaPlayerBinding
+    get() = baseBinding!!
 
-  private var _customBinding: CustomControlsBinding? = null
+  private var customBaseBinding: CustomControlsBinding? = null
   private val customBinding
-    get() = _customBinding!!
+    get() = customBaseBinding!!
 
   private lateinit var exoPlayer: ExoPlayer
   private lateinit var dataSourceFactory: DataSource.Factory
   private var isFullScreen = false
-  private var RESIZE_MODE = 0
+  private var resizeMode = 0
   private var setResizeTxt: String = "Original"
   private var setQualityTxt: String = "Auto"
   private var setSpeedText: String = "1x"
@@ -74,50 +76,50 @@ class MediaPlayerActivity : AppCompatActivity() {
   private var videoQualities = emptyList<String>()
   private var audioManager: AudioManager? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = false
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-          window.isNavigationBarContrastEnforced = false
-        }
-        _binding = ActivityMediaPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enableEdgeToEdge()
+    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
+    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = false
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      window.isNavigationBarContrastEnforced = false
+    }
+    baseBinding = ActivityMediaPlayerBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+      val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+      v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+      insets
+    }
 
-      val url = intent.getStringExtra("url")
-      val uri = url?.toUri()
-      if (uri == null) {
-        finish()
-        return
-      }
-      dataSourceFactory = DefaultHttpDataSource.Factory()
-      defaultTrackSelector = DefaultTrackSelector(this)
-      defaultTrackSelector.setParameters(
-        defaultTrackSelector.buildUponParameters()
-          .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
-          .build()
-      )
-      val mediaSource = buildMediaSource(uri)
+    val url = intent.getStringExtra("url")
+    val uri = url?.toUri()
+    if (uri == null) {
+      finish()
+      return
+    }
+    dataSourceFactory = DefaultHttpDataSource.Factory()
+    defaultTrackSelector = DefaultTrackSelector(this)
+    defaultTrackSelector.setParameters(
+      defaultTrackSelector.buildUponParameters()
+        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+        .build(),
+    )
+    val mediaSource = buildMediaSource(uri)
 
-      exoPlayer = ExoPlayer.Builder(this)
-        .setTrackSelector(defaultTrackSelector)
-        .build()
-      binding.playerView.player = exoPlayer
-      exoPlayer.setMediaSource(mediaSource)
-      exoPlayer.prepare()
-      exoPlayer.playWhenReady = true
-      exoPlayer.play()
+    exoPlayer = ExoPlayer.Builder(this)
+      .setTrackSelector(defaultTrackSelector)
+      .build()
+    binding.playerView.player = exoPlayer
+    exoPlayer.setMediaSource(mediaSource)
+    exoPlayer.prepare()
+    exoPlayer.playWhenReady = true
+    exoPlayer.play()
 
-      binding.playerView.showController()
+    binding.playerView.showController()
 
-      val controller = binding.playerView.findViewById<RelativeLayout>(R.id.custom_controls_root)
-      _customBinding = CustomControlsBinding.bind(controller)
+    val controller = binding.playerView.findViewById<RelativeLayout>(R.id.custom_controls_root)
+    customBaseBinding = CustomControlsBinding.bind(controller)
 
 //        val playPauseBtn = binding.playerView.findViewById<ImageView>(R.id.exo_play_pause_btn)
 //        val backBtn = binding.playerView.findViewById<ImageView>(R.id.back_btn)
@@ -134,184 +136,180 @@ class MediaPlayerActivity : AppCompatActivity() {
 //        val speedBtn = binding.playerView.findViewById<LinearLayout>(R.id.speed_btn)
 //        val speedTxt = binding.playerView.findViewById<TextView>(R.id.speed_txt)
 
-      customBinding.exoTitle.text = "Video name"
+    customBinding.exoTitle.text = "Video name"
 
-      customBinding.settingBtn.setOnClickListener {
-        showSettingsDialog()
+    customBinding.settingBtn.setOnClickListener {
+      showSettingsDialog()
+    }
+
+    customBinding.exoPlayPauseBtn.setOnClickListener {
+      if (exoPlayer.isPlaying) {
+        exoPlayer.pause()
+        customBinding.exoPlayPauseBtn.setImageResource(R.drawable.ic_play)
+      } else {
+        exoPlayer.play()
+        customBinding.exoPlayPauseBtn.setImageResource(R.drawable.ic_pause)
+      }
+    }
+
+    customBinding.resizeBtn.setOnClickListener {
+      resizeScreen()
+    }
+
+    customBinding.speedBtn.setOnClickListener {
+      showSpeedDialog()
+    }
+
+    customBinding.qualityBtn.setOnClickListener {
+      showQualityDialog()
+    }
+
+    customBinding.lockBtn.setOnClickListener {
+      customBinding.customControls.visibility = View.GONE
+      customBinding.unlockBtn.visibility = View.VISIBLE
+    }
+
+    customBinding.unlockBtn.setOnClickListener {
+      customBinding.customControls.visibility = View.VISIBLE
+      customBinding.unlockBtn.visibility = View.GONE
+    }
+
+    customBinding.audioBtn.setOnClickListener {
+      showAudioDialog()
+    }
+
+    customBinding.subtitleBtn.setOnClickListener {
+      showSubtitleDialog()
+    }
+
+    audioManager = getSystemService(AUDIO_SERVICE) as? AudioManager
+    val maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 0
+    val currentVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
+
+    customBinding.volumeSeekbar.max = maxVolume
+    customBinding.volumeSeekbar.progress = currentVolume
+    customBinding.volumeSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+      override fun onProgressChanged(
+        seekbar: SeekBar?,
+        progress: Int,
+        fromUser: Boolean,
+      ) {
+        audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0)
       }
 
-      customBinding.exoPlayPauseBtn.setOnClickListener {
-        if (exoPlayer.isPlaying) {
-          exoPlayer.pause()
-          customBinding.exoPlayPauseBtn.setImageResource(R.drawable.ic_play)
-        } else {
-          exoPlayer.play()
-          customBinding.exoPlayPauseBtn.setImageResource(R.drawable.ic_pause)
-        }
+      override fun onStartTrackingTouch(p0: SeekBar?) {
       }
 
-      customBinding.resizeBtn.setOnClickListener {
-        resizeScreen()
+      override fun onStopTrackingTouch(p0: SeekBar?) {
+      }
+    })
+
+    customBinding.brightnessSeekbar.max = 255
+    customBinding.brightnessSeekbar.progress = 10
+    customBinding.brightnessSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+      override fun onProgressChanged(
+        seekbar: SeekBar?,
+        progress: Int,
+        fromUser: Boolean,
+      ) {
+        val brightness = progress / 255f
+        val layoutParams = window.attributes
+        layoutParams.screenBrightness = brightness
+        window.attributes = layoutParams
       }
 
-      customBinding.speedBtn.setOnClickListener {
-        showSpeedDialog()
+      override fun onStartTrackingTouch(p0: SeekBar?) {
       }
 
-      customBinding.qualityBtn.setOnClickListener {
-        showQualityDialog()
+      override fun onStopTrackingTouch(p0: SeekBar?) {
       }
+    })
 
-      customBinding.lockBtn.setOnClickListener {
-        customBinding.customControls.visibility = View.GONE
-        customBinding.unlockBtn.visibility = View.VISIBLE
-      }
-
-      customBinding.unlockBtn.setOnClickListener {
-        customBinding.customControls.visibility = View.VISIBLE
-        customBinding.unlockBtn.visibility = View.GONE
-      }
-
-      customBinding.audioBtn.setOnClickListener {
-        showAudioDialog()
-      }
-
-      customBinding.subtitleBtn.setOnClickListener {
-        showSubtitleDialog()
-      }
-
-      audioManager = getSystemService(AUDIO_SERVICE) as? AudioManager
-      val maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 0
-      val currentVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
-
-      customBinding.volumeSeekbar.max = maxVolume
-      customBinding.volumeSeekbar.progress = currentVolume
-      customBinding.volumeSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(
-          seekbar: SeekBar?,
-          progress: Int,
-          fromUser: Boolean
-        ) {
-          audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0)
-        }
-
-        override fun onStartTrackingTouch(p0: SeekBar?) {
-
-        }
-
-        override fun onStopTrackingTouch(p0: SeekBar?) {
-
-        }
-
-      })
-
-      customBinding.brightnessSeekbar.max = 255
-      customBinding.brightnessSeekbar.progress = 10
-      customBinding.brightnessSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(
-          seekbar: SeekBar?,
-          progress: Int,
-          fromUser: Boolean
-        ) {
-          val brightness = progress / 255f
-          val layoutParams = window.attributes
-          layoutParams.screenBrightness = brightness
-          window.attributes = layoutParams
-        }
-
-        override fun onStartTrackingTouch(p0: SeekBar?) {
-
-        }
-
-        override fun onStopTrackingTouch(p0: SeekBar?) {
-
-        }
-
-      })
-
-      customBinding.fullBtn.setOnClickListener {
-        if (isFullScreen) {
-          customBinding.fullBtn.setImageDrawable(ContextCompat.getDrawable(this@MediaPlayerActivity, R.drawable.full_close))
-          customBinding.exoTitle.visibility = View.INVISIBLE
-          customBinding.lockBtn.visibility = View.GONE
-          customBinding.settingBtn.visibility = View.VISIBLE
-          customBinding.linearSettings.visibility = View.GONE
-          customBinding.volumeLl.visibility = View.GONE
-          customBinding.brightnessLl.visibility = View.GONE
-          supportActionBar?.show()
-          customBinding.resizeBtn.visibility = View.GONE
-          window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-          requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-          val params = binding.playerView.layoutParams as? ConstraintLayout.LayoutParams
-          params?.width = ViewGroup.LayoutParams.MATCH_PARENT
-          params?.height = (200 * applicationContext.resources.displayMetrics.density).toInt()
-          binding.playerView.layoutParams = params
-        } else {
-          customBinding.fullBtn.setImageDrawable(ContextCompat.getDrawable(this@MediaPlayerActivity, R.drawable.full_open))
-          customBinding.exoTitle.visibility = View.VISIBLE
-          customBinding.lockBtn.visibility = View.VISIBLE
-          customBinding.resizeBtn.visibility = View.VISIBLE
-          customBinding.settingBtn.visibility = View.GONE
-          customBinding.linearSettings.visibility = View.VISIBLE
-          customBinding.volumeLl.visibility = View.VISIBLE
-          customBinding.brightnessLl.visibility = View.VISIBLE
-          supportActionBar?.hide()
-          window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+    customBinding.fullBtn.setOnClickListener {
+      if (isFullScreen) {
+        customBinding.fullBtn.setImageDrawable(ContextCompat.getDrawable(this@MediaPlayerActivity, R.drawable.full_close))
+        customBinding.exoTitle.visibility = View.INVISIBLE
+        customBinding.lockBtn.visibility = View.GONE
+        customBinding.settingBtn.visibility = View.VISIBLE
+        customBinding.linearSettings.visibility = View.GONE
+        customBinding.volumeLl.visibility = View.GONE
+        customBinding.brightnessLl.visibility = View.GONE
+        supportActionBar?.show()
+        customBinding.resizeBtn.visibility = View.GONE
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        val params = binding.playerView.layoutParams as? ConstraintLayout.LayoutParams
+        params?.width = ViewGroup.LayoutParams.MATCH_PARENT
+        params?.height = (200 * applicationContext.resources.displayMetrics.density).toInt()
+        binding.playerView.layoutParams = params
+      } else {
+        customBinding.fullBtn.setImageDrawable(ContextCompat.getDrawable(this@MediaPlayerActivity, R.drawable.full_open))
+        customBinding.exoTitle.visibility = View.VISIBLE
+        customBinding.lockBtn.visibility = View.VISIBLE
+        customBinding.resizeBtn.visibility = View.VISIBLE
+        customBinding.settingBtn.visibility = View.GONE
+        customBinding.linearSettings.visibility = View.VISIBLE
+        customBinding.volumeLl.visibility = View.VISIBLE
+        customBinding.brightnessLl.visibility = View.VISIBLE
+        supportActionBar?.hide()
+        window.decorView.systemUiVisibility = (
+          View.SYSTEM_UI_FLAG_FULLSCREEN
             or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-          requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-          val params = binding.playerView.layoutParams as? ConstraintLayout.LayoutParams
-          params?.width = ViewGroup.LayoutParams.MATCH_PARENT
-          params?.height = ViewGroup.LayoutParams.MATCH_PARENT
-          binding.playerView.layoutParams = params
-        }
-        isFullScreen = !isFullScreen
+            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+          )
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        val params = binding.playerView.layoutParams as? ConstraintLayout.LayoutParams
+        params?.width = ViewGroup.LayoutParams.MATCH_PARENT
+        params?.height = ViewGroup.LayoutParams.MATCH_PARENT
+        binding.playerView.layoutParams = params
       }
+      isFullScreen = !isFullScreen
+    }
 
-      // WARN: we are performing click programmatically to launch in full screen directly
-      customBinding.fullBtn.performClick()
+    // WARN: we are performing click programmatically to launch in full screen directly
+    customBinding.fullBtn.performClick()
 
-      customBinding.backBtn.setOnClickListener {
-        finish()
+    customBinding.backBtn.setOnClickListener {
+      finish()
+    }
+    customBinding.tenLeftBtn.setOnClickListener {
+      val num = exoPlayer.currentPosition - 10_000
+      if (num < 0) {
+        exoPlayer.seekTo(0L)
+      } else {
+        exoPlayer.seekTo(num)
       }
-      customBinding.tenLeftBtn.setOnClickListener {
-        val num = exoPlayer.currentPosition - 10_000
-        if (num < 0) {
-          exoPlayer.seekTo(0L)
-        } else {
-          exoPlayer.seekTo(num)
-        }
-      }
+    }
 
-      customBinding.tenRightBtn.setOnClickListener {
-        val num = exoPlayer.currentPosition + 10_000
-        if (num < 0) {
-          exoPlayer.seekTo(0L)
-        } else {
-          exoPlayer.seekTo(num)
-        }
+    customBinding.tenRightBtn.setOnClickListener {
+      val num = exoPlayer.currentPosition + 10_000
+      if (num < 0) {
+        exoPlayer.seekTo(0L)
+      } else {
+        exoPlayer.seekTo(num)
       }
+    }
 
-      exoPlayer.addListener(object  : Player.Listener {
-        override fun onPlaybackStateChanged(playbackState: Int) {
-          when (playbackState) {
-            Player.STATE_READY -> {
-              binding.progressBar.visibility = View.GONE
-              customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
-              videoQualities = getVideoQualityTracks()
-            }
-            Player.STATE_BUFFERING -> {
-              binding.progressBar.visibility = View.VISIBLE
-              customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
-            }
-            else -> {
-              binding.progressBar.visibility = View.GONE
-              binding.playerView.showController()
-            }
+    exoPlayer.addListener(object : Player.Listener {
+      override fun onPlaybackStateChanged(playbackState: Int) {
+        when (playbackState) {
+          Player.STATE_READY -> {
+            binding.progressBar.visibility = View.GONE
+            customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
+            videoQualities = getVideoQualityTracks()
+          }
+          Player.STATE_BUFFERING -> {
+            binding.progressBar.visibility = View.VISIBLE
+            customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
+          }
+          else -> {
+            binding.progressBar.visibility = View.GONE
+            binding.playerView.showController()
           }
         }
-      })
-    }
+      }
+    })
+  }
 
   private var selectedSubtitleIndex = 0
   fun showSubtitleDialog() {
@@ -358,14 +356,14 @@ class MediaPlayerActivity : AppCompatActivity() {
     val tempTracks = subtitleList
     MaterialAlertDialogBuilder(this, R.style.DialogTheme)
       .setTitle("Subtitle")
-      .setSingleChoiceItems(tempTracks.toTypedArray(), selectedSubtitleIndex, {dialog, which ->
+      .setSingleChoiceItems(tempTracks.toTypedArray(), selectedSubtitleIndex, { dialog, which ->
         selectedSubtitleIndex = which
-      }).setPositiveButton("Ok", {dialog, which ->
-        if (selectedSubtitleIndex == 0){
+      }).setPositiveButton("Ok", { dialog, which ->
+        if (selectedSubtitleIndex == 0) {
           defaultTrackSelector.setParameters(
             defaultTrackSelector.buildUponParameters()
               .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
-              .build()
+              .build(),
           )
           setSubtitleText = "Off"
           customBinding.subtitleTxt.text = setSubtitleText
@@ -374,7 +372,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             defaultTrackSelector.buildUponParameters()
               .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
               .setPreferredTextLanguage(subtitleTrackGroups[selectedAudioIndex])
-              .build()
+              .build(),
           )
           setSubtitleText = tempTracks[selectedSubtitleIndex]
           customBinding.subtitleTxt.text = setSubtitleText
@@ -428,13 +426,13 @@ class MediaPlayerActivity : AppCompatActivity() {
     val tempTracks = audioList
     MaterialAlertDialogBuilder(this, R.style.DialogTheme)
       .setTitle("Audio tracks")
-      .setSingleChoiceItems(tempTracks.toTypedArray(), selectedAudioIndex, {dialog, which ->
+      .setSingleChoiceItems(tempTracks.toTypedArray(), selectedAudioIndex, { dialog, which ->
         selectedAudioIndex = which
-      }).setPositiveButton("Ok", {dialog, which ->
+      }).setPositiveButton("Ok", { dialog, which ->
         defaultTrackSelector.setParameters(
           defaultTrackSelector.buildUponParameters()
             .setPreferredAudioLanguage(audioTrackGroups[selectedAudioIndex])
-            .build()
+            .build(),
         )
         setAudioText = tempTracks[selectedAudioIndex]
         customBinding.audioTxt.text = setAudioText
@@ -523,8 +521,10 @@ class MediaPlayerActivity : AppCompatActivity() {
       showSubtitleDialog()
       dialog.dismiss()
     }
-    Objects.requireNonNull(dialog.window)?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-      ViewGroup.LayoutParams.MATCH_PARENT)
+    Objects.requireNonNull(dialog.window)?.setLayout(
+      ViewGroup.LayoutParams.MATCH_PARENT,
+      ViewGroup.LayoutParams.MATCH_PARENT,
+    )
     dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
     dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
     dialog.window?.setGravity(Gravity.BOTTOM)
@@ -540,7 +540,7 @@ class MediaPlayerActivity : AppCompatActivity() {
       .setSingleChoiceItems(speeds, selectedIndex, { dialog, which ->
         selectedIndex = which
       })
-      .setPositiveButton("Ok", {dialog, which ->
+      .setPositiveButton("Ok", { dialog, which ->
         val speed = speedValues[selectedIndex]
         if (speed < 0f) {
           exoPlayer.playbackParameters = PlaybackParameters(speed)
@@ -558,12 +558,12 @@ class MediaPlayerActivity : AppCompatActivity() {
     if (videoQualities.isNotEmpty()) {
       MaterialAlertDialogBuilder(this, R.style.DialogTheme)
         .setTitle("Video quality")
-        .setSingleChoiceItems(videoQualities.toTypedArray(), selectedQualityIndex, {dialog, which ->
+        .setSingleChoiceItems(videoQualities.toTypedArray(), selectedQualityIndex, { dialog, which ->
           selectedQualityIndex = which
           setQualityTxt = "Auto"
           customBinding.qualityTxt.text = setQualityTxt
         })
-        .setPositiveButton("Ok", {dialog, which ->
+        .setPositiveButton("Ok", { dialog, which ->
           if (selectedQualityIndex == 0) {
             defaultTrackSelector.setParameters(defaultTrackSelector.buildUponParameters().setMaxVideoSizeSd())
           } else {
@@ -573,7 +573,7 @@ class MediaPlayerActivity : AppCompatActivity() {
             defaultTrackSelector.setParameters(
               defaultTrackSelector.buildUponParameters()
                 .setMaxVideoSize(videoWidth, videoHeight)
-                .setMinVideoSize(videoWidth, videoHeight)
+                .setMinVideoSize(videoWidth, videoHeight),
             )
             setQualityTxt = "${qualityInfo[1]} p"
             customBinding.qualityTxt.text = setQualityTxt
@@ -588,34 +588,33 @@ class MediaPlayerActivity : AppCompatActivity() {
 
   @UnstableApi
   private fun resizeScreen() {
-    when (RESIZE_MODE) {
+    when (resizeMode) {
       0 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-        RESIZE_MODE = 1
+        resizeMode = 1
         showResizeNotice("Zoomed to fill")
       }
       1 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
-        RESIZE_MODE = 2
+        resizeMode = 2
         showResizeNotice("Fixed Height")
       }
       2 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
-        RESIZE_MODE = 3
+        resizeMode = 3
         showResizeNotice("Fixed Width")
       }
       3 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-        RESIZE_MODE = 4
+        resizeMode = 4
         showResizeNotice("Zoom")
       }
       4 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-        RESIZE_MODE = 0
+        resizeMode = 0
         showResizeNotice("Original")
       }
     }
-
   }
 
   fun showResizeNotice(text: String) {
@@ -639,21 +638,21 @@ class MediaPlayerActivity : AppCompatActivity() {
     val contentType = Util.inferContentType(uri)
     val mediaItem = MediaItem.fromUri(uri)
     return when (contentType) {
-        C.CONTENT_TYPE_HLS -> {
-          HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-        }
-        C.CONTENT_TYPE_DASH -> {
-          DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-        }
-        C.CONTENT_TYPE_SS -> {
-          SsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-        }
-        C.CONTENT_TYPE_RTSP -> {
-          RtspMediaSource.Factory().createMediaSource(mediaItem)
-        }
-        else -> {
-          ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
-        }
+      C.CONTENT_TYPE_HLS -> {
+        HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+      }
+      C.CONTENT_TYPE_DASH -> {
+        DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+      }
+      C.CONTENT_TYPE_SS -> {
+        SsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+      }
+      C.CONTENT_TYPE_RTSP -> {
+        RtspMediaSource.Factory().createMediaSource(mediaItem)
+      }
+      else -> {
+        ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
+      }
     }
   }
 
@@ -677,8 +676,8 @@ class MediaPlayerActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     exoPlayer.release()
-    _customBinding = null
-    _binding = null
+    customBaseBinding = null
+    baseBinding = null
     super.onDestroy()
   }
 }

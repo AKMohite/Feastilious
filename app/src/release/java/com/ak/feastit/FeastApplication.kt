@@ -5,9 +5,6 @@ package com.ak.feastit
 import android.app.Application
 import androidx.work.Configuration
 import androidx.work.WorkerFactory
-import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
-import timber.log.Timber
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -15,7 +12,9 @@ import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.intercept.Interceptor
 import coil3.memory.MemoryCache
-import coil3.util.DebugLogger
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
+import timber.log.Timber
 
 @HiltAndroidApp
 internal class FeastApplication :
