@@ -1,6 +1,7 @@
 [versions]
 compileSDK = "36"
 minSDK = "27"
+profileinstaller = "1.4.1"
 targetSDK = "36"
 versionCode = "1"
 versionName = "0.0.1"
@@ -53,6 +54,7 @@ media3-exoplayer-rtsp = { group = "androidx.media3", name = "media3-exoplayer-rt
 navigation-safe-args-plugin = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 
 app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "profileinstaller" }
 constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint_layout" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
