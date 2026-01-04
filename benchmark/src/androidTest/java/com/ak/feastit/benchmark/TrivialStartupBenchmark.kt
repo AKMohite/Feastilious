@@ -1,3 +1,5 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.benchmark
 
 import android.content.ComponentName
@@ -6,7 +8,6 @@ import androidx.benchmark.macro.BaselineProfileMode
 import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
-import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -43,16 +44,17 @@ class TrivialStartupBenchmark {
       measureBlock = {
         val intent = Intent()
         intent.component = ComponentName(
-          /* pkg = */ APP_TO_BENCHMARK,
-          /* cls = */ "com.ak.feastit.ui.main.MainActivity"
+          /* pkg = */
+          APP_TO_BENCHMARK,
+          /* cls = */
+          "com.ak.feastit.ui.main.MainActivity",
         )
         startActivityAndWait(intent)
-      }
+      },
     )
   }
 
   companion object {
     const val APP_TO_BENCHMARK = "com.ak.feastit"
   }
-
 }
