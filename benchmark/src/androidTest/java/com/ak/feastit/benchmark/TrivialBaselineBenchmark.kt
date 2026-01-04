@@ -1,3 +1,5 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.benchmark
 
 import android.content.ComponentName
@@ -21,12 +23,14 @@ class TrivialBaselineBenchmark {
 
   private fun trackStartup() {
     rule.collect(
-      packageName = APP_TO_BENCHMARK
+      packageName = APP_TO_BENCHMARK,
     ) {
       val intent = Intent()
       intent.component = ComponentName(
-        /* pkg = */ APP_TO_BENCHMARK,
-        /* cls = */ "com.ak.feastit.ui.main.MainActivity"
+        /* pkg = */
+        APP_TO_BENCHMARK,
+        /* cls = */
+        "com.ak.feastit.ui.main.MainActivity",
       )
       startActivityAndWait(intent)
     }
@@ -35,5 +39,4 @@ class TrivialBaselineBenchmark {
   companion object {
     const val APP_TO_BENCHMARK = "com.ak.feastit"
   }
-
 }
