@@ -21,6 +21,7 @@ import com.mak.feastit.domain.util.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +38,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Instant
 import timber.log.Timber
 
 private const val SAVED_START_WEEK_DATE = "saved-meal-plan-week-start-date"
@@ -185,9 +185,9 @@ internal class MealPlannerViewModel @Inject constructor(
         val start = range.first.defaultLocalDate()
         val end = range.second.defaultLocalDate()
 //                TODO handle 3 substring month properly
-        val weekRange = "${start.dayOfMonth} ${
+        val weekRange = "${start.day} ${
           start.month.toString().take(3)
-        } - ${end.dayOfMonth} ${end.month.toString().take(3)}"
+        } - ${end.day} ${end.month.toString().take(3)}"
         _state.update { it.copy(weekRange = weekRange) }
         range
       }.flowOn(dispatcher.computation)
