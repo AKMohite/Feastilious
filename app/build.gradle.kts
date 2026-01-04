@@ -75,6 +75,7 @@ android {
       signingConfig = signingConfigs.findByName("debug")
       applicationIdSuffix = ".staging"
       versionNameSuffix = ".staging"
+      matchingFallbacks.add("release")
     }
 
     create("benchmark") {
@@ -84,6 +85,7 @@ android {
       isMinifyEnabled = true
       isShrinkResources = true
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "dontobfuscate.pro")
+      matchingFallbacks.add("release")
     }
   }
 

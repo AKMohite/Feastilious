@@ -27,6 +27,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.number
 import timber.log.Timber
 
 private const val SAVED_MEAL_PLAN_ID = "meal_id"
@@ -67,8 +68,8 @@ internal class ScheduleMealViewmodel @Inject constructor(
       val scheduleDate = getScheduleInstant().defaultLocalDateTime()
       val newScheduleDateTime = LocalDateTime(
         year = scheduleDate.year,
-        monthNumber = scheduleDate.monthNumber,
-        dayOfMonth = scheduleDate.dayOfMonth,
+        month = scheduleDate.month.number,
+        day = scheduleDate.day,
         hour = hour,
         minute = minute,
       )
@@ -195,8 +196,8 @@ internal class ScheduleMealViewmodel @Inject constructor(
     val now = getScheduleInstant().defaultLocalDateTime()
     return LocalDateTime(
       year = now.year,
-      monthNumber = now.monthNumber,
-      dayOfMonth = now.dayOfMonth,
+      month = now.month.number,
+      day = now.day,
       hour = 13,
       minute = 0,
     )
@@ -206,8 +207,8 @@ internal class ScheduleMealViewmodel @Inject constructor(
     val oldScheduleDateTime = getScheduleInstant().defaultLocalDate()
     val newDateTime = LocalDateTime(
       year = oldScheduleDateTime.year,
-      monthNumber = oldScheduleDateTime.monthNumber,
-      dayOfMonth = oldScheduleDateTime.dayOfMonth,
+      month = oldScheduleDateTime.month.number,
+      day = oldScheduleDateTime.day,
       hour = scheduleTime.hour,
       minute = scheduleTime.minute,
     )
@@ -218,8 +219,8 @@ internal class ScheduleMealViewmodel @Inject constructor(
     val oldScheduleDateTime = getScheduleInstant().defaultLocalTime()
     val newDateTime = LocalDateTime(
       year = date.year,
-      monthNumber = date.monthNumber,
-      dayOfMonth = date.dayOfMonth,
+      month = date.month.number,
+      day = date.day,
       hour = oldScheduleDateTime.hour,
       minute = oldScheduleDateTime.minute,
     )
