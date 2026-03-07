@@ -2,6 +2,7 @@
 // License Name: <Actual name>
 package com.mak.feastit.data.repository
 
+import android.content.Context
 import androidx.paging.PagingConfig
 import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.database.FeastDB
@@ -93,6 +94,9 @@ internal class RealRecipesRepositoryTest {
   private lateinit var testDispatcher: TestDispatcher
   private lateinit var testDispatcherProvider: DispatcherProvider
 
+  @MockK
+  private lateinit var context: Context
+
   // Real instance of mapper if its logic is simple and doesn't have external dependencies
   // Otherwise, you might consider mocking it or creating a fake implementation.
   private val recipesMapper = RecipesMapper()
@@ -139,6 +143,7 @@ internal class RealRecipesRepositoryTest {
         api = mockApi,
         db = mockDb,
         dispatcher = testDispatcherProvider,
+        context = context
       ).apply {
         // Override the real mapper instance with our test instance if it was created inside the repo
         // In your case, it's passed or created, so ensure the one used in tests is controlled.
