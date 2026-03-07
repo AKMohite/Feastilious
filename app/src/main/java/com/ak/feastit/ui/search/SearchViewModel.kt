@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private const val SAVED_SEARCH_QUERY = "saved-search-query"
+private const val SAVED_IMAGE_PATH = "saved-image-path"
 
 @HiltViewModel
 internal class SearchViewModel
@@ -155,5 +156,34 @@ constructor(
   }
 
   fun imageCaptured() {
+    uploadAndFindRecipe()
+  }
+
+  fun setImageUri(photoUri: String?) {
+    if (photoUri.isNullOrBlank()) return
+    Timber.d("The image uri path is: $photoUri")
+    savedStateHandle[SAVED_IMAGE_PATH] = photoUri
+  }
+
+  fun onGalleryImageSelected(path: String?) {
+    if (path.isNullOrBlank()) return
+    setImageUri(path)
+    uploadAndFindRecipe()
+  }
+
+  private fun uploadAndFindRecipe() {
+    val imagePath = savedStateHandle.get<String?>(SAVED_IMAGE_PATH).orEmpty()
+    if (imagePath.isBlank()) return
+    uiScope.launch {
+      _state.update { it.copy(isLoading = true) }
+      val recipes = repository.searchRecipeByImage(imagePath)
+      _state.update { current ->
+        current.copy(
+          recommendations = recipes.shuffled(),
+        )
+      }
+    }.invokeOnCompletion {
+      _state.update { it.copy(isLoading = false) }
+    }
   }
 }
