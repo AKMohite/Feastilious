@@ -95,6 +95,10 @@ android {
       freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
   }
+
+  testOptions {
+    unitTests.isReturnDefaultValues = true
+  }
 }
 
 dependencies {
@@ -134,6 +138,20 @@ dependencies {
   implementation(libs.androidx.profileinstaller)
 
   ksp(libs.hilt.android.compiler)
+
+  testImplementation(platform(libs.junit.bom))
+  testImplementation(libs.junit.jupiter)
+  testImplementation(libs.junit.jupiter.api)
+  testImplementation(libs.junit.jupiter.params)
+  // This is the actual test engine that discovers and runs tests written with JUnit Jupiter.
+  testRuntimeOnly(libs.junit.jupiter.engine)
+  // This component is responsible for launching the test execution process. It discovers test
+  // engines (like junit-jupiter-engine) on the classpath and delegates test discovery and
+  // execution to them
+  testRuntimeOnly(libs.junit.platform.launcher)
+
+  testImplementation(libs.kotlinx.coroutines.test)
+  testImplementation(libs.mockk)
 }
 
 fun <T : Any> propOrDef(
