@@ -35,4 +35,5 @@ interface RecipesRepository {
   ): Flow<PagingData<Recipe>>
 
   suspend fun searchRecipe(query: String): List<Recipe>
+  suspend fun searchRecipeByImage(imagePath: String): List<Recipe>
 }

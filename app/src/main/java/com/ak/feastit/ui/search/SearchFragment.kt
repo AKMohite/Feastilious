@@ -176,6 +176,7 @@ internal class SearchFragment : BaseFragment() {
       registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
           Timber.d("Gallery image uri: $uri")
+          viewModel.onGalleryImageSelected(uri.toString())
         } else {
           Timber.d("No media selected")
         }
@@ -351,6 +352,7 @@ internal class SearchFragment : BaseFragment() {
           "${requireContext().packageName}.provider",
           file,
         )
+        viewModel.setImageUri(photoUri.toString())
         captureImageLauncher?.launch(photoUri)
       }
     } catch (e: Throwable) {
