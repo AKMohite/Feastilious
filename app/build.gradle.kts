@@ -6,28 +6,17 @@ plugins {
   id("androidx.navigation.safeargs.kotlin")
 }
 
+//configure<com.android.build.api.dsl.ApplicationExtension> {
 android {
   namespace = "com.ak.feastit"
-  compileSdk =
-    libs.versions.compileSDK
-      .get()
-      .toInt()
+  compileSdk = libs.versions.compileSDK.get().toInt()
 
   defaultConfig {
     namespace = "com.ak.feastit"
     applicationId = "com.ak.feastit"
-    minSdk =
-      libs.versions.minSDK
-        .get()
-        .toInt()
-    targetSdk =
-      libs.versions.targetSDK
-        .get()
-        .toInt()
-    versionCode =
-      libs.versions.versionCode
-        .get()
-        .toInt()
+    minSdk = libs.versions.minSDK.get().toInt()
+    targetSdk = libs.versions.targetSDK.get().toInt()
+    versionCode = libs.versions.versionCode.get().toInt()
     versionName = libs.versions.versionName.get()
     buildConfigField("String", "API_KEY", "\"" + propOrDef("SPOONACULAR_KEY", "") + "\"")
 
@@ -91,6 +80,7 @@ android {
 
   buildFeatures {
     viewBinding = true
+    buildConfig = true
   }
 
   compileOptions {
