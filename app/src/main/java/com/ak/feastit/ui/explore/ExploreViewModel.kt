@@ -84,7 +84,10 @@ constructor(
           }.awaitAll()
       }.invokeOnCompletion {
         Timber.d("Explore sections refreshed")
-        _state.update { it.refreshSections(false) }
+        _state.update { discoverState ->
+          discoverState.refreshSections(isLoading = false)
+          discoverState.setError(it?.message)
+        }
       }
   }
 
