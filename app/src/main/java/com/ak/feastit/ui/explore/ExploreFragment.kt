@@ -24,6 +24,7 @@ import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
 import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.onClick
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -73,6 +74,9 @@ class ExploreFragment : BaseFragment() {
         viewModel.state.collect { state ->
           val sections = state.displayableSections()
           adapter?.submitList(sections)
+//          state.errorMessage?.let { message ->
+//            Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+//          }
         }
       }
     }

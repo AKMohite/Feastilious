@@ -7,6 +7,7 @@ import com.mak.feastit.domain.model.Recipe
 internal data class DiscoverState(
   // this is loading state of whole screen
   val isLoading: Boolean = false,
+  val errorMessage: String? = null,
   private val sections: List<ExploreSection> = emptyList(),
 ) {
   fun displayableSections(): List<ExploreAdapterItem> {
@@ -48,7 +49,9 @@ internal data class DiscoverState(
         null -> Unit
       }
     }
-    return mutableList.sortedBy { item -> item.category.ordinal }
+    return mutableList.sortedBy { item -> item.category.ordinal }.filterNot { item ->
+      item.items.isEmpty()
+    }
   }
 
   fun loading(isLoading: Boolean = false): DiscoverState {
@@ -80,6 +83,10 @@ internal data class DiscoverState(
       section.copy(isLoading = isLoading)
     }
     return this.copy(sections = updatedSections)
+  }
+
+  fun setError(message: String?): DiscoverState {
+    return this.copy(errorMessage = message)
   }
 }
 
