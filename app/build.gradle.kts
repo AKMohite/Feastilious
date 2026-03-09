@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.Test
+
 plugins {
   id("com.android.application")
   id("kotlin-android")
@@ -99,6 +101,10 @@ android {
   testOptions {
     unitTests.isReturnDefaultValues = true
   }
+}
+
+tasks.withType<Test>().configureEach {
+  useJUnitPlatform()
 }
 
 dependencies {
