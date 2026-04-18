@@ -1,8 +1,16 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   id("com.android.library")
   id("org.jetbrains.kotlin.android")
   id("dagger.hilt.android.plugin")
   id("com.google.devtools.ksp")
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_21)
+  }
 }
 
 android {
@@ -38,9 +46,6 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-  }
-  kotlinOptions {
-    jvmTarget = "21"
   }
 }
 

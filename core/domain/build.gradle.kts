@@ -1,6 +1,15 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
   id("com.android.library")
   id("org.jetbrains.kotlin.android")
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_21)
+    optIn.add("kotlin.time.ExperimentalTime")
+  }
 }
 
 android {
@@ -32,15 +41,6 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-  }
-  kotlinOptions {
-    jvmTarget = "21"
-  }
-
-  kotlin {
-    compilerOptions {
-      freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
-    }
   }
 }
 

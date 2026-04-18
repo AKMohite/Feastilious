@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.testing.Test
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   id("com.android.application")
@@ -8,6 +9,12 @@ plugins {
   id("androidx.navigation.safeargs.kotlin")
 }
 
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_21)
+    optIn.add("kotlin.time.ExperimentalTime")
+  }
+}
 //configure<com.android.build.api.dsl.ApplicationExtension> {
 android {
   namespace = "com.ak.feastit"
@@ -88,14 +95,6 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-  }
-  kotlinOptions {
-    jvmTarget = "21"
-  }
-  kotlin {
-    compilerOptions {
-      freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
-    }
   }
 
   testOptions {
