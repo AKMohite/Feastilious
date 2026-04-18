@@ -3,6 +3,7 @@ package com.ak.feastit.ui.cart
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.ak.feastit.R
@@ -77,5 +78,38 @@ class ShoppingCartFragmentTest {
     onView(withText(ingredient.recipeName)).check(matches(isDisplayed()))
     onView(withText("${ingredient.quantity} ${ingredient.ingredientName}")).check(matches(isDisplayed()))
     onView(withText(servings)).check(matches(isDisplayed()))
+  }
+
+  @Test
+  fun displayIngredientsByAisle_whenCartHasItems() {
+    val ingredient = CartIngredient(
+      id = "1",
+      isBought = false,
+      aisleCategory = "Veg",
+      ingredientName = "Tomato",
+      recipeId = 101,
+      quantity = "2",
+      recipeName = "Pasta",
+      recipeImg = RecipeImage(
+        101,
+        "jpg",
+        RecipeImageSize.SMALL,
+        ImageType.CELL
+      ),
+      servings = 2
+    )
+    val cartIngredients = listOf(
+      ingredient
+    )
+    fakeRepo.emit(cartIngredients)
+
+    launchFragmentInHiltContainer<ShoppingCartFragment>()
+
+    onView(withId(R.id.group_by_aisle)).perform(click())
+
+    onView(withId(R.id.empty_state)).check(matches(not(isDisplayed())))
+    onView(withText(ingredient.recipeName)).check(matches(not(isDisplayed())))
+    onView(withText(ingredient.aisleCategory)).check(matches(isDisplayed()))
+    onView(withText("${ingredient.quantity} ${ingredient.ingredientName}")).check(matches(isDisplayed()))
   }
 }
