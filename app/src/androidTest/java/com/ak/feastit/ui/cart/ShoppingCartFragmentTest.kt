@@ -27,10 +27,6 @@ class ShoppingCartFragmentTest {
   @get:Rule(order = 0)
   var hiltRule = HiltAndroidRule(this)
 
-  @get:Rule(order = 1)
-  var activityRule: ActivityScenarioRule<HiltTestActivity> =
-    ActivityScenarioRule(HiltTestActivity::class.java)
-
   @Inject
   lateinit var repository: CartRepository
 
