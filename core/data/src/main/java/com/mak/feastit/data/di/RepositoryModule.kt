@@ -23,15 +23,15 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-internal abstract class RepositoryModule {
+abstract class RepositoryModule {
   @Binds
-  abstract fun bindRecipesRepository(repo: RealRecipesRepository): RecipesRepository
+  internal abstract fun bindRecipesRepository(repo: RealRecipesRepository): RecipesRepository
 
   @Binds
-  abstract fun bindRecipeRepository(repo: RealRecipeRepository): RecipeRepository
+  internal abstract fun bindRecipeRepository(repo: RealRecipeRepository): RecipeRepository
 
   @Binds
-  abstract fun bindCartRepository(repo: RealCartRepository): CartRepository
+  internal abstract fun bindCartRepository(repo: RealCartRepository): CartRepository
 }
 
 // FIXME: search for worker we need to have single object repositories

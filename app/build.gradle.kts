@@ -29,7 +29,7 @@ android {
     versionName = libs.versions.versionName.get()
     buildConfigField("String", "API_KEY", "\"" + propOrDef("SPOONACULAR_KEY", "") + "\"")
 
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = "com.ak.feastit.HiltTestRunner"
   }
 
   signingConfigs {
@@ -143,6 +143,14 @@ dependencies {
   implementation(libs.androidx.profileinstaller)
 
   ksp(libs.hilt.android.compiler)
+  kspAndroidTest(libs.hilt.android.compiler)
+  testImplementation(libs.kotlinx.coroutines.test)
+  androidTestImplementation(libs.test.ext.junit)
+  androidTestImplementation(libs.espresso.core)
+  androidTestImplementation(libs.espresso.contrib)
+  androidTestImplementation(libs.hilt.android.testing)
+  androidTestImplementation(libs.kotlinx.coroutines.test)
+  debugImplementation(libs.fragment.testing)
 
   testImplementation(platform(libs.junit.bom))
   testImplementation(libs.junit.jupiter)
