@@ -1,10 +1,10 @@
 package com.ak.feastit.ui.cart
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.ak.feastit.HiltTestActivity
 import com.ak.feastit.R
 import com.ak.feastit.launchFragmentInHiltContainer
 import com.mak.feastit.domain.model.CartIngredient
@@ -14,7 +14,6 @@ import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.domain.repository.CartRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.HiltTestApplication
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
@@ -49,30 +48,34 @@ class ShoppingCartFragmentTest {
 
   @Test
   fun displayIngredients_whenCartHasItems() {
-    val ingredients = listOf(
-      CartIngredient(
-        id = "1",
-        isBought = false,
-        aisleCategory = "Veg",
-        ingredientName = "Tomato",
-        recipeId = 101,
-        quantity = "2",
-        recipeName = "Pasta",
-        recipeImg = RecipeImage(
-          101,
-          "jpg",
-          RecipeImageSize.SMALL,
-          ImageType.CELL
-        ),
-        servings = 2
-      )
+    val ingredient = CartIngredient(
+      id = "1",
+      isBought = false,
+      aisleCategory = "Veg",
+      ingredientName = "Tomato",
+      recipeId = 101,
+      quantity = "2",
+      recipeName = "Pasta",
+      recipeImg = RecipeImage(
+        101,
+        "jpg",
+        RecipeImageSize.SMALL,
+        ImageType.CELL
+      ),
+      servings = 2
     )
-    fakeRepo.emit(ingredients)
+    val cartIngredients = listOf(
+      ingredient
+    )
+    fakeRepo.emit(cartIngredients)
 
+    val context = ApplicationProvider.getApplicationContext<Context>()
+    val servings = context.getString(R.string.servings, ingredient.servings)
     launchFragmentInHiltContainer<ShoppingCartFragment>()
 
     onView(withId(R.id.empty_state)).check(matches(not(isDisplayed())))
-    onView(withText("Pasta")).check(matches(isDisplayed()))
-    onView(withText("Tomato")).check(matches(isDisplayed()))
+    onView(withText(ingredient.recipeName)).check(matches(isDisplayed()))
+    onView(withText("${ingredient.quantity} ${ingredient.ingredientName}")).check(matches(isDisplayed()))
+    onView(withText(servings)).check(matches(isDisplayed()))
   }
 }
