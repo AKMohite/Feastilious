@@ -1,7 +1,7 @@
 package com.ak.feastit.ui.cart
 
 import android.content.Context
-import android.content.res.Resources
+import android.text.style.StrikethroughSpan
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -17,7 +17,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.ak.feastit.R
 import com.ak.feastit.launchFragmentInHiltContainer
-import com.ak.feastit.ui.cart.component.ComponentCartIngredient
 import com.mak.feastit.domain.model.CartIngredient
 import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.RecipeImage
@@ -95,6 +94,41 @@ class ShoppingCartFragmentTest {
     onView(withText(ingredient.recipeName)).check(doesNotExist())
     onView(withText(ingredient.aisleCategory)).check(matches(isDisplayed()))
     onView(withText("${ingredient.quantity} ${ingredient.ingredientName}")).check(matches(isDisplayed()))
+  }
+
+  @Test
+  fun toggleIngredient_updatesIsBoughtStateAndUI() {
+    val ingredient = shoppingIngredients(isBought = false)
+    fakeRepo.emit(listOf(ingredient))
+
+    launchFragmentInHiltContainer<ShoppingCartFragment>()
+
+    // Check initially not bought
+    onView(withId(R.id.cb_buy)).check(matches(isNotChecked()))
+    onView(withId(R.id.ingredient_name)).check(matches(not(hasStrikethrough())))
+
+    // Click to toggle (buy)
+    onView(withId(R.id.cart_items)).perform(
+      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click())
+    )
+
+    // Check UI updated to bought
+    onView(withId(R.id.cb_buy)).check(matches(isChecked()))
+    onView(withId(R.id.ingredient_name)).check(matches(hasStrikethrough()))
+  }
+
+  private fun hasStrikethrough(): Matcher<View> {
+    return object : TypeSafeMatcher<View>() {
+      override fun describeTo(description: Description) {
+        description.appendText("has strikethrough span")
+      }
+
+      override fun matchesSafely(item: View): Boolean {
+        if (item !is android.widget.TextView) return false
+        val text = item.text as? android.text.Spanned ?: return false
+        return text.getSpans(0, text.length, StrikethroughSpan::class.java).isNotEmpty()
+      }
+    }
   }
 
   private fun shoppingIngredients(
