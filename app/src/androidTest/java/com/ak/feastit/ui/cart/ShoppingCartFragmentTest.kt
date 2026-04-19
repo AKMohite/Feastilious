@@ -109,7 +109,7 @@ class ShoppingCartFragmentTest {
 
     // Click to toggle (buy)
     onView(withId(R.id.cart_items)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click())
+      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click())
     )
 
     // Check UI updated to bought
