@@ -26,7 +26,7 @@ private const val MEAL_NOTIFY_WORK = "meal-notify-worker"
 internal class BackgroundScheduler
 @Inject
 constructor(
-  @ApplicationContext private val context: Context,
+  @param:ApplicationContext private val context: Context,
 ) : WorkerScheduler {
   // region stale data
   override fun scheduleStaleWorker() {
