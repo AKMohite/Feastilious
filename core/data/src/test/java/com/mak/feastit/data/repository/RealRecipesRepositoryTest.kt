@@ -143,7 +143,7 @@ internal class RealRecipesRepositoryTest {
         api = mockApi,
         db = mockDb,
         dispatcher = testDispatcherProvider,
-        context = context
+        context = context,
       ).apply {
         // Override the real mapper instance with our test instance if it was created inside the repo
         // In your case, it's passed or created, so ensure the one used in tests is controlled.

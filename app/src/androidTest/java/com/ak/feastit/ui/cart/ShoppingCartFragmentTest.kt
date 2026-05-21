@@ -1,3 +1,5 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.cart
 
 import android.content.Context
@@ -33,7 +35,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
 @HiltAndroidTest
 class ShoppingCartFragmentTest {
 
@@ -64,7 +65,7 @@ class ShoppingCartFragmentTest {
   fun displayIngredients_whenCartHasItems() {
     val ingredient = shoppingIngredients()
     val cartIngredients = listOf(
-      ingredient
+      ingredient,
     )
     fakeRepo.emit(cartIngredients)
 
@@ -82,7 +83,7 @@ class ShoppingCartFragmentTest {
   fun displayIngredientsByAisle_whenCartHasItems() {
     val ingredient = shoppingIngredients()
     val cartIngredients = listOf(
-      ingredient
+      ingredient,
     )
     fakeRepo.emit(cartIngredients)
 
@@ -109,7 +110,7 @@ class ShoppingCartFragmentTest {
 
     // Click to toggle (buy)
     onView(withId(R.id.cart_items)).perform(
-      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click())
+      RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()),
     )
 
     // Check UI updated to bought
@@ -134,7 +135,7 @@ class ShoppingCartFragmentTest {
   private fun shoppingIngredients(
     id: String = "1",
     recipeId: Long = 101,
-    isBought: Boolean = false
+    isBought: Boolean = false,
   ): CartIngredient = CartIngredient(
     id = id,
     isBought = isBought,
@@ -147,9 +148,8 @@ class ShoppingCartFragmentTest {
       recipeId,
       "jpg",
       RecipeImageSize.SMALL,
-      ImageType.CELL
+      ImageType.CELL,
     ),
-    servings = 2
+    servings = 2,
   )
 }
-

@@ -1,3 +1,5 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit
 
 import android.app.Application

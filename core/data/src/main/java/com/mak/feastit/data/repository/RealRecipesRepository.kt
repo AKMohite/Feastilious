@@ -3,6 +3,7 @@
 package com.mak.feastit.data.repository
 
 import android.content.Context
+import androidx.core.net.toUri
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -13,12 +14,15 @@ import com.mak.feastit.data.mapper.RecipesMapper
 import com.mak.feastit.data.paging.DiscoverRemoteMediator
 import com.mak.feastit.database.FeastDB
 import com.mak.feastit.database.entity.custom.PaginatedRecipeEntity
+import com.mak.feastit.domain.model.ImageType
 import com.mak.feastit.domain.model.Recipe
+import com.mak.feastit.domain.model.RecipeImage
+import com.mak.feastit.domain.model.RecipeImageSize
 import com.mak.feastit.domain.model.SyncType
 import com.mak.feastit.domain.util.DispatcherProvider
 import com.mak.feastit.remote.FeastAPIService
 import com.mak.feastit.remote.dto.RecipeDTO
-import java.io.File
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
@@ -27,18 +31,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import androidx.core.net.toUri
-import com.mak.feastit.domain.model.ImageType
-import com.mak.feastit.domain.model.RecipeImage
-import com.mak.feastit.domain.model.RecipeImageSize
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 const val LIMIT_ITEMS = 20
 
 internal class RealRecipesRepository
 @Inject
 constructor(
-  @ApplicationContext private val context: Context,
+  @param:ApplicationContext private val context: Context,
   private val api: FeastAPIService,
   private val db: FeastDB,
   private val dispatcher: DispatcherProvider,
@@ -145,7 +144,7 @@ constructor(
         dto.id!!,
         dto.title.orEmpty(),
         RecipeImage(dto.id!!, dto.imageType.orEmpty(), RecipeImageSize.MEDIUM, ImageType.CELL),
-        page = 1
+        page = 1,
       )
     }
   }
