@@ -24,7 +24,6 @@ import com.ak.feastit.ui.explore.experimental.ExploreItemAction
 import com.ak.feastit.ui.explore.experimental.ExploreSectionAdapter
 import com.ak.feastit.utils.doOnApplyWindowInsets
 import com.ak.feastit.utils.onClick
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber

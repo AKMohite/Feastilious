@@ -1,3 +1,5 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.cart
 
 import com.ak.feastit.di.AppModule
@@ -17,7 +19,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 @Module
 @TestInstallIn(
   components = [SingletonComponent::class],
-  replaces = [RepositoryModule::class]
+  replaces = [RepositoryModule::class],
 )
 object TestRepositoryModule {
   @Provides
@@ -36,7 +38,7 @@ object TestRepositoryModule {
 @Module
 @TestInstallIn(
   components = [SingletonComponent::class],
-  replaces = [AppModule::class]
+  replaces = [AppModule::class],
 )
 object TestAppModule {
   @Provides

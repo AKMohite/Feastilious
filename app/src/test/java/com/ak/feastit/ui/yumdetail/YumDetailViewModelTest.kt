@@ -103,7 +103,7 @@ internal class YumDetailViewModelTest {
       scheduler,
       notification,
       dispatcherProvider,
-      savedStateHandle
+      savedStateHandle,
     )
   }
 
@@ -123,7 +123,7 @@ internal class YumDetailViewModelTest {
         scheduler,
         notification,
         dispatcherProvider,
-        SavedStateHandle()
+        SavedStateHandle(),
       )
     }
   }
@@ -183,7 +183,7 @@ internal class YumDetailViewModelTest {
       preparationTime = 30,
       isMade = false,
       name = "Mock Recipe",
-      image = null
+      image = null,
     )
     val mockNotification = YumNotification(
       id = "meal-plan-1-$recipeId",
@@ -191,7 +191,7 @@ internal class YumDetailViewModelTest {
       message = "",
       channel = YumNotificationChannel.MEAL_PLANNING,
       image = null,
-      dateTime = Instant.fromEpochMilliseconds(0)
+      dateTime = Instant.fromEpochMilliseconds(0),
     )
 
     coEvery { mealPlanRepository.getMealPlansForRecipe(recipeId) } returns listOf(mealPlan)
@@ -219,7 +219,7 @@ internal class YumDetailViewModelTest {
       scheduler,
       notification,
       dispatcherProvider,
-      savedStateHandle
+      savedStateHandle,
     )
 
     assertEquals(recipeDetail, viewModel.state.value.overview)
@@ -299,6 +299,6 @@ internal class YumDetailViewModelTest {
     recipeReadyInMins = 30,
     servings = 4,
     pricePerServing = 2.5,
-    sourceName = "Source Name"
+    sourceName = "Source Name",
   )
 }

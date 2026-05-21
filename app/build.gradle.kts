@@ -15,7 +15,7 @@ kotlin {
     optIn.add("kotlin.time.ExperimentalTime")
   }
 }
-//configure<com.android.build.api.dsl.ApplicationExtension> {
+
 android {
   namespace = "com.ak.feastit"
   compileSdk = libs.versions.compileSDK.get().toInt()

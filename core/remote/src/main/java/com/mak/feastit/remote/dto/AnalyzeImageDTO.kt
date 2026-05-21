@@ -1,5 +1,6 @@
+// Copyright 2026, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.remote.dto
-
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -10,8 +11,8 @@ data class AnalyzeImageDTO(
 //    val category: CategoryDTO? = null,
 //  @Json(name = "nutrition")
 //    val nutrition: Nutrition? = null,
-    @Json(name = "recipes")
-    val recipes: List<ImageRecipeDTO>? = null,
+  @param:Json(name = "recipes")
+  val recipes: List<ImageRecipeDTO>? = null,
 //  @Json(name = "status")
 //    val status: String? = null
 ) {
@@ -117,15 +118,15 @@ data class AnalyzeImageDTO(
         }
     }*/
 
-    @JsonClass(generateAdapter = true)
-    data class ImageRecipeDTO(
-        @Json(name = "id")
-        val id: Long? = null,
-        @Json(name = "imageType")
-        val imageType: String? = null,
-        @Json(name = "title")
-        val title: String? = null,
-        @Json(name = "url")
-        val url: String? = null
-    )
+  @JsonClass(generateAdapter = true)
+  data class ImageRecipeDTO(
+    @Json(name = "id")
+    val id: Long? = null,
+    @Json(name = "imageType")
+    val imageType: String? = null,
+    @Json(name = "title")
+    val title: String? = null,
+    @Json(name = "url")
+    val url: String? = null,
+  )
 }

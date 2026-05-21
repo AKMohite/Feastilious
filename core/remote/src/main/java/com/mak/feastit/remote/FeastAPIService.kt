@@ -55,7 +55,8 @@ interface FeastAPIService {
   suspend fun searchRecipesByBytes(bytes: ByteArray, type: String?): AnalyzeImageDTO {
     val requestFile = bytes.toRequestBody(
       type?.toMediaTypeOrNull(),
-      0, bytes.size
+      0,
+      bytes.size,
     )
     val body = MultipartBody.Part.createFormData("file", "image.jpg", requestFile)
     val response = analyzeImageForRecipes(body)
@@ -67,7 +68,7 @@ interface FeastAPIService {
   @Multipart
   @POST(API_ANALYZE_IMAGE)
   suspend fun analyzeImageForRecipes(
-    @Part image: MultipartBody.Part
+    @Part image: MultipartBody.Part,
   ): AnalyzeImageDTO
 
   /*@GET(API_GET_RECIPE_ANALYSED_INSTRUCTION)
