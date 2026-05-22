@@ -43,7 +43,7 @@ internal class YumNotificationManager @Inject constructor(
     } else {
       Timber.d("Schedule notification for $notification")
       Timber.d("Schedule notification at instant $windowStartTime")
-      val localDateTimeInstant = windowStartTime.defaultLocalDateTime().toInstant(TimeZone.UTC)
+      val localDateTimeInstant = windowStartTime.defaultLocalDateTime().toInstant()
       val epoch = localDateTimeInstant.epochSeconds
       Timber.d("Schedule at local date time: $localDateTimeInstant")
       Timber.d("Alarm Epoch: $epoch")
