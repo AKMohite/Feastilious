@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath(libs.android.gradle.plugin)
         classpath(libs.kotlin.plugin)
+        classpath("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.3.20")
         classpath(libs.hilt.plugin)
         classpath(libs.navigation.safe.args.plugin)
         classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.3.3")

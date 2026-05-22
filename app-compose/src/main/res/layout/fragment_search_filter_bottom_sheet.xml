@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/filter_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_small"
+        android:orientation="vertical">
+
+        <TextView
+            style="?attr/textAppearanceDisplaySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_filter" />
+
+        <TextView
+            style="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            android:text="@string/filter_sort" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/sort_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            app:singleLine="false"
+            app:singleSelection="true" />
+
+        <TextView
+            style="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            android:text="@string/filter_cuisine" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cuisine_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            app:singleLine="false"
+            app:singleSelection="true" />
+
+        <TextView
+            style="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            android:text="@string/filter_meal" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/meal_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            app:singleLine="false"
+            app:singleSelection="true" />
+
+        <TextView
+            style="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            android:text="@string/filter_diet" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/diet_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            app:singleLine="false"
+            app:singleSelection="true" />
+
+        <TextView
+            style="?attr/textAppearanceTitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            android:text="@string/filter_intolerance" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/intolerance_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_micro"
+            app:singleLine="false"
+            app:singleSelection="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/clear_filter"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/apply" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

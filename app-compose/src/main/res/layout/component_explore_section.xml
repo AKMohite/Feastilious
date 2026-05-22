@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None"
+    app:cardElevation="@dimen/space_micro"
+    android:layout_marginTop="@dimen/space_tiny"
+    android:padding="@dimen/space_tiny"
+    tools:context=".ui.explore.ExploreFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/space_tiny">
+        <TextView
+            android:id="@+id/section_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/space_small"
+            android:textColor="?attr/colorOnSurface"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            tools:text="Popular recipes" />
+
+        <TextView
+            android:id="@+id/section_see_all_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/section_view_more"
+            app:layout_constraintTop_toTopOf="@id/section_name"
+            app:layout_constraintBottom_toBottomOf="@id/section_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            app:drawableTint="?attr/colorTertiary"
+            android:textColor="?attr/colorTertiary"
+            android:layout_marginEnd="@dimen/space_small" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/section_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_tiny"
+            app:layout_constraintTop_toBottomOf="@id/section_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/explore_recipe_item"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:orientation="horizontal"
+            tools:itemCount="3"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

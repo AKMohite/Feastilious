@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.FeastIt" parent="Theme.FeastIt.BaseTheme" />
+</resources>

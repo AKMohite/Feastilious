@@ -1,0 +1,64 @@
+<resources>
+
+    <!-- region Shape corners cut size -->
+    <style name="ThemeOverlay.ShapeCornerSize.None" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.None</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.None</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.None</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.None</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.None</item>
+    </style>
+
+    <style name="ThemeOverlay.ShapeCornerSize.ExtraSmall" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.ExtraSmall</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.ExtraSmall</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.ExtraSmall</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.ExtraSmall</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.ExtraSmall</item>
+    </style>
+
+    <style name="ThemeOverlay.ShapeCornerSize.Small" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.Small</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.Small</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Small</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.Small</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.Small</item>
+    </style>
+
+    <style name="ThemeOverlay.ShapeCornerSize.Medium" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.Medium</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.Medium</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Medium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.Medium</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.Medium</item>
+    </style>
+
+    <style name="ThemeOverlay.ShapeCornerSize.Large" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.Large</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.Large</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Large</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.Large</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.Large</item>
+    </style>
+
+    <style name="ThemeOverlay.ShapeCornerSize.ExtraLarge" parent="">
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Material3.Corner.ExtraLarge</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.ExtraLarge</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.ExtraLarge</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Material3.Corner.ExtraLarge</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Material3.Corner.ExtraLarge</item>
+    </style>
+
+    <!-- endregion -->
+
+    <!-- region Shape corners cut type -->
+    <style name="ThemeOverlay.Shape.Corners.Rounded" parent="">
+        <item name="shapeCornerFamily">rounded</item>
+    </style>
+
+    <style name="ThemeOverlay.Shape.Corners.Cut" parent="">
+        <item name="shapeCornerFamily">cut</item>
+    </style>
+    <!-- endregion -->
+    
+</resources>

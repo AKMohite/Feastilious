@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:padding="@dimen/space_small">
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/appearance_themes"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:listitem="@layout/component_theme_card"
+    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    tools:orientation="horizontal"
+    tools:itemCount="3"
+    android:layout_marginTop="@dimen/space_tiny"/>
+</FrameLayout>

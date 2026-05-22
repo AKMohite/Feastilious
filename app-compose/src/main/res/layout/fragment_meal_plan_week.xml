@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.mealplanner.tabs.week.MealPlanWeekFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_tiny"
+        android:layout_margin="@dimen/space_micro">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/previous_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:icon="@drawable/ic_previous"
+            app:layout_constraintTop_toTopOf="@id/recipe_name"
+            app:layout_constraintBottom_toBottomOf="@id/recipe_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="?attr/materialIconButtonFilledTonalStyle"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/current_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="23 Dec - 01 Jan"
+            android:layout_marginHorizontal="@dimen/space_tiny"
+            app:layout_constraintTop_toTopOf="@id/recipe_name"
+            app:layout_constraintBottom_toBottomOf="@id/recipe_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="?attr/materialButtonOutlinedStyle"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:icon="@drawable/ic_next"
+            app:layout_constraintTop_toTopOf="@id/recipe_name"
+            app:layout_constraintBottom_toBottomOf="@id/recipe_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="?attr/materialIconButtonFilledTonalStyle"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weekly_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/component_meal_plan_recipe"/>
+
+</LinearLayout>

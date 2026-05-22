@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/explore_recipe_width"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/space_tiny"
+    app:cardElevation="@dimen/space_tiny">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipe_img"
+            android:layout_width="@dimen/explore_recipe_width"
+            android:layout_height="@dimen/explore_recipe_height"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+        <View
+            android:id="@+id/blur_view"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/text_bg_gradient"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipe_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_small"
+            android:maxLines="3"
+            android:layout_gravity="bottom"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:layout_margin="@dimen/space_small"
+            tools:text="Lorem ipsum"
+            android:textColor="?attr/colorOnSurface"/>
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>
