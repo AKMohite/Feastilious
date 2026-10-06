@@ -79,9 +79,13 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
       when (filter.type) {
         // type casting as the filters are of Single select type only
         SORT -> renderSortFilter(filter as SearchFilter.SingleSelectFilter)
+
         CUISINE -> renderCuisineFilter(filter as SearchFilter.SingleSelectFilter)
+
         MEAL -> renderMealFilter(filter as SearchFilter.SingleSelectFilter)
+
         DIET -> renderDietFilter(filter as SearchFilter.SingleSelectFilter)
+
         INTOLERANCES -> renderIntoleranceFilter(filter as SearchFilter.SingleSelectFilter)
       }
     }

@@ -196,11 +196,18 @@ constructor(
       )
     when (request) {
       SyncType.POPULAR_RECIPES -> searchParams["sort"] = "popularity"
+
       SyncType.TOP_RATED_RECIPES -> searchParams["sort"] = "meta-score"
+
       SyncType.HEALTHY_RECIPES -> searchParams["sort"] = "healthiness"
-      SyncType.QUICK_RECIPES -> searchParams["sort"] = "time" // TODO check sort direction
+
+      SyncType.QUICK_RECIPES -> searchParams["sort"] = "time"
+
+      // TODO check sort direction
       SyncType.POCKET_FRIENDLY_RECIPES -> searchParams["sort"] =
-        "price" // TODO check sort direction
+        "price"
+
+      // TODO check sort direction
       else -> throw IllegalArgumentException("$request must not be requested")
     }
     return api.searchRecipes(searchParams).results

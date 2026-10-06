@@ -298,10 +298,12 @@ class MediaPlayerActivity : AppCompatActivity() {
             customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
             videoQualities = getVideoQualityTracks()
           }
+
           Player.STATE_BUFFERING -> {
             binding.progressBar.visibility = View.VISIBLE
             customBinding.exoPlayPauseBtn.visibility = View.VISIBLE
           }
+
           else -> {
             binding.progressBar.visibility = View.GONE
             binding.playerView.showController()
@@ -594,21 +596,25 @@ class MediaPlayerActivity : AppCompatActivity() {
         resizeMode = 1
         showResizeNotice("Zoomed to fill")
       }
+
       1 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT
         resizeMode = 2
         showResizeNotice("Fixed Height")
       }
+
       2 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH
         resizeMode = 3
         showResizeNotice("Fixed Width")
       }
+
       3 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
         resizeMode = 4
         showResizeNotice("Zoom")
       }
+
       4 -> {
         binding.playerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
         resizeMode = 0
@@ -641,15 +647,19 @@ class MediaPlayerActivity : AppCompatActivity() {
       C.CONTENT_TYPE_HLS -> {
         HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
       }
+
       C.CONTENT_TYPE_DASH -> {
         DashMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
       }
+
       C.CONTENT_TYPE_SS -> {
         SsMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
       }
+
       C.CONTENT_TYPE_RTSP -> {
         RtspMediaSource.Factory().createMediaSource(mediaItem)
       }
+
       else -> {
         ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaItem)
       }

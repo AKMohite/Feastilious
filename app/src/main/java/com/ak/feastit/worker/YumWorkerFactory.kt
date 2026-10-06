@@ -52,7 +52,8 @@ constructor(
           mealPlanRepository = mealPlanRepository,
           notificationManager = notificationManager,
         )
-//            else -> throw IllegalArgumentException("Does not have instance for worker: $workerKlass")
+
+      //            else -> throw IllegalArgumentException("Does not have instance for worker: $workerKlass")
       else -> null
     }
   }

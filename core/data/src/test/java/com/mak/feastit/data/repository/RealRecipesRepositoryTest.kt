@@ -490,7 +490,9 @@ internal class RealRecipesRepositoryTest {
         (page - 1) * LIMIT_ITEMS // Assuming your isLocallyAvailable uses similar logic to getOffset
       when (syncType) {
         SyncType.POPULAR_RECIPES -> coEvery { mockPopularRecipeDAO.getCount(page) } returns expectedCount
+
         SyncType.TOP_RATED_RECIPES -> coEvery { mockTopRecipesDAO.getCount(page) } returns expectedCount
+
         // Add other cases
         else -> {}
       }

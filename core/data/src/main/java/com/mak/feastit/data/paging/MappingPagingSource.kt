@@ -24,7 +24,9 @@ internal class MappingPagingSource<Key : Any, Entity : Any, DomainModel : Pagina
 
   override suspend fun load(params: LoadParams<Key>): LoadResult<Key, DomainModel> = when (val originalResult = originalSource.load(params)) {
     is LoadResult.Error -> LoadResult.Error(originalResult.throwable)
+
     is LoadResult.Invalid -> LoadResult.Invalid()
+
     is LoadResult.Page ->
       LoadResult.Page(
         data = originalResult.data.map(mapper),
