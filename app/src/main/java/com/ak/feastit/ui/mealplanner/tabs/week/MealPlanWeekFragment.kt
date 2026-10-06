@@ -68,6 +68,7 @@ internal class MealPlanWeekFragment : BaseFragment() {
   private fun handleMealPlanEvents(event: OnMealPlanClick) {
     when (event) {
       is OnMealPlanClick.MoreMenu -> viewModel.openBottomSheet(event.recipe)
+
       is OnMealPlanClick.RecipeDetail -> {
         (requireParentFragment() as MealPlannerFragment)
           .findNavController()

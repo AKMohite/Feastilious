@@ -83,7 +83,9 @@ internal class ShoppingCartFragment : BaseFragment() {
   private fun handleCartEvents(cartEvent: CartEvent) {
     when (cartEvent) {
       is CartEvent.ToggleIngredient -> viewModel.toggleIngredient(cartEvent.ingredientId)
+
       is CartEvent.RemoveRecipe -> viewModel.removeRecipe(cartEvent.recipeId)
+
       is CartEvent.RecipeDetail -> findNavController().navigate(
         ShoppingCartFragmentDirections.cartToRecipeDetail(
           cartEvent.id,

@@ -22,7 +22,9 @@ class PaginatedEntryRemoteMediator<Entity>(
     val nextPage =
       when (loadType) {
         LoadType.REFRESH -> 0
+
         LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+
         LoadType.APPEND -> {
           val lastItem =
             state.lastItemOrNull()

@@ -80,6 +80,7 @@ internal class MealPlannerFragment : BaseFragment() {
       }
 
       is MealPlanAction.OnMenuClick -> handleBottomSheetAction(action.item, action.mealPlan)
+
       is MealPlanAction.OnMealRepeat -> gotoMealSchedule(action.mealId)
     }
   }

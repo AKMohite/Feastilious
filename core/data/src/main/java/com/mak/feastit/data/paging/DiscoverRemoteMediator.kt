@@ -27,6 +27,7 @@ internal class DiscoverRemoteMediator(
       val loadKey =
         when (loadType) {
           LoadType.REFRESH -> 1
+
           // In this example, you never need to prepend, since REFRESH
           // will always load the first page in the list. Immediately
           // return, reporting end of pagination.

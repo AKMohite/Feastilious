@@ -245,7 +245,9 @@ internal class MealPlannerViewModel @Inject constructor(
     val mealPlan = editMealPlan ?: throw IllegalStateException("No recipe found for meal plan edit")
     when (item.action) {
       MealPlanSheetMenuAction.ADD_TO_SHOPPING_LIST -> {}
+
       MealPlanSheetMenuAction.REMOVE_FROM_MEAL_PLAN -> removeFromMealPlan(mealPlan)
+
       MealPlanSheetMenuAction.REPEAT_AGAIN -> {
         uiScope.launch {
           val plan = mealPlanRepository.getUnscheduledMealForRecipe(mealPlan.recipeId)
