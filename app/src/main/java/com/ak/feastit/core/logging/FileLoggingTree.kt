@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.core.logging
 
 import android.content.Context
@@ -17,6 +19,9 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 import ch.qos.logback.core.util.FileSize
 import ch.qos.logback.core.util.StatusPrinter
 import com.ak.feastit.BuildConfig
+import java.io.File
+import java.nio.charset.Charset
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -25,29 +30,26 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import timber.log.Timber
-import java.io.File
-import java.nio.charset.Charset
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Reference: [File Logging in Android with Timber](https://sureshjoshi.com/mobile/file-logging-in-android-with-timber)
  */
 internal class FileLoggingTree(
-    private val context: Context
-): Timber.DebugTree() {
+  private val context: Context,
+) : Timber.DebugTree() {
+  private val superVisorJob = SupervisorJob()
 
-    private val superVisorJob = SupervisorJob()
-
-    /**
-     * Handle exception to display a message instead of crashing
-     */
-    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+  /**
+   * Handle exception to display a message instead of crashing
+   */
+  private val exceptionHandler =
+    CoroutineExceptionHandler { _, exception ->
 //        handleError(exception)
     }
-    private val uiScope
-        get() = CoroutineScope(Dispatchers.IO + superVisorJob + exceptionHandler)
-    private var logDirectoryIsReady = AtomicBoolean(false)
-    private var mLogger: org.slf4j.Logger? = null
+  private val uiScope
+    get() = CoroutineScope(Dispatchers.IO + superVisorJob + exceptionHandler)
+  private var logDirectoryIsReady = AtomicBoolean(false)
+  private var mLogger: org.slf4j.Logger? = null
 
 //    TODO check for crashlytics
 //    override fun createStackElementTag(element: StackTraceElement): String? {
@@ -55,117 +57,129 @@ internal class FileLoggingTree(
 //        return super.createStackElementTag(element)
 //    }
 
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (priority == Log.VERBOSE) return
+  override fun log(
+    priority: Int,
+    tag: String?,
+    message: String,
+    t: Throwable?,
+  ) {
+    if (priority == Log.VERBOSE) return
 
-        uiScope.launch {
-            initialise()
-            val logMessage = "$tag: $message"
-            when(priority) {
-                Log.DEBUG -> mLogger?.debug(logMessage)
-                Log.INFO -> mLogger?.info(logMessage)
-                Log.WARN -> mLogger?.warn(logMessage)
-                Log.ERROR -> mLogger?.error(logMessage)
-            }
+    uiScope.launch {
+      initialise()
+      val logMessage = "$tag: $message"
+      when (priority) {
+        Log.DEBUG -> mLogger?.debug(logMessage)
+        Log.INFO -> mLogger?.info(logMessage)
+        Log.WARN -> mLogger?.warn(logMessage)
+        Log.ERROR -> mLogger?.error(logMessage)
+      }
+    }
+  }
+
+  fun onStop() {
+    mLogger = null
+    superVisorJob.cancel(cause = CancellationException("App stopped"))
+  }
+
+  private fun initialise() {
+    uiScope.launch {
+      if (logDirectoryIsReady.get()) return@launch
+      createDirectory()
+      if (File(getLogsDirectory()).exists()) {
+        kotlin.run {
+          logDirectoryIsReady.set(true)
+          mLogger = LoggerFactory.getLogger(FileLoggingTree::class.java)
+          configureLogger(getLogsDirectory())
         }
+      }
     }
+  }
 
-    fun onStop() {
-        mLogger = null
-        superVisorJob.cancel(cause = CancellationException("App stopped"))
-    }
+  private fun configureLogger(logDirectory: String) {
+    uiScope.launch {
+      // reset the default context (which may already have been initialized)
+      // since we want to reconfigure it
+      val loggerContext = LoggerFactory.getILoggerFactory() as LoggerContext
+      loggerContext.reset()
 
-    private fun initialise() {
-        uiScope.launch {
-            if (logDirectoryIsReady.get()) return@launch
-            createDirectory()
-            if (File(getLogsDirectory()).exists()) kotlin.run {
-                logDirectoryIsReady.set(true)
-                mLogger = LoggerFactory.getLogger(FileLoggingTree::class.java)
-                configureLogger(getLogsDirectory())
-            }
+      val rollingFileAppender =
+        RollingFileAppender<ILoggingEvent>().also {
+          it.context = loggerContext
+          it.isAppend = true
+          it.file = "$logDirectory/$LOG_PREFIX-latest.txt"
         }
-    }
 
-    private fun configureLogger(logDirectory: String) {
-        uiScope.launch {
-            // reset the default context (which may already have been initialized)
-            // since we want to reconfigure it
-            val loggerContext = LoggerFactory.getILoggerFactory() as LoggerContext
-            loggerContext.reset()
-
-            val rollingFileAppender = RollingFileAppender<ILoggingEvent>().also {
-                it.context = loggerContext
-                it.isAppend = true
-                it.file = "$logDirectory/$LOG_PREFIX-latest.txt"
-            }
-
-            val fileNamingPolicy = SizeAndTimeBasedFNATP<ILoggingEvent>().also {
-                it.context = loggerContext
-                it.setMaxFileSize(FileSize(FileSize.MB_COEFFICIENT))
-            }
-
-            val rollingPolicy = TimeBasedRollingPolicy<ILoggingEvent>().also {
-                it.context = loggerContext
-                it.fileNamePattern = "$logDirectory/$LOG_PREFIX.%d{yyyy-MM-dd}.%i.txt"
-                it.maxHistory = 7
-                it.timeBasedFileNamingAndTriggeringPolicy = fileNamingPolicy
-                it.setParent(rollingFileAppender)
-                it.start()
-            }
-
-            val encoder = PatternLayoutEncoder().also {
-                it.context = loggerContext
-                it.charset = Charset.forName("UTF-8")
-                it.pattern = "%date %level [%thread] %msg%n"
-                it.start()
-            }
-
-            rollingFileAppender.rollingPolicy = rollingPolicy
-            rollingFileAppender.encoder = encoder
-            rollingFileAppender.start()
-
-            // add the newly created appenders to the root logger;
-            // qualify Logger to disambiguate from org.slf4j.Logger
-            val root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
-            root.level = Level.DEBUG
-            root.addAppender(rollingFileAppender)
-
-            // print any status messages (warnings, etc) encountered in logback config
-            StatusPrinter.print(loggerContext)
+      val fileNamingPolicy =
+        SizeAndTimeBasedFNATP<ILoggingEvent>().also {
+          it.context = loggerContext
+          it.setMaxFileSize(FileSize(FileSize.MB_COEFFICIENT))
         }
-    }
 
-    private suspend fun createDirectory() {
-        listOf(getImagesDirectory(), getLogsDirectory()).forEach { path ->
-            val directory = File(path)
-            if (!directory.exists()) directory.mkdirs()
+      val rollingPolicy =
+        TimeBasedRollingPolicy<ILoggingEvent>().also {
+          it.context = loggerContext
+          it.fileNamePattern = "$logDirectory/$LOG_PREFIX.%d{yyyy-MM-dd}.%i.txt"
+          it.maxHistory = 7
+          it.timeBasedFileNamingAndTriggeringPolicy = fileNamingPolicy
+          it.setParent(rollingFileAppender)
+          it.start()
         }
-    }
 
-    // region TODO maybe have separate file system
-    private fun getImagesDirectory() = getRoot() + "/images"
-    private fun getLogsDirectory() = getRoot() + "/logs"
+      val encoder =
+        PatternLayoutEncoder().also {
+          it.context = loggerContext
+          it.charset = Charset.forName("UTF-8")
+          it.pattern = "%date %level [%thread] %msg%n"
+          it.start()
+        }
 
-    private fun getRoot(): String {
-        return if (VERSION.SDK_INT >= VERSION_CODES.Q) context.filesDir.path
-        else Environment.getExternalStorageDirectory().path
+      rollingFileAppender.rollingPolicy = rollingPolicy
+      rollingFileAppender.encoder = encoder
+      rollingFileAppender.start()
+
+      // add the newly created appenders to the root logger;
+      // qualify Logger to disambiguate from org.slf4j.Logger
+      val root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+      root.level = Level.DEBUG
+      root.addAppender(rollingFileAppender)
+
+      // print any status messages (warnings, etc) encountered in logback config
+      StatusPrinter.print(loggerContext)
     }
-    // endregion
+  }
+
+  private suspend fun createDirectory() {
+    listOf(getImagesDirectory(), getLogsDirectory()).forEach { path ->
+      val directory = File(path)
+      if (!directory.exists()) directory.mkdirs()
+    }
+  }
+
+  // region TODO maybe have separate file system
+  private fun getImagesDirectory() = getRoot() + "/images"
+
+  private fun getLogsDirectory() = getRoot() + "/logs"
+
+  private fun getRoot(): String = if (VERSION.SDK_INT >= VERSION_CODES.Q) {
+    context.filesDir.path
+  } else {
+    Environment.getExternalStorageDirectory().path
+  }
+  // endregion
 
 //    Reference: https://github.com/mihonapp/mihon/blob/82fd89cee65f6663a6eddd09c73eaff23d3c2947/app/src/main/java/eu/kanade/tachiyomi/util/CrashLogUtil.kt#L39
-    private fun getDebugInfo(): String {
-        return """
-            App version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})
-            Android version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}); build ${Build.DISPLAY}
-            Device brand: ${Build.BRAND}
-            Device manufacturer: ${Build.MANUFACTURER}
-            Device name: ${Build.DEVICE} (${Build.PRODUCT})
-            Device model: ${Build.MODEL}
-        """.trimIndent()
-    }
+  private fun getDebugInfo(): String =
+    """
+        App version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})
+        Android version: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT}); build ${Build.DISPLAY}
+        Device brand: ${Build.BRAND}
+        Device manufacturer: ${Build.MANUFACTURER}
+        Device name: ${Build.DEVICE} (${Build.PRODUCT})
+        Device model: ${Build.MODEL}
+    """.trimIndent()
 
-    private companion object {
-        const val LOG_PREFIX = "log"
-    }
+  private companion object {
+    const val LOG_PREFIX = "log"
+  }
 }

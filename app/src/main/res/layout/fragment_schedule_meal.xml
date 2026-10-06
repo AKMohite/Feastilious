@@ -117,7 +117,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/add_to_calendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

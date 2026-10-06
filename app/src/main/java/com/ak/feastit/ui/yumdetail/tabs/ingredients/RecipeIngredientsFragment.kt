@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.yumdetail.tabs.ingredients
 
 import android.os.Bundle
@@ -19,38 +21,38 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class RecipeIngredientsFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = FragmentDetailTabIngredientsBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        FragmentDetailTabIngredientsBinding.inflate(inflater)
+  private val binding: FragmentDetailTabIngredientsBinding
+    get() = baseBinding as FragmentDetailTabIngredientsBinding
 
-    private val binding: FragmentDetailTabIngredientsBinding
-        get() = baseBinding as FragmentDetailTabIngredientsBinding
+  private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
 
-    private val viewModel: YumDetailViewModel by viewModels({ requireParentFragment() })
+  private val adapter: RecipeIngredientsAdapter by lazy {
+    RecipeIngredientsAdapter(
+      onToggleIngredientToCart = { id ->
+        viewModel.toggleIngredientCart(id)
+      },
+      onToggleAddToCart = {
+        viewModel.toggleCart()
+      },
+    )
+  }
 
-    private val adapter: RecipeIngredientsAdapter by lazy {
-        RecipeIngredientsAdapter(
-            onToggleIngredientToCart = { id ->
-                viewModel.toggleIngredientCart(id)
-            },
-            onToggleAddToCart = {
-                viewModel.toggleCart()
-            }
-        )
-    }
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        binding.recipeIngredients.layoutManager = LinearLayoutManager(requireContext())
-        binding.recipeIngredients.adapter = adapter
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.state.collectLatest { state ->
-                        adapter.reload(state.ingredientSections)
-                    }
-                }
-            }
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    binding.recipeIngredients.layoutManager = LinearLayoutManager(requireContext())
+    binding.recipeIngredients.adapter = adapter
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        launch {
+          viewModel.state.collectLatest { state ->
+            adapter.reload(state.ingredientSections)
+          }
         }
+      }
     }
-
+  }
 }

@@ -1,8 +1,15 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.di
 
+import coil3.intercept.Interceptor
 import com.ak.feastit.BuildConfig
+import com.ak.feastit.core.common.RecipeImageInterceptor
+import com.ak.feastit.core.support.PowerController
+import com.ak.feastit.core.support.RealPowerController
 import com.ak.feastit.utils.AppDispatcher
 import com.mak.feastit.domain.util.DispatcherProvider
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,14 +20,23 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object AppModule {
+  @Provides
+  @Singleton
+  @Named("FEAST_KEY")
+  fun provideApiKey(): String = BuildConfig.API_KEY
 
-    @Provides
-    @Singleton
-    @Named("FEAST_KEY")
-    fun provideApiKey(): String = BuildConfig.API_KEY
+  @Provides
+  @Singleton
+  fun provideDispatchers(): DispatcherProvider = AppDispatcher()
+}
 
-    @Provides
-    @Singleton
-    fun provideDispatchers(): DispatcherProvider = AppDispatcher()
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class AppModuleBindings {
 
+  @Binds
+  abstract fun bindImageInterceptor(interceptor: RecipeImageInterceptor): Interceptor
+
+  @Binds
+  abstract fun bindPowerController(controller: RealPowerController): PowerController
 }

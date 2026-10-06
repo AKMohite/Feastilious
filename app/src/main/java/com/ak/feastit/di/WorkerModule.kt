@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.di
 
 import android.app.Application
@@ -15,22 +17,16 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 object WorkerModule {
-
-    @Provides
-    fun provideWorkerScheduler(
-        app: Application
-    ): WorkerScheduler = BackgroundScheduler(app)
+  @Provides
+  fun provideWorkerScheduler(app: Application): WorkerScheduler = BackgroundScheduler(app)
 
 //    @Binds
 //    abstract fun bindWorkerFactory(workerFactory: YumWorkerFactory): WorkerFactory
-
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface AppWorkerModule {
-
-    @Binds
-    abstract fun bindWorkerFactory(workerFactory: YumWorkerFactory): WorkerFactory
-
+  @Binds
+  abstract fun bindWorkerFactory(workerFactory: YumWorkerFactory): WorkerFactory
 }

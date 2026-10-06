@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:key="@string/preference_file_name">
+
+  <PreferenceCategory
+    android:title="@string/preference_ui"
+    app:iconSpaceReserved="false">
+    <Preference
+      android:key="@string/preference_key_appearance"
+      android:title="@string/settings_appearance"
+      android:summary="@string/preference_appearance_summary"
+      app:iconSpaceReserved="false"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/preference_notifications"
+    app:iconSpaceReserved="false">
+    <SwitchPreferenceCompat
+      android:key="@string/preference_key_meal_plan"
+      android:title="@string/settings_meal_notify"
+      android:summary="@string/settings_meal_notify_summary"
+      android:defaultValue="false"
+      app:iconSpaceReserved="false"/>
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="@string/preference_backup_and_restore"
+    app:iconSpaceReserved="false">
+    <Preference
+      android:key="@string/preference_key_import"
+      android:title="@string/settings_import"
+      android:summary="@string/settings_import_summary"
+      app:iconSpaceReserved="false"/>
+
+    <Preference
+      android:key="@string/preference_key_export"
+      android:title="@string/settings_export"
+      android:summary="@string/settings_export_summary"
+      app:iconSpaceReserved="false"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/preference_privacy"
+    app:iconSpaceReserved="false">
+    <Preference
+      android:key="@string/preference_key_privacy_policy"
+      android:title="@string/settings_privacy_policy"
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/privacy_policy_url" />
+    </Preference>
+    <SwitchPreferenceCompat
+      android:key="@string/preference_key_analytics"
+      android:title="@string/settings_analytics"
+      android:summary="@string/settings_analytics_summary"
+      app:iconSpaceReserved="false"/>
+    <SwitchPreferenceCompat
+      android:key="@string/preference_key_crash_report"
+      android:title="@string/settings_crash_report"
+      android:summary="@string/settings_crash_report_summary"
+      app:iconSpaceReserved="false"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/preference_miscellaneous"
+    app:iconSpaceReserved="false">
+    <Preference
+      android:key="@string/preference_key_misc"
+      android:title="@string/settings_misc"
+      android:summary="@string/settings_misc_summary"
+      app:iconSpaceReserved="false"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/preference_about"
+    app:iconSpaceReserved="false">
+    <Preference
+      android:title="@string/settings_data_credits"
+      android:icon="@drawable/spoonacular_logo"
+      android:summary="@string/settings_credits_summaru"
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/spoonacular_url" />
+    </Preference>
+    <Preference
+      android:key="@string/preference_key_app_version"
+      android:title="@string/settings_app_version"
+      android:summary="@string/settings_app_version_summary"
+      app:iconSpaceReserved="false"/>
+    <Preference
+      android:key="@string/preference_key_repository"
+      android:title="@string/settings_repository"
+      android:summary="@string/settings_repository_summary"
+      app:iconSpaceReserved="false">
+      <intent
+        android:action="android.intent.action.VIEW"
+        android:data="@string/github_repo_url" />
+    </Preference>
+  </PreferenceCategory>
+
+</PreferenceScreen>

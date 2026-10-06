@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.base
 
 import android.os.Bundle
@@ -10,57 +12,63 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.R
 
-abstract class BaseFragment: Fragment() {
+abstract class BaseFragment : Fragment() {
+  protected open fun getViewBinding(inflater: LayoutInflater): ViewBinding? = null
 
-    protected open fun getViewBinding(inflater: LayoutInflater): ViewBinding? = null
-    var baseBinding: ViewBinding? = null
-        private set
+  var baseBinding: ViewBinding? = null
+    private set
 
-    @StyleRes
-    protected open val themeId: Int = R.style.Theme_FeastIt
+  @StyleRes
+  protected open val themeId: Int = R.style.Theme_FeastIt
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 //        https://issuetracker.google.com/issues/362452854#comment2
 //        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
 //        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
 //        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
 //        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-    }
+  }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflateFromViewBinding(getInflater(inflater), container, savedInstanceState)
-            ?: throw IllegalStateException(
-                "Fragment must either provide a layoutId OR override inflateFromViewBinding method. None are provided for ${this::class.simpleName}"
-            )
-        return view
-    }
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?,
+  ): View? {
+    val view =
+      inflateFromViewBinding(getInflater(inflater), container, savedInstanceState)
+        ?: throw IllegalStateException(
+          "Fragment must either provide a layoutId OR override inflateFromViewBinding method. None are provided for ${this::class.simpleName}",
+        )
+    return view
+  }
 
-    protected open fun inflateFromViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        baseBinding = getViewBinding(inflater)
-        return baseBinding?.root
-    }
+  protected open fun inflateFromViewBinding(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?,
+  ): View? {
+    baseBinding = getViewBinding(inflater)
+    return baseBinding?.root
+  }
 
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onViewReady(view, savedInstanceState)
-    }
+  final override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    onViewReady(view, savedInstanceState)
+  }
 
-    abstract fun onViewReady(view: View, savedInstanceState: Bundle?)
+  abstract fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  )
 
-    override fun onDestroyView() {
-        baseBinding = null
-        super.onDestroyView()
-    }
+  override fun onDestroyView() {
+    baseBinding = null
+    super.onDestroyView()
+  }
 
-    private fun getInflater(inflater: LayoutInflater) =
-        inflater.cloneInContext(ContextThemeWrapper(activity, themeId))
+  private fun getInflater(inflater: LayoutInflater) = inflater.cloneInContext(ContextThemeWrapper(activity, themeId))
 }

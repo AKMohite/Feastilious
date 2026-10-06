@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.mealplanner.tabs
 
 import androidx.fragment.app.Fragment
@@ -9,30 +11,30 @@ import com.ak.feastit.ui.mealplanner.tabs.unscheduled.UnscheduledRecipeFragment
 import com.ak.feastit.ui.mealplanner.tabs.week.MealPlanWeekFragment
 
 internal enum class MealPlanTab {
-    Today,
-    Week,
-    UnscheduledRecipes
+  Today,
+  Week,
+  UnscheduledRecipes,
 }
 
 internal class MealPlanPagerAdapter(
-    fragmentManager: FragmentManager,
-    lifecycle: Lifecycle
-): FragmentStateAdapter(fragmentManager, lifecycle) {
+  fragmentManager: FragmentManager,
+  lifecycle: Lifecycle,
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
+  override fun getItemCount(): Int = MealPlanTab.entries.count()
 
-    override fun getItemCount(): Int = MealPlanTab.entries.count()
-
-    override fun createFragment(position: Int): Fragment {
-        return when(position) {
-            MealPlanTab.Today.ordinal -> {
-                MealPlanTodayFragment()
-            }
-            MealPlanTab.Week.ordinal -> {
-                MealPlanWeekFragment()
-            }
-            MealPlanTab.UnscheduledRecipes.ordinal -> {
-                UnscheduledRecipeFragment()
-            }
-            else -> throw IllegalArgumentException("Invalid tab position: $position")
-        }
+  override fun createFragment(position: Int): Fragment = when (position) {
+    MealPlanTab.Today.ordinal -> {
+      MealPlanTodayFragment()
     }
+
+    MealPlanTab.Week.ordinal -> {
+      MealPlanWeekFragment()
+    }
+
+    MealPlanTab.UnscheduledRecipes.ordinal -> {
+      UnscheduledRecipeFragment()
+    }
+
+    else -> throw IllegalArgumentException("Invalid tab position: $position")
+  }
 }

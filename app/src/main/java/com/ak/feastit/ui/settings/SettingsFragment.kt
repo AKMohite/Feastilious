@@ -1,21 +1,30 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.ak.feastit.base.BaseFragment
 import com.ak.feastit.databinding.FragmentSettingsBinding
+import com.ak.feastit.utils.onClick
+import dagger.hilt.android.AndroidEntryPoint
 
-internal class SettingsFragment: BaseFragment() {
+@AndroidEntryPoint
+internal class SettingsFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding? = FragmentSettingsBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding? {
-        return FragmentSettingsBinding.inflate(inflater)
+  private val binding: FragmentSettingsBinding
+    get() = baseBinding as FragmentSettingsBinding
+
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    binding.appearance.onClick {
+      findNavController().navigate(SettingsPreferenceFragmentDirections.settingsToAppearance())
     }
-
-    private val binding: FragmentSettingsBinding
-        get() = baseBinding as FragmentSettingsBinding
-
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-    }
+  }
 }

@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="3"
                 android:ellipsize="end"
-                android:textColor="?attr/colorOnPrimaryContainer"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 tools:text="@string/lorem_ipsum"
                 android:textAppearance="?attr/textAppearanceBodySmall" />
 

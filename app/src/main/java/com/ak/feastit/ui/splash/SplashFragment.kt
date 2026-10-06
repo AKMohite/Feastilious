@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.splash
 
 import android.os.Bundle
@@ -19,32 +21,34 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class SplashFragment : BaseFragment() {
+  override fun getViewBinding(inflater: LayoutInflater): ViewBinding = SplashFragmentBinding.inflate(inflater)
 
-    override fun getViewBinding(inflater: LayoutInflater): ViewBinding =
-        SplashFragmentBinding.inflate(inflater)
+  private val viewModel: SplashViewModel by viewModels()
 
-    private val viewModel: SplashViewModel by viewModels()
+  override fun onViewReady(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
+    setFlowObservers()
+  }
 
-    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
-        setFlowObservers()
-    }
-
-    private fun setFlowObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.splashState.collect { state ->
-                    when (state) {
-                        NavigateToOnBoarding -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
-                        }
-                        NavigateToHome -> {
-                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToRecipeDashboardFragment())
-                        }
-                        Empty -> {}
-                    }
-                }
+  private fun setFlowObservers() {
+    viewLifecycleOwner.lifecycleScope.launch {
+      lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+        viewModel.splashState.collect { state ->
+          when (state) {
+            NavigateToOnBoarding -> {
+              findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnBoardingFragment())
             }
-        }
-    }
 
+            NavigateToHome -> {
+              findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToRecipeDashboardFragment())
+            }
+
+            Empty -> {}
+          }
+        }
+      }
+    }
+  }
 }

@@ -1,8 +1,10 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.viewall.components
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
 import com.ak.feastit.R
 import com.ak.feastit.databinding.ComponentViewAllRecipeBinding
 import com.ak.feastit.utils.onClick
@@ -10,23 +12,22 @@ import com.ak.feastit.utils.show
 import com.mak.feastit.domain.model.Recipe
 
 class ComponentViewAllRecipe(
-    private val binding: ComponentViewAllRecipeBinding,
-    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit
-): RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(recipe: Recipe) {
-        val image = binding.root.context.getString(R.string.recipe_to_detail_image, recipe.id)
-        val name = binding.root.context.getString(R.string.recipe_to_detail_name, recipe.id)
-        val sharedElements: Map<View, String> = mapOf(
-            binding.recipeImg to image,
-            binding.recipeName to name
-        )
-        binding.recipeImg.transitionName = image
-        binding.recipeName.transitionName = name
-        binding.recipeImg.load(recipe.image)
-        binding.recipeName.text = recipe.name
-        binding.recipeName.show()
-        binding.root.onClick { onRecipeClick(sharedElements, recipe.id) }
-    }
-
+  private val binding: ComponentViewAllRecipeBinding,
+  private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
+  fun bind(recipe: Recipe) {
+    val image = binding.root.context.getString(R.string.recipe_to_detail_image, recipe.id)
+    val name = binding.root.context.getString(R.string.recipe_to_detail_name, recipe.id)
+    val sharedElements: Map<View, String> =
+      mapOf(
+        binding.recipeImg to image,
+        binding.recipeName to name,
+      )
+    binding.recipeImg.transitionName = image
+    binding.recipeName.transitionName = name
+    binding.recipeImg.load(recipe.image)
+    binding.recipeName.text = recipe.name
+    binding.recipeName.show()
+    binding.root.onClick { onRecipeClick(sharedElements, recipe.id) }
+  }
 }

@@ -23,3 +23,6 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew clean testDebug
+
+      - name: Run spot less
+        run: ./gradlew spotlessCheck

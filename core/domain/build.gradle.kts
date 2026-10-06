@@ -1,44 +1,52 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+  id("com.android.library")
+  id("org.jetbrains.kotlin.android")
+}
+
+kotlin {
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_21)
+    optIn.add("kotlin.time.ExperimentalTime")
+  }
 }
 
 android {
-    namespace = "com.mak.feastit.domain"
-    compileSdk = libs.versions.compileSDK.get().toInt()
+  namespace = "com.mak.feastit.domain"
+  compileSdk =
+    libs.versions.compileSDK
+      .get()
+      .toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.minSDK.get().toInt()
+  defaultConfig {
+    minSdk =
+      libs.versions.minSDK
+        .get()
+        .toInt()
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles("consumer-rules.pro")
+  }
 
-    buildTypes {
-        release {
+  buildTypes {
+    release {
 //            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-        create("staging") {
-            initWith(getByName("release"))
-        }
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro",
+      )
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
+  }
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+  }
 }
 
 dependencies {
-    implementation(libs.coroutines.core)
-    implementation("javax.inject:javax.inject:1")
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.paging.runtime)
-
+  implementation(libs.coroutines.core)
+  implementation("javax.inject:javax.inject:1")
+  implementation(libs.kotlinx.datetime)
+  implementation(libs.paging.runtime)
 }

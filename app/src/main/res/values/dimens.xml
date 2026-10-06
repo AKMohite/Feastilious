@@ -10,6 +10,7 @@
     <dimen name="space_big">24dp</dimen>
     <dimen name="space_huge">48dp</dimen>
     <dimen name="space_infinity">90dp</dimen>
+  <dimen name="theme_card_width">150dp</dimen>
 
     <!-- This is to have floatable bottom navigation -->
     <dimen name="bottom_screen_padding">92dp</dimen>
@@ -22,5 +23,8 @@
     <dimen name="bottom_navigation_height">68dp</dimen>
     <dimen name="screen_anim_slide_distance_end">60dp</dimen>
     <dimen name="screen_anim_slide_distance_start">-60dp</dimen>
-    <!-- endregion -->
+  <dimen name="widget_img_width">40dp</dimen>
+  <dimen name="widget_img_height">60dp</dimen>
+  <dimen name="icon_size">48dp</dimen>
+  <!-- endregion -->
 </resources>

@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.mealplanner.tabs.week.components
 
 import androidx.core.content.ContextCompat
@@ -8,23 +10,22 @@ import com.ak.feastit.utils.show
 import com.mak.feastit.domain.model.DayMealPlan
 
 class ComponentDayOfWeek(
-    private val binding: ComponentDayOfWeekBinding
-): RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(day: DayMealPlan) {
+  private val binding: ComponentDayOfWeekBinding,
+) : RecyclerView.ViewHolder(binding.root) {
+  fun bind(day: DayMealPlan) {
 //        TODO handle add click event to search recipe to add for this day
 //        TODO handle toggle click to hide/show recipe items
-        binding.dayTv.text = day.day
-        val toggleIcon = if (day.isExpanded) {
-            R.drawable.ic_down
-        } else {
-            R.drawable.ic_previous
-        }
-        binding.toggleIcon.apply {
-            icon = ContextCompat.getDrawable(context, toggleIcon)
-            text = day.noOfMeal
-            show(day.noOfMeal.isNotBlank())
-        }
+    binding.dayTv.text = day.day
+    val toggleIcon =
+      if (day.isExpanded) {
+        R.drawable.ic_down
+      } else {
+        R.drawable.ic_previous
+      }
+    binding.toggleIcon.apply {
+      icon = ContextCompat.getDrawable(context, toggleIcon)
+      text = day.noOfMeal
+      show(day.noOfMeal.isNotBlank())
     }
-
+  }
 }

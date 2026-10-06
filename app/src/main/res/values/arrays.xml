@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="settings_text_size_entries">
+    <item>@string/preference_text_small</item>
+    <item>@string/preference_text_default</item>
+    <item>@string/preference_text_large</item>
+    <item>@string/preference_text_extra_large</item>
+  </string-array>
+  <string-array name="settings_language_entries">
+    <item>@string/preference_language_english</item>
+    <item>@string/preference_language_french</item>
+    <item>@string/preference_language_spanish</item>
+  </string-array>
+</resources>

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+echo "
+===================
+|  Formatting code with spotless...
+===================
+"
+./gradlew spotlessApply
+
+echo "
+===================
+|  Running spotlessCheck...
+===================
+"
+
+./gradlew --no-daemon --stacktrace -PdisablePreDex spotlessCheck
+
+checkStyleStatus=$?
+
+# return 1 exit code if running checks fails
+[ $checkStyleStatus -ne 0 ] && exit 1
+exit 0

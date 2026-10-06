@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.core.notification.di
 
 import com.ak.feastit.core.notification.NotificationManager
@@ -10,6 +12,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class NotificationModule {
-    @Binds
-    abstract fun bindNotificationManager(manager: YumNotificationManager): NotificationManager
+  @Binds
+  abstract fun bindNotificationManager(manager: YumNotificationManager): NotificationManager
 }

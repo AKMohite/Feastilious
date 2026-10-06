@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.ak.feastit.ui.search
 
 import android.view.LayoutInflater
@@ -13,88 +15,90 @@ import com.ak.feastit.ui.search.components.ComponentSearchHeader
 import com.ak.feastit.ui.search.components.ComponentSearchRecentSuggestion
 
 internal class SearchSuggestionAdapter(
-    private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit,
-    private val onHistoryClick: (String) -> Unit
+  private val onRecipeClick: (sharedElements: Map<View, String>, recipeId: Long) -> Unit,
+  private val onHistoryClick: (String) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+  private val asyncDiff = AsyncListDiffer(this, SearchSuggestionDiff())
 
-    private val asyncDiff = AsyncListDiffer(this, SearchSuggestionDiff())
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): RecyclerView.ViewHolder {
+    when (viewType) {
+      HEADER -> {
+        val binding =
+          ComponentSearchHeaderItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+          )
+        return ComponentSearchHeader(binding)
+      }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
-            HEADER -> {
-                val binding = ComponentSearchHeaderItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                return ComponentSearchHeader(binding)
-            }
+      HISTORY -> {
+        val binding =
+          ComponentSearchSuggestionTextBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+          )
+        return ComponentSearchRecentSuggestion(binding, onHistoryClick)
+      }
 
-            HISTORY -> {
-                val binding = ComponentSearchSuggestionTextBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                return ComponentSearchRecentSuggestion(binding, onHistoryClick)
-            }
+      RECOMMENDED_RECIPE -> {
+        val binding =
+          ComponentRecipeBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+          )
+        return ComponentRecipe(binding, onRecipeClick)
+      }
 
-            RECOMMENDED_RECIPE -> {
-                val binding = ComponentRecipeBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                return ComponentRecipe(binding, onRecipeClick)
-            }
-
-            else -> throw IllegalStateException("Invalid view type $viewType rendering")
-        }
+      else -> throw IllegalStateException("Invalid view type $viewType rendering")
     }
+  }
 
-    override fun getItemCount(): Int = asyncDiff.currentList.size
+  override fun getItemCount(): Int = asyncDiff.currentList.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = asyncDiff.currentList[position]
-        when (holder.itemViewType) {
-            HEADER -> {
-                val adapterItem = item as SearchSuggestionItem.Header
-                (holder as ComponentSearchHeader).bind(adapterItem)
-            }
+  override fun onBindViewHolder(
+    holder: RecyclerView.ViewHolder,
+    position: Int,
+  ) {
+    val item = asyncDiff.currentList[position]
+    when (holder.itemViewType) {
+      HEADER -> {
+        val adapterItem = item as SearchSuggestionItem.Header
+        (holder as ComponentSearchHeader).bind(adapterItem)
+      }
 
-            HISTORY -> {
-                val adapterItem = item as SearchSuggestionItem.History
-                (holder as ComponentSearchRecentSuggestion).bind(adapterItem)
-            }
+      HISTORY -> {
+        val adapterItem = item as SearchSuggestionItem.History
+        (holder as ComponentSearchRecentSuggestion).bind(adapterItem)
+      }
 
-            RECOMMENDED_RECIPE -> {
-                val adapterItem = item as SearchSuggestionItem.Recommendation
-                (holder as ComponentRecipe).bind(adapterItem.recipe)
-            }
-        }
+      RECOMMENDED_RECIPE -> {
+        val adapterItem = item as SearchSuggestionItem.Recommendation
+        (holder as ComponentRecipe).bind(adapterItem.recipe)
+      }
     }
+  }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (asyncDiff.currentList[position]) {
-            is SearchSuggestionItem.Header -> HEADER
-            is SearchSuggestionItem.History -> HISTORY
-            is SearchSuggestionItem.Recommendation -> RECOMMENDED_RECIPE
-        }
-    }
+  override fun getItemViewType(position: Int): Int = when (asyncDiff.currentList[position]) {
+    is SearchSuggestionItem.Header -> HEADER
+    is SearchSuggestionItem.History -> HISTORY
+    is SearchSuggestionItem.Recommendation -> RECOMMENDED_RECIPE
+  }
 
-    fun submitList(suggestions: List<SearchSuggestionItem>) {
-        asyncDiff.submitList(suggestions)
-    }
+  fun submitList(suggestions: List<SearchSuggestionItem>) {
+    asyncDiff.submitList(suggestions)
+  }
 
-    fun getType(position: Int): SearchSuggestionItem? {
-        return asyncDiff.currentList[position]
-    }
+  fun getType(position: Int): SearchSuggestionItem? = asyncDiff.currentList[position]
 
-
-    companion object {
-        private const val HEADER = 0
-        private const val HISTORY = 1
-        private const val RECOMMENDED_RECIPE = 2
-    }
-
+  companion object {
+    private const val HEADER = 0
+    private const val HISTORY = 1
+    private const val RECOMMENDED_RECIPE = 2
+  }
 }

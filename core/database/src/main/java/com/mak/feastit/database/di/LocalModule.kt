@@ -1,3 +1,5 @@
+// Copyright 2025, Ashish Mohite and the Yum Byte project contributors
+// License Name: <Actual name>
 package com.mak.feastit.database.di
 
 import android.app.Application
@@ -12,15 +14,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object LocalModule {
-
-    @Singleton
-    @Provides
-    fun provideDataBase(
-        app: Application
-    ): com.mak.feastit.database.FeastDB = Room.databaseBuilder(app, com.mak.feastit.database.FeastDatabase::class.java, "feast_db")
-        .addMigrations(
-            DBMigrationFrom1To2()
-        )
-        .build()
-
+  @Singleton
+  @Provides
+  fun provideDataBase(app: Application): com.mak.feastit.database.FeastDB = Room
+    .databaseBuilder(app, com.mak.feastit.database.FeastDatabase::class.java, "feast_db")
+    .addMigrations(
+      DBMigrationFrom1To2(),
+    ).build()
 }
